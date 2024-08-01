@@ -1685,6 +1685,9 @@ a {
 .w3-pointer {
   cursor: pointer;
 }
+.w3-height {
+  height: 100%;
+}
 .w3-100vh {
   height: 100vh;
 }

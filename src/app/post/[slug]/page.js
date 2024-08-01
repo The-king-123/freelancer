@@ -1,52 +1,26 @@
 // app/post/[slug]/page.js
-import { notFound } from 'next/navigation';
-import PostContent from '../../../components/PostContent';
-import { fetchPosts, fetchPostData } from '../../../lib/posts';
-
-export async function generateStaticParams() {
-  try {
-    const posts = await fetchPosts();
-    if (!Array.isArray(posts)) {
-      throw new Error('fetchPosts did not return an array');
-    }
-    return posts.map(post => ({
-      slug: post.slug,
-    }));
-  } catch (error) {
-    console.error('Error generating static params:', error);
-    return []; // Ensure it returns an array
-  }
-}
-
-export async function generateMetadata({ params }) {
-  try {
-    const post = await fetchPostData(params.slug);
-    if (!post) {
-      return {
-        title: 'Post Not Found',
-      };
-    }
-    return {
-      title: post.title,
-    };
-  } catch (error) {
-    console.error(`Error generating metadata for slug ${params.slug}:`, error);
-    return {
-      title: 'Error',
-    };
-  }
-}
+import { notFound } from "next/navigation";
+import PostContent from "../../../components/PostContent";
+import axios from "axios";
 
 export default async function PostPage({ params }) {
+  const source = "https://console.freelancer.mg";
+  // const source = "http://127.0.0.1:8000";
   try {
-    const post = await fetchPostData(params.slug);
+    const post = await axios
+      .get(source + "/_post/" + params.slug + "/edit")
+      .then((res) => {
+        return res.data.data[0];
+      })
+      .catch((e) => {
+        console.error("failure", e);
+      });
     if (!post) {
       notFound();
     }
     return (
-      <div>
-        <h1>{post.title}</h1>
-        <PostContent content={post.content} />
+      <div className="w3-block w3-100vh w3-light-grey">
+        <PostContent content={post} />
       </div>
     );
   } catch (error) {

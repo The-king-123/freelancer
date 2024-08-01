@@ -20,6 +20,49 @@ export default function Home() {
   const [displayPosts, setdisplayPosts] = useState("");
   const [chatData, setchatData] = useState([]);
   const [killer, setkiller] = useState({ starter: null});
+import {
+  faArrowLeft,
+  faChevronCircleUp,
+  faICursor,
+  faPaperPlane,
+  faPause,
+  faPlay,
+  faRecycle,
+  faRefresh,
+  faRepeat,
+  faSpinner,
+  faTimes,
+  faUsers,
+  faVideo,
+} from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import cloudinary from "cloudinary-video-player";
+import "cloudinary-video-player/cld-video-player.min.css";
+import VideoPlayer from "./video";
+
+export default function Home() {
+  const source = "https://console.freelancer.mg";
+  // const source = "http://127.0.0.1:8000";
+
+  const [imagePDP, setimagePDP] = useState(
+    source + "/images.php?w=100&h=100&zlonk=3733&zlink=160471339156947"
+  );
+  const [imagePostModal, setimagePostModal] = useState(
+    source + "/images.php?w=720&h=720&zlonk=3733&zlink=160471339156947"
+  );
+  const [audioBox, setaudioBox] = useState({chaine:null});
+  const [showThisPost, setshowThisPost] = useState();
+  const [height, setHeight] = useState(0);
+  const [displayChoice, setdisplayChoice] = useState("");
+  const [displayUsers, setdisplayUsers] = useState("");
+  const [displayCategoryUsers, setdisplayCategoryUsers] = useState("");
+  const [displayDesignations, setdisplayDesignations] = useState("");
+  const [displayChat, setdisplayChat] = useState("");
+  const [displayCore, setdisplayCore] = useState("");
+  const [chatData, setchatData] = useState([]);
+  const [usersData, setusersData] = useState([]);
+  const [designationData, setdesignationData] = useState([]);
+  const [killer, setkiller] = useState({ starter: null });
 
   const [topicData, settopicData] = useState([]);
 
@@ -176,7 +219,7 @@ export default function Home() {
 
             charCounter++;
             //
-          }, 20);
+          }, 40);
         }
       }
     }, 10);
@@ -344,11 +387,15 @@ export default function Home() {
             if (document.body.scrollHeight > stepper.scrollHeight) {
               window.scrollTo(0, document.body.scrollHeight);
               stepper.scrollHeight = document.body.scrollHeight;
+            const chatElement = document.getElementById("chatCoreWrapper");
+            if (chatElement.scrollHeight > stepper.scrollHeight) {
+              chatElement.scrollTop = chatElement.scrollHeight;
+              stepper.scrollHeight = chatElement.scrollHeight;
             }
 
             charCounter++;
             //
-          }, 20);
+          }, 40);
         }
       }
     }, 10);
@@ -360,61 +407,100 @@ export default function Home() {
       glitchPost = data.map((post, key) => (
         <div key={key} style={{ padding: 8 }}>
           <div
-            className="w3-flex-column w3-overflow w3-border w3-round w3-pointer w3-white"
+            className="w3-small w3-text-grey"
+            style={{ paddingInline: 8, textAlign: "right", display: "none" }}
+            id={"flashInfo" + key}
           >
-            <Link
+            Texte copié...
+          </div>
+          <div className="w3-flex-column w3-overflow w3-border w3-round w3-pointer w3-white">
+            <div
+              onClick={() => {
+                copyToClipboard("https://freelancer.mg/post/" + post.slug);
+                document.getElementById("flashInfo" + key).innerText =
+                  "Le lien a été copié...";
+                document.getElementById("flashInfo" + key).style.display =
+                  "block";
+                setTimeout(() => {
+                  document.getElementById("flashInfo" + key).style.display =
+                    "none";
+                }, 2000);
+              }}
+              onDoubleClick={() =>
+                shareOnFacebook("https://freelancer.mg/post/" + post.slug)
+              }
               className="w3-nowrap w3-overflow w3-light-grey w3-big w3-border-bottom"
               style={{ paddingBlock: 8, paddingInline: 16 }}
-              href={"/post/"+post.slug}
+              title="Click to copy post link"
             >
               {parse(post.title)}
-            </Link>
+            </div>
             <div className="w3-border-bottom">
               <div
                 onClick={() => {
-                  if (document.getElementById('post'+key).className == '_expand_') {
-                    document.getElementById('post'+key).className = 'w3-overflow w3-nowrap-multiline'
+                  if (
+                    document.getElementById("post" + key).className ==
+                    "_expand_"
+                  ) {
+                    document.getElementById("post" + key).className =
+                      "w3-overflow w3-nowrap-multiline";
                   } else {
-                    document.getElementById('post'+key).className = '_expand_'
+                    document.getElementById("post" + key).className =
+                      "_expand_";
                   }
-                  
                 }}
-                id={"post"+key}
+                id={"post" + key}
                 className="w3-overflow w3-nowrap-multiline"
-                style={{ marginInline: 16,marginBlock:8 }}
+                style={{ marginInline: 16, marginBlock: 8 }}
               >
                 {parse(JSON.parse(post.info).description)}
               </div>
             </div>
-            {post.type == "image" && (
-              <Image
-                alt={"image" + key}
-                unoptimized
-                loading="lazy"
-                height={ window.innerWidth <= 420 ? 280 : 320 }
-                width={520}
-                src={source + "/images.php?zlonk=2733&zlink=" + post.link}
-                style={{
-                  objectPosition: "center",
-                  objectFit: "cover",
-                }}
-                className="w3-overflow w3-light-grey post-image"
-              />
-            )}
-            {post.type == "video" && (
-              <video
-                style={{
-                  objectPosition: "center",
-                }}
-                className="w3-overflow w3-block w3-black"
-                controls
+            {(post.type == "image" || post.type == "image/audio") && (
+              <div
+                className="w3-display-container w3-light-grey post-image"
+                height={window.innerWidth <= 420 ? 280 : 320}
+                onClick={() => showSinglePost(post)}
               >
-                <source
-                  src={source + "/videos.php?zlonk=1733&zlink=" + post.link}
-                  type="video/mp4"
+                <Image
+                  alt={"image" + key}
+                  unoptimized
+                  loading="lazy"
+                  onContextMenu={(e) => e.preventDefault()}
+                  height={window.innerWidth <= 420 ? 280 : 320}
+                  width={520}
+                  src={
+                    source +
+                    "/images.php?w=420&h=420&zlonk=2733&zlink=" +
+                    post.link
+                  }
+                  style={{
+                    objectPosition: "center",
+                    objectFit: "cover",
+                  }}
+                  className="w3-overflow w3-light-grey post-image"
                 />
-                Your browser does not support the video tag.
-              </video>
+                {post.type == "image/audio" && (
+                  <div className="w3-black w3-opacity w3-block w3-height w3-padding w3-display-middle"></div>
+                )}
+                {post.type == "image/audio" && (
+                  <div
+                    className="w3-white w3-circle w3-display-middle"
+                    style={{ width: 60, height: 60 }}
+                  >
+                    <div className="w3-block w3-height w3-flex w3-flex-center">
+                      <FontAwesomeIcon
+                        icon={faPlay}
+                        style={{ height: 24, width: 24, marginLeft: 4 }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {post.type == "video" && (
+              <VideoPlayer source={source} videolink={post.link} />
             )}
           </div>
         </div>
@@ -431,12 +517,14 @@ export default function Home() {
         </div>
       );
     }
-    setdisplayPosts(glitchPost);
+
+    setdisplayCore(glitchPost);
   };
 
   const showUser = async (key) => {
     closeUsers();
-    setimagePDP(source + "/images.php?zlonk=3733&zlink=" + key);
+
+    setimagePDP(source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + key);
 
     chatData.splice(0, chatData.length);
     if (document.getElementById("chatChoice").clientHeight != 60) {
@@ -456,7 +544,7 @@ export default function Home() {
     );
     setdisplayChat("");
     setdisplayChoice("");
-    setdisplayPosts(loader);
+    setdisplayCore(loader);
     await axios
       .get(source + "/_accrocher/" + key)
       .then((res) => {
@@ -491,7 +579,9 @@ export default function Home() {
 
   const showDefault = async () => {
     closeUsers();
-    setimagePDP(source + "/images.php?zlonk=3733&zlink=160471339156947");
+    setimagePDP(
+      source + "/images.php?w=100&h=100&zlonk=3733&zlink=160471339156947"
+    );
 
     chatData.splice(0, chatData.length);
 
@@ -513,7 +603,7 @@ export default function Home() {
     );
     setdisplayChat("");
     setdisplayChoice("");
-    setdisplayPosts(loader);
+    setdisplayCore(loader);
     await axios
       .get(source + "/_accrocher/default")
       .then((res) => {
@@ -544,38 +634,87 @@ export default function Home() {
         console.error("failure", e);
       });
   };
-
-  const reloadUsers = (data) => {
-    var glitchUsers = "";
-    if (data.length > 1) {
-      glitchUsers = data.map(
-        (user, key) =>
-          key > 0 && (
-            <div
-              onClick={() => showUser(user.key)}
-              key={key}
-              className="w3-white w3-pointer w3-flex-row w3-flex-center-v w3-round w3-block"
-              style={{ marginBlock: 16, padding: 8 }}
-            >
-              <Image
-                loading="lazy"
-                unoptimized
-                width={40}
-                height={40}
-                src={source + "/images.php?zlonk=3733&zlink=" + user.key}
-                className="w3-circle w3-margin-right"
-                alt={user.fullname}
-                style={{objectFit:'cover',objectPosition:'center'}}
-              />
-              <div
-                className="w3-small w3-big w3-nowrap w3-overflow"
-                style={{ width: 196 }}
-              >
-                {user.fullname}
-              </div>
-            </div>
-          )
+  const reloadDesignation = (data) => {
+    usersData.splice(0, usersData.length);
+    data.forEach((user) => {
+      usersData.push(user);
+      if (
+        !designationData.includes(user.designation) &&
+        user.designation != "Admin"
+      ) {
+        designationData.push(user.designation);
+      }
+    });
+    var glitchDesignations = "";
+    if (designationData.length > 0) {
+      glitchDesignations = designationData.map((designation, key) => (
+        <div
+          onClick={() => reloadUsers(designation)}
+          key={key}
+          className="w3-white w3-pointer w3-flex-row w3-flex-center-v w3-round w3-block"
+          style={{ marginBlock: 16, padding: 8 }}
+        >
+          <div
+            className="w3-medium w3-big w3-nowrap w3-overflow"
+            style={{ width: 196 }}
+          >
+            {designation}
+          </div>
+        </div>
+      ));
+    } else {
+      glitchDesignations = (
+        <div>
+          <div
+            className="w3-text-black w3-border w3-flex-row w3-flex-center-v w3-round w3-block w3-medium w3-big"
+            style={{ marginBlock: 16, padding: 12 }}
+          >
+            You will find categories here...
+          </div>
+        </div>
       );
+    }
+    setdisplayDesignations(glitchDesignations);
+  };
+
+  const reloadUsers = (designation) => {
+    var users = [];
+    usersData.forEach((user) => {
+      if (user.designation == designation) {
+        users.push(user);
+      }
+    });
+    var glitchUsers = "";
+    if (users.length > 0) {
+      glitchUsers = users.map((user, key) => (
+        <div
+          onClick={() => showUser(user.key)}
+          key={key}
+          className="w3-half"
+          style={{ padding: 8 }}
+        >
+          <div
+            className="w3-flex w3-flex-column w3-light-grey w3-flex-center"
+            style={{ padding: 24 }}
+          >
+            <Image
+              loading="lazy"
+              unoptimized
+              width={80}
+              height={80}
+              src={
+                source + "/images.php?w=80&h=80&zlonk=3733&zlink=" + user.key
+              }
+              className="w3-circle w3-margin-right"
+              alt={user.fullname}
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
+            <div className="w3-medium w3-margin-top w3-big w3-nowrap w3-overflow w3-block">
+              {user.fullname}
+            </div>
+          </div>
+        </div>
+      ));
     } else {
       glitchUsers = (
         <div>
@@ -588,7 +727,7 @@ export default function Home() {
         </div>
       );
     }
-    setdisplayUsers(glitchUsers);
+    setdisplayCore(glitchUsers);
   };
 
   const expand = () => {
@@ -644,15 +783,80 @@ export default function Home() {
 
     const localHosts = ["localhost", "127.0.0.1", "::1"];
   
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(function () {
+        console.log("Text copied to clipboard");
+      })
+      .catch(function (err) {
+        console.error("Could not copy text: ", err);
+      });
+  };
+
+  const shareOnFacebook = (link) => {
+    const url = link;
+    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      url
+    )}`;
+
+    window.open(
+      facebookShareUrl,
+      "facebook-share-dialog",
+      "width=800,height=600"
+    );
+  };
+
+  const shareOnMessenger = (link) => {
+    const url = link;
+    const messengerShareUrl = `https://www.messenger.com/t?link=${encodeURIComponent(
+      url
+    )}`;
+
+    window.open(messengerShareUrl, "_blank");
+  };
+  const showSinglePost = (post) => {
+    setshowThisPost(post);
+    setimagePostModal(
+      source + "/images.php?w=420&h=420&zlonk=2733&zlink=" + post.link
+    );
+    if (post.type == "image/audio" && audioBox.chaine) {
+      audioBox.chaine.src = source + "/audios.php?zlonk=1733&zlink=" + post.link;
+      audioBox.chaine.load();
+      audioBox.chaine.play();
+
+      document.getElementById('iconPlay').style.display = "none"
+      document.getElementById('iconPause').style.display = "inline-block"
+      
+      document.getElementById('audioControl').style.display = 'flex'
+    }else{
+      document.getElementById('audioControl').style.display = 'none'
+    }
+    setTimeout(() => {
+      document.getElementById("modalSinglePost").style.display = "block";
+    }, 100);
+  };
+
+  useEffect(() => {
+    const localHosts = ["localhost", "127.0.0.1", "::1"];
+
     if (
       !localHosts.includes(location.hostname) &&
       location.protocol === "http:"
     ) {
       location.href =
         "https://" + location.hostname + location.pathname + location.search;
-    }else{
-      document.getElementById("coreMain").style.display = 'block'
+    } else {
+      document.getElementById("coreMain").style.display = "block";
     }
+
+    audioBox.chaine = document.getElementById("audioBox");
+    
+    audioBox.chaine.addEventListener('ended',()=>{
+      document.getElementById('iconPlay').style.display = "inline-block"
+      document.getElementById('iconPause').style.display = "none"
+    })
 
     axios
       .get(source + "/_accrocher/default")
@@ -687,7 +891,7 @@ export default function Home() {
     axios
       .get(source + "/_auth/users")
       .then((res) => {
-        reloadUsers(res.data.data);
+        reloadDesignation(res.data.data);
       })
       .catch((e) => {
         console.error("failure", e);
@@ -730,7 +934,12 @@ export default function Home() {
   }, []);
 
   return (
-    <div id="coreMain" className="container " style={{ userSelect: "none",display:'none' }}>
+
+    <div
+      id="coreMain"
+      className="container "
+      style={{ userSelect: "none", display: "none" }}
+    >
       <div
         id="overlay"
         style={{ width: "100vw", height: "100vh" }}
@@ -753,7 +962,7 @@ export default function Home() {
           className="w3-padding-32 w3-large w3-text-grey"
           style={{ paddingInline: 16 }}
         >
-          {displayUsers}
+          {displayDesignations}
         </div>
       </nav>
 
@@ -765,7 +974,7 @@ export default function Home() {
           className="w3-container"
           style={{ padding: 0, maxWidth: 480, margin: "auto" }}
         >
-          {displayPosts}
+          {displayCore}
         </div>
       </main>
 
@@ -943,6 +1152,113 @@ export default function Home() {
             width={20}
             height={20}
           />
+        </div>
+      </div>
+      <div
+        id="modalSinglePost"
+        className="w3-light-grey w3-modal w3-noscrollbar"
+        style={{ height: "100vh", width: "100vw", padding: 24 }}
+      >
+        
+        <audio id="audioBox" className="w3-hide"></audio>
+        <div
+          className="w3-white w3-noscrollbar w3-container w3-round-large w3-content w3-overflow w3-height"
+          style={{ minHeight: 320, padding: 0 }}
+        >
+          {/* Button control */}
+        <div className="w3-top" style={{ padding: 16 }}>
+          <div
+            onClick={() => {
+              if (audioBox) {
+                audioBox.chaine.pause();
+              }
+              document.getElementById("modalSinglePost").style.display = "none";
+            }}
+            className="w3-white w3-card w3-round w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
+            style={{ width: 32, height: 32 }}
+          >
+            <FontAwesomeIcon
+              icon={faArrowLeft}
+              style={{ width: 16, height: 16 }}
+            />
+          </div>
+        </div>
+
+        <div id="audioControl" className="w3-bottom w3-flex-row w3-flex" style={{ padding: 16 }}>
+          <div
+            onClick={() =>{
+              audioBox.chaine.currentTime = 0;
+            }
+            }
+            className="w3-white w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
+            style={{ width: 32, height: 32,marginRight:12 }}
+          >
+            <FontAwesomeIcon
+              icon={faRefresh}
+              style={{ width: 14, height: 14 }}
+            />
+          </div>
+          <div
+            onClick={() => {
+              if (document.getElementById('iconPause').style.display == "none") {
+                audioBox.chaine.play();
+                document.getElementById('iconPlay').style.display = "none"
+                document.getElementById('iconPause').style.display = "inline-block"
+              } else {
+                audioBox.chaine.pause();
+                document.getElementById('iconPlay').style.display = "inline-block"
+                document.getElementById('iconPause').style.display = "none"
+              }
+            }
+            }
+            className="w3-white w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
+            style={{ width: 32, height: 32 }}
+          >
+            <FontAwesomeIcon
+              id="iconPlay"
+              icon={faPlay}
+              style={{ width: 14, height: 14, marginLeft: 2 }}
+            />
+            <FontAwesomeIcon
+              id="iconPause"
+              icon={faPause}
+              style={{ width: 14, height: 14, display: "none" }}
+            />
+          </div>
+        </div>
+
+        {/* End button control */}
+          <div className="w3-height w3-overflow-scroll w3-noscrollbar">
+            <div className="w3-half w3-height w3-black">
+              <div className="w3-red w3-height w3-black">
+                <Image
+                  unoptimized
+                  loading="lazy"
+                  width={100}
+                  height={320}
+                  alt="post image"
+                  style={{
+                    objectFit: "contain",
+                    objectPosition: "center",
+                  }}
+                  src={imagePostModal}
+                  className="w3-overflow w3-black post-image w3-height"
+                />
+              </div>
+            </div>
+            <div className="w3-half" style={{ padding: 24 }}>
+              <div>
+                <div className="w3-large w3-big w3-padding">
+                  {showThisPost != null ? showThisPost.title : ""}
+                </div>
+                <div className="w3-padding">
+                  {showThisPost != null
+                    ? parse(JSON.parse(showThisPost.info).description)
+                    : ""}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
