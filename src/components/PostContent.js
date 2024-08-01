@@ -1,6 +1,6 @@
 "use client";
 
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import Image from "next/image";
@@ -176,20 +176,46 @@ export default function PostContent({ content }) {
                     {parse(JSON.parse(post.info).description)}
                   </div>
                 </div>
-                {post.type == "image" && (
-                  <Image
-                    alt={"image" + key}
-                    unoptimized
-                    loading="lazy"
+                {(post.type == "image" || post.type == "image/audio") && (
+                  <div
+                    className="w3-display-container w3-light-grey post-image"
                     height={200}
-                    width={280}
-                    src={source + "/images.php?zlonk=2733&zlink=" + post.link}
-                    style={{
-                      objectPosition: "center",
-                      objectFit: "cover",
-                    }}
-                    className="w3-overflow w3-light-grey post-image"
-                  />
+                  >
+                    <Image
+                      alt={"image" + key}
+                      unoptimized
+                      loading="lazy"
+                      onContextMenu={(e) => e.preventDefault()}
+                      height={200}
+                      width={280}
+                      src={
+                        source +
+                        "/images.php?w=280&h=280&zlonk=2733&zlink=" +
+                        post.link
+                      }
+                      style={{
+                        objectPosition: "center",
+                        objectFit: "cover",
+                      }}
+                      className="w3-overflow w3-light-grey post-image"
+                    />
+                    {post.type == "image/audio" && (
+                      <div className="w3-black w3-opacity w3-block w3-height w3-padding w3-display-middle"></div>
+                    )}
+                    {post.type == "image/audio" && (
+                      <div
+                        className="w3-white w3-circle w3-display-middle"
+                        style={{ width: 60, height: 60 }}
+                      >
+                        <div className="w3-block w3-height w3-flex w3-flex-center">
+                          <FontAwesomeIcon
+                            icon={faPlay}
+                            style={{ height: 24, width: 24, marginLeft: 4 }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 )}
                 {post.type == "video" && (
                   <video
@@ -274,7 +300,8 @@ export default function PostContent({ content }) {
           }}
         >
           <div className="w3-overflow w3-light-grey w3-round-large">
-            {singlePostInfo.type == "image" && (
+            {(singlePostInfo.type == "image" ||
+              singlePostInfo.type == "image/audio") && (
               <Image
                 id="postImageMedia"
                 alt={singlePostInfo.title}
@@ -283,7 +310,9 @@ export default function PostContent({ content }) {
                 height={420}
                 width={520}
                 src={
-                  source + "/images.php?zlonk=2733&zlink=" + singlePostInfo.link
+                  source +
+                  "/images.php?w=720&h=720&zlonk=2733&zlink=" +
+                  singlePostInfo.link
                 }
                 style={{
                   objectPosition: "center",
