@@ -3,23 +3,7 @@ import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { faChevronCircleUp, faICursor, faPaperPlane, faSpinner, faTimes, faUsers } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import Link from "next/link";
-
-export default function Home() {
-  
-  // const source = "https://console.freelancer.mg";
-  const source = "http://127.0.0.1:8000";
-
-  const [imagePDP, setimagePDP] = useState(source + "/images.php?zlonk=3733&zlink=160471339156947")
-  const [height, setHeight] = useState(0);
-  const [displayChoice, setdisplayChoice] = useState("");
-  const [displayUsers, setdisplayUsers] = useState("");
-  const [displayChat, setdisplayChat] = useState("");
-  const [displayPosts, setdisplayPosts] = useState("");
-  const [chatData, setchatData] = useState([]);
-  const [killer, setkiller] = useState({ starter: null});
 import {
   faArrowLeft,
   faChevronCircleUp,
@@ -27,16 +11,11 @@ import {
   faPaperPlane,
   faPause,
   faPlay,
-  faRecycle,
   faRefresh,
-  faRepeat,
   faSpinner,
   faTimes,
   faUsers,
-  faVideo,
 } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
-import cloudinary from "cloudinary-video-player";
 import "cloudinary-video-player/cld-video-player.min.css";
 import VideoPlayer from "./video";
 
@@ -392,7 +371,7 @@ export default function Home() {
               chatElement.scrollTop = chatElement.scrollHeight;
               stepper.scrollHeight = chatElement.scrollHeight;
             }
-
+          }
             charCounter++;
             //
           }, 40);
@@ -779,11 +758,6 @@ export default function Home() {
     document.getElementById("chatOpenButton").style.display = "block";
   };
   
-  useEffect(() => {
-
-    const localHosts = ["localhost", "127.0.0.1", "::1"];
-  
-
   const copyToClipboard = (text) => {
     navigator.clipboard
       .writeText(text)
