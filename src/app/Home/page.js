@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import {
   faArrowLeft,
@@ -17,19 +17,19 @@ import {
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import "cloudinary-video-player/cld-video-player.min.css";
-import dynamic from "next/dynamic";
+import VideoPlayer from "./video";
 import Link from "next/link";
 import slugify from "slugify";
-
-const VideoPlayer = dynamic(() => import("./video"), { ssr: false });
 
 export default function Home(props) {
   const source = "https://console.freelancer.mg";
   // const source = "http://127.0.0.1:8000";
 
-  const [fullPath, setfullPath] = useState({path:''})
+  const fullPath = window.location.pathname
 
-  const [imagePDP, setimagePDP] = useState(null);
+  const [imagePDP, setimagePDP] = useState(
+    source + "/images.php?w=100&h=100&zlonk=3733&zlink=160471339156947"
+  );
   const [imagePostModal, setimagePostModal] = useState(
     source + "/images.php?w=720&h=720&zlonk=3733&zlink=160471339156947"
   );
@@ -44,13 +44,7 @@ export default function Home(props) {
   const [displayUsers, setdisplayUsers] = useState("");
   const [displayCategoryUsers, setdisplayCategoryUsers] = useState("");
   const [displayDesignations, setdisplayDesignations] = useState("");
-  const [displayChat, setdisplayChat] = useState(
-    <div className="w3-flex w3-flex-center" style={{ padding: 24 }}>
-      <span className="w3-spin">
-        <FontAwesomeIcon icon={faSpinner} />
-      </span>
-    </div>
-  );
+  const [displayChat, setdisplayChat] = useState("");
   const [displayCore, setdisplayCore] = useState("");
   const [chatData, setchatData] = useState([]);
   const [usersData, setusersData] = useState([]);
@@ -575,10 +569,10 @@ export default function Home(props) {
         .catch((e) => {
           console.error("failure", e);
         });
-    } else if (props.core == "talent" && props.settings) {
+    }else if (props.core == "talent" && props.settings) {
       reloadUsers(props.settings[0]);
-    } else if (props.core == "talent" && !props.settings) {
-      reloadTalents();
+    }else if (props.core == "talent" && !props.settings) {
+      reloadTalents()
     }
   };
 
@@ -597,20 +591,12 @@ export default function Home(props) {
     if (designationData.length > 0) {
       glitchDesignations = designationData.map((designation, key) => (
         <Link
-          onClick={() => {
-            if (
-              !fullPath.path.includes(
-                "/talent/" + slugify(designation, { lower: true })
-              )
-            ) {
-              stopAllIntervalAndTimeout();
+          onClick={() =>{
+            if (!fullPath.includes("/talent/" + slugify(designation, { lower: true }))) {
+              stopAllIntervalAndTimeout()
             }
-          }}
-          href={
-            "/talent/" +
-            slugify(designation, { lower: true }) +
-            (props.user != "default" ? "?user=" + props.user : "")
-          }
+          } }
+          href={"/talent/" + slugify(designation, { lower: true })+(props.user!="default"?("?user="+props.user):"")}
           key={key}
           className="w3-white w3-pointer w3-flex-row w3-flex-center-v w3-round w3-block"
           style={{ marginBlock: 16, padding: 8 }}
@@ -649,12 +635,12 @@ export default function Home(props) {
     if (users.length > 0) {
       glitchUsers = users.map((user, key) => (
         <Link
-          onClick={() => {
-            if (!fullPath.path.includes("user/" + user.key)) {
-              stopAllIntervalAndTimeout();
+          onClick={()=>{
+            if (!fullPath.includes("user/"+user.key)) {
+              stopAllIntervalAndTimeout()
             }
           }}
-          href={"/user/" + user.key}
+          href={"/user/"+user.key}
           key={key}
           className="w3-half"
           style={{ padding: 8 }}
@@ -745,7 +731,6 @@ export default function Home(props) {
     document.getElementById("chatOpenButton").style.display = "block";
   };
 
-  
   const copyToClipboard = (text) => {
     navigator.clipboard
       .writeText(text)
@@ -786,20 +771,13 @@ export default function Home(props) {
     var glitchTalents = "";
     if (designationData.length > 0) {
       glitchTalents = designationData.map((des, key) => (
-        <div key={key} className="w3-half" style={{ padding: 8 }}>
+        <div
+          key={key}
+          className="w3-half"
+          style={{ padding: 8 }}
+        >
           <Link
-            onClick={() => {
-              if (
-                !fullPath.path.includes("talent/" + slugify(des, { lower: true }))
-              ) {
-                stopAllIntervalAndTimeout();
-              }
-            }}
-            href={
-              "/talent/" +
-              slugify(des, { lower: true }) +
-              (props.user != "default" ? "?user=" + props.user : "")
-            }
+            href={'/talent/'+slugify(des, { lower: true })}
             className="w3-flex w3-flex-column w3-light-grey w3-flex-center"
           >
             <Image
@@ -808,18 +786,13 @@ export default function Home(props) {
               width={80}
               height={120}
               src={
-                source +
-                "/images.php?w=320&h=320&zlonk=5733&zlink=" +
-                slugify(des, { lower: true })
+                source + "/images.php?w=320&h=320&zlonk=5733&zlink=" + slugify(des, { lower: true })
               }
               className="w3-block"
               alt={des}
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
-            <div
-              style={{ padding: 16 }}
-              className="w3-medium w3-big w3-center w3-nowrap w3-overflow w3-block"
-            >
+            <div style={{ padding: 16 }} className="w3-medium w3-big w3-center w3-nowrap w3-overflow w3-block">
               {des}
             </div>
           </Link>
@@ -864,10 +837,6 @@ export default function Home(props) {
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      fullPath.path =  window.location.pathname;
-    }
-
     const localHosts = ["localhost", "127.0.0.1", "::1"];
 
     if (
@@ -963,9 +932,9 @@ export default function Home(props) {
       >
         <div className="w3-container w3-display-container w3-padding-16">
           <Link
-            onClick={() => {
-              if (fullPath.path.length>0) {
-                stopAllIntervalAndTimeout();
+            onClick={()=>{
+              if (fullPath.length>1) {
+                stopAllIntervalAndTimeout()
               }
             }}
             href={"/"}
@@ -981,9 +950,9 @@ export default function Home(props) {
           <div className="w3-flex w3-flex-row w3-flex-center-v">
             <div className="w3-flex-1 w3-text-black w3-medium">Nos talents</div>
             <Link
-              onClick={() => {
-                if (fullPath.path != "/talent/" && fullPath.path != "/talent") {
-                  stopAllIntervalAndTimeout();
+              onClick={()=>{
+                if (fullPath!="/talent/" && fullPath!="/talent") {
+                  stopAllIntervalAndTimeout()
                 }
               }}
               className="w3-small w3-text-grey w3-padding w3-white"
@@ -1023,27 +992,20 @@ export default function Home(props) {
         >
           <div style={{ marginInline: "auto" }}>
             <div>
-              <div
-                className="w3-circle w3-light-grey"
-                style={{ width: 100, height: 100 }}
-              >
-                {imagePDP && (
-                  <Image
-                    id="imagePDP"
-                    unoptimized
-                    loading="lazy"
-                    className="w3-circle"
-                    width={100}
-                    height={100}
-                    alt="App profile"
-                    style={{
-                      objectFit: "cover",
-                      objectPosition: "center",
-                    }}
-                    src={imagePDP}
-                  />
-                )}
-              </div>
+              <Image
+                id="imagePDP"
+                unoptimized
+                loading="lazy"
+                className="w3-circle"
+                width={100}
+                height={100}
+                alt="App profile"
+                style={{
+                  objectFit: "cover",
+                  objectPosition: "center",
+                }}
+                src={imagePDP}
+              />
             </div>
 
             <div className="w3-flex-row" style={{ paddingBlock: 16 }}>
