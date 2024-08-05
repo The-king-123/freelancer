@@ -3,7 +3,6 @@
 import {
   faArrowLeft,
   faPause,
-  faPlay,
   faRefresh,
 } from "@fortawesome/free-solid-svg-icons";
 import { faArrowLeft, faPlay } from "@fortawesome/free-solid-svg-icons";
