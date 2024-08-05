@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Home from "../Home/page";
 
 function page() {
-  const [talent, settalent] = useState("");
+  const [code, settalent] = useState("");
 
   useEffect(() => {
 
@@ -15,7 +15,7 @@ function page() {
     
   }, []);
 
-  return <div>{talent}</div>;
+  return <div>{code}</div>;
 }
 
 export default page;

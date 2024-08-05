@@ -1,8 +1,8 @@
 "use client";
+import React, { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import {
   faArrowLeft,
@@ -17,15 +17,17 @@ import {
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import "cloudinary-video-player/cld-video-player.min.css";
-import VideoPlayer from "./video";
+import dynamic from 'next/dynamic';
 import Link from "next/link";
 import slugify from "slugify";
+
+const VideoPlayer = dynamic(() => import('./video'), { ssr: false });
 
 export default function Home(props) {
   const source = "https://console.freelancer.mg";
   // const source = "http://127.0.0.1:8000";
 
-  const fullPath = window.location.pathname
+  var fullPath = ""
 
   const [imagePDP, setimagePDP] = useState(
     source + "/images.php?w=100&h=100&zlonk=3733&zlink=160471339156947"
@@ -837,6 +839,11 @@ export default function Home(props) {
   };
 
   useEffect(() => {
+
+    if (typeof window !== 'undefined') {
+      fullPath = window.location.pathname;
+    }
+
     const localHosts = ["localhost", "127.0.0.1", "::1"];
 
     if (
