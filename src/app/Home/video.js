@@ -6,9 +6,7 @@ function video(props) {
   const source = props.source;
   
   return (
-    <>
       <VideoPlayer id="player1" publicId={source + "/videos/post/" + videolink} />
-    </>
   );
 }
 

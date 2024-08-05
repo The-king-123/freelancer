@@ -1,10 +1,14 @@
 "use client";
 
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faPause,
+  faPlay,
+  faRefresh,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 
@@ -15,7 +19,7 @@ export default function PostContent({ content }) {
   // const source = "http://127.0.0.1:8000";
 
   const [displayRelated, setDisplayRelated] = useState("");
-
+  const [audioBox, setaudioBox] = useState({chaine:null});
   const [stepper, setstepper] = useState({
     key: 0,
     scrollHeight: 0,
@@ -159,14 +163,16 @@ export default function PostContent({ content }) {
         (post, key) =>
           singlePostInfo.slug != post.slug && (
             <div key={key} style={{ padding: 8 }}>
-              <div className="w3-flex-column w3-overflow w3-border w3-round w3-pointer w3-white">
-                <Link
+              <div
+                onClick={() => (document.location = "/post/" + post.slug)}
+                className="w3-flex-column w3-overflow w3-border w3-round w3-pointer w3-white"
+              >
+                <div
                   className="w3-nowrap w3-overflow w3-light-grey w3-big w3-border-bottom"
                   style={{ paddingBlock: 8, paddingInline: 16 }}
-                  href={"/post/" + post.slug}
                 >
                   {parse(post.title)}
-                </Link>
+                </div>
                 <div className="w3-border-bottom">
                   <div
                     id={"post" + key}
@@ -176,20 +182,46 @@ export default function PostContent({ content }) {
                     {parse(JSON.parse(post.info).description)}
                   </div>
                 </div>
-                {post.type == "image" && (
-                  <Image
-                    alt={"image" + key}
-                    unoptimized
-                    loading="lazy"
+                {(post.type == "image" || post.type == "image/audio") && (
+                  <div
+                    className="w3-display-container w3-light-grey post-image"
                     height={200}
-                    width={280}
-                    src={source + "/images.php?zlonk=2733&zlink=" + post.link}
-                    style={{
-                      objectPosition: "center",
-                      objectFit: "cover",
-                    }}
-                    className="w3-overflow w3-light-grey post-image"
-                  />
+                  >
+                    <Image
+                      alt={"image" + key}
+                      unoptimized
+                      loading="lazy"
+                      onContextMenu={(e) => e.preventDefault()}
+                      height={200}
+                      width={280}
+                      src={
+                        source +
+                        "/images.php?w=280&h=280&zlonk=2733&zlink=" +
+                        post.link
+                      }
+                      style={{
+                        objectPosition: "center",
+                        objectFit: "cover",
+                      }}
+                      className="w3-overflow w3-light-grey post-image"
+                    />
+                    {post.type == "image/audio" && (
+                      <div className="w3-black w3-opacity w3-block w3-height w3-padding w3-display-middle"></div>
+                    )}
+                    {post.type == "image/audio" && (
+                      <div
+                        className="w3-white w3-circle w3-display-middle"
+                        style={{ width: 60, height: 60 }}
+                      >
+                        <div className="w3-block w3-height w3-flex w3-flex-center">
+                          <FontAwesomeIcon
+                            icon={faPlay}
+                            style={{ height: 24, width: 24, marginLeft: 4 }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 )}
                 {post.type == "video" && (
                   <video
@@ -226,6 +258,15 @@ export default function PostContent({ content }) {
   };
 
   useEffect(() => {
+
+    audioBox.chaine = document.getElementById("audioBox");
+    audioBox.chaine.src = source + "/audios.php?zlonk=1733&zlink=" + content.link;
+    audioBox.chaine.load();
+    audioBox.chaine.addEventListener('ended',()=>{
+      document.getElementById('iconPlay').style.display = "inline-block"
+      document.getElementById('iconPause').style.display = "none"
+    })
+
     axios
       .get(source + "/_post/" + require + "?c=default")
       .then((res) => {
@@ -252,17 +293,65 @@ export default function PostContent({ content }) {
       }}
     >
       <h3
-        onClick={() => (document.location = "/")}
         className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large"
-      >
+      ><div onClick={() => (document.location = "/")} className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large" >
         <FontAwesomeIcon
           icon={faArrowLeft}
           style={{ width: 24 }}
           className="w3-marginn-right"
         />
         <b>FREELANCER</b>
+      </div>
+        
+        <audio id="audioBox" className="w3-hide"></audio>
+        {content.type == "image/audio" && (
+          <div id="audioControl" className="w3-margin-left w3-flex-row w3-flex">
+            <div
+              onClick={() => {
+                audioBox.chaine.currentTime = 0;
+              }}
+              className="w3-white w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
+              style={{ width: 32, height: 32, marginRight: 12 }}
+            >
+              <FontAwesomeIcon
+                icon={faRefresh}
+                style={{ width: 14, height: 14 }}
+              />
+            </div>
+            <div
+              onClick={() => {
+                if (
+                  document.getElementById("iconPause").style.display == "none"
+                ) {
+                  audioBox.chaine.play();
+                  document.getElementById("iconPlay").style.display = "none";
+                  document.getElementById("iconPause").style.display =
+                    "inline-block";
+                } else {
+                  audioBox.chaine.pause();
+                  document.getElementById("iconPlay").style.display =
+                    "inline-block";
+                  document.getElementById("iconPause").style.display = "none";
+                }
+              }}
+              className="w3-white w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
+              style={{ width: 32, height: 32 }}
+            >
+              <FontAwesomeIcon
+                id="iconPlay"
+                icon={faPlay}
+                style={{ width: 14, height: 14, marginLeft: 2 }}
+              />
+              <FontAwesomeIcon
+                id="iconPause"
+                icon={faPause}
+                style={{ width: 14, height: 14, display: "none" }}
+              />
+            </div>
+          </div>
+        )}
       </h3>
-      <div className="w3-container w3-white w3-flex w3-flex-row w3-round-large">
+      <div className="w3-container singlePostFlex w3-white w3-flex w3-flex-row w3-round-large">
         <div
           id="chatCoreWrapper"
           className="w3-flex-1 w3-overflow-scroll w3-noscrollbar"
@@ -274,7 +363,8 @@ export default function PostContent({ content }) {
           }}
         >
           <div className="w3-overflow w3-light-grey w3-round-large">
-            {singlePostInfo.type == "image" && (
+            {(singlePostInfo.type == "image" ||
+              singlePostInfo.type == "image/audio") && (
               <Image
                 id="postImageMedia"
                 alt={singlePostInfo.title}
@@ -283,7 +373,9 @@ export default function PostContent({ content }) {
                 height={420}
                 width={520}
                 src={
-                  source + "/images.php?zlonk=2733&zlink=" + singlePostInfo.link
+                  source +
+                  "/images.php?w=720&h=720&zlonk=2733&zlink=" +
+                  singlePostInfo.link
                 }
                 style={{
                   objectPosition: "center",

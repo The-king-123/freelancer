@@ -81,3 +81,6 @@ html,.w3-noscrollbar {
     display: none;
     transition: 1s;
 }
+a[href] {
+    text-decoration: none;
+}
