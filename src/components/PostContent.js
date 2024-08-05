@@ -6,6 +6,7 @@ import {
   faPlay,
   faRefresh,
 } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import Image from "next/image";

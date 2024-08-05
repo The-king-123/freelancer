@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import {
   faArrowLeft,
@@ -745,6 +746,7 @@ export default function Home(props) {
     document.getElementById("chatOpenButton").style.display = "block";
   };
 
+  
   const copyToClipboard = (text) => {
     navigator.clipboard
       .writeText(text)
