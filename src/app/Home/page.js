@@ -10,6 +10,7 @@ import {
   faICursor,
   faPaperPlane,
   faPause,
+  faPhone,
   faPlay,
   faRefresh,
   faSpinner,
@@ -20,6 +21,10 @@ import "cloudinary-video-player/cld-video-player.min.css";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import slugify from "slugify";
+import {
+  faFacebookMessenger,
+  faWhatsapp,
+} from "@fortawesome/free-brands-svg-icons";
 
 const VideoPlayer = dynamic(() => import("./video"), { ssr: false });
 
@@ -27,12 +32,18 @@ export default function Home(props) {
   const source = "https://console.freelancer.mg";
   // const source = "http://127.0.0.1:8000";
 
-  const [fullPath, setfullPath] = useState({path:''})
+  const [fullPath, setfullPath] = useState({ path: "" });
 
   const [imagePDP, setimagePDP] = useState(null);
   const [imagePostModal, setimagePostModal] = useState(
     source + "/images.php?w=720&h=720&zlonk=3733&zlink=160471339156947"
   );
+
+  const [contact, setcontact] = useState({
+    phone: null,
+    whatsapp: null,
+    messenger: null,
+  });
 
   const [userData, setuserData] = useState({
     key: props.user,
@@ -516,7 +527,28 @@ export default function Home(props) {
 
   const showUser = async (key) => {
     closeUsers();
+    
+    const userInfos = usersData.find(obj => obj.key == key);
+console.log(usersData);
 
+    if (userInfos) {
+      if (userInfos.contact.includes('whatsapp')) {
+          setcontact({
+            phone: JSON.parse(userInfos.contact).telephone.length>3 ? JSON.parse(userInfos.contact).telephone : null,
+            whatsapp: JSON.parse(userInfos.contact).whatsapp.length>3 ? JSON.parse(userInfos.contact).whatsapp : null,
+            messenger: JSON.parse(userInfos.contact).messenger.length>3 ? JSON.parse(userInfos.contact).messenger : null,
+          })
+        }else{
+          setcontact({
+            phone: userInfos.contact.length>3 ? userInfos.contact : null,
+            whatsapp: null,
+            messenger: null,
+          })
+        }
+    }
+    
+    
+    
     setimagePDP(
       source +
         "/images.php?w=100&h=100&zlonk=3733&zlink=" +
@@ -640,6 +672,7 @@ export default function Home(props) {
 
   const reloadUsers = (designation) => {
     var users = [];
+
     usersData.forEach((user) => {
       if (slugify(user.designation, { lower: true }) == designation) {
         users.push(user);
@@ -789,7 +822,9 @@ export default function Home(props) {
           <Link
             onClick={() => {
               if (
-                !fullPath.path.includes("talent/" + slugify(des, { lower: true }))
+                !fullPath.path.includes(
+                  "talent/" + slugify(des, { lower: true })
+                )
               ) {
                 stopAllIntervalAndTimeout();
               }
@@ -864,7 +899,7 @@ export default function Home(props) {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      fullPath.path =  window.location.pathname;
+      fullPath.path = window.location.pathname;
     }
 
     const localHosts = ["localhost", "127.0.0.1", "::1"];
@@ -956,14 +991,14 @@ export default function Home(props) {
         className="w3-display-middle w3-hide-large"
       ></div>
       <nav
-        className="w3-animate-left w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
+        className="w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
         style={{ zIndex: 3, width: 250 }}
         id="sidebarMenu"
       >
         <div className="w3-container w3-display-container w3-padding-16">
           <Link
             onClick={() => {
-              if (fullPath.path.length>0) {
+              if (fullPath.path.length > 0) {
                 stopAllIntervalAndTimeout();
               }
             }}
@@ -1011,7 +1046,7 @@ export default function Home(props) {
       </main>
 
       <nav
-        className="w3-animate-right w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
+        className="w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
         style={{ zIndex: 3, width: 320, right: 0 }}
         id="sidebarChat"
       >
@@ -1023,8 +1058,8 @@ export default function Home(props) {
           <div style={{ marginInline: "auto" }}>
             <div>
               <div
-                className="w3-circle w3-light-grey"
-                style={{ width: 100, height: 100 }}
+                className="w3-circle w3-light-grey w3-flex w3-flex-row w3-flex-center-v"
+                style={{ minWidth: 80, minHeight: 80 }}
               >
                 {imagePDP && (
                   <Image
@@ -1032,8 +1067,8 @@ export default function Home(props) {
                     unoptimized
                     loading="lazy"
                     className="w3-circle"
-                    width={100}
-                    height={100}
+                    width={80}
+                    height={80}
                     alt="App profile"
                     style={{
                       objectFit: "cover",
@@ -1042,6 +1077,45 @@ export default function Home(props) {
                     src={imagePDP}
                   />
                 )}
+                <div className="w3-padding w3-flex-1 w3-flex-row w3-flex-center-v">
+                  {contact.phone && (
+                    <div
+                      onClick={() =>
+                        window.open("tel:"+contact.phone, "_blank").focus()
+                      }
+                      className="w3-circle w3-border w3-flex-center w3-flex"
+                      style={{ height: 36, width: 36, margin: 4 }}
+                    >
+                      <FontAwesomeIcon icon={faPhone} />
+                    </div>
+                  )}
+                  {contact.whatsapp && (
+                    <div
+                      onClick={() =>
+                        window
+                          .open("https://wa.me/"+contact.whatsapp, "_blank")
+                          .focus()
+                      }
+                      className="w3-circle w3-border w3-flex-center w3-flex"
+                      style={{ height: 36, width: 36, margin: 4 }}
+                    >
+                      <FontAwesomeIcon icon={faWhatsapp} />
+                    </div>
+                  )}
+                  {contact.messenger && (
+                    <div
+                      onClick={() =>
+                        window
+                          .open(contact.messenger, "_blank")
+                          .focus()
+                      }
+                      className="w3-circle w3-border w3-flex-center w3-flex"
+                      style={{ height: 36, width: 36, margin: 4 }}
+                    >
+                      <FontAwesomeIcon icon={faFacebookMessenger} />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
