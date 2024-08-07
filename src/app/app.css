@@ -69,6 +69,12 @@ html,.w3-noscrollbar {
     #iconCloseMenu{
         display: block;
     }
+    .mobileHeight{
+        height:calc(100vh - 44px);
+    }
+    .mobileHeightPanel{
+        height:calc(100vh - 60px);
+    }
 }
 .post-image{
     display: block;

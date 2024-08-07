@@ -526,29 +526,34 @@ export default function Home(props) {
   };
 
   const showUser = async (key) => {
-    closeUsers();
-    
-    const userInfos = usersData.find(obj => obj.key == key);
-console.log(usersData);
+    closeAllPanel()
+    const userInfos = usersData.find((obj) => obj.key == key);
 
     if (userInfos) {
-      if (userInfos.contact.includes('whatsapp')) {
-          setcontact({
-            phone: JSON.parse(userInfos.contact).telephone.length>3 ? JSON.parse(userInfos.contact).telephone : null,
-            whatsapp: JSON.parse(userInfos.contact).whatsapp.length>3 ? JSON.parse(userInfos.contact).whatsapp : null,
-            messenger: JSON.parse(userInfos.contact).messenger.length>3 ? JSON.parse(userInfos.contact).messenger : null,
-          })
-        }else{
-          setcontact({
-            phone: userInfos.contact.length>3 ? userInfos.contact : null,
-            whatsapp: null,
-            messenger: null,
-          })
-        }
+      if (userInfos.contact.includes("whatsapp")) {
+        setcontact({
+          phone:
+            JSON.parse(userInfos.contact).telephone.length > 3
+              ? JSON.parse(userInfos.contact).telephone
+              : null,
+          whatsapp:
+            JSON.parse(userInfos.contact).whatsapp.length > 3
+              ? JSON.parse(userInfos.contact).whatsapp
+              : null,
+          messenger:
+            JSON.parse(userInfos.contact).messenger.length > 3
+              ? JSON.parse(userInfos.contact).messenger
+              : null,
+        });
+      } else {
+        setcontact({
+          phone: userInfos.contact.length > 3 ? userInfos.contact : null,
+          whatsapp: null,
+          messenger: null,
+        });
+      }
     }
-    
-    
-    
+
     setimagePDP(
       source +
         "/images.php?w=100&h=100&zlonk=3733&zlink=" +
@@ -708,7 +713,7 @@ console.log(usersData);
               alt={user.fullname}
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
-            <div className="w3-medium w3-margin-top w3-big w3-nowrap w3-overflow w3-block">
+            <div className="w3-medium w3-margin-top w3-big w3-nowrap w3-center w3-overflow w3-block">
               {user.fullname}
             </div>
           </div>
@@ -748,35 +753,40 @@ console.log(usersData);
     }
   };
 
-  const openChat = () => {
-    document.getElementById("sidebarMenu").style.display = "none";
-    document.getElementById("overlay").style.display = "block";
-    document.getElementById("sidebarChat").style.display = "block";
+  const toggleChat = () => {
+    if (document.getElementById("sidebarChat").style.display != "block") {
+      closeAllPanel()
+      document.getElementById("overlay").style.display = "block";
+      document.getElementById("sidebarChat").className =
+        "mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top w3-animate-right";
+      document.getElementById("sidebarChat").style.display = "block";
+    } else {
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("sidebarChat").style.display = "none";
+    }
   };
 
-  const closeChat = () => {
+  const toggleUsers = () => {
+    if (document.getElementById("sidebarMenu").style.display != "block") {
+      closeAllPanel()
+      document.getElementById("overlay").style.display = "block";
+      document.getElementById("sidebarMenu").className =
+        "mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top w3-animate-left";
+      document.getElementById("sidebarMenu").style.display = "block";
+    } else {
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("sidebarMenu").style.display = "none";
+    }
+  };
+
+  const closeAllPanel = () => {
+    const allPanel = document.getElementsByClassName('panel')
+    for (let i = 0; i < allPanel.length; i++) {
+      allPanel[i].style.display = 'none';
+    }
     document.getElementById("overlay").style.display = "none";
-    document.getElementById("sidebarChat").style.display = "none";
-  };
-
-  const openUsers = () => {
-    document.getElementById("sidebarChat").style.display = "none";
-    document.getElementById("overlay").style.display = "block";
-    document.getElementById("sidebarMenu").style.display = "block";
-
-    document.getElementById("usersCloseButton").style.display = "block";
-    document.getElementById("usersOpenButton").style.display = "none";
-    document.getElementById("chatOpenButton").style.display = "none";
-  };
-
-  const closeUsers = () => {
-    document.getElementById("overlay").style.display = "none";
-    document.getElementById("sidebarMenu").style.display = "none";
-
-    document.getElementById("usersCloseButton").style.display = "none";
-    document.getElementById("usersOpenButton").style.display = "block";
-    document.getElementById("chatOpenButton").style.display = "block";
-  };
+    
+  }
 
   const copyToClipboard = (text) => {
     navigator.clipboard
@@ -986,13 +996,15 @@ console.log(usersData);
       style={{ userSelect: "none", display: "none" }}
     >
       <div
+      onClick={()=>closeAllPanel()}
         id="overlay"
         style={{ width: "100vw", height: "100vh" }}
         className="w3-display-middle w3-hide-large"
       ></div>
+
       <nav
-        className="w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
-        style={{ zIndex: 3, width: 250 }}
+        className="mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
+        style={{ zIndex: 3, width: 250, top:8,borderRadius:'0px 8px 8px 0px'  }}
         id="sidebarMenu"
       >
         <div className="w3-container w3-display-container w3-padding-16">
@@ -1018,6 +1030,7 @@ console.log(usersData);
               onClick={() => {
                 if (fullPath.path != "/talent/" && fullPath.path != "/talent") {
                   stopAllIntervalAndTimeout();
+                  closeAllPanel()
                 }
               }}
               className="w3-small w3-text-grey w3-padding w3-white"
@@ -1034,8 +1047,8 @@ console.log(usersData);
       </nav>
 
       <main
-        className="w3-main w3-100vh w3-overflow-scroll w3-noscrollbar"
-        style={{ marginLeft: 250, marginRight: 320, padding: 8 }}
+        className="mobileHeight w3-main w3-100vh w3-overflow-scroll w3-noscrollbar"
+        style={{ marginLeft: 250, marginRight: 320, padding:8 }}
       >
         <div
           className="w3-container"
@@ -1046,8 +1059,8 @@ console.log(usersData);
       </main>
 
       <nav
-        className="w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
-        style={{ zIndex: 3, width: 320, right: 0 }}
+        className="mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
+        style={{ zIndex: 3, width: 320, right: 0, top:8, borderRadius:'8px 0px 0px 8px' }}
         id="sidebarChat"
       >
         <div
@@ -1077,11 +1090,12 @@ console.log(usersData);
                     src={imagePDP}
                   />
                 )}
+
                 <div className="w3-padding w3-flex-1 w3-flex-row w3-flex-center-v">
                   {contact.phone && (
                     <div
                       onClick={() =>
-                        window.open("tel:"+contact.phone, "_blank").focus()
+                        window.open("tel:" + contact.phone, "_blank").focus()
                       }
                       className="w3-circle w3-border w3-flex-center w3-flex"
                       style={{ height: 36, width: 36, margin: 4 }}
@@ -1093,7 +1107,7 @@ console.log(usersData);
                     <div
                       onClick={() =>
                         window
-                          .open("https://wa.me/"+contact.whatsapp, "_blank")
+                          .open("https://wa.me/" + contact.whatsapp, "_blank")
                           .focus()
                       }
                       className="w3-circle w3-border w3-flex-center w3-flex"
@@ -1105,9 +1119,7 @@ console.log(usersData);
                   {contact.messenger && (
                     <div
                       onClick={() =>
-                        window
-                          .open(contact.messenger, "_blank")
-                          .focus()
+                        window.open(contact.messenger, "_blank").focus()
                       }
                       className="w3-circle w3-border w3-flex-center w3-flex"
                       style={{ height: 36, width: 36, margin: 4 }}
@@ -1173,7 +1185,7 @@ console.log(usersData);
             justifyContent: "flex-end",
           }}
         >
-          <div className="w3-white" style={{ display: "block" }}>
+          <div className="w3-light-grey w3-card" style={{ display: "block",paddingTop:12 }}>
             {displayChoice}
           </div>
           <div
@@ -1189,88 +1201,57 @@ console.log(usersData);
                 <span className="w3-center w3-flex-1">Des questions !?</span>{" "}
                 <FontAwesomeIcon id="expandIcon" icon={faChevronCircleUp} />
               </div>
-              <div
-                onClick={closeChat}
-                className="w3-hide-large w3-text-black w3-hover-black w3-yellow w3-flex-center w3-flex w3-round-xxlarge"
-                style={{ width: 38, height: 38, marginTop: 12 }}
-              >
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  style={{ width: 18, height: 18 }}
-                />
-              </div>
             </div>
           </div>
         </div>
       </nav>
 
       <div
-        id="usersCloseButton"
-        onClick={closeUsers}
-        className="w3-yellow w3-overflow w3-circle w3-card w3-bottom w3-right"
-        style={{
-          width: 40,
-          height: 40,
-          right: 16,
-          bottom: 56,
-          padding: 0,
-          display: "none",
-        }}
+        className="w3-bottom w3-block w3-card w3-white w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
+        style={{ paddingBlock: 4, zIndex: 9999 }}
       >
         <div
-          className="w3-flex w3-flex-center"
-          style={{ width: 40, height: 40 }}
+          onClick={toggleUsers}
+          className="w3-flex-1"
+          style={{ width: 36, height: 36 }}
         >
-          <FontAwesomeIcon
-            className="w3-text-black"
-            icon={faTimes}
-            width={20}
-            height={20}
-          />
+          <div
+            className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
+            style={{ width: 36, height: 36, marginInline: "auto" }}
+          >
+            <FontAwesomeIcon
+              className="w3-text-black"
+              icon={faUsers}
+              width={20}
+              height={20}
+            />
+          </div>
+        </div>
+
+        <div
+          onClick={toggleChat}
+          className="w3-flex-1"
+          style={{ width: 36, height: 36 }}
+        >
+          <div
+            className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
+            style={{ width: 36, height: 36, marginInline: "auto" }}
+          >
+            <FontAwesomeIcon
+              className="w3-text-black"
+              icon={faPaperPlane}
+              width={20}
+              height={20}
+            />
+          </div>
         </div>
       </div>
 
-      <div
-        id="usersOpenButton"
-        onClick={openUsers}
-        className="w3-yellow w3-overflow w3-circle w3-card w3-bottom w3-right"
-        style={{ width: 40, height: 40, right: 16, bottom: 56, padding: 0 }}
-      >
-        <div
-          className="w3-flex w3-flex-center"
-          style={{ width: 40, height: 40 }}
-        >
-          <FontAwesomeIcon
-            className="w3-text-black"
-            icon={faUsers}
-            width={20}
-            height={20}
-          />
-        </div>
-      </div>
-
-      <div
-        id="chatOpenButton"
-        onClick={openChat}
-        className="w3-yellow w3-overflow w3-circle w3-card w3-bottom w3-right"
-        style={{ width: 40, height: 40, right: 16, bottom: 8, padding: 0 }}
-      >
-        <div
-          className="w3-flex w3-flex-center"
-          style={{ width: 40, height: 40 }}
-        >
-          <FontAwesomeIcon
-            className="w3-text-black"
-            icon={faPaperPlane}
-            width={20}
-            height={20}
-          />
-        </div>
-      </div>
+      {/* modal sigle post */}
       <div
         id="modalSinglePost"
-        className="w3-light-grey w3-modal w3-noscrollbar"
-        style={{ height: "100vh", width: "100vw", padding: 24 }}
+        className="mobileHeight w3-light-grey w3-modal w3-noscrollbar"
+        style={{ width: "100vw", padding: 24 }}
       >
         <audio id="audioBox" className="w3-hide"></audio>
         <div
@@ -1300,7 +1281,7 @@ console.log(usersData);
           <div
             id="audioControl"
             className="w3-bottom w3-flex-row w3-flex"
-            style={{ padding: 16 }}
+            style={{ padding: 16,bottom:38 }}
           >
             <div
               onClick={() => {
