@@ -6,18 +6,20 @@ import Image from "next/image";
 import axios from "axios";
 import {
   faArrowLeft,
+  faBell,
   faChevronCircleUp,
+  faHome,
   faICursor,
   faPaperPlane,
   faPause,
   faPhone,
   faPlay,
+  faPlus,
   faRefresh,
   faSpinner,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import "cloudinary-video-player/cld-video-player.min.css";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import slugify from "slugify";
 import {
@@ -25,7 +27,6 @@ import {
   faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
 
-const VideoPlayer = dynamic(() => import("./video"), { ssr: false });
 
 export default function Home(props) {
   const source = "https://console.freelancer.mg";
@@ -645,6 +646,7 @@ export default function Home(props) {
   };
 
   useEffect(() => {
+    const localHosts = ["localhost", "127.0.0.1", "::1"];
 
     // fullscreen
     function tryFullscreen() {
@@ -666,17 +668,18 @@ export default function Home(props) {
         tryFullscreen();
       }
     }
-
-    document.getElementById("mainCore").addEventListener("scroll", handleInteraction);
-    document.addEventListener("click", handleInteraction);
+    if (!localHosts.includes(location.hostname)) {
+      document
+        .getElementById("mainCore")
+        .addEventListener("scroll", handleInteraction);
+      document.addEventListener("click", handleInteraction);
+    }
     // End full screen
 
     stopAllIntervalAndTimeout();
     if (typeof window !== "undefined") {
       fullPath.path = window.location.pathname;
     }
-
-    const localHosts = ["localhost", "127.0.0.1", "::1"];
 
     if (
       !localHosts.includes(location.hostname) &&
@@ -1023,8 +1026,25 @@ export default function Home(props) {
 
       <div
         className="w3-bottom w3-block w3-card w3-white w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
-        style={{ paddingBlock: 4, zIndex: 9999 }}
+        style={{ paddingBlock: 8, zIndex: 9999 }}
       >
+        <div
+          className="w3-flex-1"
+          style={{ width: 36, height: 36 }}
+        >
+          <div
+            className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
+            style={{ width: 36, height: 36, marginInline: "auto" }}
+          >
+            <FontAwesomeIcon
+              className="w3-text-black"
+              icon={faHome}
+              width={20}
+              height={20}
+            />
+          </div>
+        </div>
+
         <div
           onClick={toggleUsers}
           className="w3-flex-1"
@@ -1037,6 +1057,40 @@ export default function Home(props) {
             <FontAwesomeIcon
               className="w3-text-black"
               icon={faUsers}
+              width={20}
+              height={20}
+            />
+          </div>
+        </div>
+
+        <div
+          className="w3-flex-1"
+          style={{ width: 36, height: 36 }}
+        >
+          <div
+            className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
+            style={{ width: 36, height: 36, marginInline: "auto" }}
+          >
+            <FontAwesomeIcon
+              className="w3-text-black"
+              icon={faPlus}
+              width={20}
+              height={20}
+            />
+          </div>
+        </div>
+
+        <div
+          className="w3-flex-1"
+          style={{ width: 36, height: 36 }}
+        >
+          <div
+            className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
+            style={{ width: 36, height: 36, marginInline: "auto" }}
+          >
+            <FontAwesomeIcon
+              className="w3-text-black"
+              icon={faBell}
               width={20}
               height={20}
             />
@@ -1060,6 +1114,7 @@ export default function Home(props) {
             />
           </div>
         </div>
+        
       </div>
 
       {/* modal sigle post */}

@@ -6,6 +6,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import parse from "html-react-parser";
+import dynamic from "next/dynamic";
+
+const VideoPlayer = dynamic(() => import("./Home/video"), { ssr: false });
 
 export default function PostContent({ posts }) {
   const source = "https://console.freelancer.mg";
@@ -73,7 +76,7 @@ export default function PostContent({ posts }) {
                     unoptimized
                     loading="lazy"
                     onContextMenu={(e) => e.preventDefault()}
-                    height={300}
+                    height={320}
                     width={520}
                     src={
                       source +
