@@ -667,8 +667,8 @@ export default function Home(props) {
       }
     }
 
-    document.getElementById("mainCore").addEventListener("scroll", handleInteraction, { once: true });
-    document.addEventListener("click", handleInteraction, { once: true });
+    document.getElementById("mainCore").addEventListener("scroll", handleInteraction);
+    document.addEventListener("click", handleInteraction);
     // End full screen
 
     stopAllIntervalAndTimeout();
