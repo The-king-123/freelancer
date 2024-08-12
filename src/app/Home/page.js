@@ -645,6 +645,7 @@ export default function Home(props) {
   };
 
   useEffect(() => {
+
     // fullscreen
     function tryFullscreen() {
       const elem = document.documentElement;
@@ -666,10 +667,10 @@ export default function Home(props) {
       }
     }
 
-    window.addEventListener("scroll", handleInteraction, { once: true });
+    document.getElementById("mainCore").addEventListener("scroll", handleInteraction, { once: true });
     document.addEventListener("click", handleInteraction, { once: true });
-
     // End full screen
+
     stopAllIntervalAndTimeout();
     if (typeof window !== "undefined") {
       fullPath.path = window.location.pathname;
@@ -851,6 +852,7 @@ export default function Home(props) {
       </nav>
 
       <main
+        id="mainCore"
         className="mobileHeight w3-main w3-100vh w3-overflow-scroll w3-noscrollbar"
         style={{ marginLeft: 250, marginRight: 320, padding: 8 }}
       >
