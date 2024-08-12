@@ -7,19 +7,18 @@ import {
   faRefresh,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
+import Link from "next/link";
 
 export default function PostContent({ content }) {
-  const require = content.owner_key;
 
   const source = "https://console.freelancer.mg";
   // const source = "http://127.0.0.1:8000";
 
-  const [displayRelated, setDisplayRelated] = useState("");
-  const [audioBox, setaudioBox] = useState({chaine:null});
+
+  const [audioBox, setaudioBox] = useState({ chaine: null });
   const [stepper, setstepper] = useState({
     key: 0,
     scrollHeight: 0,
@@ -156,153 +155,32 @@ export default function PostContent({ content }) {
     }
   };
 
-  const reloadRelatedPost = (data) => {
-    var glitchPost = "";
-    if (data.length > 0) {
-      glitchPost = data.map(
-        (post, key) =>
-          singlePostInfo.slug != post.slug && (
-            <div key={key} style={{ padding: 8 }}>
-              <div
-                onClick={() => (document.location = "/post/" + post.slug)}
-                className="w3-flex-column w3-overflow w3-border w3-round w3-pointer w3-white"
-              >
-                <div
-                  className="w3-nowrap w3-overflow w3-light-grey w3-big w3-border-bottom"
-                  style={{ paddingBlock: 8, paddingInline: 16 }}
-                >
-                  {parse(post.title)}
-                </div>
-                <div className="w3-border-bottom">
-                  <div
-                    id={"post" + key}
-                    className="w3-overflow w3-nowrap-multiline"
-                    style={{ marginInline: 16, marginBlock: 8 }}
-                  >
-                    {parse(JSON.parse(post.info).description)}
-                  </div>
-                </div>
-                {(post.type == "image" || post.type == "image/audio") && (
-                  <div
-                    className="w3-display-container w3-light-grey post-image"
-                    height={200}
-                  >
-                    <Image
-                      alt={"image" + key}
-                      unoptimized
-                      loading="lazy"
-                      onContextMenu={(e) => e.preventDefault()}
-                      height={200}
-                      width={280}
-                      src={
-                        source +
-                        "/images.php?w=280&h=280&zlonk=2733&zlink=" +
-                        post.link
-                      }
-                      style={{
-                        objectPosition: "center",
-                        objectFit: "cover",
-                      }}
-                      className="w3-overflow w3-light-grey post-image"
-                    />
-                    {post.type == "image/audio" && (
-                      <div className="w3-black w3-opacity w3-block w3-height w3-padding w3-display-middle"></div>
-                    )}
-                    {post.type == "image/audio" && (
-                      <div
-                        className="w3-white w3-circle w3-display-middle"
-                        style={{ width: 60, height: 60 }}
-                      >
-                        <div className="w3-block w3-height w3-flex w3-flex-center">
-                          <FontAwesomeIcon
-                            icon={faPlay}
-                            style={{ height: 24, width: 24, marginLeft: 4 }}
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-                {post.type == "video" && (
-                  <video
-                    style={{
-                      objectPosition: "center",
-                    }}
-                    className="w3-overflow w3-block w3-black"
-                    controls
-                  >
-                    <source
-                      src={source + "/videos.php?zlonk=1733&zlink=" + post.link}
-                      type="video/mp4"
-                    />
-                    Your browser does not support the video tag.
-                  </video>
-                )}
-              </div>
-            </div>
-          )
-      );
-    } else {
-      glitchPost = (
-        <div>
-          <div
-            className="w3-border w3-flex-row w3-flex-center-v w3-round w3-block w3-medium w3-big"
-            style={{ marginBlock: 16, padding: 12 }}
-          >
-            No post related ...
-          </div>
-        </div>
-      );
-    }
-    setDisplayRelated(glitchPost);
-  };
-
   useEffect(() => {
-
     audioBox.chaine = document.getElementById("audioBox");
-    audioBox.chaine.src = source + "/audios.php?zlonk=1733&zlink=" + content.link;
+    audioBox.chaine.src =
+      source + "/audios.php?zlonk=1733&zlink=" + content.link;
     audioBox.chaine.load();
-    audioBox.chaine.addEventListener('ended',()=>{
-      document.getElementById('iconPlay').style.display = "inline-block"
-      document.getElementById('iconPause').style.display = "none"
-    })
-
-    axios
-      .get(source + "/_post/" + require + "?c=default")
-      .then((res) => {
-        reloadRelatedPost(res.data.data);
-      })
-      .catch((e) => {
-        console.error("failure", e);
-      });
+    audioBox.chaine.addEventListener("ended", () => {
+      document.getElementById("iconPlay").style.display = "inline-block";
+      document.getElementById("iconPause").style.display = "none";
+    });
 
     document.getElementById("postImageMedia").style.transition = "1s";
     document.getElementById("postImageMedia").style.height = "auto";
-    document.getElementById("coreMain").style.display = "block";
+
     typer(singlePostInfo.description);
   }, []);
 
   return (
-    <div
-      id="coreMain"
-      style={{
-        maxWidth: 1024,
-        marginInline: "auto",
-        padding: 24,
-        display: "none",
-      }}
-    >
-      <h3
-        className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large"
-      ><div onClick={() => (document.location = "/")} className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large" >
-        <FontAwesomeIcon
-          icon={faArrowLeft}
-          style={{ width: 24 }}
-          className="w3-marginn-right"
-        />
-        <b>FREELANCER</b>
-      </div>
-        
+    <div>
+      <h3 className="w3-wide w3-flex-row w3-flex-center-v w3-large">
+        <Link href={'/'} className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large" style={{paddingInline:4}}>
+          <FontAwesomeIcon
+            icon={faArrowLeft}
+            style={{ width: 24 }}
+          />
+        </Link>
+
         <audio id="audioBox" className="w3-hide"></audio>
         {content.type == "image/audio" && (
           <div id="audioControl" className="w3-margin-left w3-flex-row w3-flex">
@@ -351,17 +229,19 @@ export default function PostContent({ content }) {
           </div>
         )}
       </h3>
-      <div className="w3-container singlePostFlex w3-white w3-flex w3-flex-row w3-round-large">
+      <div className="w3-container singlePostFlex" style={{padding:8}}>
         <div
           id="chatCoreWrapper"
-          className="w3-flex-1 w3-overflow-scroll w3-noscrollbar"
+          className="w3-overflow-scroll w3-noscrollbar"
           style={{
             maxWidth: 520,
             marginInline: "auto",
-            padding: 24,
-            height: "90vh",
           }}
         >
+          <div className="w3-large w3-big" style={{ marginTop: 8 }}>
+            {parse(singlePostInfo.title)}
+          </div>
+          <div id="typingField" style={{ marginBottom: 24 }}></div>
           <div className="w3-overflow w3-light-grey w3-round-large">
             {(singlePostInfo.type == "image" ||
               singlePostInfo.type == "image/audio") && (
@@ -403,19 +283,6 @@ export default function PostContent({ content }) {
                 Your browser does not support the video tag.
               </video>
             )}
-          </div>
-          <div className="w3-large w3-big" style={{ marginTop: 24 }}>
-            {singlePostInfo.title}
-          </div>
-          <div id="typingField" style={{ marginTop: 24 }}></div>
-        </div>
-        <div
-          className="w3-overflow-scroll w3-noscrollbar"
-          style={{ minWidth: 320, width: 320, height: "90vh" }}
-        >
-          <div style={{ paddingInline: 16, paddingBlock: 24 }}>
-            <div className="w3-big">D'autres articles:</div>
-            <div style={{ marginTop: 24 }}>{displayRelated}</div>
           </div>
         </div>
       </div>

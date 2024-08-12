@@ -1,21 +1,52 @@
-"use client";
+import { notFound } from "next/navigation";
+import CategoryUsers from "./categoryUsers";
+import axios from "axios";
 import Home from "@/app/Home/page";
-import React, { useEffect, useState } from "react";
+import slugify from "slugify";
 
-function page({params}) {
-  const [core, setcore] = useState("");
+var titre =''
+export default async function page({ params }) {
+  const source = "https://console.freelancer.mg";
+  // const source = "http://127.0.0.1:8000";
 
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    const param = new URLSearchParams(url.search);
-    const user = param.get("user");
+  try {
+    const users = await axios
+      .get(source + "/_auth/users")
+      .then((res) => {
+        const usersData = [];
+        
+        res.data.data.forEach((user) => {
+          if ( slugify(user.designation,{lower:true}) == params.category ) {
+            titre = user.designation;
+            usersData.push(user);
+          }
+        });
 
-    setcore(
-      <Home user={user ? user : "default"} core={"talent"} settings={[params.category]} />
+        return usersData;
+      })
+      .catch((e) => {
+        console.error("failure", e);
+      });
+
+    if (!users) {
+      notFound();
+    }
+    return <Home core={<CategoryUsers content={users} />} />;
+  } catch (error) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>There was an error loading the post. Please try again later.</p>
+      </div>
     );
-  }, []);
-
-  return <div>{core}</div>;
+  }
 }
 
-export default page;
+export async function metadata() {
+
+  const meta = {
+    title: titre,
+    description: 'Vous trouverez ici ce que vous voulez',
+  };
+  return meta;
+}

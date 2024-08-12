@@ -1,33 +1,16 @@
-// app/post/[slug]/page.js
 import { notFound } from "next/navigation";
-import PostContent from "../../../components/PostContent";
+import PostContent from "./PostContent";
 import axios from "axios";
+import Home from "@/app/Home/page";
 
 const source = "https://console.freelancer.mg";
 
-export const metadata = async (context) => {
+var slug = ''
 
-  const path = context.toString().split("/");
-
-  // const post = await axios
-  //     .get(source + "/_post/" +location.pathname+ "/edit")
-  //     .then((res) => {
-  //       return res.data.data[0];
-  //     })
-  //     .catch((e) => {
-  //       console.error("failure", e);
-  //     });
-  const meta = {
-    title: path,
-    description:
-      "Découvrez notre plateforme dédiée aux freelances, offrant une gamme complète de formations professionnelles pour réussir dans le monde du freelance. Apprenez les compétences essentielles, des stratégies de marketing aux outils de gestion de projet, et développez votre carrière en toute confiance",
-  };
-  return meta
-};
-
-export default async function PostPage({ params }) {
+export default async function page({ params }) {
   const source = "https://console.freelancer.mg";
   // const source = "http://127.0.0.1:8000";
+  slug = params.slug
 
   try {
     const post = await axios
@@ -41,11 +24,7 @@ export default async function PostPage({ params }) {
     if (!post) {
       notFound();
     }
-    return (
-      <div className="w3-block w3-100vh w3-light-grey">
-        <PostContent content={post} />
-      </div>
-    );
+    return <Home core={<PostContent content={post} />} />;
   } catch (error) {
     console.error(`Error rendering page for slug ${params.slug}:`, error);
     return (
@@ -56,3 +35,17 @@ export default async function PostPage({ params }) {
     );
   }
 }
+
+
+export async function metadata() {
+
+
+  const response = await axios.get(`${source}/_post/${slug}/edit`);
+  const post = response.data.data[0];
+
+  const meta = {
+    title: post.title,
+    description: JSON.parse(post.info).description.replace(/<\/?[^>]+(>|$)/g, ""),
+  };
+  return meta
+};

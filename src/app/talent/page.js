@@ -1,21 +1,50 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import Home from "../Home/page";
+import { notFound } from "next/navigation";
+import TalentsListe from "./talentsListe";
+import axios from "axios";
+import Home from "@/app/Home/page";
 
-function page() {
-  const [code, settalent] = useState("");
+export default async function page({ params }) {
+  const source = "https://console.freelancer.mg";
+  // const source = "http://127.0.0.1:8000";
 
-  useEffect(() => {
+  try {
+    const talents = await axios
+      .get(source + "/_auth/users")
+      .then((res) => {
+        const usersData = [];
+        res.data.data.forEach((user) => {
+          if (
+            !usersData.includes(user.designation) &&
+            user.designation != "Admin"
+          ) {
+            usersData.push(user.designation);
+          }
+        });
+        return usersData;
+      })
+      .catch((e) => {
+        console.error("failure", e);
+      });
 
-    const url = new URL(window.location.href);
-    const params = new URLSearchParams(url.search);
-    const user = params.get("user");
-
-    settalent(<Home user={user?user:"default"} core={"talent"} />);
-    
-  }, []);
-
-  return <div>{code}</div>;
+    if (!talents) {
+      notFound();
+    }
+    return <Home core={<TalentsListe content={talents} />} />;
+  } catch (error) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>There was an error loading the post. Please try again later.</p>
+      </div>
+    );
+  }
 }
 
-export default page;
+export async function metadata() {
+
+  const meta = {
+    title: "Decouvrez nos talents",
+    description: 'Vous trouverez ici ce que vous voulez',
+  };
+  return meta;
+}

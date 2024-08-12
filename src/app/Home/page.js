@@ -14,7 +14,6 @@ import {
   faPlay,
   faRefresh,
   faSpinner,
-  faTimes,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import "cloudinary-video-player/cld-video-player.min.css";
@@ -33,27 +32,19 @@ export default function Home(props) {
   // const source = "http://127.0.0.1:8000";
 
   const [fullPath, setfullPath] = useState({ path: "" });
-
   const [imagePDP, setimagePDP] = useState(null);
   const [imagePostModal, setimagePostModal] = useState(
     source + "/images.php?w=720&h=720&zlonk=3733&zlink=160471339156947"
   );
-
   const [contact, setcontact] = useState({
     phone: null,
     whatsapp: null,
     messenger: null,
   });
 
-  const [userData, setuserData] = useState({
-    key: props.user,
-  });
   const [audioBox, setaudioBox] = useState({ chaine: null });
   const [showThisPost, setshowThisPost] = useState();
   const [height, setHeight] = useState(0);
-  const [displayChoice, setdisplayChoice] = useState("");
-  const [displayUsers, setdisplayUsers] = useState("");
-  const [displayCategoryUsers, setdisplayCategoryUsers] = useState("");
   const [displayDesignations, setdisplayDesignations] = useState("");
   const [displayChat, setdisplayChat] = useState(
     <div className="w3-flex w3-flex-center" style={{ padding: 24 }}>
@@ -62,14 +53,12 @@ export default function Home(props) {
       </span>
     </div>
   );
-  const [displayCore, setdisplayCore] = useState("");
+  const [displayChoice, setdisplayChoice] = useState("");
   const [chatData, setchatData] = useState([]);
   const [usersData, setusersData] = useState([]);
   const [designationData, setdesignationData] = useState([]);
   const [killer, setkiller] = useState({ starter: null });
-
   const [topicData, settopicData] = useState([]);
-
   const [stepper, setstepper] = useState({
     key: 0,
     scrollHeight: 0,
@@ -229,7 +218,7 @@ export default function Home(props) {
     }, 10);
   };
 
-  const thisChoice = async (data, type) => {
+  const thisChoice = async (data) => {
     document.getElementById("chatLoaderCursor").style.display = "flex";
 
     chatData.push({
@@ -405,130 +394,10 @@ export default function Home(props) {
     }, 10);
   };
 
-  const reloadPost = (data) => {
-    var glitchPost = "";
-    if (data.length > 0) {
-      glitchPost = data.map((post, key) => (
-        <div key={key} style={{ padding: 8 }}>
-          <div
-            className="w3-small w3-text-grey"
-            style={{ paddingInline: 8, textAlign: "right", display: "none" }}
-            id={"flashInfo" + key}
-          >
-            Texte copié...
-          </div>
-          <div className="w3-flex-column w3-overflow w3-border w3-round w3-pointer w3-white">
-            <div
-              onClick={() => {
-                copyToClipboard("https://freelancer.mg/post/" + post.slug);
-                document.getElementById("flashInfo" + key).innerText =
-                  "Le lien a été copié...";
-                document.getElementById("flashInfo" + key).style.display =
-                  "block";
-                setTimeout(() => {
-                  document.getElementById("flashInfo" + key).style.display =
-                    "none";
-                }, 2000);
-              }}
-              onDoubleClick={() =>
-                shareOnFacebook("https://freelancer.mg/post/" + post.slug)
-              }
-              className="w3-nowrap w3-overflow w3-light-grey w3-big w3-border-bottom"
-              style={{ paddingBlock: 8, paddingInline: 16 }}
-              title="Click to copy post link"
-            >
-              {parse(post.title)}
-            </div>
-            <div className="w3-border-bottom">
-              <div
-                onClick={() => {
-                  if (
-                    document.getElementById("post" + key).className ==
-                    "_expand_"
-                  ) {
-                    document.getElementById("post" + key).className =
-                      "w3-overflow w3-nowrap-multiline";
-                  } else {
-                    document.getElementById("post" + key).className =
-                      "_expand_";
-                  }
-                }}
-                id={"post" + key}
-                className="w3-overflow w3-nowrap-multiline"
-                style={{ marginInline: 16, marginBlock: 8 }}
-              >
-                {parse(JSON.parse(post.info).description)}
-              </div>
-            </div>
-            {(post.type == "image" || post.type == "image/audio") && (
-              <div
-                className="w3-display-container w3-light-grey post-image"
-                height={window.innerWidth <= 420 ? 280 : 320}
-                onClick={() => showSinglePost(post)}
-              >
-                <Image
-                  alt={"image" + key}
-                  unoptimized
-                  loading="lazy"
-                  onContextMenu={(e) => e.preventDefault()}
-                  height={window.innerWidth <= 420 ? 280 : 320}
-                  width={520}
-                  src={
-                    source +
-                    "/images.php?w=420&h=420&zlonk=2733&zlink=" +
-                    post.link
-                  }
-                  style={{
-                    objectPosition: "center",
-                    objectFit: "cover",
-                  }}
-                  className="w3-overflow w3-light-grey post-image"
-                />
-                {post.type == "image/audio" && (
-                  <div className="w3-black w3-opacity w3-block w3-height w3-padding w3-display-middle"></div>
-                )}
-                {post.type == "image/audio" && (
-                  <div
-                    className="w3-white w3-circle w3-display-middle"
-                    style={{ width: 60, height: 60 }}
-                  >
-                    <div className="w3-block w3-height w3-flex w3-flex-center">
-                      <FontAwesomeIcon
-                        icon={faPlay}
-                        style={{ height: 24, width: 24, marginLeft: 4 }}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {post.type == "video" && (
-              <VideoPlayer source={source} videolink={post.link} />
-            )}
-          </div>
-        </div>
-      ));
-    } else {
-      glitchPost = (
-        <div>
-          <div
-            className="w3-border w3-flex-row w3-flex-center-v w3-round w3-block w3-medium w3-big"
-            style={{ marginBlock: 16, padding: 12 }}
-          >
-            No more post found...
-          </div>
-        </div>
-      );
-    }
-
-    setdisplayCore(glitchPost);
-  };
-
-  const showUser = async (key) => {
-    closeAllPanel()
-    const userInfos = usersData.find((obj) => obj.key == key);
-
+  const showUser = async (key, others) => {
+    closeAllPanel();
+    var users = localStorage.getItem("users");
+    const userInfos = JSON.parse(users).find((obj) => obj.key == key);
     if (userInfos) {
       if (userInfos.contact.includes("whatsapp")) {
         setcontact({
@@ -580,49 +449,41 @@ export default function Home(props) {
 
     setdisplayChat("");
     setdisplayChoice("");
-    setdisplayCore(loader);
 
-    await axios
-      .get(source + "/_accrocher/" + key)
-      .then((res) => {
-        reloadStarter(res.data.data[0]);
-      })
-      .catch((e) => {
-        console.error("failure", e);
-      });
-
-    await axios
-      .get(source + "/_topic/" + key)
-      .then((res) => {
-        res.data.data.forEach((tpc) => {
-          topicData.push(tpc);
-        });
-        reloadChoice("topic", res.data.data);
-      })
-      .catch((e) => {
-        console.error("failure", e);
-      });
-
-    if (props.core == "main" || props.core == "user") {
+    if (others) {
       await axios
-        .get(source + "/_post/" + key + "?c=default")
+        .get(source + "/_accrocher/" + key)
         .then((res) => {
-          reloadPost(res.data.data);
+          localStorage.setItem("accrocher", JSON.stringify(res.data.data[0]));
+          reloadStarter(res.data.data[0]);
         })
         .catch((e) => {
           console.error("failure", e);
         });
-    } else if (props.core == "talent" && props.settings) {
-      reloadUsers(props.settings[0]);
-    } else if (props.core == "talent" && !props.settings) {
-      reloadTalents();
+
+      await axios
+        .get(source + "/_topic/" + key)
+        .then((res) => {
+          res.data.data.forEach((tpc) => {
+            topicData.push(tpc);
+          });
+          localStorage.setItem("topic", JSON.stringify(res.data.data));
+          reloadChoice("topic", res.data.data);
+        })
+        .catch((e) => {
+          console.error("failure", e);
+        });
+    } else {
+      var accrocher = localStorage.getItem("accrocher");
+      var topic = localStorage.getItem("topic");
+
+      reloadStarter(JSON.parse(accrocher));
+      reloadChoice("topic", JSON.parse(topic));
     }
   };
 
   const reloadDesignation = (data) => {
-    usersData.splice(0, usersData.length);
     data.forEach((user) => {
-      usersData.push(user);
       if (
         !designationData.includes(user.designation) &&
         user.designation != "Admin"
@@ -643,11 +504,7 @@ export default function Home(props) {
               stopAllIntervalAndTimeout();
             }
           }}
-          href={
-            "/talent/" +
-            slugify(designation, { lower: true }) +
-            (props.user != "default" ? "?user=" + props.user : "")
-          }
+          href={"/talent/" + slugify(designation, { lower: true })}
           key={key}
           className="w3-white w3-pointer w3-flex-row w3-flex-center-v w3-round w3-block"
           style={{ marginBlock: 16, padding: 8 }}
@@ -675,87 +532,9 @@ export default function Home(props) {
     setdisplayDesignations(glitchDesignations);
   };
 
-  const reloadUsers = (designation) => {
-    var users = [];
-
-    usersData.forEach((user) => {
-      if (slugify(user.designation, { lower: true }) == designation) {
-        users.push(user);
-      }
-    });
-    var glitchUsers = "";
-    if (users.length > 0) {
-      glitchUsers = users.map((user, key) => (
-        <Link
-          onClick={() => {
-            if (!fullPath.path.includes("user/" + user.key)) {
-              stopAllIntervalAndTimeout();
-            }
-          }}
-          href={"/user/" + user.key}
-          key={key}
-          className="w3-half"
-          style={{ padding: 8 }}
-        >
-          <div
-            className="w3-flex w3-flex-column w3-light-grey w3-flex-center"
-            style={{ padding: 24 }}
-          >
-            <Image
-              loading="lazy"
-              unoptimized
-              width={80}
-              height={80}
-              src={
-                source + "/images.php?w=80&h=80&zlonk=3733&zlink=" + user.key
-              }
-              className="w3-circle w3-margin-right"
-              alt={user.fullname}
-              style={{ objectFit: "cover", objectPosition: "center" }}
-            />
-            <div className="w3-medium w3-margin-top w3-big w3-nowrap w3-center w3-overflow w3-block">
-              {user.fullname}
-            </div>
-          </div>
-        </Link>
-      ));
-    } else {
-      glitchUsers = (
-        <div>
-          <div
-            className="w3-text-black w3-border w3-flex-row w3-flex-center-v w3-round w3-block w3-medium w3-big"
-            style={{ marginBlock: 16, padding: 12 }}
-          >
-            You will find here all users
-          </div>
-        </div>
-      );
-    }
-    setdisplayCore(glitchUsers);
-  };
-
-  const expand = () => {
-    if (document.getElementById("chatChoice").clientHeight == 60) {
-      document.getElementById("chatChoice").style.overflow = "auto";
-      document.getElementById("chatChoice").style.transition = "1s";
-      document.getElementById("chatChoice").style.height =
-        window.innerHeight + "px";
-
-      document.getElementById("expandIcon").style.transition = "1s";
-      document.getElementById("expandIcon").style.transform = "rotate(180deg)";
-    } else {
-      document.getElementById("chatChoice").style.overflow = "hidden";
-      document.getElementById("chatChoice").style.transition = "0.4s";
-      document.getElementById("chatChoice").style.height = "60px";
-
-      document.getElementById("expandIcon").style.transition = "0.4s";
-      document.getElementById("expandIcon").style.transform = "rotate(0deg)";
-    }
-  };
-
   const toggleChat = () => {
     if (document.getElementById("sidebarChat").style.display != "block") {
-      closeAllPanel()
+      closeAllPanel();
       document.getElementById("overlay").style.display = "block";
       document.getElementById("sidebarChat").className =
         "mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top w3-animate-right";
@@ -768,7 +547,7 @@ export default function Home(props) {
 
   const toggleUsers = () => {
     if (document.getElementById("sidebarMenu").style.display != "block") {
-      closeAllPanel()
+      closeAllPanel();
       document.getElementById("overlay").style.display = "block";
       document.getElementById("sidebarMenu").className =
         "mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top w3-animate-left";
@@ -780,13 +559,12 @@ export default function Home(props) {
   };
 
   const closeAllPanel = () => {
-    const allPanel = document.getElementsByClassName('panel')
+    const allPanel = document.getElementsByClassName("panel");
     for (let i = 0; i < allPanel.length; i++) {
-      allPanel[i].style.display = 'none';
+      allPanel[i].style.display = "none";
     }
     document.getElementById("overlay").style.display = "none";
-    
-  }
+  };
 
   const copyToClipboard = (text) => {
     navigator.clipboard
@@ -824,66 +602,6 @@ export default function Home(props) {
     }
   };
 
-  const reloadTalents = () => {
-    var glitchTalents = "";
-    if (designationData.length > 0) {
-      glitchTalents = designationData.map((des, key) => (
-        <div key={key} className="w3-half" style={{ padding: 8 }}>
-          <Link
-            onClick={() => {
-              if (
-                !fullPath.path.includes(
-                  "talent/" + slugify(des, { lower: true })
-                )
-              ) {
-                stopAllIntervalAndTimeout();
-              }
-            }}
-            href={
-              "/talent/" +
-              slugify(des, { lower: true }) +
-              (props.user != "default" ? "?user=" + props.user : "")
-            }
-            className="w3-flex w3-flex-column w3-light-grey w3-flex-center"
-          >
-            <Image
-              loading="lazy"
-              unoptimized
-              width={80}
-              height={120}
-              src={
-                source +
-                "/images.php?w=320&h=320&zlonk=5733&zlink=" +
-                slugify(des, { lower: true })
-              }
-              className="w3-block"
-              alt={des}
-              style={{ objectFit: "cover", objectPosition: "center" }}
-            />
-            <div
-              style={{ padding: 16 }}
-              className="w3-medium w3-big w3-center w3-nowrap w3-overflow w3-block"
-            >
-              {des}
-            </div>
-          </Link>
-        </div>
-      ));
-    } else {
-      glitchTalents = (
-        <div>
-          <div
-            className="w3-text-black w3-border w3-flex-row w3-flex-center-v w3-round w3-block w3-medium w3-big"
-            style={{ marginBlock: 16, padding: 12 }}
-          >
-            You will find here all talents
-          </div>
-        </div>
-      );
-    }
-    setdisplayCore(glitchTalents);
-  };
-
   const showSinglePost = (post) => {
     setshowThisPost(post);
     setimagePostModal(
@@ -907,7 +625,57 @@ export default function Home(props) {
     }, 100);
   };
 
+  const expand = () => {
+    if (document.getElementById("chatChoice").clientHeight == 60) {
+      document.getElementById("chatChoice").style.overflow = "auto";
+      document.getElementById("chatChoice").style.transition = "1s";
+      document.getElementById("chatChoice").style.height =
+        window.innerHeight + "px";
+
+      document.getElementById("expandIcon").style.transition = "1s";
+      document.getElementById("expandIcon").style.transform = "rotate(180deg)";
+    } else {
+      document.getElementById("chatChoice").style.overflow = "hidden";
+      document.getElementById("chatChoice").style.transition = "0.4s";
+      document.getElementById("chatChoice").style.height = "60px";
+
+      document.getElementById("expandIcon").style.transition = "0.4s";
+      document.getElementById("expandIcon").style.transform = "rotate(0deg)";
+    }
+  };
+
   useEffect(() => {
+    // fullscreen
+    document.addEventListener("DOMContentLoaded", () => {
+      // Attempt to enter fullscreen as soon as possible
+      tryFullscreen();
+
+      // Also, set up an event listener to re-enter fullscreen if the user exits it
+      document.addEventListener("fullscreenchange", () => {
+        if (!document.fullscreenElement) {
+          tryFullscreen();
+        }
+      });
+    });
+
+    function tryFullscreen() {
+      const elem = document.documentElement;
+
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.mozRequestFullScreen) {
+        // Firefox
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) {
+        // Chrome, Safari, and Opera
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        // IE/Edge
+        elem.msRequestFullscreen();
+      }
+    }
+    // End full screen
+    stopAllIntervalAndTimeout();
     if (typeof window !== "undefined") {
       fullPath.path = window.location.pathname;
     }
@@ -924,27 +692,66 @@ export default function Home(props) {
       document.getElementById("coreMain").style.display = "block";
     }
 
-    axios
-      .get(source + "/_auth/users")
-      .then((res) => {
-        var exist = false;
-        reloadDesignation(res.data.data);
-        if (res.data.data.length > 0) {
-          res.data.data.forEach((user) => {
-            if (user.key == props.user) {
-              exist = true;
-            }
-          });
-        }
-        if (exist) {
-          showUser(props.user);
-        } else {
-          showUser("default");
-        }
-      })
-      .catch((e) => {
-        console.error("failure", e);
+    const posts = document.getElementsByClassName("postMedia");
+    for (let i = 0; i < posts.length; i++) {
+      posts[i].addEventListener("click", () => {
+        const post = posts[i].getAttribute("data");
+        showSinglePost(JSON.parse(post));
       });
+    }
+
+    const postsTitle = document.getElementsByClassName("postTitle");
+    for (let i = 0; i < postsTitle.length; i++) {
+      postsTitle[i].addEventListener("click", () => {
+        const post = postsTitle[i].getAttribute("data");
+        copyToClipboard(post);
+      });
+    }
+
+    const talentsList = document.getElementsByClassName("talentsList");
+    for (let i = 0; i < talentsList.length; i++) {
+      talentsList[i].addEventListener("click", () => {
+        stopAllIntervalAndTimeout();
+      });
+    }
+
+    const categoryUser = document.getElementsByClassName("categoryUser");
+    for (let i = 0; i < categoryUser.length; i++) {
+      categoryUser[i].addEventListener("click", () => {
+        stopAllIntervalAndTimeout();
+      });
+    }
+
+    var users = localStorage.getItem("users");
+    if (users) {
+      reloadDesignation(JSON.parse(users));
+    } else {
+      axios
+        .get(source + "/_auth/users")
+        .then((res) => {
+          localStorage.setItem("users", JSON.stringify(res.data.data));
+          reloadDesignation(res.data.data);
+        })
+        .catch((e) => {
+          console.error("failure", e);
+        });
+    }
+
+    var user = localStorage.getItem("user");
+    if (props.user) {
+      if (props.user == user) {
+        showUser(user, false);
+      } else {
+        localStorage.setItem("user", props.user);
+        showUser(props.user, true);
+      }
+    } else {
+      if (user) {
+        showUser(user, false);
+      } else {
+        showUser("160471339156947", true);
+      }
+    }
 
     audioBox.chaine = document.getElementById("audioBox");
 
@@ -996,7 +803,7 @@ export default function Home(props) {
       style={{ userSelect: "none", display: "none" }}
     >
       <div
-      onClick={()=>closeAllPanel()}
+        onClick={() => closeAllPanel()}
         id="overlay"
         style={{ width: "100vw", height: "100vh" }}
         className="w3-display-middle w3-hide-large"
@@ -1004,12 +811,18 @@ export default function Home(props) {
 
       <nav
         className="mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
-        style={{ zIndex: 3, width: 250, top:8,borderRadius:'0px 8px 8px 0px'  }}
+        style={{
+          zIndex: 3,
+          width: 250,
+          top: 8,
+          borderRadius: "0px 8px 8px 0px",
+        }}
         id="sidebarMenu"
       >
         <div className="w3-container w3-display-container w3-padding-16">
           <Link
             onClick={() => {
+              localStorage.removeItem("user");
               if (fullPath.path.length > 0) {
                 stopAllIntervalAndTimeout();
               }
@@ -1024,43 +837,45 @@ export default function Home(props) {
           className="w3-padding-32 w3-large w3-text-grey"
           style={{ paddingInline: 16 }}
         >
-          <div className="w3-flex w3-flex-row w3-flex-center-v">
-            <div className="w3-flex-1 w3-text-black w3-medium">Nos talents</div>
+          {displayDesignations}
+          {/* <div className="w3-flex w3-flex-row w3-flex-center-v">
             <Link
               onClick={() => {
                 if (fullPath.path != "/talent/" && fullPath.path != "/talent") {
                   stopAllIntervalAndTimeout();
-                  closeAllPanel()
+                  closeAllPanel();
                 }
               }}
               className="w3-small w3-text-grey w3-padding w3-white"
-              href={
-                "/talent" +
-                (userData.key != "default" ? "?user=" + userData.key : "")
-              }
+              href={"/talent"}
             >
               Voir plus
             </Link>
-          </div>
-          {displayDesignations}
+          </div> */}
         </div>
       </nav>
 
       <main
         className="mobileHeight w3-main w3-100vh w3-overflow-scroll w3-noscrollbar"
-        style={{ marginLeft: 250, marginRight: 320, padding:8 }}
+        style={{ marginLeft: 250, marginRight: 320, padding: 8 }}
       >
         <div
           className="w3-container"
           style={{ padding: 0, maxWidth: 480, margin: "auto" }}
         >
-          {displayCore}
+          {props.core}
         </div>
       </main>
 
       <nav
         className="mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
-        style={{ zIndex: 3, width: 320, right: 0, top:8, borderRadius:'8px 0px 0px 8px' }}
+        style={{
+          zIndex: 3,
+          width: 320,
+          right: 0,
+          top: 8,
+          borderRadius: "8px 0px 0px 8px",
+        }}
         id="sidebarChat"
       >
         <div
@@ -1185,7 +1000,10 @@ export default function Home(props) {
             justifyContent: "flex-end",
           }}
         >
-          <div className="w3-light-grey w3-card" style={{ display: "block",paddingTop:12 }}>
+          <div
+            className="w3-light-grey w3-card"
+            style={{ display: "block", paddingTop: 12 }}
+          >
             {displayChoice}
           </div>
           <div
@@ -1281,7 +1099,7 @@ export default function Home(props) {
           <div
             id="audioControl"
             className="w3-bottom w3-flex-row w3-flex"
-            style={{ padding: 16,bottom:38 }}
+            style={{ padding: 16, bottom: 38 }}
           >
             <div
               onClick={() => {
