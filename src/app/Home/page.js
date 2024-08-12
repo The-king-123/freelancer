@@ -646,34 +646,29 @@ export default function Home(props) {
 
   useEffect(() => {
     // fullscreen
-    document.addEventListener("DOMContentLoaded", () => {
-      // Attempt to enter fullscreen as soon as possible
-      tryFullscreen();
-
-      // Also, set up an event listener to re-enter fullscreen if the user exits it
-      document.addEventListener("fullscreenchange", () => {
-        if (!document.fullscreenElement) {
-          tryFullscreen();
-        }
-      });
-    });
-
     function tryFullscreen() {
       const elem = document.documentElement;
 
       if (elem.requestFullscreen) {
         elem.requestFullscreen();
       } else if (elem.mozRequestFullScreen) {
-        // Firefox
         elem.mozRequestFullScreen();
       } else if (elem.webkitRequestFullscreen) {
-        // Chrome, Safari, and Opera
         elem.webkitRequestFullscreen();
       } else if (elem.msRequestFullscreen) {
-        // IE/Edge
         elem.msRequestFullscreen();
       }
     }
+
+    function handleInteraction() {
+      if (!document.fullscreenElement) {
+        tryFullscreen();
+      }
+    }
+
+    window.addEventListener("scroll", handleInteraction, { once: true });
+    document.addEventListener("click", handleInteraction, { once: true });
+
     // End full screen
     stopAllIntervalAndTimeout();
     if (typeof window !== "undefined") {
