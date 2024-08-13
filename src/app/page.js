@@ -17,7 +17,6 @@ export default async function page() {
         console.error("failure", e);
       });
     
-
     if (!posts) {
       notFound();
     }

@@ -6,10 +6,12 @@ import Image from "next/image";
 import axios from "axios";
 import {
   faArrowLeft,
+  faBars,
   faBell,
   faChevronCircleUp,
   faHome,
   faICursor,
+  faList,
   faPaperPlane,
   faPause,
   faPhone,
@@ -26,7 +28,6 @@ import {
   faFacebookMessenger,
   faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
-
 
 export default function Home(props) {
   const source = "https://console.freelancer.mg";
@@ -645,6 +646,19 @@ export default function Home(props) {
     }
   };
 
+  const Home = () => {
+    var user = localStorage.getItem("user");
+    if (user) {
+      if (user == "160471339156947") {
+        window.location = "/";
+      } else {
+        window.location = "/user/" + user;
+      }
+    } else {
+      window.location = "/";
+    }
+  };
+
   useEffect(() => {
     const localHosts = ["localhost", "127.0.0.1", "::1"];
 
@@ -804,7 +818,7 @@ export default function Home(props) {
       <div
         onClick={() => closeAllPanel()}
         id="overlay"
-        style={{ width: "100vw", height: "100vh" }}
+        style={{ width: "100vw", height: "100vh", zIndex: 3 }}
         className="w3-display-middle w3-hide-large"
       ></div>
 
@@ -863,6 +877,7 @@ export default function Home(props) {
           className="w3-container"
           style={{ padding: 0, maxWidth: 480, margin: "auto" }}
         >
+          <div className="w3-hide-large" style={{height:54}}>hui</div>
           {props.core}
         </div>
       </main>
@@ -1023,18 +1038,53 @@ export default function Home(props) {
           </div>
         </div>
       </nav>
-
+      {/* // Top bar menu */}
       <div
-        className="w3-bottom w3-block w3-card w3-white w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
-        style={{ paddingBlock: 8, zIndex: 9999 }}
+        className="w3-top w3-block w3-card w3-white w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
+        style={{ paddingBlock: 8, paddingInline:16, zIndex: 9999 }}
       >
+        <div className="w3-flex-1">
+          <Link
+            onClick={() => {
+              localStorage.removeItem("user");
+              if (fullPath.path.length > 0) {
+                stopAllIntervalAndTimeout();
+              }
+            }}
+            href={"/"}
+            className="w3-wide w3-pointer w3-flex-row w3-large"
+          >
+            <b>FREELANCER</b>
+          </Link>
+        </div>
+
         <div
-          className="w3-flex-1"
           style={{ width: 36, height: 36 }}
         >
           <div
             className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
+          >
+            <FontAwesomeIcon
+              className="w3-text-black"
+              icon={faBars}
+              width={20}
+              height={20}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* // bottom menu */}
+      <div
+        className="w3-bottom w3-block w3-card w3-white w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
+        style={{ paddingBlock: 8, zIndex: 9999 }}
+      >
+        <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
+          <div
+            className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
+            style={{ width: 36, height: 36, marginInline: "auto" }}
+            onClick={Home}
           >
             <FontAwesomeIcon
               className="w3-text-black"
@@ -1063,10 +1113,7 @@ export default function Home(props) {
           </div>
         </div>
 
-        <div
-          className="w3-flex-1"
-          style={{ width: 36, height: 36 }}
-        >
+        <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
           <div
             className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
@@ -1080,10 +1127,7 @@ export default function Home(props) {
           </div>
         </div>
 
-        <div
-          className="w3-flex-1"
-          style={{ width: 36, height: 36 }}
-        >
+        <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
           <div
             className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
@@ -1114,7 +1158,6 @@ export default function Home(props) {
             />
           </div>
         </div>
-        
       </div>
 
       {/* modal sigle post */}
@@ -1151,7 +1194,7 @@ export default function Home(props) {
           <div
             id="audioControl"
             className="w3-bottom w3-flex-row w3-flex"
-            style={{ padding: 16, bottom: 38 }}
+            style={{ padding: 16, bottom: 46 }}
           >
             <div
               onClick={() => {

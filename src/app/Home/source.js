@@ -3,8 +3,6 @@ import cloudinary from 'cloudinary-video-player';
 import 'cloudinary-video-player/cld-video-player.min.css';
 
 const source = ({ id, publicId, ...props }) => {
-
-  console.log(publicId);
   
   const cloudinaryRef = useRef();
   const playerRef = useRef();
@@ -15,7 +13,8 @@ const source = ({ id, publicId, ...props }) => {
     cloudinaryRef.current = cloudinary;
 
     const player = cloudinaryRef.current.videoPlayer(playerRef.current, {
-      cloud_name: 'demo',
+      cloud_name: 'freelancer.mg',
+      sourceTypes: ['mp4', 'webm', 'ogv', 'flv', 'mov', 'mkv', 'avi', '3gp', 'm4v'],
       secure: true,
       controls: true,
     });

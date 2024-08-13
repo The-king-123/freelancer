@@ -6,7 +6,7 @@ function video(props) {
   const source = props.source;
   
   return (
-      <VideoPlayer id="player1" publicId={source + "/videos/post/" + videolink} />
+      <VideoPlayer id="player1" publicId={source + "/videos.php?zlonk=1733&zlink=" + videolink} />
   );
 }
 

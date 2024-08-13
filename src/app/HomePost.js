@@ -18,7 +18,7 @@ export default function PostContent({ posts }) {
     <div>
       {posts.length > 0 &&
         posts.map((post, key) => (
-          <div key={key} style={{ padding: 8 }}>
+          <div key={key} style={{ padding: 8, zIndex:1, }}>
             <div
               className="w3-small w3-text-grey"
               style={{ paddingInline: 8, textAlign: "right", display: "none" }}
@@ -70,6 +70,7 @@ export default function PostContent({ posts }) {
                 <div
                   className="postMedia w3-display-container w3-light-grey post-image"
                   data={JSON.stringify(post)}
+                  style={{zIndex:2,}}
                 >
                   <Image
                     alt={"image" + key}
@@ -86,6 +87,7 @@ export default function PostContent({ posts }) {
                     style={{
                       objectPosition: "center",
                       objectFit: "cover",
+                      zIndex:1,
                     }}
                     className="w3-overflow w3-light-grey post-image"
                   />

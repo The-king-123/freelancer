@@ -70,10 +70,10 @@ html,.w3-noscrollbar {
         display: block;
     }
     .mobileHeight{
-        height:calc(100vh - 44px);
+        height:calc(100vh - 52px);
     }
     .mobileHeightPanel{
-        height:calc(100vh - 60px);
+        height:calc(100vh - 68px);
     }
 }
 .post-image{
