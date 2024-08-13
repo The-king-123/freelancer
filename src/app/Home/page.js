@@ -789,12 +789,13 @@ export default function Home(props) {
         stepper.scrolling = false;
       }
     });
+    
     setInterval(() => {
       document.getElementById("coreMain").style.userSelect = "none";
     }, 1000);
 
     const updateHeight = () => {
-      setHeight(window.innerHeight - 80);
+      setHeight(window.innerHeight - 80 - (window.innerWidth>992?0:20));
     };
 
     // Set the initial height
@@ -818,14 +819,14 @@ export default function Home(props) {
       <div
         onClick={() => closeAllPanel()}
         id="overlay"
-        style={{ width: "100vw", height: "100vh", zIndex: 3 }}
+        style={{ width: "100vw", height: "100vh", zIndex: 4 }}
         className="w3-display-middle w3-hide-large"
       ></div>
 
       <nav
         className="mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
         style={{
-          zIndex: 3,
+          zIndex: 5,
           width: 250,
           top: 8,
           borderRadius: "0px 8px 8px 0px",
@@ -885,7 +886,7 @@ export default function Home(props) {
       <nav
         className="mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
         style={{
-          zIndex: 3,
+          zIndex: 5,
           width: 320,
           right: 0,
           top: 8,
@@ -1041,7 +1042,7 @@ export default function Home(props) {
       {/* // Top bar menu */}
       <div
         className="w3-top w3-block w3-card w3-white w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
-        style={{ paddingBlock: 8, paddingInline:16, zIndex: 9999 }}
+        style={{ paddingBlock: 8, paddingInline:16, zIndex: 3 }}
       >
         <div className="w3-flex-1">
           <Link
