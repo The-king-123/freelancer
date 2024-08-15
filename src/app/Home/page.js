@@ -399,7 +399,12 @@ export default function Home(props) {
   const showUser = async (key, others) => {
     closeAllPanel();
     var users = localStorage.getItem("users");
-    const userInfos = JSON.parse(users).find((obj) => obj.key == key);
+    var userInfos = null;
+    console.log(users);
+    
+    if (users) {
+      userInfos = JSON.parse(users).find((obj) => obj.key == key);
+    }
     if (userInfos) {
       if (userInfos.contact.includes("whatsapp")) {
         setcontact({
@@ -441,14 +446,6 @@ export default function Home(props) {
       document.getElementById("expandIcon").style.transform = "rotate(0deg)";
     }
 
-    const loader = (
-      <div className="w3-flex w3-flex-center" style={{ padding: 24 }}>
-        <span className="w3-spin">
-          <FontAwesomeIcon icon={faSpinner} />
-        </span>
-      </div>
-    );
-
     setdisplayChat("");
     setdisplayChoice("");
 
@@ -458,6 +455,8 @@ export default function Home(props) {
         .then((res) => {
           localStorage.setItem("accrocher", JSON.stringify(res.data.data[0]));
           reloadStarter(res.data.data[0]);
+          console.log(res.data.data[0]);
+          
         })
         .catch((e) => {
           console.error("failure", e);
@@ -661,34 +660,6 @@ export default function Home(props) {
 
   useEffect(() => {
     const localHosts = ["localhost", "127.0.0.1", "::1"];
-
-    // fullscreen
-    function tryFullscreen() {
-      const elem = document.documentElement;
-
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-      } else if (elem.mozRequestFullScreen) {
-        elem.mozRequestFullScreen();
-      } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      } else if (elem.msRequestFullscreen) {
-        elem.msRequestFullscreen();
-      }
-    }
-
-    function handleInteraction() {
-      if (!document.fullscreenElement) {
-        tryFullscreen();
-      }
-    }
-    if (!localHosts.includes(location.hostname)) {
-      document
-        .getElementById("mainCore")
-        .addEventListener("scroll", handleInteraction);
-      document.addEventListener("click", handleInteraction);
-    }
-    // End full screen
 
     stopAllIntervalAndTimeout();
     if (typeof window !== "undefined") {
@@ -910,7 +881,7 @@ export default function Home(props) {
                     id="imagePDP"
                     unoptimized
                     loading="lazy"
-                    className="w3-circle"
+                    className={!imagePDP.includes('160471339156947')?"w3-circle":''}
                     width={80}
                     height={80}
                     alt="App profile"

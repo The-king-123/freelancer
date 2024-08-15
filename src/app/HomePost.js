@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  faPlay,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import parse from "html-react-parser";
@@ -12,13 +10,26 @@ const VideoPlayer = dynamic(() => import("./Home/video"), { ssr: false });
 
 export default function PostContent({ posts }) {
   const source = "https://console.freelancer.mg";
-  // const source = "http://127.0.0.1:8000";  
+  // const source = "http://127.0.0.1:8000";
+
+  const getUrl = (embed) => {
+    const start = embed.indexOf('src="') + 5;
+    const end = embed.indexOf('"', start);
+    const result = embed.substring(start, end);
+    return result;
+  };
+  const getTitle = (embed) => {
+    const start = embed.indexOf('title="') + 7;
+    const end = embed.indexOf('"', start);
+    const result = embed.substring(start, end);
+    return result;
+  };
 
   return (
     <div>
       {posts.length > 0 &&
         posts.map((post, key) => (
-          <div key={key} style={{ padding: 8, zIndex:1, }}>
+          <div key={key} style={{ padding: 8, zIndex: 1 }}>
             <div
               className="w3-small w3-text-grey"
               style={{ paddingInline: 8, textAlign: "right", display: "none" }}
@@ -70,7 +81,7 @@ export default function PostContent({ posts }) {
                 <div
                   className="postMedia w3-display-container w3-light-grey post-image"
                   data={JSON.stringify(post)}
-                  style={{zIndex:2,}}
+                  style={{ zIndex: 2 }}
                 >
                   <Image
                     alt={"image" + key}
@@ -87,7 +98,7 @@ export default function PostContent({ posts }) {
                     style={{
                       objectPosition: "center",
                       objectFit: "cover",
-                      zIndex:1,
+                      zIndex: 1,
                     }}
                     className="w3-overflow w3-light-grey post-image"
                   />
@@ -111,7 +122,14 @@ export default function PostContent({ posts }) {
               )}
 
               {post.type == "video" && (
-                <VideoPlayer source={source} videolink={post.link} />
+                <iframe
+                  className="w3-block"
+                  height="280"
+                  src={getUrl(post.link)}
+                  title={getTitle(post.link)}
+                  frameBorder={0}
+                  allowFullScreen
+                ></iframe>
               )}
             </div>
           </div>
