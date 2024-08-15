@@ -452,9 +452,7 @@ export default function Home(props) {
         .get(source + "/_accrocher/" + key)
         .then((res) => {
           localStorage.setItem("accrocher", JSON.stringify(res.data.data[0]));
-          reloadStarter(res.data.data[0]);
-          console.log(res.data.data[0]);
-          
+          reloadStarter(res.data.data[0]);          
         })
         .catch((e) => {
           console.error("failure", e);
