@@ -761,7 +761,16 @@ export default function Home(props) {
     
     setInterval(() => {
       document.getElementById("coreMain").style.userSelect = "none";
-    }, 1000);
+      if (window.innerWidth<=993) {
+        document.getElementsByClassName("mobileHeight")[0].style.height = (window.innerHeight - 52) + 'px'
+        const panels = document.getElementsByClassName("mobileHeight")
+        for (let i = 0; i < panels.length; i++) {
+          panels[i].style.height = (window.innerHeight - 68) + 'px';
+          
+        }
+      }
+      
+    }, 500);
 
     const updateHeight = () => {
       setHeight(window.innerHeight - 80 - (window.innerWidth>992?0:20));
