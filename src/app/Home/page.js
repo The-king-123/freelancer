@@ -399,9 +399,7 @@ export default function Home(props) {
   const showUser = async (key, others) => {
     closeAllPanel();
     var users = localStorage.getItem("users");
-    var userInfos = null;
-    console.log(users);
-    
+    var userInfos = null;    
     if (users) {
       userInfos = JSON.parse(users).find((obj) => obj.key == key);
     }
