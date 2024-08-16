@@ -11,7 +11,6 @@ import {
   faChevronCircleUp,
   faHome,
   faICursor,
-  faList,
   faPaperPlane,
   faPause,
   faPhone,
@@ -29,6 +28,7 @@ import {
   faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
 import { console_source as source } from "@/app/data";
+import HomePost from "@/app/HomePost";
 
 export default function Home(props) {
   const [fullPath, setfullPath] = useState({ path: "" });
@@ -55,7 +55,7 @@ export default function Home(props) {
   );
   const [displayChoice, setdisplayChoice] = useState("");
   const [chatData, setchatData] = useState([]);
-  const [usersData, setusersData] = useState([]);
+  const [core, setcore] = useState("");
   const [designationData, setdesignationData] = useState([]);
   const [killer, setkiller] = useState({ starter: null });
   const [topicData, settopicData] = useState([]);
@@ -699,14 +699,12 @@ export default function Home(props) {
     const postCore = document.getElementsByClassName("postCore");
     for (let i = 0; i < postCore.length; i++) {
       postCore[i].addEventListener("click", () => {
-          console.log(document.getElementById("post" + i).className);
-          if (document.getElementById("post" + i).className == "_expand_") {
-            document.getElementById("post" + i).className =
-              "w3-overflow w3-nowrap-multiline";
-          } else {
-            document.getElementById("post" + i).className = "_expand_";
-          }
-
+        if (document.getElementById("post" + i).className == "_expand_") {
+          document.getElementById("post" + i).className =
+            "w3-overflow w3-nowrap-multiline";
+        } else {
+          document.getElementById("post" + i).className = "_expand_";
+        }
       });
     }
 
@@ -740,8 +738,6 @@ export default function Home(props) {
 
     var users = localStorage.getItem("users");
     if (users) {
-      console.log("users existe");
-
       reloadDesignation(JSON.parse(users));
     } else {
       axios
@@ -758,7 +754,6 @@ export default function Home(props) {
     var user = localStorage.getItem("user");
     if (props.user) {
       if (props.user == user) {
-        console.log("user and props existe");
         showUser(user, false);
       } else {
         localStorage.setItem("user", props.user);
@@ -771,6 +766,32 @@ export default function Home(props) {
       } else {
         showUser("160471339156947", true);
       }
+    }
+
+    if (!props.core) {
+      axios
+        .get(source + "/_post/default?c=default")
+        .then((res) => {
+          setcore(<HomePost posts={res.data.data} />);
+          setTimeout(() => {
+            const postCore = document.getElementsByClassName("postCore");
+            for (let i = 0; i < postCore.length; i++) {
+              postCore[i].addEventListener("click", () => {
+                if (
+                  document.getElementById("post" + i).className == "_expand_"
+                ) {
+                  document.getElementById("post" + i).className =
+                    "w3-overflow w3-nowrap-multiline";
+                } else {
+                  document.getElementById("post" + i).className = "_expand_";
+                }
+              });
+            }
+          }, 100);
+        })
+        .catch((e) => {
+          console.error("failure", e);
+        });
     }
 
     // forum section
@@ -902,7 +923,7 @@ export default function Home(props) {
           <div className="w3-hide-large" style={{ height: 54 }}>
             hui
           </div>
-          {props.core}
+          {props.core ? props.core : core}
         </div>
       </main>
 
