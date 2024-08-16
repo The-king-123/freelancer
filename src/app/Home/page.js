@@ -652,22 +652,25 @@ export default function Home(props) {
     }
   };
 
-  const createForum = async () => {
-    await axios
-      .get(source + "/_auth")
-      .then((res) => {
-        console.log(res.data);
-        console.log(source);
-        // if (res.data.logedin) {
-        //   localStorage.setItem("info", JSON.stringify(res.data.user));
-        //   document.location = "/forum";
-        // } else {
-        //   window.open(source + "/login?q=forum");
-        // }
-      })
-      .catch((e) => {
-        console.error("failure", e);
-      });
+  const getCookie = (item) => {
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookies = decodedCookie.split(';');
+    
+    for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i].trim(); 
+        if (cookie.indexOf(item + "=") === 0) {
+            return cookie.substring(item.length + 1);
+        }
+    }
+    return null;
+}
+
+  const createForum = () => {
+    if(getCookie('logedin')){
+      console.log(getCookie('logedin'));
+    }else{
+      window.open('https://console.freelancer.mg/login?q=forum',"_blank")
+    }
   };
 
   useEffect(() => {
