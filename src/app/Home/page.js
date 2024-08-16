@@ -402,6 +402,7 @@ export default function Home(props) {
       userInfos = JSON.parse(users).find((obj) => obj.key == key);
     }
     if (userInfos) {
+      
       if (userInfos.contact.includes("whatsapp")) {
         setcontact({
           phone:
@@ -720,6 +721,8 @@ export default function Home(props) {
 
     var users = localStorage.getItem("users");
     if (users) {
+      console.log('users existe');
+      
       reloadDesignation(JSON.parse(users));
     } else {
       axios
@@ -736,6 +739,7 @@ export default function Home(props) {
     var user = localStorage.getItem("user");
     if (props.user) {
       if (props.user == user) {
+        console.log('user and props existe');
         showUser(user, false);
       } else {
         localStorage.setItem("user", props.user);
@@ -743,6 +747,7 @@ export default function Home(props) {
       }
     } else {
       if (user) {
+        console.log('user existe');
         showUser(user, false);
       } else {
         showUser("160471339156947", true);

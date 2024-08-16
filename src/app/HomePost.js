@@ -11,6 +11,8 @@ const VideoPlayer = dynamic(() => import("./Home/video"), { ssr: false });
 
 export default function PostContent({ posts }) {
 
+  console.log(posts);
+  
   const getUrl = (embed) => {
     const start = embed.indexOf('src="') + 5;
     const end = embed.indexOf('"', start);

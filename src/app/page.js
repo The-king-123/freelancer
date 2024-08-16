@@ -20,7 +20,7 @@ export default async function page() {
       notFound();
     }
 
-    return <Home core={<HomePost posts={posts} />} />;
+    return <Home user="default" core={<HomePost posts={posts} />} />;
 
   } catch (error) {
       console.error(error)
