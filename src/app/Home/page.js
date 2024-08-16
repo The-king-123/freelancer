@@ -666,7 +666,8 @@ export default function Home(props) {
 }
 
   const createForum = () => {
-    console.log(document.cookie);
+    const decodedCookie = decodeURIComponent(document.cookie);
+    console.log(decodedCookie);
     
     // if(getCookie('logedin')){
     //   console.log(getCookie('logedin'));
