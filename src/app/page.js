@@ -2,10 +2,9 @@ import { notFound } from "next/navigation";
 import axios from "axios";
 import Home from "./Home/page";
 import HomePost from "./HomePost"
+import {console_source as source} from "@/app/data";
 
 export default async function page() {
-  const source = "https://console.freelancer.mg";
-  // const source = "http://127.0.0.1:8000";
 
   try {
     const posts = await axios

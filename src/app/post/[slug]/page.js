@@ -2,14 +2,12 @@ import { notFound } from "next/navigation";
 import PostContent from "./PostContent";
 import axios from "axios";
 import Home from "@/app/Home/page";
-
-const source = "https://console.freelancer.mg";
+import {app_name, console_source as source} from "@/app/data";
 
 var slug = ''
 
 export default async function page({ params }) {
-  const source = "https://console.freelancer.mg";
-  // const source = "http://127.0.0.1:8000";
+
   slug = params.slug
 
   try {
@@ -39,12 +37,11 @@ export default async function page({ params }) {
 
 export async function metadata() {
 
-
   const response = await axios.get(`${source}/_post/${slug}/edit`);
   const post = response.data.data[0];
 
   const meta = {
-    title: post.title,
+    title: post.title + " - " + app_name,
     description: JSON.parse(post.info).description.replace(/<\/?[^>]+(>|$)/g, ""),
   };
   return meta

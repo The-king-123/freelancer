@@ -2,10 +2,9 @@ import { notFound } from "next/navigation";
 import TalentsListe from "./talentsListe";
 import axios from "axios";
 import Home from "@/app/Home/page";
+import {app_name, console_source as source} from "@/app/data";
 
 export default async function page({ params }) {
-  const source = "https://console.freelancer.mg";
-  // const source = "http://127.0.0.1:8000";
 
   try {
     const talents = await axios
@@ -43,7 +42,7 @@ export default async function page({ params }) {
 export async function metadata() {
 
   const meta = {
-    title: "Decouvrez nos talents",
+    title: "Decouvrez nos talents - " + app_name,
     description: 'Vous trouverez ici ce que vous voulez',
   };
   return meta;

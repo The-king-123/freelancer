@@ -5,12 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import parse from "html-react-parser";
 import dynamic from "next/dynamic";
+import {console_source as source} from "@/app/data";
 
 const VideoPlayer = dynamic(() => import("./Home/video"), { ssr: false });
 
 export default function PostContent({ posts }) {
-  const source = "https://console.freelancer.mg";
-  // const source = "http://127.0.0.1:8000";
 
   const getUrl = (embed) => {
     const start = embed.indexOf('src="') + 5;
@@ -18,6 +17,7 @@ export default function PostContent({ posts }) {
     const result = embed.substring(start, end);
     return result;
   };
+  
   const getTitle = (embed) => {
     const start = embed.indexOf('title="') + 7;
     const end = embed.indexOf('"', start);

@@ -2,14 +2,11 @@ import { notFound } from "next/navigation";
 import axios from "axios";
 import Home from "@/app/Home/page";
 import HomePost from '@/app/HomePost'
-
-const source = "https://console.freelancer.mg";
+import {app_name, console_source as source} from "@/app/data";
 
 var slug = "";
 
 export default async function page({ params }) {
-  const source = "https://console.freelancer.mg";
-  // const source = "http://127.0.0.1:8000";
 
   slug = params.user;
   
@@ -42,7 +39,7 @@ export async function metadata() {
   const post = response.data.data[0];
 
   const meta = {
-    title: 'Freelancer',
+    title: app_name,
     description: post.info.replace(
       /<\/?[^>]+(>|$)/g,
       ""

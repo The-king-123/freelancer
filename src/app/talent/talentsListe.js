@@ -2,11 +2,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import slugify from "slugify";
-slugify;
+import {console_source as source} from "@/app/data";
 
 export default function PostContent({ content }) {
-  const source = "https://console.freelancer.mg";
-  // const source = "http://127.0.0.1:8000";
 
   return (
     <div>

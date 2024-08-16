@@ -3,11 +3,10 @@ import CategoryUsers from "./categoryUsers";
 import axios from "axios";
 import Home from "@/app/Home/page";
 import slugify from "slugify";
+import {console_source as source} from "@/app/data";
 
 var titre =''
 export default async function page({ params }) {
-  const source = "https://console.freelancer.mg";
-  // const source = "http://127.0.0.1:8000";
 
   try {
     const users = await axios

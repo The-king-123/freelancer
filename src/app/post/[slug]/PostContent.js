@@ -11,12 +11,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import Link from "next/link";
+import {console_source as source} from "@/app/data";
 
 export default function PostContent({ content }) {
-
-  const source = "https://console.freelancer.mg";
-  // const source = "http://127.0.0.1:8000";
-
 
   const [audioBox, setaudioBox] = useState({ chaine: null });
   const [stepper, setstepper] = useState({

@@ -28,11 +28,9 @@ import {
   faFacebookMessenger,
   faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
+import { console_source as source } from "@/app/data";
 
 export default function Home(props) {
-  const source = "https://console.freelancer.mg";
-  // const source = "http://127.0.0.1:8000";
-
   const [fullPath, setfullPath] = useState({ path: "" });
   const [imagePDP, setimagePDP] = useState(null);
   const [imagePostModal, setimagePostModal] = useState(
@@ -399,7 +397,7 @@ export default function Home(props) {
   const showUser = async (key, others) => {
     closeAllPanel();
     var users = localStorage.getItem("users");
-    var userInfos = null;    
+    var userInfos = null;
     if (users) {
       userInfos = JSON.parse(users).find((obj) => obj.key == key);
     }
@@ -452,7 +450,7 @@ export default function Home(props) {
         .get(source + "/_accrocher/" + key)
         .then((res) => {
           localStorage.setItem("accrocher", JSON.stringify(res.data.data[0]));
-          reloadStarter(res.data.data[0]);          
+          reloadStarter(res.data.data[0]);
         })
         .catch((e) => {
           console.error("failure", e);
@@ -654,6 +652,24 @@ export default function Home(props) {
     }
   };
 
+  const createForum = async () => {
+    await axios
+      .get(source + "/_auth")
+      .then((res) => {
+        console.log(res.data);
+        console.log(source);
+        // if (res.data.logedin) {
+        //   localStorage.setItem("info", JSON.stringify(res.data.user));
+        //   document.location = "/forum";
+        // } else {
+        //   window.open(source + "/login?q=forum");
+        // }
+      })
+      .catch((e) => {
+        console.error("failure", e);
+      });
+  };
+
   useEffect(() => {
     const localHosts = ["localhost", "127.0.0.1", "::1"];
 
@@ -733,6 +749,12 @@ export default function Home(props) {
       }
     }
 
+    // forum section
+    var info = localStorage.getItem("info");
+    console.log(info);
+
+    //end forum section
+
     audioBox.chaine = document.getElementById("audioBox");
 
     audioBox.chaine.addEventListener("ended", () => {
@@ -756,22 +778,21 @@ export default function Home(props) {
         stepper.scrolling = false;
       }
     });
-    
+
     setInterval(() => {
       document.getElementById("coreMain").style.userSelect = "none";
-      if (window.innerWidth<=993) {
-        document.getElementsByClassName("mobileHeight")[0].style.height = (window.innerHeight - 52) + 'px !important'
-        const panels = document.getElementsByClassName("mobileHeightPanel")
+      if (window.innerWidth <= 993) {
+        document.getElementsByClassName("mobileHeight")[0].style.height =
+          window.innerHeight - 52 + "px !important";
+        const panels = document.getElementsByClassName("mobileHeightPanel");
         for (let i = 0; i < panels.length; i++) {
-          panels[i].style.height = (window.innerHeight - 68) + 'px';
-          
+          panels[i].style.height = window.innerHeight - 68 + "px";
         }
       }
-      
     }, 500);
 
     const updateHeight = () => {
-      setHeight(window.innerHeight - 80 - (window.innerWidth>992?0:20));
+      setHeight(window.innerHeight - 80 - (window.innerWidth > 992 ? 0 : 20));
     };
 
     // Set the initial height
@@ -854,7 +875,9 @@ export default function Home(props) {
           className="w3-container"
           style={{ padding: 0, maxWidth: 480, margin: "auto" }}
         >
-          <div className="w3-hide-large" style={{height:54}}>hui</div>
+          <div className="w3-hide-large" style={{ height: 54 }}>
+            hui
+          </div>
           {props.core}
         </div>
       </main>
@@ -886,7 +909,9 @@ export default function Home(props) {
                     id="imagePDP"
                     unoptimized
                     loading="lazy"
-                    className={!imagePDP.includes('160471339156947')?"w3-circle":''}
+                    className={
+                      !imagePDP.includes("160471339156947") ? "w3-circle" : ""
+                    }
                     width={80}
                     height={80}
                     alt="App profile"
@@ -1018,7 +1043,7 @@ export default function Home(props) {
       {/* // Top bar menu */}
       <div
         className="w3-top w3-block w3-card w3-white w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
-        style={{ paddingBlock: 8, paddingInline:16, zIndex: 3 }}
+        style={{ paddingBlock: 8, paddingInline: 16, zIndex: 3 }}
       >
         <div className="w3-flex-1">
           <Link
@@ -1035,9 +1060,7 @@ export default function Home(props) {
           </Link>
         </div>
 
-        <div
-          style={{ width: 36, height: 36 }}
-        >
+        <div style={{ width: 36, height: 36 }}>
           <div
             className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
@@ -1090,7 +1113,11 @@ export default function Home(props) {
           </div>
         </div>
 
-        <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
+        <div
+          onClick={createForum}
+          className="w3-flex-1"
+          style={{ width: 36, height: 36 }}
+        >
           <div
             className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
