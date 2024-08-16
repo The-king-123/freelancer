@@ -1,25 +1,19 @@
-"use client";
-
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import parse from "html-react-parser";
-import dynamic from "next/dynamic";
-import {console_source as source} from "@/app/data";
-
-const VideoPlayer = dynamic(() => import("./Home/video"), { ssr: false });
+import { console_source as source } from "@/app/data";
 
 export default function PostContent({ posts }) {
-
   console.log(posts);
-  
+
   const getUrl = (embed) => {
     const start = embed.indexOf('src="') + 5;
     const end = embed.indexOf('"', start);
     const result = embed.substring(start, end);
     return result;
   };
-  
+
   const getTitle = (embed) => {
     const start = embed.indexOf('title="') + 7;
     const end = embed.indexOf('"', start);
@@ -42,16 +36,6 @@ export default function PostContent({ posts }) {
             <div className="w3-flex-column w3-overflow w3-border w3-round w3-pointer w3-white">
               <div
                 data={"https://freelancer.mg/post/" + post.slug}
-                onClick={() => {
-                  document.getElementById("flashInfo" + key).innerText =
-                    "Le lien a été copié...";
-                  document.getElementById("flashInfo" + key).style.display =
-                    "block";
-                  setTimeout(() => {
-                    document.getElementById("flashInfo" + key).style.display =
-                      "none";
-                  }, 2000);
-                }}
                 className="postTitle w3-nowrap w3-overflow w3-light-grey w3-big w3-border-bottom"
                 style={{ paddingBlock: 8, paddingInline: 16 }}
                 title="Click to copy post link"
@@ -59,24 +43,14 @@ export default function PostContent({ posts }) {
                 {parse(post.title)}
               </div>
               <div className="w3-border-bottom">
-                <div
-                  onClick={() => {
-                    if (
-                      document.getElementById("post" + key).className ==
-                      "_expand_"
-                    ) {
-                      document.getElementById("post" + key).className =
-                        "w3-overflow w3-nowrap-multiline";
-                    } else {
-                      document.getElementById("post" + key).className =
-                        "_expand_";
-                    }
-                  }}
-                  id={"post" + key}
-                  className="w3-overflow w3-nowrap-multiline"
-                  style={{ marginInline: 16, marginBlock: 8 }}
-                >
-                  {parse(JSON.parse(post.info).description)}
+                <div className="postCore">
+                  <div
+                    id={"post" + key}
+                    className="w3-overflow w3-nowrap-multiline"
+                    style={{ marginInline: 16, marginBlock: 8 }}
+                  >
+                    {parse(JSON.parse(post.info).description)}
+                  </div>
                 </div>
               </div>
               {(post.type == "image" || post.type == "image/audio") && (

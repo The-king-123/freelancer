@@ -402,7 +402,6 @@ export default function Home(props) {
       userInfos = JSON.parse(users).find((obj) => obj.key == key);
     }
     if (userInfos) {
-      
       if (userInfos.contact.includes("whatsapp")) {
         setcontact({
           phone:
@@ -697,11 +696,31 @@ export default function Home(props) {
       });
     }
 
+    const postCore = document.getElementsByClassName("postCore");
+    for (let i = 0; i < postCore.length; i++) {
+      postCore[i].addEventListener("click", () => {
+          console.log(document.getElementById("post" + i).className);
+          if (document.getElementById("post" + i).className == "_expand_") {
+            document.getElementById("post" + i).className =
+              "w3-overflow w3-nowrap-multiline";
+          } else {
+            document.getElementById("post" + i).className = "_expand_";
+          }
+
+      });
+    }
+
     const postsTitle = document.getElementsByClassName("postTitle");
     for (let i = 0; i < postsTitle.length; i++) {
       postsTitle[i].addEventListener("click", () => {
         const post = postsTitle[i].getAttribute("data");
         copyToClipboard(post);
+        document.getElementById("flashInfo" + i).innerText =
+          "Le lien a été copié...";
+        document.getElementById("flashInfo" + i).style.display = "block";
+        setTimeout(() => {
+          document.getElementById("flashInfo" + i).style.display = "none";
+        }, 2000);
       });
     }
 
@@ -721,8 +740,8 @@ export default function Home(props) {
 
     var users = localStorage.getItem("users");
     if (users) {
-      console.log('users existe');
-      
+      console.log("users existe");
+
       reloadDesignation(JSON.parse(users));
     } else {
       axios
@@ -739,7 +758,7 @@ export default function Home(props) {
     var user = localStorage.getItem("user");
     if (props.user) {
       if (props.user == user) {
-        console.log('user and props existe');
+        console.log("user and props existe");
         showUser(user, false);
       } else {
         localStorage.setItem("user", props.user);
@@ -747,7 +766,7 @@ export default function Home(props) {
       }
     } else {
       if (user) {
-        console.log('user existe');
+        console.log("user existe");
         showUser(user, false);
       } else {
         showUser("160471339156947", true);
