@@ -666,11 +666,13 @@ export default function Home(props) {
 }
 
   const createForum = () => {
-    if(getCookie('logedin')){
-      console.log(getCookie('logedin'));
-    }else{
-      window.open('https://console.freelancer.mg/login?q=forum',"_blank")
-    }
+    console.log(document.cookie);
+    
+    // if(getCookie('logedin')){
+    //   console.log(getCookie('logedin'));
+    // }else{
+    //   window.open('https://console.freelancer.mg/login?q=forum',"_blank")
+    // }
   };
 
   useEffect(() => {
