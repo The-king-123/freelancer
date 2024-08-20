@@ -687,12 +687,6 @@ export default function Home(props) {
     }
   };
 
-  document.onkeyup = async (e) => {
-    if (e.key == "Enter") {
-      login();
-    }
-  };
-
   const emailRegister = (element) => {
     signinAuthElement.email = element.target.value;
   };
@@ -748,6 +742,16 @@ export default function Home(props) {
         const post = posts[i].getAttribute("data");
         showSinglePost(JSON.parse(post));
       });
+    }
+
+    const videoPosts = document.getElementsByClassName("videoPosts");
+    for (let i = 0; i < videoPosts.length; i++) {
+      console.log(videoPosts[i]);
+      
+      // videoPosts[i].addEventListener("click", () => {
+      //   const post = posts[i].getAttribute("data");
+      //   showSinglePost(JSON.parse(post));
+      // });
     }
 
     const postCore = document.getElementsByClassName("postCore");
@@ -848,6 +852,12 @@ export default function Home(props) {
         });
     }
 
+    document.onkeyup = async (e) => {
+      if (e.key == "Enter") {
+        login();
+      }
+    };
+    
     // forum section
     var info = localStorage.getItem("info");
     console.log(info);

@@ -97,8 +97,8 @@ export default function PostContent({ posts }) {
 
               {post.type == "video" && (
                 <iframe
-                  id={"video"+key}
-                  className="w3-block"
+                  id={"videoPosts"+key}
+                  className="videoPosts w3-block"
                   height="420"
                   src={getUrl(post.link)}
                   title={getTitle(post.link)}
