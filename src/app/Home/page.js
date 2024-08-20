@@ -11,6 +11,7 @@ import {
   faChevronCircleUp,
   faHome,
   faICursor,
+  faKey,
   faPaperPlane,
   faPause,
   faPhone,
@@ -18,6 +19,7 @@ import {
   faPlus,
   faRefresh,
   faSpinner,
+  faUser,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import "cloudinary-video-player/cld-video-player.min.css";
@@ -652,35 +654,74 @@ export default function Home(props) {
     }
   };
 
-  const getCookie = (item) => {
-    const decodedCookie = decodeURIComponent(document.cookie);
-    const cookies = decodedCookie.split(';');
-    
-    for (let i = 0; i < cookies.length; i++) {
-        let cookie = cookies[i].trim(); 
-        if (cookie.indexOf(item + "=") === 0) {
-            return cookie.substring(item.length + 1);
+  const signinAuthElement = {
+    email: "",
+    password: "",
+    type: "login",
+  };
+
+  const isLogedin = async () => {
+    await axios
+      .get(source + "/_auth")
+      .then((res) => {
+        if (res.data.logedin) {
+          console.log('true');
+          localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+          return true;
+        } else {
+          console.log('false');
+          return false;
         }
+      })
+      .catch((e) => {
+        console.error("failure", e);
+      });
+  };
+
+  const createForum = async () => {
+    const logedin = await isLogedin()
+    if (logedin) {
+      // document.location = "/forum";
+    } else {
+      document.getElementById('modalLogin').style.display = 'block'
     }
-    return null;
-}
+  };
 
-  const createForum = () => {
-    console.log(document.cookie);
-    
-    const decodedCookie = decodeURIComponent(document.cookie);
-    
-    console.log(decodedCookie);
+  document.onkeyup = async (e) => {
+    if (e.key == "Enter") {
+      login();
+    }
+  };
 
-    const cookies = decodedCookie.split(';');
+  const emailRegister = (element) => {
+    signinAuthElement.email = element.target.value;
+  };
 
-    console.log(cookies);
-    
-    // if(getCookie('logedin')){
-    //   console.log(getCookie('logedin'));
-    // }else{
-    //   window.open('https://console.freelancer.mg/login?q=forum',"_blank")
-    // }
+  const passwordRegister = (element) => {
+    signinAuthElement.password = element.target.value;
+  };
+
+  const login = async () => {
+    if (
+      signinAuthElement.email.length > 3 &&
+      signinAuthElement.password.length > 8
+    ) {
+      document.getElementById("spinner").style.display = "inline-block";
+      await axios
+        .patch(source+"/_auth/login", signinAuthElement)
+        .then((res) => {
+          if (res.data.logedin) {
+              document.location = "/forum";
+          } else {
+            document.getElementById("alert_connexion").className =
+              "w3-text-red w3-center";
+            document.getElementById("spinner").style.display = "none";
+          }
+        })
+        .catch((e) => {
+          console.error("failure", e);
+        });
+    }
   };
 
   useEffect(() => {
@@ -1222,7 +1263,129 @@ export default function Home(props) {
         </div>
       </div>
 
-      {/* modal sigle post */}
+      {/* modal logedin */}
+
+      <div
+        id="modalLogin"
+        className="w3-modal w3-noscrollbar"
+        style={{ padding: 24, zIndex: 999999}}
+      >
+        <div
+          className="w3-white w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
+          style={{
+            minHeight: 320,
+            paddingBlock: 24,
+            paddingInline: 0,
+            maxWidth: 320,
+          }}
+        >
+          <div className="w3-block w3-flex-column w3-flex-center">
+            <div className="w3-center w3-padding-16 w3-flex w3-flex-center">
+              <span className="w3-padding-small w3-overflow w3-flex w3-flex-center">
+                <Image
+                  id="imagePDP"
+                  unoptimized
+                  loading="lazy"
+                  width={60}
+                  height={60}
+                  alt="App profile"
+                  style={{
+                    objectFit: "cover",
+                    objectPosition: "center",
+                  }}
+                  src={
+                    source +
+                    "/images.php?w=720&h=720&zlonk=3733&zlink=160471339156947"
+                  }
+                />
+              </span>
+              <span className="w3-text-black w3-padding w3-large">
+                Connexion
+              </span>
+            </div>
+            <div className="w3-block">
+              <div id="alert_connexion" className="w3-hide">
+                mail ou mot de passe incorrect...
+              </div>
+              <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
+                <input
+                  onChange={(e) => emailRegister(e)}
+                  type="text"
+                  className="input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium"
+                  placeholder="Adresse e-mail"
+                  id="leader"
+                  name="user_leader"
+                  required
+                />
+                <div
+                  className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                  style={{ marginRight: 20 }}
+                >
+                  <span className="w3-text-white">
+                    <FontAwesomeIcon icon={faUser} />
+                  </span>
+                </div>
+              </div>
+              <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
+                <input
+                  onChange={(e) => passwordRegister(e)}
+                  type="password"
+                  className="input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium"
+                  placeholder="Mot de passe"
+                  id="mail"
+                  name="user_email"
+                  required
+                />
+
+                <div
+                  className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                  style={{ marginRight: 20 }}
+                >
+                  <span className="w3-text-white">
+                    <FontAwesomeIcon icon={faKey} />
+                  </span>
+                </div>
+              </div>
+              <div className="w3-center w3-white w3-flex w3-flex-center">
+                <div className="w3-margin w3-col l8 m8 s8">
+                  <button
+                    id="buttonConnexion"
+                    disabled={false}
+                    onClick={() => login()}
+                    className="transition w3-medium w3-block w3-button w3-round-xxlarge w3-text-white w3-black"
+                  >
+                    Se connecter
+                    <span
+                      className="w3-spin w3-margin-left"
+                      style={{ display: "none" }}
+                      id="spinner"
+                    >
+                      <FontAwesomeIcon icon={faSpinner} />
+                    </span>
+                  </button>
+                </div>
+              </div>
+              <div className="w3-center w3-white w3-flex w3-flex-center">
+                <div
+                  className="w3-col l8 m8 s8"
+                  style={{ marginInline: 16, marginBottom: 24 }}
+                >
+                  <button
+                    id="buttonSignup"
+                    onClick={() => window.location = "https://console.freelancer.mg/signup"}
+                    className="transition w3-medium w3-block w3-button w3-round-xxlarge w3-text-black w3-yellow"
+                  >
+                    S'inscrire
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/*end modal logedin */}
+
+      {/* modal single post */}
       <div
         id="modalSinglePost"
         className="mobileHeight w3-light-grey w3-modal w3-noscrollbar"
