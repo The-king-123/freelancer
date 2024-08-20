@@ -5,8 +5,6 @@ import parse from "html-react-parser";
 import { console_source as source } from "@/app/data";
 
 export default function PostContent({ posts }) {
-  console.log(posts);
-
   const getUrl = (embed) => {
     const start = embed.indexOf('src="') + 5;
     const end = embed.indexOf('"', start);
