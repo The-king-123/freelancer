@@ -665,11 +665,11 @@ export default function Home(props) {
       .get(source + "/_auth")
       .then((res) => {
         if (res.data.logedin) {
-          console.log('true');
+          console.log("true");
           localStorage.setItem("userInfo", JSON.stringify(res.data.user));
           return true;
         } else {
-          console.log('false');
+          console.log("false");
           return false;
         }
       })
@@ -679,11 +679,11 @@ export default function Home(props) {
   };
 
   const createForum = async () => {
-    const logedin = await isLogedin()
+    const logedin = await isLogedin();
     if (logedin) {
       // document.location = "/forum";
     } else {
-      document.getElementById('modalLogin').style.display = 'block'
+      document.getElementById("modalLogin").style.display = "block";
     }
   };
 
@@ -702,10 +702,10 @@ export default function Home(props) {
     ) {
       document.getElementById("spinner").style.display = "inline-block";
       await axios
-        .patch(source+"/_auth/login", signinAuthElement)
+        .patch(source + "/_auth/login", signinAuthElement)
         .then((res) => {
           if (res.data.logedin) {
-              document.location = "/forum";
+            document.location = "/forum";
           } else {
             document.getElementById("alert_connexion").className =
               "w3-text-red w3-center";
@@ -744,15 +744,25 @@ export default function Home(props) {
       });
     }
 
-    const videoPosts = document.getElementsByClassName("videoPosts");
-    for (let i = 0; i < videoPosts.length; i++) {
-      console.log(videoPosts[i]);
-      
-      // videoPosts[i].addEventListener("click", () => {
-      //   const post = posts[i].getAttribute("data");
-      //   showSinglePost(JSON.parse(post));
-      // });
-    }
+    var times = 0
+
+    const videoPostInterval = setInterval(() => {
+      const videoPosts = document.getElementsByClassName("videoPosts");
+      if (videoPosts.length>0) {
+        clearInterval(videoPostInterval);
+        for (let i = 0; i < videoPosts.length; i++) {
+          console.log(videoPosts[i].clientWidth*16/9);
+
+          videoPosts[i].style.height = videoPosts[i].clientWidth*16/9 + 'px'
+        }
+      }else{
+        if (times>=10) {
+          clearInterval(videoPostInterval);
+        } else {
+          times++
+        }
+      }
+    }, 500);
 
     const postCore = document.getElementsByClassName("postCore");
     for (let i = 0; i < postCore.length; i++) {
@@ -857,7 +867,7 @@ export default function Home(props) {
         login();
       }
     };
-    
+
     // forum section
     var info = localStorage.getItem("info");
     console.log(info);
@@ -1278,7 +1288,7 @@ export default function Home(props) {
       <div
         id="modalLogin"
         className="w3-modal w3-noscrollbar"
-        style={{ padding: 24, zIndex: 999999}}
+        style={{ padding: 24, zIndex: 999999 }}
       >
         <div
           className="w3-white w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
@@ -1382,7 +1392,9 @@ export default function Home(props) {
                 >
                   <button
                     id="buttonSignup"
-                    onClick={() => window.location = "https://console.freelancer.mg/signup"}
+                    onClick={() =>
+                      (window.location = "https://console.freelancer.mg/signup")
+                    }
                     className="transition w3-medium w3-block w3-button w3-round-xxlarge w3-text-black w3-yellow"
                   >
                     S'inscrire
