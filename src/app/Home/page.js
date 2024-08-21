@@ -706,13 +706,19 @@ export default function Home(props) {
   };
 
   const login = async () => {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     if (
       signinAuthElement.email.length > 3 &&
       signinAuthElement.password.length > 8
     ) {
       document.getElementById("spinner").style.display = "inline-block";
       await axios
-        .patch(source + "/_auth/login", signinAuthElement)
+        .patch(source + "/_auth/login", signinAuthElement,{
+          headers: {
+              'X-CSRF-TOKEN': csrfToken
+          },
+          withCredentials: true // Inclure les cookies de session
+      })
         .then((res) => {
           if (res.data.logedin) {
             document.location = "/forum";
@@ -761,8 +767,6 @@ export default function Home(props) {
       if (videoPosts.length>0) {
         clearInterval(videoPostInterval);
         for (let i = 0; i < videoPosts.length; i++) {
-          console.log(videoPosts[i].clientWidth*16/9);
-
           videoPosts[i].style.height = videoPosts[i].clientWidth*16/9 + 'px'
         }
       }else{
@@ -839,7 +843,6 @@ export default function Home(props) {
       }
     } else {
       if (user) {
-        console.log("user existe");
         showUser(user, false);
       } else {
         showUser("160471339156947", true);
@@ -881,7 +884,6 @@ export default function Home(props) {
     // forum section
     var info = localStorage.getItem("info");
     console.log(info);
-
     //end forum section
 
     audioBox.chaine = document.getElementById("audioBox");
