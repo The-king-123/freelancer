@@ -33,8 +33,7 @@ import { console_source as source } from "@/app/data";
 import HomePost from "@/app/HomePost";
 
 export default function Home(props) {
-
-  const [csrfToken, setCsrfToken] = useState('');
+  const [csrfToken, setCsrfToken] = useState("");
   const [fullPath, setfullPath] = useState({ path: "" });
   const [imagePDP, setimagePDP] = useState(null);
   const [imagePostModal, setimagePostModal] = useState(
@@ -407,15 +406,19 @@ export default function Home(props) {
     }
     if (userInfos) {
       console.log(userInfos.designation);
-      
-      if (userInfos.designation=="Admin") {
-        document.getElementsByClassName('userNameTitle')[0].innerText = "FREELANCER";
-        document.getElementsByClassName('userNameTitle')[1].innerText = "FREELANCER";
+
+      if (userInfos.designation == "Admin") {
+        document.getElementsByClassName("userNameTitle")[0].innerText =
+          "FREELANCER";
+        document.getElementsByClassName("userNameTitle")[1].innerText =
+          "FREELANCER";
       } else {
-        document.getElementsByClassName('userNameTitle')[0].innerText = userInfos.fullname;
-        document.getElementsByClassName('userNameTitle')[1].innerText = userInfos.fullname
+        document.getElementsByClassName("userNameTitle")[0].innerText =
+          userInfos.fullname;
+        document.getElementsByClassName("userNameTitle")[1].innerText =
+          userInfos.fullname;
       }
-      
+
       if (userInfos.contact.includes("whatsapp")) {
         setcontact({
           phone:
@@ -672,12 +675,30 @@ export default function Home(props) {
     type: "login",
   };
 
-  const createForum =  () => {
+  const createForum = async () => {
+    const code = localStorage.getItem("x-code");
+    if (code) {
+      await axios
+        .get(`${source}/_auth/${code}/edit`)
+        .then((res) => {
+          if (res.data.logedin) {
+            localStorage.setItem("userInfos", res.data.user);
+            document.location = "https://freelancer.mg/forum";
+          }else{
+            document.location = `${source}/login?q=forum&c=${code}`
+          }
+        })
+        .catch((e) => {
+          console.error("failure", e);
+        });
+    } else {
       let randomNumber = "";
       for (let i = 0; i < 15; i++) {
-          randomNumber += Math.floor(Math.random() * 10);
+        randomNumber += Math.floor(Math.random() * 10);
       }
-      document.location = source+"/login?q=forum&c="+randomNumber;
+      localStorage.setItem("x-code", randomNumber);
+      document.location = source + "/login?q=forum&c=" + randomNumber;
+    }
   };
 
   const emailRegister = (element) => {
@@ -689,19 +710,18 @@ export default function Home(props) {
   };
 
   const login = async () => {
-    
     if (
       signinAuthElement.email.length > 3 &&
       signinAuthElement.password.length > 8
     ) {
       document.getElementById("spinner").style.display = "inline-block";
       await axios
-        .patch(source + "/_auth/login", signinAuthElement,{
+        .patch(source + "/_auth/login", signinAuthElement, {
           headers: {
-              'X-CSRF-TOKEN': csrfToken
+            "X-CSRF-TOKEN": csrfToken,
           },
-          withCredentials: true // Inclure les cookies de session
-      })
+          withCredentials: true, // Inclure les cookies de session
+        })
         .then((res) => {
           if (res.data.logedin) {
             document.location = "/forum";
@@ -719,13 +739,14 @@ export default function Home(props) {
 
   useEffect(() => {
     const localHosts = ["localhost", "127.0.0.1", "::1"];
-    axios.get(source+'/csrf-token')
-    .then(response => {
-      setCsrfToken(response.data.csrfToken);
-    })
-    .catch(error => {
-      console.error('Error fetching CSRF token:', error);
-    });
+    axios
+      .get(source + "/csrf-token")
+      .then((response) => {
+        setCsrfToken(response.data.csrfToken);
+      })
+      .catch((error) => {
+        console.error("Error fetching CSRF token:", error);
+      });
     stopAllIntervalAndTimeout();
     if (typeof window !== "undefined") {
       fullPath.path = window.location.pathname;
@@ -753,16 +774,17 @@ export default function Home(props) {
 
     const videoPostInterval = setInterval(() => {
       const videoPosts = document.getElementsByClassName("videoPosts");
-      if (videoPosts.length>0) {
+      if (videoPosts.length > 0) {
         clearInterval(videoPostInterval);
         for (let i = 0; i < videoPosts.length; i++) {
-          videoPosts[i].style.height = videoPosts[i].clientWidth*16/9 + 'px'
+          videoPosts[i].style.height =
+            (videoPosts[i].clientWidth * 16) / 9 + "px";
         }
-      }else{
-        if (times>=10) {
+      } else {
+        if (times >= 10) {
           clearInterval(videoPostInterval);
         } else {
-          times++
+          times++;
         }
       }
     }, 500);
@@ -952,7 +974,6 @@ export default function Home(props) {
       >
         <div className="w3-container w3-display-container w3-padding-16">
           <div
-          
             onClick={Home}
             className="w3-pointer w3-center w3-flex-row w3-flex-center w3-large"
           >
@@ -1161,10 +1182,7 @@ export default function Home(props) {
         style={{ paddingBlock: 8, paddingInline: 16, zIndex: 3 }}
       >
         <div className="w3-flex-1">
-          <div
-            onClick={Home}
-            className="w3-pointer w3-flex-row w3-large"
-          >
+          <div onClick={Home} className="w3-pointer w3-flex-row w3-large">
             <b className="userNameTitle">FREELANCER</b>
           </div>
         </div>

@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 function createForum() {
 
   useEffect(() => {
+    console.log(localStorage.getItem('userInfos'));
     
   }, [])
   
