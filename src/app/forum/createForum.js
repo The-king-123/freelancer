@@ -70,7 +70,7 @@ function createForum() {
             className="w3-right w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
             height={120}
             width={120}
-            style={{marginTop: 16, display:none, objectFit:'cover', objectPosition:'center' }}
+            style={{marginTop: 16, display:'none', objectFit:'cover', objectPosition:'center' }}
           />
             
         </div>
