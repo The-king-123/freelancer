@@ -672,31 +672,12 @@ export default function Home(props) {
     type: "login",
   };
 
-  const isLogedin = async () => {
-    await axios
-      .get(source + "/_auth")
-      .then((res) => {
-        if (res.data.logedin) {
-          console.log("true");
-          localStorage.setItem("userInfo", JSON.stringify(res.data.user));
-          return true;
-        } else {
-          console.log("false");
-          return false;
-        }
-      })
-      .catch((e) => {
-        console.error("failure", e);
-      });
-  };
-
-  const createForum = async () => {
-    const logedin = await isLogedin();
-    if (logedin) {
-      // document.location = "/forum";
-    } else {
-      document.getElementById("modalLogin").style.display = "block";
-    }
+  const createForum =  () => {
+      let randomNumber = "";
+      for (let i = 0; i < 15; i++) {
+          randomNumber += Math.floor(Math.random() * 10);
+      }
+      document.location = source+"/login?q=forum&c="+randomNumber;
   };
 
   const emailRegister = (element) => {
