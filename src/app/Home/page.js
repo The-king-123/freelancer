@@ -33,6 +33,8 @@ import { console_source as source } from "@/app/data";
 import HomePost from "@/app/HomePost";
 
 export default function Home(props) {
+
+  const [csrfToken, setCsrfToken] = useState('');
   const [fullPath, setfullPath] = useState({ path: "" });
   const [imagePDP, setimagePDP] = useState(null);
   const [imagePostModal, setimagePostModal] = useState(
@@ -706,7 +708,7 @@ export default function Home(props) {
   };
 
   const login = async () => {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
     if (
       signinAuthElement.email.length > 3 &&
       signinAuthElement.password.length > 8
@@ -736,7 +738,13 @@ export default function Home(props) {
 
   useEffect(() => {
     const localHosts = ["localhost", "127.0.0.1", "::1"];
-
+    axios.get(source+'/csrf-token')
+    .then(response => {
+      setCsrfToken(response.data.csrfToken);
+    })
+    .catch(error => {
+      console.error('Error fetching CSRF token:', error);
+    });
     stopAllIntervalAndTimeout();
     if (typeof window !== "undefined") {
       fullPath.path = window.location.pathname;
