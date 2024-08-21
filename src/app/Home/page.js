@@ -682,7 +682,7 @@ export default function Home(props) {
         .get(`${source}/_auth/${code}/edit`)
         .then((res) => {
           if (res.data.logedin) {
-            localStorage.setItem("userInfos", res.data.user);
+            localStorage.setItem("userInfos", JSON.stringify(res.data.user));
             document.location = "https://freelancer.mg/forum";
           }else{
             document.location = `${source}/login?q=forum&c=${code}`
