@@ -404,6 +404,16 @@ export default function Home(props) {
       userInfos = JSON.parse(users).find((obj) => obj.key == key);
     }
     if (userInfos) {
+      console.log(userInfos.designation);
+      
+      if (userInfos.designation=="Admin") {
+        document.getElementsByClassName('userNameTitle')[0].innerText = "FREELANCER";
+        document.getElementsByClassName('userNameTitle')[1].innerText = "FREELANCER";
+      } else {
+        document.getElementsByClassName('userNameTitle')[0].innerText = userInfos.fullname;
+        document.getElementsByClassName('userNameTitle')[1].innerText = userInfos.fullname
+      }
+      
       if (userInfos.contact.includes("whatsapp")) {
         setcontact({
           phone:
@@ -744,7 +754,7 @@ export default function Home(props) {
       });
     }
 
-    var times = 0
+    var times = 0;
 
     const videoPostInterval = setInterval(() => {
       const videoPosts = document.getElementsByClassName("videoPosts");
@@ -950,18 +960,13 @@ export default function Home(props) {
         id="sidebarMenu"
       >
         <div className="w3-container w3-display-container w3-padding-16">
-          <Link
-            onClick={() => {
-              localStorage.removeItem("user");
-              if (fullPath.path.length > 0) {
-                stopAllIntervalAndTimeout();
-              }
-            }}
-            href={"/"}
-            className="w3-wide w3-pointer w3-center w3-flex-row w3-flex-center w3-large"
+          <div
+          
+            onClick={Home}
+            className="w3-pointer w3-center w3-flex-row w3-flex-center w3-large"
           >
-            <b>FREELANCER</b>
-          </Link>
+            <b className="userNameTitle">FREELANCER</b>
+          </div>
         </div>
         <div
           className="w3-padding-32 w3-large w3-text-grey"
@@ -1165,18 +1170,12 @@ export default function Home(props) {
         style={{ paddingBlock: 8, paddingInline: 16, zIndex: 3 }}
       >
         <div className="w3-flex-1">
-          <Link
-            onClick={() => {
-              localStorage.removeItem("user");
-              if (fullPath.path.length > 0) {
-                stopAllIntervalAndTimeout();
-              }
-            }}
-            href={"/"}
-            className="w3-wide w3-pointer w3-flex-row w3-large"
+          <div
+            onClick={Home}
+            className="w3-pointer w3-flex-row w3-large"
           >
-            <b>FREELANCER</b>
-          </Link>
+            <b className="userNameTitle">FREELANCER</b>
+          </div>
         </div>
 
         <div style={{ width: 36, height: 36 }}>
@@ -1200,10 +1199,16 @@ export default function Home(props) {
         style={{ paddingBlock: 8, zIndex: 9999 }}
       >
         <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
-          <div
+          <Link
             className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
-            onClick={Home}
+            onClick={() => {
+              localStorage.removeItem("user");
+              if (fullPath.path.length > 0) {
+                stopAllIntervalAndTimeout();
+              }
+            }}
+            href={"/"}
           >
             <FontAwesomeIcon
               className="w3-text-black"
@@ -1211,7 +1216,7 @@ export default function Home(props) {
               width={20}
               height={20}
             />
-          </div>
+          </Link>
         </div>
 
         <div
