@@ -677,6 +677,8 @@ export default function Home(props) {
 
   const createForum = async () => {
     const code = localStorage.getItem("x-code");
+    console.log(code);
+    
     if (code) {
       await axios
         .get(`${source}/_auth/${code}/edit`)
