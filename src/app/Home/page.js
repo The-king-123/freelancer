@@ -698,8 +698,7 @@ export default function Home(props) {
       for (let i = 0; i < 15; i++) {
         randomNumber += Math.floor(Math.random() * 10);
       }
-      localStorage.setItem("x-code", randomNumber);
-      document.location = source + "/login?q=forum&c=" + randomNumber;
+      document.getElementById('modalLogin').style.display = 'block'
     }
   };
 
@@ -726,9 +725,16 @@ export default function Home(props) {
       signinAuthElement.password.length > 8
     ) {
       document.getElementById("spinner").style.display = "inline-block";
+      
+      let randomNumber = "";
+      for (let i = 0; i < 15; i++) {
+        randomNumber += Math.floor(Math.random() * 10);
+      }
+      localStorage.setItem("x-code", randomNumber);
+
       await setCSRFToken();
       await axios
-        .patch(source + "/_auth/login", signinAuthElement)
+        .patch(source + "/_auth/login?c=" + randomNumber, signinAuthElement)
         .then((res) => {
           if (res.data.logedin) {
             document.location = "/forum";
