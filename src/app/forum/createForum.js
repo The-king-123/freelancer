@@ -15,6 +15,7 @@ import Image from "next/image";
 import slugify from "slugify";
 
 function createForum() {
+  axios.defaults.withCredentials = true;
   var inputImage = "";
 
   const forumInfos = {
@@ -26,6 +27,12 @@ function createForum() {
     state: "",
     slug: "",
     xcode: null,
+  };
+
+  const getCsrfToken = async () => {
+    await axios.get(source+'/sanctum/csrf-cookie', {
+      withCredentials: true, // Ensures cookies are sent with the request
+    });
   };
 
   const save = async (state) => {
@@ -59,16 +66,25 @@ function createForum() {
         };
       }    
 
-      await axios
-        .post(source+"/_forum", data)
-        .then((res) => {
-          document.getElementById("postSaveSpinner").style.display = "none";
+      await getCsrfToken();
+      const csrfToken = document.cookie.match(/XSRF-TOKEN=([^;]+)/)[1];
 
+      await axios
+        .post(source+"/_forum", data,{
+          headers: {
+            'X-CSRF-TOKEN': csrfToken,
+          },
+          withCredentials: true, // Ensures cookies are included with the request
+        })
+        .then((res) => {
+          document.getElementById("forumPublicSpinner").style.display = "inline-block";
+          document.getElementById("forumPublicIcon").style.display = "none";
           closeModalPost();
           reloadPost(res.data.data);
         })
         .catch((e) => {
-          document.getElementById("postSaveSpinner").style.display = "none";
+          document.getElementById("forumPublicSpinner").style.display = "inline-block";
+          document.getElementById("forumPublicIcon").style.display = "none";
           window.alert("There is a probleme, your post is not saved!!");
           console.error("failure", e);
         });

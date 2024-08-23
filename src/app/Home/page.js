@@ -930,7 +930,7 @@ export default function Home(props) {
           window.innerHeight - 52 + "px !important";
         const panels = document.getElementsByClassName("mobileHeightPanel");
         for (let i = 0; i < panels.length; i++) {
-          panels[i].style.height = window.innerHeight - 68 + "px";
+          panels[i].style.height = window.innerHeight - 68 + "px !important";
         }
       }
     }, 500);
