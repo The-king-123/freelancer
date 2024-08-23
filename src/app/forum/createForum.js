@@ -66,16 +66,16 @@ function createForum() {
         };
       }    
 
-      await getCsrfToken();
-      const csrfToken = document.cookie.match(/XSRF-TOKEN=([^;]+)/)[1];
-
+      // await getCsrfToken();
+      // const csrfToken = document.cookie.match(/XSRF-TOKEN=([^;]+)/)[1];
+// ,{
+//           headers: {
+//             'X-CSRF-TOKEN': csrfToken,
+//           },
+//           withCredentials: true, // Ensures cookies are included with the request
+//         }
       await axios
-        .post(source+"/_forum", data,{
-          headers: {
-            'X-CSRF-TOKEN': csrfToken,
-          },
-          withCredentials: true, // Ensures cookies are included with the request
-        })
+        .post(source+"/_forum", data)
         .then((res) => {
           document.getElementById("forumPublicSpinner").style.display = "inline-block";
           document.getElementById("forumPublicIcon").style.display = "none";
