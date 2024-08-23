@@ -62,7 +62,7 @@ function createForum() {
       }
 
       await axios
-        .get("/csrf-token") // Or your endpoint that sets the CSRF token
+        .get(source+"/csrf-token") // Or your endpoint that sets the CSRF token
         .then(async (response) => {
           // Now you can make subsequent requests
           await axios
