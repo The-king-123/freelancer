@@ -28,12 +28,23 @@ function createForum() {
     slug: "",
     xcode: null,
   };
-
+  async function setCSRFToken() {
+    try {
+      // Fetch CSRF token from the server
+      const response = await axios.get(source + '/csrf-token');
+      // Set CSRF token as a default header for all future requests
+      axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+    } catch (error) {
+      console.error('CSRF token fetch failed:', error);
+    }
+  } 
   const save = async (state) => {
+
     forumInfos.state = state;
     forumInfos.slug = slugify(forumInfos.title, { lower: true });
 
     console.log(forumInfos);
+    
     if (forumInfos.title.length > 0 && forumInfos.content.length > 0) {
       document.getElementById("forumPublicSpinner").style.display =
         "inline-block";
@@ -61,33 +72,45 @@ function createForum() {
         };
       }
 
+      try {
+        await setCSRFToken();
+        
+        const response = await axios.post(source + '/_forum',data);
+        document.getElementById('forumPublicSpinner').style.display = 'inline-block';
+        document.getElementById('forumPublicIcon').style.display = 'none';
+        closeModalPost();
+        reloadPost(response.data.data);
+      } catch (error) {
+        document.getElementById('forumPublicSpinner').style.display = 'inline-block';
+        document.getElementById('forumPublicIcon').style.display = 'none';
+        
+        if (error.response && error.response.status === 419) {
+          console.error('CSRF token missing or incorrect');
+        } else {
+          console.error('Request failed:', error);
+        }
+      }
+
       await axios
-        .get(source+"/csrf-token") // Or your endpoint that sets the CSRF token
-        .then(async (response) => {
-          // Now you can make subsequent requests
-          await axios
-            .post(source + "/_forum")
-            .then((res) => {
-              document.getElementById("forumPublicSpinner").style.display =
-                "inline-block";
-              document.getElementById("forumPublicIcon").style.display = "none";
-              closeModalPost();
-              reloadPost(res.data.data);
-            })
-            .catch((e) => {
-              document.getElementById("forumPublicSpinner").style.display =
-                "inline-block";
-              document.getElementById("forumPublicIcon").style.display = "none";
-              if (e.response && e.response.status === 419) {
-                console.error('CSRF token missing or incorrect');
-              } else {
-                console.error('Request failed:', error);
-              }
-            });
+        .post(source + "/_forum",data)
+        .then((res) => {
+          document.getElementById("forumPublicSpinner").style.display =
+            "inline-block";
+          document.getElementById("forumPublicIcon").style.display = "none";
+          closeModalPost();
+          reloadPost(res.data.data);
         })
-        .catch((error) => {
-          console.error("CSRF cookie setup failed:", error);
+        .catch((e) => {
+          document.getElementById("forumPublicSpinner").style.display =
+            "inline-block";
+          document.getElementById("forumPublicIcon").style.display = "none";
+          if (e.response && e.response.status === 419) {
+            console.error('CSRF token missing or incorrect');
+          } else {
+            console.error('Request failed:', error);
+          }
         });
+       
     }
   };
 
@@ -208,7 +231,6 @@ function createForum() {
             >
               <Image
                 id="showImage"
-                src="/images/user.jpg"
                 className="w3-display-middle w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
                 height={120}
                 width={120}
