@@ -30,7 +30,7 @@ function createForum() {
   };
 
   const getCsrfToken = async () => {
-    await axios.get(source+'/sanctum/csrf-cookie', {
+    await axios.get(source+'/csrf-token', {
       withCredentials: true, // Ensures cookies are sent with the request
     });
   };
