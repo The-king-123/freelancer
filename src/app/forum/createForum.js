@@ -29,19 +29,14 @@ function createForum() {
     xcode: null,
   };
 
-  const getCsrfToken = async () => {
-    await axios.get(source+'/csrf-token', {
-      withCredentials: true, // Ensures cookies are sent with the request
-    });
-  };
-
   const save = async (state) => {
     forumInfos.state = state;
     forumInfos.slug = slugify(forumInfos.title, { lower: true });
 
     console.log(forumInfos);
     if (forumInfos.title.length > 0 && forumInfos.content.length > 0) {
-      document.getElementById("forumPublicSpinner").style.display = "inline-block";
+      document.getElementById("forumPublicSpinner").style.display =
+        "inline-block";
       document.getElementById("forumPublicIcon").style.display = "none";
       var data;
       if (forumInfos.image) {
@@ -64,29 +59,34 @@ function createForum() {
           state: forumInfos.state,
           xcode: forumInfos.xcode,
         };
-      }    
-
-      await getCsrfToken();
-      const csrfToken = document.cookie.match(/XSRF-TOKEN=([^;]+)/)[1];
+      }
 
       await axios
-        .post(source+"/_forum", data,{
-          headers: {
-            'X-CSRF-TOKEN': csrfToken,
-          },
-          withCredentials: true, // Ensures cookies are included with the request
+        .get("/csrf-token") // Or your endpoint that sets the CSRF token
+        .then(async (response) => {
+          // Now you can make subsequent requests
+          await axios
+            .post(source + "/_forum")
+            .then((res) => {
+              document.getElementById("forumPublicSpinner").style.display =
+                "inline-block";
+              document.getElementById("forumPublicIcon").style.display = "none";
+              closeModalPost();
+              reloadPost(res.data.data);
+            })
+            .catch((e) => {
+              document.getElementById("forumPublicSpinner").style.display =
+                "inline-block";
+              document.getElementById("forumPublicIcon").style.display = "none";
+              if (e.response && e.response.status === 419) {
+                console.error('CSRF token missing or incorrect');
+              } else {
+                console.error('Request failed:', error);
+              }
+            });
         })
-        .then((res) => {
-          document.getElementById("forumPublicSpinner").style.display = "inline-block";
-          document.getElementById("forumPublicIcon").style.display = "none";
-          closeModalPost();
-          reloadPost(res.data.data);
-        })
-        .catch((e) => {
-          document.getElementById("forumPublicSpinner").style.display = "inline-block";
-          document.getElementById("forumPublicIcon").style.display = "none";
-          window.alert("There is a probleme, your post is not saved!!");
-          console.error("failure", e);
+        .catch((error) => {
+          console.error("CSRF cookie setup failed:", error);
         });
     }
   };
@@ -101,8 +101,8 @@ function createForum() {
             localStorage.setItem("userInfos", JSON.stringify(res.data.user));
             forumInfos.ownerId = res.data.user.key;
             forumInfos.xcode = code;
-          }else{
-            document.location = `${source}/login?q=forum&c=${code}`
+          } else {
+            document.location = `${source}/login?q=forum&c=${code}`;
           }
         })
         .catch((e) => {
@@ -247,7 +247,7 @@ function createForum() {
               id="forumPublicSpinner"
               className="w3-spin w3-margin-left"
               icon={faSpinner}
-              style={{ width: 16, height: 16, display:'none' }}
+              style={{ width: 16, height: 16, display: "none" }}
             />
           </button>
           <button
@@ -260,7 +260,7 @@ function createForum() {
               id="forumDraftSpinner"
               className="w3-spin w3-margin-left"
               icon={faSpinner}
-              style={{ width: 16, height: 16, display:'none' }}
+              style={{ width: 16, height: 16, display: "none" }}
             />
           </button>
         </div>
