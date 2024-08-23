@@ -676,32 +676,6 @@ export default function Home(props) {
     type: "login",
   };
 
-  const createForum = async () => {
-    const code = localStorage.getItem("x-code");
-
-    if (code) {
-      await axios
-        .get(`${source}/_auth/${code}/edit`)
-        .then((res) => {
-          if (res.data.logedin) {
-            localStorage.setItem("userInfos", JSON.stringify(res.data.user));
-            document.location = "/forum";
-          } else {
-            document.getElementById("modalLogin").style.display = "block";
-          }
-        })
-        .catch((e) => {
-          console.error("failure", e);
-        });
-    } else {
-      let randomNumber = "";
-      for (let i = 0; i < 15; i++) {
-        randomNumber += Math.floor(Math.random() * 10);
-      }
-      document.getElementById('modalLogin').style.display = 'block'
-    }
-  };
-
   const emailRegister = (element) => {
     signinAuthElement.email = element.target.value;
   };
@@ -1251,8 +1225,8 @@ export default function Home(props) {
           </div>
         </div>
 
-        <div
-          onClick={createForum}
+        <Link
+          href={'/forum'}
           className="w3-flex-1"
           style={{ width: 36, height: 36 }}
         >
@@ -1267,7 +1241,7 @@ export default function Home(props) {
               height={20}
             />
           </div>
-        </div>
+        </Link>
 
         <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
           <div

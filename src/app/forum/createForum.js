@@ -124,10 +124,11 @@ function createForum() {
             localStorage.setItem("userInfos", JSON.stringify(res.data.user));
             forumInfos.ownerId = res.data.user.key;
             forumInfos.xcode = code;
+            document.getElementById('forumCore').style.display = 'block'
+            document.getElementById('modalLogin').style.display = 'none'
           } else {
             if (document.getElementById('modalLogin')) {
               document.getElementById('modalLogin').style.display = 'block'
-              document.getElementById('forumCore').innerHTML = ''
             }            
           }
         })
@@ -137,7 +138,6 @@ function createForum() {
     } else {
       if (document.getElementById('modalLogin')) {
         document.getElementById('modalLogin').style.display = 'block'
-        document.getElementById('forumCore').innerHTML = ''
       }
     }
 
@@ -169,7 +169,7 @@ function createForum() {
   }, []);
 
   return (
-    <div id="forumCore">
+    <div id="forumCore" style={{display:'none'}}>
       <div
         className="w3-medium w3-big w3-flex-row w3-flex-center-v"
         style={{ padding: 8 }}
