@@ -33,6 +33,7 @@ import { console_source as source } from "@/app/data";
 import HomePost from "@/app/HomePost";
 
 export default function Home(props) {
+  axios.defaults.withCredentials = true;
   const [csrfToken, setCsrfToken] = useState("");
   const [fullPath, setfullPath] = useState({ path: "" });
   const [imagePDP, setimagePDP] = useState(null);
@@ -677,17 +678,16 @@ export default function Home(props) {
 
   const createForum = async () => {
     const code = localStorage.getItem("x-code");
-    console.log(code);
-    
+
     if (code) {
       await axios
         .get(`${source}/_auth/${code}/edit`)
         .then((res) => {
           if (res.data.logedin) {
             localStorage.setItem("userInfos", JSON.stringify(res.data.user));
-            document.location = "https://freelancer.mg/forum";
-          }else{
-            document.location = `${source}/login?q=forum&c=${code}`
+            document.location = "/forum";
+          } else {
+            document.getElementById("modalLogin").style.display = "block";
           }
         })
         .catch((e) => {
@@ -710,20 +710,25 @@ export default function Home(props) {
   const passwordRegister = (element) => {
     signinAuthElement.password = element.target.value;
   };
-
+  async function setCSRFToken() {
+    try {
+      // Fetch CSRF token from the server
+      const response = await axios.get(source + "/csrf-token");
+      // Set CSRF token as a default header for all future requests
+      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.csrfToken;
+    } catch (error) {
+      console.error("CSRF token fetch failed:", error);
+    }
+  }
   const login = async () => {
     if (
       signinAuthElement.email.length > 3 &&
       signinAuthElement.password.length > 8
     ) {
       document.getElementById("spinner").style.display = "inline-block";
+      await setCSRFToken();
       await axios
-        .patch(source + "/_auth/login", signinAuthElement, {
-          headers: {
-            "X-CSRF-TOKEN": csrfToken,
-          },
-          withCredentials: true, // Inclure les cookies de session
-        })
+        .patch(source + "/_auth/login", signinAuthElement)
         .then((res) => {
           if (res.data.logedin) {
             document.location = "/forum";
@@ -741,14 +746,6 @@ export default function Home(props) {
 
   useEffect(() => {
     const localHosts = ["localhost", "127.0.0.1", "::1"];
-    axios
-      .get(source + "/csrf-token")
-      .then((response) => {
-        setCsrfToken(response.data.csrfToken);
-      })
-      .catch((error) => {
-        console.error("Error fetching CSRF token:", error);
-      });
     stopAllIntervalAndTimeout();
     if (typeof window !== "undefined") {
       fullPath.path = window.location.pathname;
