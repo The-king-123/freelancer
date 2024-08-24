@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { console_source as source } from "../data";
+import { console_source as source } from "@/app/data";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

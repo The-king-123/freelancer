@@ -12,6 +12,7 @@ import {
   faHome,
   faICursor,
   faKey,
+  faNewspaper,
   faPaperPlane,
   faPause,
   faPhone,
@@ -19,6 +20,7 @@ import {
   faPlus,
   faRefresh,
   faSpinner,
+  faTimesCircle,
   faUser,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
@@ -670,6 +672,19 @@ export default function Home(props) {
     }
   };
 
+  const userForum = () => {
+    var user = localStorage.getItem("user");
+    if (user) {
+      if (user == "160471339156947") {
+        window.location = "/forum";
+      } else {
+        window.location = "/forum/" + user;
+      }
+    } else {
+      window.location = "/forum";
+    }
+  };
+
   const signinAuthElement = {
     email: "",
     password: "",
@@ -683,6 +698,7 @@ export default function Home(props) {
   const passwordRegister = (element) => {
     signinAuthElement.password = element.target.value;
   };
+
   async function setCSRFToken() {
     try {
       // Fetch CSRF token from the server
@@ -693,13 +709,14 @@ export default function Home(props) {
       console.error("CSRF token fetch failed:", error);
     }
   }
+
   const login = async () => {
     if (
       signinAuthElement.email.length > 3 &&
       signinAuthElement.password.length > 8
     ) {
       document.getElementById("spinner").style.display = "inline-block";
-      
+
       let randomNumber = "";
       for (let i = 0; i < 15; i++) {
         randomNumber += Math.floor(Math.random() * 10);
@@ -724,12 +741,23 @@ export default function Home(props) {
     }
   };
 
+  const closeModalLogin = () => {
+    document.getElementById("mail").value = "";
+    document.getElementById("password").value = "";
+    signinAuthElement.email = "";
+    signinAuthElement.password = "";
+    window.location = '/'
+  };
+
   useEffect(() => {
     const localHosts = ["localhost", "127.0.0.1", "::1"];
     stopAllIntervalAndTimeout();
     if (typeof window !== "undefined") {
       fullPath.path = window.location.pathname;
     }
+
+    document.getElementsByClassName("userNameTitle")[0].style.width = window.innerWidth>520?'320px':window.innerWidth - 80 + 'px'
+    document.getElementsByClassName("userNameTitle")[1].style.width = window.innerWidth>520?'320px':window.innerWidth - 80 + 'px'
 
     if (
       !localHosts.includes(location.hostname) &&
@@ -956,7 +984,7 @@ export default function Home(props) {
             onClick={Home}
             className="w3-pointer w3-center w3-flex-row w3-flex-center w3-large"
           >
-            <b className="userNameTitle">FREELANCER</b>
+            <b className="userNameTitle w3-overflow w3-nowrap">FREELANCER</b>
           </div>
         </div>
         <div
@@ -990,7 +1018,7 @@ export default function Home(props) {
           className="w3-container"
           style={{ padding: 0, maxWidth: 480, margin: "auto" }}
         >
-          <div className="w3-hide-large" style={{ height: 54 }}>
+          <div className="w3-text-white w3-hide-large" style={{ height: 54 }}>
             hui
           </div>
           {props.core ? props.core : core}
@@ -1162,7 +1190,7 @@ export default function Home(props) {
       >
         <div className="w3-flex-1">
           <div onClick={Home} className="w3-pointer w3-flex-row w3-large">
-            <b className="userNameTitle">FREELANCER</b>
+            <b className="userNameTitle w3-overflow w3-nowrap">FREELANCER</b>
           </div>
         </div>
 
@@ -1186,6 +1214,7 @@ export default function Home(props) {
         className="w3-bottom w3-block w3-card w3-white w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
         style={{ paddingBlock: 8, zIndex: 9999 }}
       >
+
         <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
           <Link
             className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
@@ -1225,8 +1254,26 @@ export default function Home(props) {
           </div>
         </div>
 
+        <div
+          onClick={userForum}
+          className="w3-flex-1"
+          style={{ width: 36, height: 36 }}
+        >
+          <div
+            className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
+            style={{ width: 36, height: 36, marginInline: "auto" }}
+          >
+            <FontAwesomeIcon
+              className="w3-text-black"
+              icon={faNewspaper}
+              width={20}
+              height={20}
+            />
+          </div>
+        </div>
+
         <Link
-          href={'/forum'}
+          href={"/forum/create"}
           className="w3-flex-1"
           style={{ width: 36, height: 36 }}
         >
@@ -1287,13 +1334,28 @@ export default function Home(props) {
           className="w3-white w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
           style={{
             minHeight: 320,
-            paddingBlock: 24,
+            paddingBlock: 8,
             paddingInline: 0,
             maxWidth: 320,
           }}
         >
+          <div
+            className="w3-container"
+            style={{ paddingBlock: 0, paddingInline: 8 }}
+          >
+            <div
+              onClick={closeModalLogin}
+              className="w3-pointer w3-right w3-flex w3-flex-center"
+              style={{ width: 32, height: 32 }}
+            >
+              <FontAwesomeIcon
+                icon={faTimesCircle}
+                style={{ width: 20, height: 20 }}
+              />
+            </div>
+          </div>
           <div className="w3-block w3-flex-column w3-flex-center">
-            <div className="w3-center w3-padding-16 w3-flex w3-flex-center">
+            <div className="w3-center w3-flex w3-flex-center">
               <span className="w3-padding-small w3-overflow w3-flex w3-flex-center">
                 <Image
                   id="imagePDP"
@@ -1326,8 +1388,8 @@ export default function Home(props) {
                   type="text"
                   className="input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium"
                   placeholder="Adresse e-mail"
-                  id="leader"
-                  name="user_leader"
+                  id="mail"
+                  name="user_email"
                   required
                 />
                 <div
@@ -1345,8 +1407,8 @@ export default function Home(props) {
                   type="password"
                   className="input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium"
                   placeholder="Mot de passe"
-                  id="mail"
-                  name="user_email"
+                  id="password"
+                  name="user_password"
                   required
                 />
 

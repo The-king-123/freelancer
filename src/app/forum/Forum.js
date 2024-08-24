@@ -4,36 +4,23 @@ import Image from "next/image";
 import parse from "html-react-parser";
 import { console_source as source } from "@/app/data";
 
-export default function PostContent({ posts }) {
-  const getUrl = (embed) => {
-    const start = embed.indexOf('src="') + 5;
-    const end = embed.indexOf('"', start);
-    const result = embed.substring(start, end);
-    return result;
-  };
-
-  const getTitle = (embed) => {
-    const start = embed.indexOf('title="') + 7;
-    const end = embed.indexOf('"', start);
-    const result = embed.substring(start, end);
-    return result;
-  };
+export default function Forum({ forums }) {
 
   return (
     <div>
-      {posts.length > 0 &&
-        posts.map((post, key) => (
+      {forums.length > 0 &&
+        forums.map((post, key) => (
           <div key={key} style={{ padding: 8, zIndex: 1 }}>
             <div
               className="w3-small w3-text-grey"
               style={{ paddingInline: 8, textAlign: "right", display: "none" }}
               id={"flashInfo" + key}
             >
-              Texte copié...
+              Lien copié...
             </div>
             <div className="w3-flex-column w3-overflow w3-card w3-round w3-pointer w3-white">
               <div
-                data={"https://freelancer.mg/post/" + post.slug}
+                data={"https://freelancer.mg/forum/" + post.slug}
                 className="postTitle w3-nowrap w3-overflow w3-light-grey w3-big"
                 style={{ paddingBlock: 8, paddingInline: 16 }}
                 title="Click to copy post link"
@@ -47,11 +34,11 @@ export default function PostContent({ posts }) {
                     className="w3-overflow w3-nowrap-multiline"
                     style={{ marginInline: 16, marginBlock: 8 }}
                   >
-                    {parse(JSON.parse(post.info).description)}
+                    {parse(post.content)}
                   </div>
                 </div>
               </div>
-              {(post.type == "image" || post.type == "image/audio") && (
+              {post.type == "image" && (
                 <div
                   className="postMedia w3-display-container w3-light-grey post-image"
                   data={JSON.stringify(post)}
@@ -61,12 +48,12 @@ export default function PostContent({ posts }) {
                     alt={"image" + key}
                     unoptimized
                     loading="lazy"
-                    onContextMenu={(e) => e.preventDefault()}
+                    // onContextMenu={(e) => e.preventDefault()}
                     height={320}
                     width={520}
                     src={
                       source +
-                      "/images.php?w=420&h=420&zlonk=2733&zlink=" +
+                      "/images.php?w=420&h=420&zlonk=4733&zlink=" +
                       post.link
                     }
                     style={{
@@ -76,47 +63,19 @@ export default function PostContent({ posts }) {
                     }}
                     className="w3-overflow w3-light-grey post-image"
                   />
-                  {post.type == "image/audio" && (
-                    <div className="w3-black w3-opacity w3-block w3-height w3-padding w3-display-middle"></div>
-                  )}
-                  {post.type == "image/audio" && (
-                    <div
-                      className="w3-white w3-circle w3-display-middle"
-                      style={{ width: 60, height: 60 }}
-                    >
-                      <div className="w3-block w3-height w3-flex w3-flex-center">
-                        <FontAwesomeIcon
-                          icon={faPlay}
-                          style={{ height: 24, width: 24, marginLeft: 4 }}
-                        />
-                      </div>
-                    </div>
-                  )}
                 </div>
-              )}
-
-              {post.type == "video" && (
-                <iframe
-                  id={"videoPosts"+key}
-                  className="videoPosts w3-block"
-                  height="420"
-                  src={getUrl(post.link)}
-                  title={getTitle(post.link)}
-                  frameBorder={0}
-                  allowFullScreen
-                ></iframe>
               )}
             </div>
           </div>
         ))}
 
-      {posts.length <= 0 && (
+      {forums.length <= 0 && (
         <div style={{ paddingInline: 8 }}>
           <div
             className="w3-border w3-flex-row w3-flex-center-v w3-round w3-block w3-medium w3-big"
             style={{ marginBlock: 16, padding: 12 }}
           >
-            No more post found...
+            Nous n'avons trouves aucun forums ...
           </div>
         </div>
       )}
