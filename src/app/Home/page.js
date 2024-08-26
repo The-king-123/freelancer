@@ -1266,7 +1266,6 @@ export default function Home(props) {
         <div style={{ width: 36, height: 36 }}>
           <div
             className="w3-dropdown-click w3-hover-white"
-            style={{ marginTop: 4 }}
           >
             <div
               onClick={() => openDropdown("setting")}
