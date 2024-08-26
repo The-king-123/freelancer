@@ -115,6 +115,8 @@ function createForum() {
   };
 
   useEffect(() => {
+    console.log(sessionStorage.getItem('userCredentials'));
+    
     const code = localStorage.getItem("x-code");
     if (code) {
       axios
@@ -232,6 +234,7 @@ function createForum() {
             >
               <Image
                 id="showImage"
+                src={''}
                 className="w3-display-middle w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
                 height={120}
                 width={120}

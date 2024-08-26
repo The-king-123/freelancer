@@ -9,6 +9,8 @@ import {
   faBars,
   faBell,
   faChevronCircleUp,
+  faClock,
+  faDoorOpen,
   faHome,
   faICursor,
   faKey,
@@ -19,6 +21,7 @@ import {
   faPlay,
   faPlus,
   faRefresh,
+  faShieldAlt,
   faSpinner,
   faTimesCircle,
   faUser,
@@ -546,7 +549,14 @@ export default function Home(props) {
     }
     setdisplayDesignations(glitchDesignations);
   };
-
+  const openDropdown = (ID) => {
+    var x = document.getElementById(ID);
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+    } else {
+        x.className = x.className.replace(" w3-show", "");
+    }
+};
   const toggleChat = () => {
     if (document.getElementById("sidebarChat").style.display != "block") {
       closeAllPanel();
@@ -728,7 +738,10 @@ export default function Home(props) {
         .patch(source + "/_auth/login?c=" + randomNumber, signinAuthElement)
         .then((res) => {
           if (res.data.logedin) {
-            document.location = "/forum";
+            console.log(res.data.user);
+            
+            sessionStorage.setItem('userCredentials',res.data.user)
+            document.location = "/forum/create";
           } else {
             document.getElementById("alert_connexion").className =
               "w3-text-red w3-center";
@@ -749,6 +762,26 @@ export default function Home(props) {
     window.location = '/'
   };
 
+  const logout = async () => {
+    document.getElementById("logoutIcon").style.display = "none";
+    document.getElementById("logoutSpinner").style.display = "inline-block";
+    await axios
+        .patch("/_auth/logout", userInfo)
+        .then((res) => {
+            if (res.data.logedout) {
+                openDropdown("setting");
+                document.location = "/";
+            } else {
+                document.getElementById("logoutSpinner").style.display =
+                    "none";
+                document.getElementById("logoutIcon").style.display =
+                    "inline-block";
+            }
+        })
+        .catch((e) => {
+            console.error("failure", e);
+        });
+  };
   useEffect(() => {
     const localHosts = ["localhost", "127.0.0.1", "::1"];
     stopAllIntervalAndTimeout();
@@ -1196,6 +1229,72 @@ export default function Home(props) {
 
         <div style={{ width: 36, height: 36 }}>
           <div
+                className="w3-dropdown-click w3-hover-white"
+                style={{ marginTop: 4 }}
+            >
+                <div
+                  onClick={() => openDropdown("setting")}
+                  className="w3-flex w3-flex-center w3-overflow w3-card  w3-round"
+                  style={{ width: 36, height: 36, marginInline: "auto" }}
+                >
+                  <FontAwesomeIcon
+                    className="w3-text-black"
+                    icon={faBars}
+                    width={20}
+                    height={20}
+                  />
+                </div>
+                <div
+                    id="setting"
+                    className="w3-dropdown-content w3-bar-block w3-card w3-round w3-overflow"
+                    style={{ right: 0, minWidth: 240, marginTop:4 }}
+                >
+                    <div className="w3-bar-item w3-button">
+                        <FontAwesomeIcon
+                            className="w3-margin-right"
+                            icon={faClock}
+                        />
+                        Paramètres
+                    </div>
+                    <div
+                        className="w3-bar-item w3-button"
+                    >
+                        <FontAwesomeIcon
+                            className="w3-margin-right"
+                            icon={faUser}
+                        />
+                        Votre profil
+                    </div>
+                    <div
+                        className="w3-bar-item w3-button"
+                    >
+                        <FontAwesomeIcon
+                            className="w3-margin-right"
+                            icon={faShieldAlt}
+                        />
+                        Sécurité
+                    </div>
+                    {/* {adminCore} */}
+                    <div
+                        onClick={logout}
+                        className="w3-bar-item w3-button"
+                    >
+                        <FontAwesomeIcon
+                            id="logoutIcon"
+                            className="w3-margin-right"
+                            icon={faDoorOpen}
+                        />
+                        <FontAwesomeIcon
+                            id="logoutSpinner"
+                            style={{ display: "none" }}
+                            className="w3-margin-right w3-spin"
+                            icon={faSpinner}
+                        />
+                        Déconnexion
+                    </div>
+                </div>
+            </div>
+          {/* <div
             className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
           >
@@ -1205,7 +1304,7 @@ export default function Home(props) {
               width={20}
               height={20}
             />
-          </div>
+          </div> */}
         </div>
       </div>
 
