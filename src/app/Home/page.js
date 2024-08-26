@@ -470,8 +470,8 @@ export default function Home(props) {
 
     setimagePDP(
       source +
-        "/images.php?w=100&h=100&zlonk=3733&zlink=" +
-        (key == "default" ? "160471339156947" : key)
+      "/images.php?w=100&h=100&zlonk=3733&zlink=" +
+      (key == "default" ? "160471339156947" : key)
     );
 
     chatData.splice(0, chatData.length);
@@ -571,11 +571,11 @@ export default function Home(props) {
   const openDropdown = (ID) => {
     var x = document.getElementById(ID);
     if (x.className.indexOf("w3-show") == -1) {
-        x.className += " w3-show";
+      x.className += " w3-show";
     } else {
-        x.className = x.className.replace(" w3-show", "");
+      x.className = x.className.replace(" w3-show", "");
     }
-};
+  };
   const toggleChat = () => {
     if (document.getElementById("sidebarChat").style.display != "block") {
       closeAllPanel();
@@ -635,12 +635,12 @@ export default function Home(props) {
   };
 
   const stopAllIntervalAndTimeout = () => {
-    var highestIntervalId = window.setInterval(() => {}, 1);
+    var highestIntervalId = window.setInterval(() => { }, 1);
     for (var i = 0; i < highestIntervalId; i++) {
       window.clearInterval(i);
     }
 
-    var highestTimeoutId = window.setTimeout(() => {}, 1);
+    var highestTimeoutId = window.setTimeout(() => { }, 1);
     for (var i = 0; i < highestTimeoutId; i++) {
       window.clearTimeout(i);
     }
@@ -757,20 +757,20 @@ export default function Home(props) {
             userInfo.id = res.data.user.id;
             userInfo.key = res.data.user.key;
             userInfo.telephone =
-                res.data.user.contact.length > 12
-                    ? JSON.parse(res.data.user.contact).telephone
-                    : res.data.user.contact;
+              res.data.user.contact.length > 12
+                ? JSON.parse(res.data.user.contact).telephone
+                : res.data.user.contact;
             userInfo.whatsapp =
-                res.data.user.contact.length > 12
-                    ? JSON.parse(res.data.user.contact).whatsapp
-                    : "";
+              res.data.user.contact.length > 12
+                ? JSON.parse(res.data.user.contact).whatsapp
+                : "";
             userInfo.messenger =
-                res.data.user.contact.length > 12
-                    ? JSON.parse(res.data.user.contact).messenger
-                    : "";
+              res.data.user.contact.length > 12
+                ? JSON.parse(res.data.user.contact).messenger
+                : "";
             userInfo.designation = res.data.user.designation;
-            
-            localStorage.setItem('userCredentials',JSON.stringify(res.data.user))
+
+            localStorage.setItem('userCredentials', JSON.stringify(res.data.user))
             document.location = "/forum/create";
           } else {
             document.getElementById("alert_connexion").className =
@@ -795,25 +795,25 @@ export default function Home(props) {
   const logout = async () => {
     document.getElementById("logoutIcon").style.display = "none";
     document.getElementById("logoutSpinner").style.display = "inline-block";
-    
+
     await axios
-        .patch(source + "/_auth/logout", userInfo)
-        .then((res) => {
-            if (res.data.logedout) {
-                openDropdown("setting");
-                localStorage.removeItem('userCredentials')
-                localStorage.removeItem('x-code')
-                document.location = "/";
-            } else {
-                document.getElementById("logoutSpinner").style.display =
-                    "none";
-                document.getElementById("logoutIcon").style.display =
-                    "inline-block";
-            }
-        })
-        .catch((e) => {
-            console.error("failure", e);
-        });
+      .patch(source + "/_auth/logout", userInfo)
+      .then((res) => {
+        if (res.data.logedout) {
+          openDropdown("setting");
+          localStorage.removeItem('userCredentials')
+          localStorage.removeItem('x-code')
+          document.location = "/";
+        } else {
+          document.getElementById("logoutSpinner").style.display =
+            "none";
+          document.getElementById("logoutIcon").style.display =
+            "inline-block";
+        }
+      })
+      .catch((e) => {
+        console.error("failure", e);
+      });
   };
   useEffect(() => {
     const localHosts = ["localhost", "127.0.0.1", "::1"];
@@ -822,204 +822,207 @@ export default function Home(props) {
       fullPath.path = window.location.pathname;
     }
 
-    document.getElementsByClassName("userNameTitle")[0].style.width = window.innerWidth>520?'320px':window.innerWidth - 80 + 'px'
-    document.getElementsByClassName("userNameTitle")[1].style.width = window.innerWidth>520?'320px':window.innerWidth - 80 + 'px'
+    if (document.getElementById("coreMain")) {
+      document.getElementsByClassName("userNameTitle")[0].style.width = window.innerWidth > 520 ? '320px' : window.innerWidth - 80 + 'px'
+      document.getElementsByClassName("userNameTitle")[1].style.width = window.innerWidth > 520 ? '320px' : window.innerWidth - 80 + 'px'
 
-    if (
-      !localHosts.includes(location.hostname) &&
-      location.protocol === "http:"
-    ) {
-      location.href =
-        "https://" + location.hostname + location.pathname + location.search;
-    } else {
-      document.getElementById("coreMain").style.display = "block";
-    }
-
-    const posts = document.getElementsByClassName("postMedia");
-    for (let i = 0; i < posts.length; i++) {
-      posts[i].addEventListener("click", () => {
-        const post = posts[i].getAttribute("data");
-        showSinglePost(JSON.parse(post));
-      });
-    }
-
-    var times = 0;
-
-    const videoPostInterval = setInterval(() => {
-      const videoPosts = document.getElementsByClassName("videoPosts");
-      if (videoPosts.length > 0) {
-        clearInterval(videoPostInterval);
-        for (let i = 0; i < videoPosts.length; i++) {
-          videoPosts[i].style.height =
-            (videoPosts[i].clientWidth * 16) / 9 + "px";
-        }
+      if (
+        !localHosts.includes(location.hostname) &&
+        location.protocol === "http:"
+      ) {
+        location.href =
+          "https://" + location.hostname + location.pathname + location.search;
       } else {
-        if (times >= 10) {
+        document.getElementById("coreMain").style.display = "block";
+      }
+
+      const posts = document.getElementsByClassName("postMedia");
+      for (let i = 0; i < posts.length; i++) {
+        posts[i].addEventListener("click", () => {
+          const post = posts[i].getAttribute("data");
+          showSinglePost(JSON.parse(post));
+        });
+      }
+
+      var times = 0;
+
+      const videoPostInterval = setInterval(() => {
+        const videoPosts = document.getElementsByClassName("videoPosts");
+        if (videoPosts.length > 0) {
           clearInterval(videoPostInterval);
+          for (let i = 0; i < videoPosts.length; i++) {
+            videoPosts[i].style.height =
+              (videoPosts[i].clientWidth * 16) / 9 + "px";
+          }
         } else {
-          times++;
+          if (times >= 10) {
+            clearInterval(videoPostInterval);
+          } else {
+            times++;
+          }
         }
-      }
-    }, 500);
+      }, 500);
 
-    const postCore = document.getElementsByClassName("postCore");
-    for (let i = 0; i < postCore.length; i++) {
-      postCore[i].addEventListener("click", () => {
-        if (document.getElementById("post" + i).className == "_expand_") {
-          document.getElementById("post" + i).className =
-            "w3-overflow w3-nowrap-multiline";
-        } else {
-          document.getElementById("post" + i).className = "_expand_";
-        }
-      });
-    }
-
-    const postsTitle = document.getElementsByClassName("postTitle");
-    for (let i = 0; i < postsTitle.length; i++) {
-      postsTitle[i].addEventListener("click", () => {
-        const post = postsTitle[i].getAttribute("data");
-        copyToClipboard(post);
-        document.getElementById("flashInfo" + i).innerText =
-          "Le lien a été copié...";
-        document.getElementById("flashInfo" + i).style.display = "block";
-        setTimeout(() => {
-          document.getElementById("flashInfo" + i).style.display = "none";
-        }, 2000);
-      });
-    }
-
-    const talentsList = document.getElementsByClassName("talentsList");
-    for (let i = 0; i < talentsList.length; i++) {
-      talentsList[i].addEventListener("click", () => {
-        stopAllIntervalAndTimeout();
-      });
-    }
-
-    const categoryUser = document.getElementsByClassName("categoryUser");
-    for (let i = 0; i < categoryUser.length; i++) {
-      categoryUser[i].addEventListener("click", () => {
-        stopAllIntervalAndTimeout();
-      });
-    }
-
-    var users = localStorage.getItem("users");
-    if (users) {
-      reloadDesignation(JSON.parse(users));
-    } else {
-      axios
-        .get(source + "/_auth/users")
-        .then((res) => {
-          localStorage.setItem("users", JSON.stringify(res.data.data));
-          reloadDesignation(res.data.data);
-        })
-        .catch((e) => {
-          console.error("failure", e);
+      const postCore = document.getElementsByClassName("postCore");
+      for (let i = 0; i < postCore.length; i++) {
+        postCore[i].addEventListener("click", () => {
+          if (document.getElementById("post" + i).className == "_expand_") {
+            document.getElementById("post" + i).className =
+              "w3-overflow w3-nowrap-multiline";
+          } else {
+            document.getElementById("post" + i).className = "_expand_";
+          }
         });
-    }
-
-    var user = localStorage.getItem("user");
-    if (props.user) {
-      if (props.user == user) {
-        showUser(user, false);
-      } else {
-        localStorage.setItem("user", props.user);
-        showUser(props.user, true);
       }
-    } else {
-      if (user) {
-        showUser(user, false);
-      } else {
-        showUser("160471339156947", true);
-      }
-    }
 
-    if (!props.core) {
-      axios
-        .get(source + "/_post/default?c=default")
-        .then((res) => {
-          setcore(<HomePost posts={res.data.data} />);
+      const postsTitle = document.getElementsByClassName("postTitle");
+      for (let i = 0; i < postsTitle.length; i++) {
+        postsTitle[i].addEventListener("click", () => {
+          const post = postsTitle[i].getAttribute("data");
+          copyToClipboard(post);
+          document.getElementById("flashInfo" + i).innerText =
+            "Le lien a été copié...";
+          document.getElementById("flashInfo" + i).style.display = "block";
           setTimeout(() => {
-            const postCore = document.getElementsByClassName("postCore");
-            for (let i = 0; i < postCore.length; i++) {
-              postCore[i].addEventListener("click", () => {
-                if (
-                  document.getElementById("post" + i).className == "_expand_"
-                ) {
-                  document.getElementById("post" + i).className =
-                    "w3-overflow w3-nowrap-multiline";
-                } else {
-                  document.getElementById("post" + i).className = "_expand_";
-                }
-              });
-            }
-          }, 100);
-        })
-        .catch((e) => {
-          console.error("failure", e);
+            document.getElementById("flashInfo" + i).style.display = "none";
+          }, 2000);
         });
-    }
-
-    document.onkeyup = async (e) => {
-      if (e.key == "Enter") {
-        login();
       }
-    };
 
-    // forum section
-    var info = localStorage.getItem("info");
-    console.log(info);
-    //end forum section
+      const talentsList = document.getElementsByClassName("talentsList");
+      for (let i = 0; i < talentsList.length; i++) {
+        talentsList[i].addEventListener("click", () => {
+          stopAllIntervalAndTimeout();
+        });
+      }
 
-    audioBox.chaine = document.getElementById("audioBox");
+      const categoryUser = document.getElementsByClassName("categoryUser");
+      for (let i = 0; i < categoryUser.length; i++) {
+        categoryUser[i].addEventListener("click", () => {
+          stopAllIntervalAndTimeout();
+        });
+      }
 
-    audioBox.chaine.addEventListener("ended", () => {
-      document.getElementById("iconPlay").style.display = "inline-block";
-      document.getElementById("iconPause").style.display = "none";
-    });
-
-    window.addEventListener("scroll", function () {
-      // Calculate the scrollable height
-      const chatElement = document.getElementById("chatCoreWrapper");
-      const totalHeight = chatElement.scrollHeight;
-      const viewportHeight = chatElement.clientHeight;
-
-      // Determine the current scroll position
-      const currentScroll = chatElement.scrollTop;
-
-      // Check if the current scroll position is less than the maximum scrollable height minus the viewport height
-      if (currentScroll + viewportHeight < totalHeight) {
-        stepper.scrolling = true;
+      var users = localStorage.getItem("users");
+      if (users) {
+        reloadDesignation(JSON.parse(users));
       } else {
-        stepper.scrolling = false;
+        axios
+          .get(source + "/_auth/users")
+          .then((res) => {
+            localStorage.setItem("users", JSON.stringify(res.data.data));
+            reloadDesignation(res.data.data);
+          })
+          .catch((e) => {
+            console.error("failure", e);
+          });
       }
-    });
 
-    setInterval(() => {
-      document.getElementById("coreMain").style.userSelect = "none";
-      if (window.innerWidth <= 993) {
-        document.getElementsByClassName("mobileHeight")[0].style.height =
-          window.innerHeight - 52 + "px !important";
-        const panels = document.getElementsByClassName("mobileHeightPanel");
-        for (let i = 0; i < panels.length; i++) {
-          panels[i].style.height = window.innerHeight - 68 + "px !important";
+      var user = localStorage.getItem("user");
+      if (props.user) {
+        if (props.user == user) {
+          showUser(user, false);
+        } else {
+          localStorage.setItem("user", props.user);
+          showUser(props.user, true);
+        }
+      } else {
+        if (user) {
+          showUser(user, false);
+        } else {
+          showUser("160471339156947", true);
         }
       }
-    }, 500);
 
-    const updateHeight = () => {
-      setHeight(window.innerHeight - 80 - (window.innerWidth > 992 ? 0 : 20));
-    };
+      if (!props.core) {
+        axios
+          .get(source + "/_post/default?c=default")
+          .then((res) => {
+            setcore(<HomePost posts={res.data.data} />);
+            setTimeout(() => {
+              const postCore = document.getElementsByClassName("postCore");
+              for (let i = 0; i < postCore.length; i++) {
+                postCore[i].addEventListener("click", () => {
+                  if (
+                    document.getElementById("post" + i).className == "_expand_"
+                  ) {
+                    document.getElementById("post" + i).className =
+                      "w3-overflow w3-nowrap-multiline";
+                  } else {
+                    document.getElementById("post" + i).className = "_expand_";
+                  }
+                });
+              }
+            }, 100);
+          })
+          .catch((e) => {
+            console.error("failure", e);
+          });
+      }
 
-    // Set the initial height
-    updateHeight();
+      document.onkeyup = async (e) => {
+        if (e.key == "Enter") {
+          login();
+        }
+      };
 
-    // Update height on window resize
-    window.addEventListener("resize", updateHeight);
+      // forum section
+      var info = localStorage.getItem("info");
+      console.log(info);
+      //end forum section
 
-    // Clean up the event listener on component unmount
-    return () => {
-      window.removeEventListener("resize", updateHeight);
-    };
+      audioBox.chaine = document.getElementById("audioBox");
+
+      audioBox.chaine.addEventListener("ended", () => {
+        document.getElementById("iconPlay").style.display = "inline-block";
+        document.getElementById("iconPause").style.display = "none";
+      });
+
+      window.addEventListener("scroll", function () {
+        // Calculate the scrollable height
+        const chatElement = document.getElementById("chatCoreWrapper");
+        const totalHeight = chatElement.scrollHeight;
+        const viewportHeight = chatElement.clientHeight;
+
+        // Determine the current scroll position
+        const currentScroll = chatElement.scrollTop;
+
+        // Check if the current scroll position is less than the maximum scrollable height minus the viewport height
+        if (currentScroll + viewportHeight < totalHeight) {
+          stepper.scrolling = true;
+        } else {
+          stepper.scrolling = false;
+        }
+      });
+
+      setInterval(() => {
+        document.getElementById("coreMain").style.userSelect = "none";
+        if (window.innerWidth <= 993) {
+          document.getElementsByClassName("mobileHeight")[0].style.height =
+            window.innerHeight - 52 + "px !important";
+          const panels = document.getElementsByClassName("mobileHeightPanel");
+          for (let i = 0; i < panels.length; i++) {
+            panels[i].style.height = window.innerHeight - 68 + "px !important";
+          }
+        }
+      }, 500);
+
+      const updateHeight = () => {
+        setHeight(window.innerHeight - 80 - (window.innerWidth > 992 ? 0 : 20));
+      };
+
+      // Set the initial height
+      updateHeight();
+
+      // Update height on window resize
+      window.addEventListener("resize", updateHeight);
+
+      // Clean up the event listener on component unmount
+      return () => {
+        window.removeEventListener("resize", updateHeight);
+      };
+    }
+
   }, []);
 
   return (
@@ -1085,7 +1088,7 @@ export default function Home(props) {
           style={{ padding: 0, maxWidth: 480, margin: "auto" }}
         >
           <div className="w3-text-white w3-hide-large" style={{ height: 54 }}>
-            hui
+            freelancer.mg
           </div>
           {props.core ? props.core : core}
         </div>
@@ -1262,71 +1265,71 @@ export default function Home(props) {
 
         <div style={{ width: 36, height: 36 }}>
           <div
-                className="w3-dropdown-click w3-hover-white"
-                style={{ marginTop: 4 }}
+            className="w3-dropdown-click w3-hover-white"
+            style={{ marginTop: 4 }}
+          >
+            <div
+              onClick={() => openDropdown("setting")}
+              className="w3-flex w3-flex-center w3-overflow w3-card  w3-round"
+              style={{ width: 36, height: 36, marginInline: "auto" }}
             >
-                <div
-                  onClick={() => openDropdown("setting")}
-                  className="w3-flex w3-flex-center w3-overflow w3-card  w3-round"
-                  style={{ width: 36, height: 36, marginInline: "auto" }}
-                >
-                  <FontAwesomeIcon
-                    className="w3-text-black"
-                    icon={faBars}
-                    width={20}
-                    height={20}
-                  />
-                </div>
-                <div
-                    id="setting"
-                    className="w3-dropdown-content w3-bar-block w3-card w3-round w3-overflow"
-                    style={{ right: 0, minWidth: 240, marginTop:4 }}
-                >
-                    <div className="w3-bar-item w3-button">
-                        <FontAwesomeIcon
-                            className="w3-margin-right"
-                            icon={faClock}
-                        />
-                        Paramètres
-                    </div>
-                    <div
-                        className="w3-bar-item w3-button"
-                    >
-                        <FontAwesomeIcon
-                            className="w3-margin-right"
-                            icon={faUser}
-                        />
-                        Votre profil
-                    </div>
-                    <div
-                        className="w3-bar-item w3-button"
-                    >
-                        <FontAwesomeIcon
-                            className="w3-margin-right"
-                            icon={faShieldAlt}
-                        />
-                        Sécurité
-                    </div>
-                    {/* {adminCore} */}
-                    <div
-                        onClick={logout}
-                        className="w3-bar-item w3-button"
-                    >
-                        <FontAwesomeIcon
-                            id="logoutIcon"
-                            className="w3-margin-right"
-                            icon={faDoorOpen}
-                        />
-                        <FontAwesomeIcon
-                            id="logoutSpinner"
-                            style={{ display: "none" }}
-                            className="w3-margin-right w3-spin"
-                            icon={faSpinner}
-                        />
-                        Déconnexion
-                    </div>
-                </div>
+              <FontAwesomeIcon
+                className="w3-text-black"
+                icon={faBars}
+                width={20}
+                height={20}
+              />
             </div>
+            <div
+              id="setting"
+              className="w3-dropdown-content w3-bar-block w3-card w3-round w3-overflow"
+              style={{ right: 0, minWidth: 240, marginTop: 4 }}
+            >
+              <Link className="w3-bar-item w3-button" href={'/settings'}>
+                <FontAwesomeIcon
+                  className="w3-margin-right"
+                  icon={faClock}
+                />
+                Paramètres
+              </Link>
+              <div
+                className="w3-bar-item w3-button"
+              >
+                <FontAwesomeIcon
+                  className="w3-margin-right"
+                  icon={faUser}
+                />
+                Votre profil
+              </div>
+              <div
+                className="w3-bar-item w3-button"
+              >
+                <FontAwesomeIcon
+                  className="w3-margin-right"
+                  icon={faShieldAlt}
+                />
+                Sécurité
+              </div>
+              {/* {adminCore} */}
+              <div
+                onClick={logout}
+                className="w3-bar-item w3-button"
+              >
+                <FontAwesomeIcon
+                  id="logoutIcon"
+                  className="w3-margin-right"
+                  icon={faDoorOpen}
+                />
+                <FontAwesomeIcon
+                  id="logoutSpinner"
+                  style={{ display: "none" }}
+                  className="w3-margin-right w3-spin"
+                  icon={faSpinner}
+                />
+                Déconnexion
+              </div>
+            </div>
+          </div>
           {/* <div
             className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
