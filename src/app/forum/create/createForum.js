@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { console_source as source } from "@/app/data";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,6 +28,11 @@ function createForum() {
     slug: "",
     xcode: null,
   };
+  const [userInfo, setuserInfo] = useState({
+    id: null,
+    email: "",
+    key: "",
+  });
   async function setCSRFToken() {
     try {
       // Fetch CSRF token from the server
@@ -115,7 +120,6 @@ function createForum() {
   };
 
   useEffect(() => {
-    console.log(sessionStorage.getItem('userCredentials'));
     
     const code = localStorage.getItem("x-code");
     if (code) {
@@ -128,6 +132,7 @@ function createForum() {
             forumInfos.xcode = code;
             document.getElementById('forumCore').style.display = 'block'
             document.getElementById('modalLogin').style.display = 'none'
+            console.log(JSON.parse(sessionStorage.getItem('userCredentials')));
           } else {
             if (document.getElementById('modalLogin')) {
               document.getElementById('modalLogin').style.display = 'block'

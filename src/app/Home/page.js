@@ -74,6 +74,25 @@ export default function Home(props) {
     intervalTyper: null,
   });
 
+  const signinAuthElement = {
+    email: "",
+    password: "",
+    type: "login",
+  };
+
+  const [userInfo, setuserInfo] = useState({
+    id: null,
+    email: "",
+    newemail: "",
+    telephone: "",
+    whatsapp: "",
+    messenger: "",
+    fullname: "",
+    password: "",
+    designation: "",
+    key: "",
+  });
+
   const reloadChat = (data) => {
     clearInterval(stepper.intervalTyper);
 
@@ -695,11 +714,6 @@ export default function Home(props) {
     }
   };
 
-  const signinAuthElement = {
-    email: "",
-    password: "",
-    type: "login",
-  };
 
   const emailRegister = (element) => {
     signinAuthElement.email = element.target.value;
@@ -738,9 +752,25 @@ export default function Home(props) {
         .patch(source + "/_auth/login?c=" + randomNumber, signinAuthElement)
         .then((res) => {
           if (res.data.logedin) {
-            console.log(res.data.user);
+            userInfo.email = res.data.user.email;
+            userInfo.fullname = res.data.user.fullname;
+            userInfo.id = res.data.user.id;
+            userInfo.key = res.data.user.key;
+            userInfo.telephone =
+                res.data.user.contact.length > 12
+                    ? JSON.parse(res.data.user.contact).telephone
+                    : res.data.user.contact;
+            userInfo.whatsapp =
+                res.data.user.contact.length > 12
+                    ? JSON.parse(res.data.user.contact).whatsapp
+                    : "";
+            userInfo.messenger =
+                res.data.user.contact.length > 12
+                    ? JSON.parse(res.data.user.contact).messenger
+                    : "";
+            userInfo.designation = res.data.user.designation;
             
-            sessionStorage.setItem('userCredentials',res.data.user)
+            localStorage.setItem('userCredentials',JSON.stringify(res.data.user))
             document.location = "/forum/create";
           } else {
             document.getElementById("alert_connexion").className =
@@ -765,11 +795,14 @@ export default function Home(props) {
   const logout = async () => {
     document.getElementById("logoutIcon").style.display = "none";
     document.getElementById("logoutSpinner").style.display = "inline-block";
+    
     await axios
-        .patch("/_auth/logout", userInfo)
+        .patch(source + "/_auth/logout", userInfo)
         .then((res) => {
             if (res.data.logedout) {
                 openDropdown("setting");
+                localStorage.removeItem('userCredentials')
+                localStorage.removeItem('x-code')
                 document.location = "/";
             } else {
                 document.getElementById("logoutSpinner").style.display =
