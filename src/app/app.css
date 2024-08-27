@@ -90,3 +90,9 @@ html,.w3-noscrollbar {
 a[href] {
     text-decoration: none;
 }
+.rotate-90{
+    transform: rotate(-90deg);
+}
+.rotate90{
+    transform: rotate(90deg);
+}

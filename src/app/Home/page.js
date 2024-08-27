@@ -13,6 +13,7 @@ import {
   faDoorOpen,
   faHome,
   faICursor,
+  faImages,
   faKey,
   faNewspaper,
   faPaperPlane,
@@ -21,6 +22,7 @@ import {
   faPlay,
   faPlus,
   faRefresh,
+  faRobot,
   faShieldAlt,
   faSpinner,
   faTimesCircle,
@@ -31,6 +33,7 @@ import "cloudinary-video-player/cld-video-player.min.css";
 import Link from "next/link";
 import slugify from "slugify";
 import {
+  faBots,
   faFacebookMessenger,
   faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
@@ -568,14 +571,31 @@ export default function Home(props) {
     }
     setdisplayDesignations(glitchDesignations);
   };
-  const openDropdown = (ID) => {
-    var x = document.getElementById(ID);
-    if (x.className.indexOf("w3-show") == -1) {
-      x.className += " w3-show";
-    } else {
-      x.className = x.className.replace(" w3-show", "");
+
+  const openDropdown = (ID, EL) => {
+    const allDropContent = document.getElementsByClassName('w3-dropdown-content')
+    for (let i = 0; i < allDropContent.length; i++) {
+      if (allDropContent[i].id != ID) {
+        allDropContent[i].className = allDropContent[i].className.replace(" w3-show", "").replace(" w3-black", " w3-white");
+      }
     }
+    if (document.getElementById(ID)) {
+      var x = document.getElementById(ID);
+      if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        if (EL) {
+          EL.target.className = EL.target.className.replace("w3-white", "w3-black")
+        }
+      } else {
+        x.className = x.className.replace(" w3-show", "");
+        if (EL) {
+          EL.target.className = EL.target.className.replace("w3-black", "w3-white")
+        }
+      }
+    }
+
   };
+
   const toggleChat = () => {
     if (document.getElementById("sidebarChat").style.display != "block") {
       closeAllPanel();
@@ -1139,7 +1159,7 @@ export default function Home(props) {
                   {contact.phone && (
                     <div
                       onClick={() =>
-                        window.open("tel:" + contact.phone, "_blank").focus()
+                        window.open("tel:" + contact.phone, "_blank")
                       }
                       className="w3-circle w3-border w3-flex-center w3-flex"
                       style={{ height: 36, width: 36, margin: 4 }}
@@ -1152,7 +1172,6 @@ export default function Home(props) {
                       onClick={() =>
                         window
                           .open("https://wa.me/" + contact.whatsapp, "_blank")
-                          .focus()
                       }
                       className="w3-circle w3-border w3-flex-center w3-flex"
                       style={{ height: 36, width: 36, margin: 4 }}
@@ -1163,7 +1182,7 @@ export default function Home(props) {
                   {contact.messenger && (
                     <div
                       onClick={() =>
-                        window.open(contact.messenger, "_blank").focus()
+                        window.open(contact.messenger, "_blank")
                       }
                       className="w3-circle w3-border w3-flex-center w3-flex"
                       style={{ height: 36, width: 36, margin: 4 }}
@@ -1268,8 +1287,8 @@ export default function Home(props) {
             className="w3-dropdown-click w3-hover-white"
           >
             <div
-              onClick={() => openDropdown("setting")}
-              className="w3-flex w3-flex-center w3-overflow w3-card  w3-round"
+              onClick={(e) => openDropdown("setting", e)}
+              className="w3-flex w3-flex-center w3-card w3-round w3-white"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
@@ -1281,16 +1300,18 @@ export default function Home(props) {
             </div>
             <div
               id="setting"
-              className="w3-dropdown-content w3-bar-block w3-card w3-round w3-overflow"
-              style={{ right: 0, minWidth: 240, marginTop: 4 }}
+              className="w3-dropdown-content w3-bar-block w3-card w3-round"
+              style={{ right: 0, minWidth: 260, marginTop: 8, paddingBottom: 4 }}
             >
-              <Link className="w3-bar-item w3-button" href={'/settings'}>
+              {/* / arrow marker / */}
+              <div style={{ height: 2 }}>
                 <FontAwesomeIcon
-                  className="w3-margin-right"
-                  icon={faClock}
+                  icon={faPlay}
+                  className="rotate-90 w3-text-white w3-right"
+                  style={{ marginTop: -9, marginRight: 13 }}
                 />
-                Paramètres
-              </Link>
+              </div>
+              {/* / arrow marker / */}
               <div
                 className="w3-bar-item w3-button"
               >
@@ -1300,6 +1321,20 @@ export default function Home(props) {
                 />
                 Votre profil
               </div>
+              <Link className="w3-bar-item w3-button" href={'/chatbotmaker'}>
+                <FontAwesomeIcon
+                  className="w3-margin-right"
+                  icon={faRobot}
+                />
+                Gérez votre chatbot
+              </Link>
+              <Link className="w3-bar-item w3-button" href={'/settings'}>
+                <FontAwesomeIcon
+                  className="w3-margin-right"
+                  icon={faClock}
+                />
+                Paramètres
+              </Link>
               <div
                 className="w3-bar-item w3-button"
               >
@@ -1329,17 +1364,6 @@ export default function Home(props) {
               </div>
             </div>
           </div>
-          {/* <div
-            className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
-            style={{ width: 36, height: 36, marginInline: "auto" }}
-          >
-            <FontAwesomeIcon
-              className="w3-text-black"
-              icon={faBars}
-              width={20}
-              height={20}
-            />
-          </div> */}
         </div>
       </div>
 
@@ -1406,24 +1430,74 @@ export default function Home(props) {
           </div>
         </div>
 
-        <Link
-          href={"/forum/create"}
+        {/* ///// */}
+        <div
           className="w3-flex-1"
-          style={{ width: 36, height: 36 }}
         >
-          <div
-            className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
-            style={{ width: 36, height: 36, marginInline: "auto" }}
-          >
-            <FontAwesomeIcon
-              className="w3-text-black"
-              icon={faPlus}
-              width={20}
-              height={20}
-            />
-          </div>
-        </Link>
+          <div style={{ width: 36, height: 36, marginInline: "auto" }}>
+            <div
+              className="w3-dropdown-click w3-hover-white"
+            >
+              <div
+                id="contentMaker"
+                className="w3-dropdown-content w3-bar-block w3-card w3-round"
+                style={{ bottom: 0, minWidth: 260, marginBottom: 44, right: -87, padding: 4 }}
+              >
 
+                <div style={{ padding: 4 }}>
+                  <Link
+                    href={'/post/create'}
+                    className="w3-light-grey w3-round w3-flex-row w3-flex-center-v"
+                    style={{ padding: 8 }}
+                  >
+                    <div className="w3-white w3-circle w3-flex w3-flex-center w3-margin-right" style={{ width: 40, height: 40 }}>
+                      <FontAwesomeIcon
+                        icon={faImages}
+                      />
+                    </div>
+                    Créer un post
+                  </Link>
+                </div>
+
+                <div style={{ padding: 4, marginBottom: -2 }}>
+                  <Link
+                    href={'/forum/create'}
+                    className="w3-light-grey w3-round w3-flex-row w3-flex-center-v"
+                    style={{ padding: 8 }}
+                  >
+                    <div className="w3-white w3-circle w3-flex w3-flex-center w3-margin-right" style={{ width: 40, height: 40 }}>
+                      <FontAwesomeIcon
+                        icon={faNewspaper}
+                      />
+                    </div>
+                    Créer un forum
+                  </Link>
+                </div>
+
+                <div style={{ height: 2 }}>
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    className="rotate90 w3-text-white"
+                    style={{ marginLeft: 145, marginBottom: 4 }}
+                  />
+                </div>
+              </div>
+              <div
+                onClick={(e) => openDropdown("contentMaker", e)}
+                className="w3-flex w3-flex-center w3-overflow w3-card w3-round w3-white"
+                style={{ width: 36, height: 36, marginInline: "auto" }}
+              >
+                <FontAwesomeIcon
+                  className="w3-text-black"
+                  icon={faPlus}
+                  width={20}
+                  height={20}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* ////// */}
         <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
           <div
             className="w3-flex w3-flex-center w3-overflow w3-card w3-round"

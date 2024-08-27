@@ -187,7 +187,7 @@ function createForum() {
             icon={faNewspaper}
             style={{ width: 16, height: 16 }}
           />{" "}
-          Creer votre forum
+          Créer votre forum
         </div>
         <div>
           <div
