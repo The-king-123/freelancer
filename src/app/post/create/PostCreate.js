@@ -126,8 +126,8 @@ function PostCreate() {
         slug: "",
         type: "image",
         link: null,
-        owner_id: props.user.id,
-        category: props.data.id,
+        owner_id: null,
+        category: null,
         info: {
             description: "",
         },
@@ -299,9 +299,9 @@ function PostCreate() {
                 "/_post/" +
                 postInfo.id +
                 "?q=" +
-                props.user.id +
+                postInfo.owner_id +
                 "&c=" +
-                props.data.id
+                postInfo.category
             )
             .then((res) => {
                 document.getElementById("postDeleteSpinner").style.display =
@@ -475,6 +475,7 @@ function PostCreate() {
                     if (res.data.logedin) {
                         localStorage.setItem("userInfos", JSON.stringify(res.data.user));
                         postInfos.ownerId = res.data.user.key;
+                        postInfo.owner_id = res.data.user.key;
                         postInfos.xcode = code;
                         document.getElementById('postCore').style.display = 'block'
                         document.getElementById('modalLogin').style.display = 'none'

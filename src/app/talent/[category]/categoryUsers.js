@@ -25,14 +25,14 @@ export default function PostContent({ content }) {
               <Image
                 loading="lazy"
                 unoptimized
-                width={80}
-                height={80}
+                width={64}
+                height={64}
                 src={
                   source + "/images.php?w=80&h=80&zlonk=3733&zlink=" + user.key
                 }
                 className="w3-circle w3-margin-right"
                 alt={user.fullname}
-                style={{ objectFit: "cover", objectPosition: "center", minHeight: 80, minWidth: 80 }}
+                style={{ objectFit: "cover", objectPosition: "center", minHeight: 64, minWidth: 64 }}
               />
               <div className="w3-flex-1 w3-medium w3-big w3-nowrap w3-center w3-overflow w3-block">
                 {user.fullname}

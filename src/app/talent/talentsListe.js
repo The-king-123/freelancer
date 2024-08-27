@@ -12,7 +12,7 @@ export default function PostContent({ content }) {
         content.map((des, key) => (
           <div key={key} className="w3-half" style={{ padding: 8 }}>
             <Link
-              href={"/talent/" + slugify(des, { lower: true })}
+              href={"/talent/" + slugify(des.designation, { lower: true })}
               key={key}
               className="categoryUser w3-half"
               style={{ padding: 8 }}
@@ -24,27 +24,28 @@ export default function PostContent({ content }) {
                 <Image
                   loading="lazy"
                   unoptimized
-                  width={80}
-                  height={80}
+                  width={60}
+                  height={60}
                   src={
                     source +
                     "/images.php?w=320&h=320&zlonk=5733&zlink=" +
-                    slugify(des, { lower: true })
+                    slugify(des.designation, { lower: true })
                   }
                   className="w3-round-large w3-margin-right"
-                  alt={des}
+                  alt={des.designation}
                   style={{
                     objectFit: "cover",
                     objectPosition: "center",
-                    minHeight: 80,
-                    minWidth: 80,
+                    minHeight: 60,
+                    minWidth: 60,
                   }}
                 />
                 <div
-                  title={des}
-                  className="w3-flex-1 w3-medium w3-big w3-nowrap w3-center w3-overflow w3-block"
+                  title={des.designation}
+                  className="w3-flex-1 w3-flex-column w3-nowrap w3-overflow"
                 >
-                  {des}
+                  <span className="w3-medium w3-big w3-nowrap w3-overflow">{des.designation}sd aSHJDLajshd lakhsd</span>
+                  <span className="w3-small w3-text-grey w3-nowrap w3-overflow">{des.users} utilisateur{des.users>1?'s':''}</span>
                 </div>
               </div>
             </Link>

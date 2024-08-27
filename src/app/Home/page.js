@@ -835,6 +835,7 @@ export default function Home(props) {
         console.error("failure", e);
       });
   };
+
   useEffect(() => {
     const localHosts = ["localhost", "127.0.0.1", "::1"];
     stopAllIntervalAndTimeout();
@@ -1080,7 +1081,7 @@ export default function Home(props) {
           className="w3-padding-32 w3-large w3-text-grey"
           style={{ paddingInline: 16 }}
         >
-          {displayDesignations}
+          {/* {displayDesignations} */}
           {/* <div className="w3-flex w3-flex-row w3-flex-center-v">
             <Link
               onClick={() => {
@@ -1392,8 +1393,8 @@ export default function Home(props) {
           </Link>
         </div>
 
-        <div
-          onClick={toggleUsers}
+        <Link
+          href={'/talent'}
           className="w3-flex-1"
           style={{ width: 36, height: 36 }}
         >
@@ -1407,7 +1408,7 @@ export default function Home(props) {
               height={20}
             />
           </div>
-        </div>
+        </Link>
 
         <div
           onClick={userForum}

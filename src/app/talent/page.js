@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import TalentsListe from "./talentsListe";
 import axios from "axios";
 import Home from "@/app/Home/page";
-import {app_name, console_source as source} from "@/app/data";
+import { app_name, console_source as source } from "@/app/data";
 
 export default async function page({ params }) {
 
@@ -13,10 +13,18 @@ export default async function page({ params }) {
         const usersData = [];
         res.data.data.forEach((user) => {
           if (
-            !usersData.includes(user.designation) &&
+            !usersData.some(des => des.designation == user.designation) &&
             user.designation != "Admin"
           ) {
-            usersData.push(user.designation);
+            usersData.push({
+              designation: user.designation,
+              users: 1,
+            });
+          } else if (user.designation != 'Admin') {
+            const design = usersData.find(obj => obj.designation == user.designation);
+            if (design) {
+              design.users += 1;
+            }
           }
         });
         return usersData;
