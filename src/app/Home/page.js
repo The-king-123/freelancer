@@ -1292,7 +1292,6 @@ export default function Home(props) {
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
-                className="w3-text-black"
                 icon={faBars}
                 width={20}
                 height={20}
@@ -1386,7 +1385,6 @@ export default function Home(props) {
             href={"/"}
           >
             <FontAwesomeIcon
-              className="w3-text-black"
               icon={faHome}
               width={20}
               height={20}
@@ -1404,7 +1402,6 @@ export default function Home(props) {
             style={{ width: 36, height: 36, marginInline: "auto" }}
           >
             <FontAwesomeIcon
-              className="w3-text-black"
               icon={faUsers}
               width={20}
               height={20}
@@ -1422,7 +1419,6 @@ export default function Home(props) {
             style={{ width: 36, height: 36, marginInline: "auto" }}
           >
             <FontAwesomeIcon
-              className="w3-text-black"
               icon={faNewspaper}
               width={20}
               height={20}
@@ -1488,7 +1484,6 @@ export default function Home(props) {
                 style={{ width: 36, height: 36, marginInline: "auto" }}
               >
                 <FontAwesomeIcon
-                  className="w3-text-black"
                   icon={faPlus}
                   width={20}
                   height={20}
@@ -1504,7 +1499,6 @@ export default function Home(props) {
             style={{ width: 36, height: 36, marginInline: "auto" }}
           >
             <FontAwesomeIcon
-              className="w3-text-black"
               icon={faBell}
               width={20}
               height={20}
@@ -1522,7 +1516,6 @@ export default function Home(props) {
             style={{ width: 36, height: 36, marginInline: "auto" }}
           >
             <FontAwesomeIcon
-              className="w3-text-black"
               icon={faPaperPlane}
               width={20}
               height={20}
