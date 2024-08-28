@@ -1526,7 +1526,6 @@ export default function Home(props) {
       </div>
 
       {/* modal logedin */}
-
       <div
         id="modalLogin"
         className="w3-modal w3-noscrollbar"

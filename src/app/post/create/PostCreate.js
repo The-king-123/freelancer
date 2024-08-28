@@ -5,36 +5,55 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faArrowRight,
+    faEye,
     faImage,
     faImages,
     faListDots,
+    faMicrophone,
     faNewspaper,
+    faPause,
+    faPlay,
+    faPlus,
+    faRecordVinyl,
     faSpinner,
+    faStop,
     faTimes,
+    faTrashAlt,
+    faVideo,
+    faWarning,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import slugify from "slugify";
 
 function PostCreate() {
+
     axios.defaults.withCredentials = true;
     var inputImage = "";
     var inputAudio = "";
 
-    const postInfos = {
-        ownerId: null,
+    const [postInfo, setPostInfo] = useState({
+        id: null,
         title: "",
-        content: "",
-        image: null,
-        type: "text",
-        state: "",
         slug: "",
+        type: "text",
+        link: null,
+        owner_id: null,
+        category: null,
+        info: {
+            description: "",
+        },
+        media: null,
+        videoUrl: "",
         xcode: null,
-    };
+        state: "",
+    });
+
     const [userInfo, setuserInfo] = useState({
         id: null,
         email: "",
         key: "",
     });
+
     async function setCSRFToken() {
         try {
             // Fetch CSRF token from the server
@@ -47,35 +66,35 @@ function PostCreate() {
     }
     const save = async (state) => {
 
-        postInfos.state = state;
-        postInfos.slug = slugify(postInfos.title, { lower: true });
+        postInfo.state = state;
+        postInfo.slug = slugify(postInfo.title, { lower: true });
 
-        console.log(postInfos);
+        console.log(postInfo);
 
-        if (postInfos.title.length > 0 && postInfos.content.length > 0) {
+        if (postInfo.title.length > 0 && postInfo.info.description.length > 0) {
             document.getElementById("postPublicSpinner").style.display =
                 "inline-block";
             document.getElementById("postPublicIcon").style.display = "none";
             var data;
-            if (postInfos.image) {
-                data = postInfos.image;
+            if (postInfo.media) {
+                data = postInfo.media;
 
-                data.append("title", postInfos.title);
-                data.append("slug", postInfos.slug);
-                data.append("ownerId", postInfos.ownerId);
-                data.append("content", postInfos.content);
-                data.append("type", postInfos.type);
-                data.append("state", postInfos.state);
-                data.append("xcode", postInfos.xcode);
+                data.append("title", postInfo.title);
+                data.append("slug", postInfo.slug);
+                data.append("owner_id", postInfo.owner_id);
+                data.append("info", JSON.stringify(postInfo.info));
+                data.append("type", postInfo.type);
+                data.append("state", postInfo.state);
+                data.append("xcode", postInfo.xcode);
             } else {
                 data = {
-                    ownerId: postInfos.ownerId,
-                    title: postInfos.title,
-                    content: postInfos.content,
-                    type: postInfos.type,
-                    slug: postInfos.slug,
-                    state: postInfos.state,
-                    xcode: postInfos.xcode,
+                    owner_id: postInfo.owner_id,
+                    title: postInfo.title,
+                    info: JSON.stringify(postInfo.info),
+                    type: postInfo.type,
+                    slug: postInfo.slug,
+                    state: postInfo.state,
+                    xcode: postInfo.xcode,
                 };
             }
 
@@ -120,20 +139,6 @@ function PostCreate() {
 
         }
     };
-    const [postInfo, setPostInfo] = useState({
-        id: null,
-        title: "",
-        slug: "",
-        type: "image",
-        link: null,
-        owner_id: null,
-        category: null,
-        info: {
-            description: "",
-        },
-        media: null,
-        videoUrl: "",
-    });
 
     const [singleCategoryInfo, setsingleCategoryInfo] = useState({
         id: null,
@@ -148,6 +153,7 @@ function PostCreate() {
     const [step, setstep] = useState({ at: 1, editID: null, this: null });
 
     const [displayPost, setdisplayPost] = useState("");
+
     const [displayStep, setdisplayStep] = useState("");
 
     const getUrl = (embed) => {
@@ -242,7 +248,7 @@ function PostCreate() {
             document.getElementById("postMediaVideo").className =
                 "w3-right w3-button w3-grey w3-round w3-flex-1";
             document.getElementById("postMediaImage").className =
-                "w3-right w3-button w3-hover-green w3-green w3-round w3-flex-1";
+                "w3-right w3-button w3-hover-black w3-black w3-round w3-flex-1";
 
             if (data.type == "image/audio") {
                 document.getElementById("audioBox").src =
@@ -255,7 +261,7 @@ function PostCreate() {
                 document.getElementById("noRecordIcon").style.display = "none";
 
                 document.getElementById("startRecord").className =
-                    "w3-text-green w3-margin-left w3-flex w3-white w3-border w3-border-green w3-circle w3-flex-center";
+                    "w3-text-black w3-margin-left w3-flex w3-white w3-border w3-border-black w3-circle w3-flex-center";
 
                 document.getElementById("startRecord").disabled = false;
                 document.getElementById("stopRecord").disabled = true;
@@ -263,7 +269,7 @@ function PostCreate() {
                 document.getElementById("recordingState").innerText =
                     "Voice recorded";
                 document.getElementById("playRecord").className =
-                    "w3-button w3-hover-text-white w3-green w3-hover-green w3-border w3-border-green w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
+                    "w3-button w3-hover-text-white w3-black w3-hover-black w3-border w3-border-black w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
             }
 
             postInfo.type = data.type;
@@ -280,7 +286,7 @@ function PostCreate() {
             document.getElementById("imageIcon").style.display = "inline-block";
 
             document.getElementById("postMediaVideo").className =
-                "w3-right w3-button w3-hover-green w3-green w3-round w3-flex-1";
+                "w3-right w3-button w3-hover-black w3-black w3-round w3-flex-1";
             document.getElementById("postMediaImage").className =
                 "w3-right w3-button w3-grey w3-round w3-flex-1";
             postInfo.type = data.type;
@@ -425,44 +431,180 @@ function PostCreate() {
         }
     };
 
-    const closeModalPost = () => {
-        postInfo.title = "";
-        postInfo.info.description = "";
-        postInfo.type = "image";
-        postInfo.slug = "";
-        postInfo.media = null;
-        postInfo.id = null;
+    const closeModalCategory = () => {
+        singleCategoryInfo.name = ''
+        document.getElementById("categoryTitle").value = "";
+        document.getElementById("modalCategory").style.display = "none";
+    };
 
-        document.getElementById("postTitle").value = "";
-        document.getElementById("postDescription").innerHTML = "";
-
-        document.getElementById("videoSource").src = "";
-        document.getElementById("videoSource").style.display = "none";
-        document.getElementById("videoIcon").style.display = "inline-block";
-
-        document.getElementById("postVideo").value = '';
-
-        document.getElementById("imageShower").style.backgroundImage = "";
-        document.getElementById("imageIcon").style.display = "inline-block";
-
-        inputImage.value = "";
-        inputVideo.value = "";
-
-        document.getElementById("savePostButton").style.display =
-            "inline-block";
-        document.getElementById("deletePostButton").style.display = "none";
-
-        document.getElementById("modalPost").style.display = "none";
-
-        document.getElementById("audioBox").pause();
-        document.getElementById("repeatRecord").click();
+    const openModalCategory = () => {
+        singleCategoryInfo.name = ''
+        document.getElementById("categoryTitle").value = "";
+        document.getElementById("modalCategory").style.display = "block";
     };
 
     const previewVideo = () => {
         document.getElementById("videoSource").src = getUrl(postInfo.videoUrl);
-        document.getElementById("videoSource").style.display = "block";
-        document.getElementById("videoIcon").style.display = "none";
+        document.getElementById("modalVideoPreview").style.display = "block";
     };
+
+    const categoryInfo = {
+        name: null,
+        type: "actuality",
+        state: "publique",
+        info: {
+            description: "_",
+        },
+    };
+
+    const reloadCategory = (data) => {
+        const glitchCategory = data.map((element, key) => (
+            <div key={key} className="w3-flex-row w3-hover-grey topicbar">
+                <div
+                    onClick={() => changeCoreCategory("category", element)}
+                    className="w3-nowrap w3-hover-grey w3-button w3-left-align"
+                    style={{ width: 205 }}
+                >
+                    {element.name}
+                </div>
+                <div
+                    onClick={() => deleteCategory(element.id)}
+                    className="w3-hover-red w3-button w3-flex-center topicdelete"
+                    style={{ opacity: 0 }}
+                >
+                    <FontAwesomeIcon className="w3-medium" icon={faTrash} />
+                </div>
+            </div>
+        ));
+        document.getElementById("inputCategoryName").value = "";
+        setCategories(glitchCategory);
+    };
+
+    const changeCoreCategory = (type, data) => {
+        setCore("");
+        setTimeout(() => {
+            setCore(
+                <Category
+                    user={userInfo}
+                    reloadCategory={reloadCategory}
+                    data={data}
+                />
+            );
+        }, 10);
+    };
+
+    const saveCategory = async () => {
+        const request = {
+            name: categoryInfo.name,
+            type: categoryInfo.type,
+            state: categoryInfo.state,
+            info: JSON.stringify({
+                description: categoryInfo.info.description.replace(
+                    /\n/g,
+                    "<br/>"
+                ),
+            }),
+        };
+        return 0;
+        await axios
+            .post(source + "/_category", request)
+            .then((res) => {
+                reloadCategory(res.data.data.reverse());
+            })
+            .catch((e) => {
+                console.error("failure", e);
+            });
+    };
+
+    const deleteCategory = async (id) => {
+        document.getElementById("modalWarning").style.display = "block";
+        document.getElementById("textWarning").innerText =
+            "Voulez vous vraiment supprimer cette categorie avec Ses elements ...";
+
+        const deleteHandler = async () => {
+            document.getElementById("confirmSpinner").style.display =
+                "inline-block";
+            await axios
+                .delete(source + "/_category/" + id)
+                .then((res) => {
+                    document.getElementById("confirmSpinner").style.display =
+                        "none";
+                    document.getElementById("modalWarning").style.display =
+                        "none";
+
+                    document
+                        .getElementById("confirmWarning")
+                        .removeEventListener("click", deleteHandler);
+                    document
+                        .getElementById("cancelWarning")
+                        .removeEventListener("click", cancelHandler);
+
+                    reloadCategory(res.data.data.reverse());
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                });
+        };
+        const cancelHandler = async () => {
+            document.getElementById("modalWarning").style.display = "none";
+
+            document
+                .getElementById("confirmWarning")
+                .removeEventListener("click", deleteHandler);
+            document
+                .getElementById("cancelWarning")
+                .removeEventListener("click", cancelHandler);
+        };
+
+        document
+            .getElementById("confirmWarning")
+            .addEventListener("click", deleteHandler);
+        document
+            .getElementById("cancelWarning")
+            .addEventListener("click", cancelHandler);
+    };
+
+    const cancelImageInsertion = () => {
+        postInfo.media = null;
+        postInfo.type = "text";
+
+        document.getElementById("showImage").src = '';
+        document.getElementById("showImageWrapper").style.display = "none";
+        document.getElementById("inputImage").style.display = "flex";
+
+        document.getElementById("audioSection").style.display = "none";
+        document.getElementById("videoEmbed").style.display = "flex";
+    }
+    const closeModalVideoPreview = () => {
+        document.getElementById("videoSource").src = "";
+        document.getElementById("modalVideoPreview").style.display = "none";
+    };
+
+    const addEmbedVideo = () => {
+
+        if (document.getElementById("videoEmbed").className.includes('w3-black')) {
+            postInfo.videoUrl = '';
+            postInfo.type = 'text';
+            document.getElementById("inputImage").style.display = "flex";
+            document.getElementById("videoSection").style.display = "none";
+
+            document.getElementById("iconVideo").style.display = "inline-block";
+            document.getElementById("iconTimes").style.display = "none";
+
+            document.getElementById("postVideo").value = '';
+
+            document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-black', 'w3-light-grey').replace('w3-text-white', 'w3-text-grey');
+        } else {
+            postInfo.type = 'video';
+            document.getElementById("inputImage").style.display = "none";
+            document.getElementById("videoSection").style.display = "block";
+
+            document.getElementById("iconVideo").style.display = "none";
+            document.getElementById("iconTimes").style.display = "inline-block";
+
+            document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-light-grey', 'w3-black').replace('w3-text-grey', 'w3-text-white');
+        }
+    }
 
 
     useEffect(() => {
@@ -474,9 +616,9 @@ function PostCreate() {
                 .then((res) => {
                     if (res.data.logedin) {
                         localStorage.setItem("userInfos", JSON.stringify(res.data.user));
-                        postInfos.ownerId = res.data.user.key;
                         postInfo.owner_id = res.data.user.key;
-                        postInfos.xcode = code;
+                        postInfo.owner_id = res.data.user.key;
+                        postInfo.xcode = code;
                         document.getElementById('postCore').style.display = 'block'
                         document.getElementById('modalLogin').style.display = 'none'
                         console.log(JSON.parse(sessionStorage.getItem('userCredentials')));
@@ -516,8 +658,11 @@ function PostCreate() {
                 document.getElementById("showImageWrapper").style.display = "block";
                 document.getElementById("inputImage").style.display = "none";
 
-                postInfos.image = formData;
-                postInfos.type = "image";
+                document.getElementById("audioSection").style.display = "block";
+                document.getElementById("videoEmbed").style.display = "none";
+
+                postInfo.media = formData;
+                postInfo.type = "image";
             };
         };
 
@@ -542,7 +687,7 @@ function PostCreate() {
                 document.getElementById("videoSource").src = "";
 
                 document.getElementById("startRecord").className =
-                    "w3-text-green w3-margin-left w3-flex w3-white w3-border w3-border-green w3-circle w3-flex-center";
+                    "w3-text-black w3-margin-left w3-flex w3-white w3-border w3-border-black w3-circle w3-flex-center";
 
                 document.getElementById("startRecord").disabled = false;
                 document.getElementById("stopRecord").disabled = true;
@@ -550,7 +695,7 @@ function PostCreate() {
                 document.getElementById("recordingState").innerText =
                     "Voice recorded";
                 document.getElementById("playRecord").className =
-                    "w3-button w3-hover-text-white w3-green w3-hover-green w3-border w3-border-green w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
+                    "w3-button w3-hover-text-white w3-black w3-hover-black w3-border w3-border-black w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
 
                 document.getElementById("pauseRecordIcon").style.display = "none";
                 document.getElementById("playRecordIcon").style.display =
@@ -591,15 +736,40 @@ function PostCreate() {
             </div>
 
             <div style={{ padding: 8 }}>
+                <div className="w3-container" style={{ padding: 0 }}>
+                    <div className="w3-right" style={{ width: '35%' }}>
+                        <div
+                            onClick={openModalCategory}
+                            className="w3-black w3-center"
+                            style={{ paddingBlock: 7 }}
+                        >
+                            <FontAwesomeIcon style={{ marginRight: 8 }} icon={faPlus} />Catégorie
+                        </div>
+                    </div>
+                    <div className="w3-right" style={{ paddingRight: 16, width: '65%' }}>
+                        <select
+                            className="w3-light-grey w3-input w3-border-0 w3-block w3-nowrap w3-overflow"
+                            style={{ paddingBlock: 8 }}
+                            defaultValue={'category'}
+                        >
+                            <option value="category" disabled>Sélectionner une catégorie</option>
+                            <option value="Acheteur">Acheteur</option>
+                            <option value="Rédaction">Rédaction</option>
+
+                        </select>
+                    </div>
+                </div>
+
                 <input
-                    onChange={(e) => (postInfos.title = e.target.value)}
+                    onChange={(e) => (postInfo.title = e.target.value)}
                     className="w3-input w3-border-0 w3-light-grey"
                     type="text"
                     maxLength={100}
+                    style={{ marginTop: 16 }}
                     placeholder="Titre"
                 />
                 <textarea
-                    onChange={(e) => (postInfos.content = e.target.value)}
+                    onChange={(e) => (postInfo.info.description = e.target.value)}
                     className="w3-input w3-border-0 w3-light-grey"
                     placeholder="Qu'est-ce que vous pense ?"
                     style={{
@@ -610,6 +780,16 @@ function PostCreate() {
                     }}
                 />
                 <div className="w3-container" style={{ padding: 0 }}>
+
+                    <div
+                        id="videoEmbed"
+                        onClick={addEmbedVideo}
+                        className="w3-right w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-margin-left"
+                        style={{ height: 40, width: 40, marginTop: 16 }}
+                    >
+                        <FontAwesomeIcon id="iconVideo" icon={faVideo} style={{ width: 16, height: 16 }} />
+                        <FontAwesomeIcon id="iconTimes" icon={faTimes} style={{ width: 16, height: 16, display: 'none' }} />
+                    </div>
                     <div
                         id="inputImage"
                         onClick={() => inputImage.click()}
@@ -629,8 +809,8 @@ function PostCreate() {
                                 id="showImage"
                                 src={''}
                                 className="w3-display-middle w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
-                                height={120}
-                                width={120}
+                                height={100}
+                                width={100}
                                 style={{
                                     objectFit: "cover",
                                     objectPosition: "center",
@@ -638,6 +818,7 @@ function PostCreate() {
                             />
                             <div className="w3-display-topright" style={{ padding: 4 }}>
                                 <div
+                                    onClick={cancelImageInsertion}
                                     className="w3-circle w3-card w3-white w3-flex w3-flex-center"
                                     style={{ width: 24, height: 24 }}
                                 >
@@ -650,6 +831,118 @@ function PostCreate() {
                         </div>
                     </div>
                 </div>
+
+                {/* show audio control when an image is selected */}
+                <div id="audioSection" style={{ display: 'none' }}>
+                    <audio
+                        id="audioBox"
+                        style={{ display: "none" }}
+                        controls
+                    ></audio>
+                    <div className="w3-small w3-text-grey w3-margin-top" style={{ marginBottom: 4 }}>
+                        ¬ Enregistrer ou téléverser un audio.
+                    </div>
+                    <div className="w3-flex w3-flex-row w3-flex-center">
+                        <div
+                            onContextMenu={() => {
+                                if (postInfo.media) {
+                                    inputAudio.click();
+                                } else {
+                                    alert(
+                                        "Une image est obligatoire pour ajouter une voix"
+                                    );
+                                }
+                            }}
+                            disabled
+                            id="playRecord"
+                            style={{
+                                width: 180,
+                            }}
+                            className="w3-flex-1 w3-button w3-hover-text-black w3-hover-white w3-light-grey w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v"
+                        >
+                            <FontAwesomeIcon
+                                id="noRecordIcon"
+                                className="w3-margin-right"
+                                icon={faMicrophone}
+                            />
+                            <FontAwesomeIcon
+                                id="playRecordIcon"
+                                className="w3-margin-right"
+                                icon={faPlay}
+                                style={{ display: "none" }}
+                            />
+                            <FontAwesomeIcon
+                                id="pauseRecordIcon"
+                                className="w3-margin-right"
+                                icon={faPause}
+                                style={{ display: "none" }}
+                            />
+                            <div id="recordingState">Pas d'enregistrement</div>
+                        </div>
+                        <div
+                            disabled
+                            id="repeatRecord"
+                            title="Supprimer l'enregistrement!"
+                            className="w3-text-black w3-margin-left w3-flex w3-border w3-border-black w3-circle w3-flex-center"
+                            style={{ width: 36, height: 36, display: 'none' }}
+                        >
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                        </div>
+                        <div
+                            disabled
+                            id="stopRecord"
+                            title="Arrêter l'enregistrement!"
+                            className="w3-text-black w3-margin-left w3-flex w3-border w3-border-black w3-circle w3-flex-center"
+                            style={{ width: 36, height: 36, display: 'none' }}
+                        >
+                            <FontAwesomeIcon icon={faStop} />
+                        </div>
+                        <div
+                            id="startRecord"
+                            title="Commencer l'enregistrement!"
+                            className="w3-text-black w3-margin-left w3-flex w3-border w3-border-black w3-circle w3-flex-center"
+                            style={{ width: 36, height: 36 }}
+                        >
+                            <FontAwesomeIcon icon={faRecordVinyl} />
+                        </div>
+                    </div>
+                </div>
+
+                {/* show video section on square video symbol click */}
+                <div id="videoSection" style={{ display: 'none' }}>
+                    <div className="w3-small w3-text-grey w3-margin-top" style={{ marginBottom: 4 }}>
+                        ¬ Coller un lien d'intégration ou url video.
+                    </div>
+                    <div
+                        className="w3-flex w3-flex-row w3-flex-center-v"
+                    >
+                        <input
+                            id="postVideo"
+                            onChange={(e) => postInfo.videoUrl = e.target.value }
+                            className="w3-border-0 w3-flex-1 w3-block w3-input w3-light-grey w3-round-xxlarge"
+                            type="text"
+                            placeholder="Lien video"
+                            style={{
+                                paddingInline: 24,
+                            }}
+                        />
+                        <div
+                            onClick={previewVideo}
+                            id="previewVideo"
+                            className="w3-pointer w3-text-white w3-margin-left w3-flex  w3-black w3-round-xxlarge w3-flex-center"
+                            style={{
+                                height: 36,
+                                paddingInline: 16,
+                            }}
+                        >
+                            Preview
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                {/* buton save public | draft */}
                 <div style={{ marginTop: 24 }}>
                     <button
                         onClick={() => save("pubic")}
@@ -684,6 +977,66 @@ function PostCreate() {
                     </button>
                 </div>
             </div>
+
+            {/* modal add new category */}
+            <div id="modalCategory" className="w3-modal">
+                <div
+                    className="w3-modal-content w3-card w3-round w3-overflow"
+                    style={{ maxWidth: 420, top: '30%' }}
+                >
+
+                    <div onClick={closeModalCategory} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 32, height: 32, marginInline: 16, marginTop: 16 }}>
+                        <FontAwesomeIcon icon={faTimes} />
+                    </div>
+
+                    <div style={{ paddingInline: 16, paddingBlock: 24 }}>
+                        <input
+                            id="categoryTitle"
+                            onChange={(e) => categoryInfo.name = e.target.value}
+                            className="w3-border-0 w3-input w3-border w3-round"
+                            placeholder="Nom de la catégorie"
+                            type="text"
+                        />
+                    </div>
+
+                    <div className="w3-container w3-light-grey w3-padding">
+                        <button
+                            onClick={saveCategory}
+                            id="cancelWarning"
+                            className="w3-button w3-right w3-round w3-white w3-black"
+                        >
+                            Créer une catégorie
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {/* end modal add new category */}
+
+            {/* modal video preview */}
+            <div id="modalVideoPreview" className="w3-modal">
+                <div
+                    className="w3-modal-content w3-card w3-round w3-overflow"
+                    style={{ maxWidth: 420, top: 64 }}
+                >
+
+                    <div onClick={closeModalVideoPreview} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 32, height: 32, marginInline: 16, marginTop: 16 }}>
+                        <FontAwesomeIcon icon={faTimes} />
+                    </div>
+
+                    <div style={{ height: 320,marginTop:16 }}>
+                        <iframe
+                            id="videoSource"
+                            className="w3-block"
+                            height="300"
+                            src=""
+                            frameBorder={0}
+                            allowFullScreen
+                        ></iframe>
+                    </div>
+
+                </div>
+            </div>
+            {/* end modal video preview */}
         </div>
     );
 }

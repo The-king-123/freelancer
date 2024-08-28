@@ -34,7 +34,7 @@ export default function PostContent({ content }) {
                 alt={user.fullname}
                 style={{ objectFit: "cover", objectPosition: "center", minHeight: 64, minWidth: 64 }}
               />
-              <div className="w3-flex-1 w3-medium w3-big w3-nowrap w3-center w3-overflow w3-block">
+              <div className="w3-flex-1 w3-medium w3-big w3-nowrap w3-overflow w3-block">
                 {user.fullname}
               </div>
             </div>
