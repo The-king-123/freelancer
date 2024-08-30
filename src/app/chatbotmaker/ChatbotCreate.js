@@ -109,52 +109,60 @@ function ChatbotCreate() {
         }
     };
 
-    const deleteTopic = async (id) => {
-        document.getElementById("modalWarning").style.display = "block";
-        document.getElementById("textWarning").innerText =
-            "Voulez vous vraiment supprimer ce Topic avec Ses elements ...";
+    const deleteTopic = async () => {
 
-        const deleteHandler = async () => {
-            document.getElementById("confirmSpinner").style.display =
-                "inline-block";
-            await axios
-                .delete(source + "/_topic/" + id)
-                .then((res) => {
-                    document.getElementById("confirmSpinner").style.display =
-                        "none";
-                    document.getElementById("modalWarning").style.display =
-                        "none";
+        if (singleTopicInfo.id) {
+            document.getElementById("modalWarning").style.display = "block";
+            document.getElementById("textWarning").innerText =
+                "Voulez vous vraiment supprimer ce Topic avec son contenu ...";
 
-                    document
-                        .getElementById("confirmWarning")
-                        .removeEventListener("click", deleteHandler);
-                    document
-                        .getElementById("cancelWarning")
-                        .removeEventListener("click", cancelHandler);
+            const deleteHandler = async () => {
+                document.getElementById("confirmSpinner").style.display =
+                    "inline-block";
+                await axios
+                    .delete(source + "/_topic/" + singleTopicInfo.id + '?xcode=' + xcode)
+                    .then((res) => {
+                        document.getElementById("confirmSpinner").style.display =
+                            "none";
+                        document.getElementById("modalWarning").style.display =
+                            "none";
 
-                    reloadTopics(res.data.data.reverse());
-                })
-                .catch((e) => {
-                    console.error("failure", e);
-                });
-        };
-        const cancelHandler = async () => {
-            document.getElementById("modalWarning").style.display = "none";
+                        document
+                            .getElementById("confirmWarning")
+                            .removeEventListener("click", deleteHandler);
+                        document
+                            .getElementById("cancelWarning")
+                            .removeEventListener("click", cancelHandler);
+
+                        reloadTopics(res.data.data.reverse());
+                    })
+                    .catch((e) => {
+                        console.error("failure", e);
+                    });
+            };
+            const cancelHandler = async () => {
+                document.getElementById("modalWarning").style.display = "none";
+
+                document
+                    .getElementById("confirmWarning")
+                    .removeEventListener("click", deleteHandler);
+                document
+                    .getElementById("cancelWarning")
+                    .removeEventListener("click", cancelHandler);
+            };
 
             document
                 .getElementById("confirmWarning")
-                .removeEventListener("click", deleteHandler);
+                .addEventListener("click", deleteHandler);
             document
                 .getElementById("cancelWarning")
-                .removeEventListener("click", cancelHandler);
-        };
+                .addEventListener("click", cancelHandler);
+        } else {
+            document.getElementById('modalShowTopic').style.display = 'none';
+            document.getElementById('topicTitle').value = '';
+            document.getElementById('topicContent').innerHTML = '';
+        }
 
-        document
-            .getElementById("confirmWarning")
-            .addEventListener("click", deleteHandler);
-        document
-            .getElementById("cancelWarning")
-            .addEventListener("click", cancelHandler);
     };
 
     useEffect(() => {
@@ -210,6 +218,7 @@ function ChatbotCreate() {
                     </div>
                     <div className="w3-right" style={{ paddingRight: 16, width: '65%' }}>
                         <input
+                            id='topicTitle'
                             onChange={(e) => singleTopicInfo.name = e.target.value}
                             className="w3-input w3-border-0 w3-light-grey w3-round"
                             type="text"
@@ -249,6 +258,7 @@ function ChatbotCreate() {
 
                     <div className="w3-flex w3-flex-row w3-flex-center-v w3-light-grey w3-padding w3-red">
                         <button
+                            onClick={deleteTopic}
                             id="deleteButton"
                             className="w3-flex-1 w3-button w3-round w3-border w3-border-black"
                         >
