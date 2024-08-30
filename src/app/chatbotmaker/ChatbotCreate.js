@@ -7,8 +7,6 @@ import axios from 'axios'
 
 function ChatbotCreate() {
 
-    const xcode = localStorage.getItem("x-code");
-
     const [singleTopicInfo, setsingleTopicInfo] = useState({
         id: null,
         name: '',
@@ -70,6 +68,7 @@ function ChatbotCreate() {
 
     const saveTopic = async () => {
 
+        const xcode = localStorage.getItem("x-code");
         singleTopicInfo.info.description = document.getElementById('topicContent').innerHTML;
 
         if (singleTopicInfo.info.description.length > 3) {
@@ -111,6 +110,7 @@ function ChatbotCreate() {
 
     const deleteTopic = async () => {
 
+        const xcode = localStorage.getItem("x-code");
         if (singleTopicInfo.id) {
             document.getElementById("modalWarning").style.display = "block";
             document.getElementById("textWarning").innerText =
@@ -166,6 +166,8 @@ function ChatbotCreate() {
     };
 
     useEffect(() => {
+        const xcode = localStorage.getItem("x-code");
+
         if (xcode) {
             axios
                 .get(source + "/_topic?xcode=" + xcode)
