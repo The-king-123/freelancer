@@ -42,7 +42,7 @@ import HomePost from "@/app/HomePost";
 
 export default function Home(props) {
   axios.defaults.withCredentials = true;
-  const [csrfToken, setCsrfToken] = useState("");
+
   const [fullPath, setfullPath] = useState({ path: "" });
   const [imagePDP, setimagePDP] = useState(null);
   const [imagePostModal, setimagePostModal] = useState(
@@ -425,12 +425,12 @@ export default function Home(props) {
     }, 10);
   };
 
-  const showUser = async (key, others) => {
+  const showUser = async (data, key, others) => {
     closeAllPanel();
-    var users = localStorage.getItem("users");
+    var users = data;
     var userInfos = null;
     if (users) {
-      userInfos = JSON.parse(users).find((obj) => obj.key == key);
+      userInfos = users.find((obj) => obj.key == key);
     }
     if (userInfos) {
       console.log(userInfos.designation);
@@ -523,6 +523,7 @@ export default function Home(props) {
   };
 
   const reloadDesignation = (data) => {
+
     data.forEach((user) => {
       if (
         !designationData.includes(user.designation) &&
@@ -531,6 +532,7 @@ export default function Home(props) {
         designationData.push(user.designation);
       }
     });
+
     var glitchDesignations = "";
     if (designationData.length > 0) {
       glitchDesignations = designationData.map((designation, key) => (
@@ -724,7 +726,7 @@ export default function Home(props) {
   const userForum = () => {
     var user = localStorage.getItem("user");
     if (user) {
-      if (user == "160471339156947") {
+      if (user == "160471339156947" || user == "undefined") {
         window.location = "/forum";
       } else {
         window.location = "/forum/" + user;
@@ -733,7 +735,6 @@ export default function Home(props) {
       window.location = "/forum";
     }
   };
-
 
   const emailRegister = (element) => {
     signinAuthElement.email = element.target.value;
@@ -765,13 +766,15 @@ export default function Home(props) {
       for (let i = 0; i < 15; i++) {
         randomNumber += Math.floor(Math.random() * 10);
       }
-      localStorage.setItem("x-code", randomNumber);
 
       await setCSRFToken();
       await axios
-        .patch(source + "/_auth/login?c=" + randomNumber, signinAuthElement)
+        .patch(source + "/_auth/login?xcode=" + randomNumber, signinAuthElement)
         .then((res) => {
           if (res.data.logedin) {
+
+            localStorage.setItem("x-code", res.data.xcode);
+
             userInfo.email = res.data.user.email;
             userInfo.fullname = res.data.user.fullname;
             userInfo.id = res.data.user.id;
@@ -790,8 +793,7 @@ export default function Home(props) {
                 : "";
             userInfo.designation = res.data.user.designation;
 
-            localStorage.setItem('userCredentials', JSON.stringify(res.data.user))
-            document.location = "/forum/create";
+            window.location.reload()
           } else {
             document.getElementById("alert_connexion").className =
               "w3-text-red w3-center";
@@ -821,7 +823,6 @@ export default function Home(props) {
       .then((res) => {
         if (res.data.logedout) {
           openDropdown("setting");
-          localStorage.removeItem('userCredentials')
           localStorage.removeItem('x-code')
           document.location = "/";
         } else {
@@ -924,36 +925,33 @@ export default function Home(props) {
         });
       }
 
-      var users = localStorage.getItem("users");
-      if (users) {
-        reloadDesignation(JSON.parse(users));
-      } else {
-        axios
-          .get(source + "/_auth/users")
-          .then((res) => {
-            localStorage.setItem("users", JSON.stringify(res.data.data));
-            reloadDesignation(res.data.data);
-          })
-          .catch((e) => {
-            console.error("failure", e);
-          });
-      }
+      axios
+        .get(source + "/_auth/users")
+        .then((res) => {
+          reloadDesignation(res.data.data);
+          var user = localStorage.getItem("user");
+          if (props.user) {
+            if (props.user == user) {
+              showUser(res.data.data, user, false);
+            } else {
+              localStorage.setItem("user", props.user);
+              showUser(res.data.data, props.user, true);
+            }
+          } else {
+            if (user) {
+              showUser(res.data.data, user == 'undefined' ? "160471339156947" : user, false);
+            } else {
+              localStorage.setItem("user", "160471339156947");
+              showUser(res.data.data, "160471339156947", true);
+            }
+          }
+        })
+        .catch((e) => {
+          console.error("failure", e);
+        });
 
-      var user = localStorage.getItem("user");
-      if (props.user) {
-        if (props.user == user) {
-          showUser(user, false);
-        } else {
-          localStorage.setItem("user", props.user);
-          showUser(props.user, true);
-        }
-      } else {
-        if (user) {
-          showUser(user, false);
-        } else {
-          showUser("160471339156947", true);
-        }
-      }
+
+
 
       if (!props.core) {
         axios
@@ -987,11 +985,6 @@ export default function Home(props) {
         }
       };
 
-      // forum section
-      var info = localStorage.getItem("info");
-      console.log(info);
-      //end forum section
-
       audioBox.chaine = document.getElementById("audioBox");
 
       audioBox.chaine.addEventListener("ended", () => {
@@ -1017,15 +1010,18 @@ export default function Home(props) {
       });
 
       setInterval(() => {
-        document.getElementById("coreMain").style.userSelect = "none";
-        if (window.innerWidth <= 993) {
-          document.getElementsByClassName("mobileHeight")[0].style.height =
-            window.innerHeight - 52 + "px !important";
-          const panels = document.getElementsByClassName("mobileHeightPanel");
-          for (let i = 0; i < panels.length; i++) {
-            panels[i].style.height = window.innerHeight - 68 + "px !important";
+        if (document.getElementById("coreMain")) {
+          document.getElementById("coreMain").style.userSelect = "none";
+          if (window.innerWidth <= 993) {
+            document.getElementsByClassName("mobileHeight")[0].style.height =
+              window.innerHeight - 52 + "px !important";
+            const panels = document.getElementsByClassName("mobileHeightPanel");
+            for (let i = 0; i < panels.length; i++) {
+              panels[i].style.height = window.innerHeight - 68 + "px !important";
+            }
           }
         }
+
       }, 500);
 
       const updateHeight = () => {
@@ -1074,7 +1070,7 @@ export default function Home(props) {
             onClick={Home}
             className="w3-pointer w3-center w3-flex-row w3-flex-center w3-large"
           >
-            <b className="userNameTitle w3-overflow w3-nowrap">FREELANCER</b>
+            <b className="userNameTitle w3-overflow w3-nowrap"></b>
           </div>
         </div>
         <div
@@ -1279,7 +1275,7 @@ export default function Home(props) {
       >
         <div className="w3-flex-1">
           <div onClick={Home} className="w3-pointer w3-flex-row w3-large">
-            <b className="userNameTitle w3-overflow w3-nowrap">FREELANCER</b>
+            <b className="userNameTitle w3-overflow w3-nowrap"></b>
           </div>
         </div>
 
@@ -1335,7 +1331,8 @@ export default function Home(props) {
                 />
                 Paramètres
               </Link>
-              <div
+              <Link
+                href={'/security'}
                 className="w3-bar-item w3-button"
               >
                 <FontAwesomeIcon
@@ -1343,7 +1340,7 @@ export default function Home(props) {
                   icon={faShieldAlt}
                 />
                 Sécurité
-              </div>
+              </Link>
               {/* {adminCore} */}
               <div
                 onClick={logout}

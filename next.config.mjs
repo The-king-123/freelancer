@@ -13,6 +13,11 @@ const nextConfig = {
         hostname: "freelancer.mg",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "console.freelancer.mg",
+        pathname: "/**",
+      },
     ],
   },
 };

@@ -1,9 +1,28 @@
-import React from 'react'
+import { notFound } from "next/navigation";
+import axios from "axios";
+import Home from "@/app/Home/page";
+import { app_name, console_source as source } from "@/app/data";
+import ChatbotCreate from "./ChatbotCreate";
 
-function page() {
-  return (
-    <div>Chatbotmaker</div>
-  )
+export default async function page() {
+
+  try {
+    return <Home core={<ChatbotCreate />} />;
+  } catch (error) {
+    console.error('Error rendering forum for default user ', error);
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>There was an error loading the chatbot. Please try again later.</p>
+      </div>
+    );
+  }
 }
 
-export default page
+export function metadata() {
+  const meta = {
+    title: app_name,
+    description: 'Utliser des chatbots pour repondre aux questions courantes et donnes des reponses satisfaisons a vos visiteurs.',
+  };
+  return meta;
+}

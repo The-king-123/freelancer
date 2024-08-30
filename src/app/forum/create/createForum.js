@@ -4,6 +4,7 @@ import { console_source as source } from "@/app/data";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faArrowLeft,
   faArrowRight,
   faImage,
   faListDots,
@@ -18,6 +19,7 @@ function createForum() {
   axios.defaults.withCredentials = true;
   var inputImage = "";
 
+  const [forumListe, setforumListe] = useState('')
   const forumInfos = {
     ownerId: null,
     title: "",
@@ -33,6 +35,7 @@ function createForum() {
     email: "",
     key: "",
   });
+
   async function setCSRFToken() {
     try {
       // Fetch CSRF token from the server
@@ -42,14 +45,31 @@ function createForum() {
     } catch (error) {
       console.error('CSRF token fetch failed:', error);
     }
-  } 
+  }
+
+  const reloadForums = (data) => {
+    var glitchForum
+    if (data.length > 0) {
+      glitchForum = data.map((forum, key) => (
+        <div key={key} style={{ padding: 4 }}>
+          <div className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
+            {forum.title}
+          </div>
+        </div>
+      ))
+    } else {
+      //
+    }
+    setforumListe(glitchForum)
+  }
+
   const save = async (state) => {
 
     forumInfos.state = state;
     forumInfos.slug = slugify(forumInfos.title, { lower: true });
 
-    console.log(forumInfos);
-    
+    forumInfos.content = document.getElementById('forumContent').innerHTML;
+
     if (forumInfos.title.length > 0 && forumInfos.content.length > 0) {
       document.getElementById("forumPublicSpinner").style.display =
         "inline-block";
@@ -79,8 +99,8 @@ function createForum() {
 
       try {
         await setCSRFToken();
-        
-        const response = await axios.post(source + '/_forum',data);
+
+        const response = await axios.post(source + '/_forum', data);
         document.getElementById('forumPublicSpinner').style.display = 'inline-block';
         document.getElementById('forumPublicIcon').style.display = 'none';
         closeModalPost();
@@ -88,7 +108,7 @@ function createForum() {
       } catch (error) {
         document.getElementById('forumPublicSpinner').style.display = 'inline-block';
         document.getElementById('forumPublicIcon').style.display = 'none';
-        
+
         if (error.response && error.response.status === 419) {
           console.error('CSRF token missing or incorrect');
         } else {
@@ -97,7 +117,7 @@ function createForum() {
       }
 
       await axios
-        .post(source + "/_forum",data)
+        .post(source + "/_forum", data)
         .then((res) => {
           document.getElementById("forumPublicSpinner").style.display =
             "inline-block";
@@ -115,28 +135,24 @@ function createForum() {
             console.error('Request failed:', error);
           }
         });
-       
+
     }
   };
 
   useEffect(() => {
-    
-    const code = localStorage.getItem("x-code");
-    if (code) {
+
+    const xcode = localStorage.getItem("x-code");
+    if (xcode) {
       axios
-        .get(`${source}/_auth/${code}/edit`)
+        .get(`${source}/_forum?xcode=${xcode}`)
         .then((res) => {
           if (res.data.logedin) {
-            localStorage.setItem("userInfos", JSON.stringify(res.data.user));
-            forumInfos.ownerId = res.data.user.key;
-            forumInfos.xcode = code;
-            document.getElementById('forumCore').style.display = 'block'
-            document.getElementById('modalLogin').style.display = 'none'
-            console.log(JSON.parse(sessionStorage.getItem('userCredentials')));
+            document.getElementById('forumCore').style.display = 'block';
+            reloadForums(res.data.data)
           } else {
             if (document.getElementById('modalLogin')) {
               document.getElementById('modalLogin').style.display = 'block'
-            }            
+            }
           }
         })
         .catch((e) => {
@@ -176,7 +192,7 @@ function createForum() {
   }, []);
 
   return (
-    <div id="forumCore" style={{display:'none'}}>
+    <div id="forumCore" style={{ display: 'none' }}>
       <div
         className="w3-medium w3-big w3-flex-row w3-flex-center-v"
         style={{ padding: 8 }}
@@ -185,12 +201,13 @@ function createForum() {
           <FontAwesomeIcon
             className="w3-margin-right"
             icon={faNewspaper}
-            style={{ width: 16, height: 16 }}
+            style={{ width: 24, height: 24 }}
           />{" "}
           Créer votre forum
         </div>
         <div>
           <div
+            onClick={() => document.getElementById('modalForumListe').style.display = 'block'}
             className="w3-light-grey w3-circle w3-flex w3-flex-center"
             style={{ width: 32, height: 32 }}
           >
@@ -204,23 +221,23 @@ function createForum() {
 
       <div style={{ padding: 8 }}>
         <input
+          id="forumTitle"
           onChange={(e) => (forumInfos.title = e.target.value)}
-          className="w3-input w3-border-0 w3-light-grey"
+          className="w3-input w3-border-0 w3-light-grey w3-round"
           type="text"
           maxLength={100}
           placeholder="Titre"
         />
-        <textarea
-          onChange={(e) => (forumInfos.content = e.target.value)}
-          className="w3-input w3-border-0 w3-light-grey"
-          placeholder="Qu'est-ce que vous pense ?"
+        <div
+          id="forumContent"
+          contentEditable={true}
+          className="w3-input w3-border-0 w3-light-grey w3-round"
           style={{
-            minHeight: 120,
-            maxHeight: 120,
+            height: 160,
             minWidth: "100%",
             marginTop: 16,
           }}
-        />
+        >Qu'est-ce que vous pense ?</div>
         <div className="w3-container" style={{ padding: 0 }}>
           <div
             id="inputImage"
@@ -296,6 +313,35 @@ function createForum() {
           </button>
         </div>
       </div>
+
+      {/* modal forum liste */}
+      <div id="modalForumListe" className="w3-modal">
+        <div
+          className="w3-modal-content w3-card w3-round w3-overflow"
+          style={{ maxWidth: 420, top: 32 }}
+        >
+
+          <div onClick={()=>document.getElementById('modalForumListe').style.display = 'none'} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </div>
+
+          <div style={{ paddingInline: 16, paddingBlock: 16 }}>
+            <input
+              id="categoryTitle"
+              className="input w3-border-0 w3-input w3-border w3-round-xxlarge"
+              placeholder="Chercher un forum"
+              type="text"
+            />
+          </div>
+          <div style={{ height: '50vh', paddingInline: 12, marginBottom: 16 }} className="w3-overflow-scroll w3-noscrollbar">
+            {
+              forumListe
+            }
+          </div>
+
+        </div>
+      </div>
+      {/* end modal forum liste */}
     </div>
   );
 }

@@ -69,7 +69,7 @@ function PostCreate() {
         postInfo.state = state;
         postInfo.slug = slugify(postInfo.title, { lower: true });
 
-        console.log(postInfo);
+        postInfo.info.description = document.getElementById('postContent').innerHTML
 
         if (postInfo.title.length > 0 && postInfo.info.description.length > 0) {
             document.getElementById("postPublicSpinner").style.display =
@@ -718,7 +718,7 @@ function PostCreate() {
                     <FontAwesomeIcon
                         className="w3-margin-right"
                         icon={faImages}
-                        style={{ width: 16, height: 16 }}
+                        style={{ width: 24, height: 24 }}
                     />{" "}
                     Créer votre post
                 </div>
@@ -740,7 +740,7 @@ function PostCreate() {
                     <div className="w3-right" style={{ width: '35%' }}>
                         <div
                             onClick={openModalCategory}
-                            className="w3-black w3-center"
+                            className="w3-black w3-center w3-round"
                             style={{ paddingBlock: 7 }}
                         >
                             <FontAwesomeIcon style={{ marginRight: 8 }} icon={faPlus} />Catégorie
@@ -748,7 +748,7 @@ function PostCreate() {
                     </div>
                     <div className="w3-right" style={{ paddingRight: 16, width: '65%' }}>
                         <select
-                            className="w3-light-grey w3-input w3-border-0 w3-block w3-nowrap w3-overflow"
+                            className="w3-light-grey w3-input w3-border-0 w3-block w3-nowrap w3-overflow w3-round"
                             style={{ paddingBlock: 8 }}
                             defaultValue={'category'}
                         >
@@ -761,6 +761,7 @@ function PostCreate() {
                 </div>
 
                 <input
+                    id="postTitle"
                     onChange={(e) => (postInfo.title = e.target.value)}
                     className="w3-input w3-border-0 w3-light-grey"
                     type="text"
@@ -768,17 +769,15 @@ function PostCreate() {
                     style={{ marginTop: 16 }}
                     placeholder="Titre"
                 />
-                <textarea
-                    onChange={(e) => (postInfo.info.description = e.target.value)}
-                    className="w3-input w3-border-0 w3-light-grey"
-                    placeholder="Qu'est-ce que vous pense ?"
+                <div
+                    id="postContent"
+                    className="w3-input w3-border-0 w3-light-grey w3-round"
                     style={{
-                        minHeight: 120,
-                        maxHeight: 120,
+                        height: 120,
                         minWidth: "100%",
                         marginTop: 16,
                     }}
-                />
+                >Qu'est-ce que vous pense ?</div>
                 <div className="w3-container" style={{ padding: 0 }}>
 
                     <div
