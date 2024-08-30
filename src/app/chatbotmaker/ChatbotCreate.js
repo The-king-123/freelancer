@@ -70,7 +70,7 @@ function ChatbotCreate() {
 
         const xcode = localStorage.getItem("x-code");
         singleTopicInfo.info.description = document.getElementById('topicContent').innerHTML;
-
+        
         if (singleTopicInfo.info.description.length > 3) {
             document.getElementById('saveTopicSpinner').style.display = 'inline-block'
             const request = {
