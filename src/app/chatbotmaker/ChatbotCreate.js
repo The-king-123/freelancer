@@ -1,11 +1,13 @@
 'use client'
-import { faBookmark, faPlus, faRobot, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faBookmark, faPlus, faRobot, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
 import { console_source as source } from '../data'
 import axios from 'axios'
 
 function ChatbotCreate() {
+
+    const xcode = localStorage.getItem("x-code");
 
     const [singleTopicInfo, setsingleTopicInfo] = useState({
         id: null,
@@ -67,20 +69,44 @@ function ChatbotCreate() {
     };
 
     const saveTopic = async () => {
-        const request = {
-            name: topicInfo.name,
-            info: JSON.stringify({
-                description: topicInfo.info.description.replace(/\n/g, "<br/>"),
-            }),
-        };
-        await axios
-            .post(source + "/_topic", request)
-            .then((res) => {
-                reloadTopics(res.data.data.reverse());
-            })
-            .catch((e) => {
-                console.error("failure", e);
-            });
+
+        singleTopicInfo.info.description = document.getElementById('topicContent').innerHTML;
+
+        if (singleTopicInfo.info.description.length > 3) {
+            document.getElementById('saveTopicSpinner').style.display = 'inline-block'
+            const request = {
+                name: singleTopicInfo.name,
+                info: JSON.stringify({
+                    description: singleTopicInfo.info.description.replace(/\n/g, "<br/>"),
+                }),
+            };
+            if (singleTopicInfo.id) {
+                await axios
+                    .patch(source + "/_topic/" + singleTopicInfo.id + '?xcode=' + xcode, request)
+                    .then((res) => {
+                        document.getElementById('saveTopicSpinner').style.display = 'none'
+                        reloadTopics(res.data.data.reverse());
+                        document.getElementById('modalShowTopic').style.display = 'none'
+                    })
+                    .catch((e) => {
+                        document.getElementById('saveTopicSpinner').style.display = 'none'
+                        console.error("failure", e);
+                    });
+            } else {
+                await axios
+                    .post(source + "/_topic?xcode=" + xcode, request)
+                    .then((res) => {
+                        document.getElementById('saveTopicSpinner').style.display = 'none'
+                        reloadTopics(res.data.data.reverse());
+                        document.getElementById('modalShowTopic').style.display = 'none'
+                    })
+                    .catch((e) => {
+                        document.getElementById('saveTopicSpinner').style.display = 'none'
+                        console.error("failure", e);
+                    });
+            }
+
+        }
     };
 
     const deleteTopic = async (id) => {
@@ -132,7 +158,6 @@ function ChatbotCreate() {
     };
 
     useEffect(() => {
-        const xcode = localStorage.getItem("x-code");
         if (xcode) {
             axios
                 .get(source + "/_topic?xcode=" + xcode)
@@ -155,7 +180,6 @@ function ChatbotCreate() {
             }
         }
     }, [])
-
 
     return (
         <div id="chatbotCore" style={{ display: 'none' }}>
@@ -229,12 +253,25 @@ function ChatbotCreate() {
                             className="w3-flex-1 w3-button w3-round w3-border w3-border-black"
                         >
                             Supprimer
+                            <FontAwesomeIcon
+                                id="deleteTopicSpinner"
+                                style={{ display: "none" }}
+                                className="w3-margin-left w3-spin"
+                                icon={faSpinner}
+                            />
                         </button>
                         <button
+                            onClick={saveTopic}
                             id="saveButton"
                             className="w3-flex-1 w3-button w3-round w3-white w3-black w3-margin-left"
                         >
                             Sauvegarder
+                            <FontAwesomeIcon
+                                id="saveTopicSpinner"
+                                style={{ display: "none" }}
+                                className="w3-margin-left w3-spin"
+                                icon={faSpinner}
+                            />
                         </button>
                     </div>
                 </div>
