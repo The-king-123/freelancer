@@ -6,6 +6,7 @@ import { console_source as source } from '../data'
 import axios from 'axios'
 
 function ChatbotCreate() {
+    axios.defaults.withCredentials = true;
 
     const [singleTopicInfo, setsingleTopicInfo] = useState({
         id: null,
@@ -70,7 +71,7 @@ function ChatbotCreate() {
 
         const xcode = localStorage.getItem("x-code");
         singleTopicInfo.info.description = document.getElementById('topicContent').innerHTML;
-        
+
         if (singleTopicInfo.info.description.length > 3) {
             document.getElementById('saveTopicSpinner').style.display = 'inline-block'
             const request = {
@@ -80,6 +81,7 @@ function ChatbotCreate() {
                 }),
             };
             if (singleTopicInfo.id) {
+                await setCSRFToken();
                 await axios
                     .patch(source + "/_topic/" + singleTopicInfo.id + '?xcode=' + xcode, request)
                     .then((res) => {
@@ -92,6 +94,7 @@ function ChatbotCreate() {
                         console.error("failure", e);
                     });
             } else {
+                await setCSRFToken();
                 await axios
                     .post(source + "/_topic?xcode=" + xcode, request)
                     .then((res) => {
@@ -165,7 +168,19 @@ function ChatbotCreate() {
 
     };
 
+    async function setCSRFToken() {
+        try {
+            // Fetch CSRF token from the server
+            const response = await axios.get(source + '/csrf-token');
+            // Set CSRF token as a default header for all future requests
+            axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+        } catch (error) {
+            console.error('CSRF token fetch failed:', error);
+        }
+    }
+
     useEffect(() => {
+        
         const xcode = localStorage.getItem("x-code");
 
         if (xcode) {
