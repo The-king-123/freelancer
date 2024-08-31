@@ -20,7 +20,9 @@ function createForum() {
   var inputImage = "";
 
   const [forumListe, setforumListe] = useState('')
+
   const forumInfos = {
+    id: null,
     ownerId: null,
     title: "",
     content: "",
@@ -30,6 +32,7 @@ function createForum() {
     slug: "",
     xcode: null,
   };
+
   const [userInfo, setuserInfo] = useState({
     id: null,
     email: "",
@@ -52,13 +55,21 @@ function createForum() {
     if (data.length > 0) {
       glitchForum = data.map((forum, key) => (
         <div key={key} style={{ padding: 4 }}>
-          <div className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
-            {forum.title}
+          <div onClick={() => showThisForum(forum)} className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
+            <div>{forum.title}</div>
+            <div className="w3-small w3-text-grey">{forum.state == 'public' ? 'Publique' : 'Brouillon'}</div>
           </div>
         </div>
       ))
     } else {
       //
+      <div style={{ padding: 8 }}>
+        <div className="w3-border w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
+          <div style={{ paddingInline: 16 }}>
+            Vous n'avez aucun forum pour le moment...
+          </div>
+        </div>
+      </div>
     }
     setforumListe(glitchForum)
   }
@@ -71,9 +82,12 @@ function createForum() {
     forumInfos.content = document.getElementById('forumContent').innerHTML;
 
     if (forumInfos.title.length > 0 && forumInfos.content.length > 0) {
-      document.getElementById("forumPublicSpinner").style.display =
-        "inline-block";
-      document.getElementById("forumPublicIcon").style.display = "none";
+      if (state == 'public') {
+        document.getElementById("forumPublicSpinner").style.display = "inline-block";
+        document.getElementById("forumPublicIcon").style.display = "none";
+      } else if (state == draft) {
+        document.getElementById("forumDraftSpinner").style.display = "inline-block";
+      }
       var data;
       if (forumInfos.image) {
         data = forumInfos.image;
@@ -99,15 +113,101 @@ function createForum() {
 
       try {
         await setCSRFToken();
+        if (forumInfos.id) {
+          await axios
+            .patch(source + "/_forum/" + forumInfos.id, data)
+            .then((res) => {
+              if (res.data.logedin) {
+                if (state == 'public') {
+                  document.getElementById("forumPublicSpinner").style.display = "none";
+                  document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                } else if (state == draft) {
+                  document.getElementById("forumDraftSpinner").style.display = "none";
 
-        const response = await axios.post(source + '/_forum', data);
-        document.getElementById('forumPublicSpinner').style.display = 'inline-block';
-        document.getElementById('forumPublicIcon').style.display = 'none';
-        closeModalPost();
-        reloadPost(response.data.data);
+                }
+                reloadForums(res.data.data.reverse());
+                document.getElementById('modalForumListe').style.display = 'block'
+                document.getElementById('forumTitle').value = ''
+                document.getElementById('forumContent').innerHTML = 'Que pensez-vous ?'
+                cancelImageInsertion()
+                document.getElementById('deleteButton').style.display = 'none';
+              } else {
+                if (document.getElementById('modalLogin')) {
+                  document.getElementById('modalLogin').style.display = 'block'
+                }
+                if (state == 'public') {
+                  document.getElementById("forumPublicSpinner").style.display = "none";
+                  document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                } else if (state == draft) {
+                  document.getElementById("forumDraftSpinner").style.display = "none";
+                }
+              }
+
+            })
+            .catch((e) => {
+              if (state == 'public') {
+                document.getElementById("forumPublicSpinner").style.display = "none";
+                document.getElementById("forumPublicIcon").style.display = "inline-draft";
+              } else if (state == draft) {
+                document.getElementById("forumDraftSpinner").style.display = "none";
+              }
+              if (e.response && e.response.status === 419) {
+                console.error('CSRF token missing or incorrect');
+              } else {
+                console.error('Request failed:', error);
+              }
+            });
+        } else {
+          await axios
+            .post(source + "/_forum", data)
+            .then((res) => {
+              if (res.data.logedin) {
+                if (state == 'public') {
+                  document.getElementById("forumPublicSpinner").style.display = "none";
+                  document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                } else if (state == draft) {
+                  document.getElementById("forumDraftSpinner").style.display = "none";
+
+                }
+                reloadForums(res.data.data.reverse());
+                document.getElementById('modalForumListe').style.display = 'block'
+                document.getElementById('forumTitle').value = ''
+                document.getElementById('forumContent').innerHTML = 'Que pensez-vous ?'
+                cancelImageInsertion()
+              } else {
+                if (document.getElementById('modalLogin')) {
+                  document.getElementById('modalLogin').style.display = 'block'
+                }
+                if (state == 'public') {
+                  document.getElementById("forumPublicSpinner").style.display = "none";
+                  document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                } else if (state == draft) {
+                  document.getElementById("forumDraftSpinner").style.display = "none";
+                }
+              }
+
+            })
+            .catch((e) => {
+              if (state == 'public') {
+                document.getElementById("forumPublicSpinner").style.display = "none";
+                document.getElementById("forumPublicIcon").style.display = "inline-draft";
+              } else if (state == draft) {
+                document.getElementById("forumDraftSpinner").style.display = "none";
+              }
+              if (e.response && e.response.status === 419) {
+                console.error('CSRF token missing or incorrect');
+              } else {
+                console.error('Request failed:', error);
+              }
+            });
+        }
       } catch (error) {
-        document.getElementById('forumPublicSpinner').style.display = 'inline-block';
-        document.getElementById('forumPublicIcon').style.display = 'none';
+        if (state == 'public') {
+          document.getElementById("forumPublicSpinner").style.display = "none";
+          document.getElementById("forumPublicIcon").style.display = "inline-draft";
+        } else if (state == draft) {
+          document.getElementById("forumDraftSpinner").style.display = "none";
+        }
 
         if (error.response && error.response.status === 419) {
           console.error('CSRF token missing or incorrect');
@@ -116,28 +216,102 @@ function createForum() {
         }
       }
 
-      await axios
-        .post(source + "/_forum", data)
-        .then((res) => {
-          document.getElementById("forumPublicSpinner").style.display =
-            "inline-block";
-          document.getElementById("forumPublicIcon").style.display = "none";
-          closeModalPost();
-          reloadPost(res.data.data);
-        })
-        .catch((e) => {
-          document.getElementById("forumPublicSpinner").style.display =
-            "inline-block";
-          document.getElementById("forumPublicIcon").style.display = "none";
-          if (e.response && e.response.status === 419) {
-            console.error('CSRF token missing or incorrect');
-          } else {
-            console.error('Request failed:', error);
-          }
-        });
-
     }
   };
+
+  const supprimer = async () => {
+    const xcode = localStorage.getItem("x-code");
+    if (forumInfos.id) {
+      document.getElementById("modalWarning").style.display = "block";
+      document.getElementById("textWarning").innerText =
+        "Voulez vous vraiment supprimer ce Forum ...";
+
+      const deleteHandler = async () => {
+        document.getElementById("confirmSpinner").style.display =
+          "inline-block";
+        await setCSRFToken();
+        await axios
+          .delete(source + "/_forum/" + forumInfos.id + '?xcode=' + xcode)
+          .then((res) => {
+            if (res.data.logedin) {
+              document.getElementById("confirmSpinner").style.display = "none";
+              document.getElementById("modalWarning").style.display = "none";
+
+              document
+                .getElementById("confirmWarning")
+                .removeEventListener("click", deleteHandler);
+              document
+                .getElementById("cancelWarning")
+                .removeEventListener("click", cancelHandler);
+
+              reloadForums(res.data.data.reverse());
+              document.getElementById('modalForumListe').style.display = 'block'
+              document.getElementById('forumTitle').value = ''
+              document.getElementById('forumContent').innerHTML = 'Que pensez-vous ?'
+              cancelImageInsertion()
+              document.getElementById('deleteButton').style.display = 'none';
+            } else {
+              if (document.getElementById('modalLogin')) {
+                document.getElementById('modalLogin').style.display = 'block'
+              }
+              document.getElementById("confirmSpinner").style.display = "none";
+              document.getElementById("modalWarning").style.display = "none";
+            }
+
+          })
+          .catch((e) => {
+            console.error("failure", e);
+          });
+      };
+      const cancelHandler = async () => {
+        document.getElementById("modalWarning").style.display = "none";
+
+        document
+          .getElementById("confirmWarning")
+          .removeEventListener("click", deleteHandler);
+        document
+          .getElementById("cancelWarning")
+          .removeEventListener("click", cancelHandler);
+      };
+
+      document
+        .getElementById("confirmWarning")
+        .addEventListener("click", deleteHandler);
+      document
+        .getElementById("cancelWarning")
+        .addEventListener("click", cancelHandler);
+    } else {
+      document.getElementById('modalShowTopic').style.display = 'none';
+      document.getElementById('topicTitle').value = '';
+      document.getElementById('topicContent').innerHTML = '';
+    }
+  }
+
+  const cancelImageInsertion = () => {
+    forumInfos.image = null;
+    forumInfos.type = "text";
+
+    document.getElementById("showImage").src = '';
+    document.getElementById("showImageWrapper").style.display = "none";
+    document.getElementById("inputImage").style.display = "flex";
+  }
+
+  const showThisForum = (data) => {
+    forumInfos.title = data.title
+    forumInfos.content = data.content
+    forumInfos.id = data.id
+
+    document.getElementById('forumTitle').value = data.title
+    document.getElementById('forumContent').innerHTML = data.content
+
+    if (data.type == 'image') {
+      document.getElementById("showImage").src = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + data.link;
+      document.getElementById("showImageWrapper").style.display = "block";
+      document.getElementById("inputImage").style.display = "none";
+    }
+
+    document.getElementById('deleteButton').style.display = 'block';
+  }
 
   useEffect(() => {
 
@@ -148,7 +322,7 @@ function createForum() {
         .then((res) => {
           if (res.data.logedin) {
             document.getElementById('forumCore').style.display = 'block';
-            reloadForums(res.data.data)
+            reloadForums(res.data.data.reverse())
           } else {
             if (document.getElementById('modalLogin')) {
               document.getElementById('modalLogin').style.display = 'block'
@@ -237,7 +411,7 @@ function createForum() {
             minWidth: "100%",
             marginTop: 16,
           }}
-        >Qu'est-ce que vous pense ?</div>
+        >Que pensez-vous?</div>
         <div className="w3-container" style={{ padding: 0 }}>
           <div
             id="inputImage"
@@ -267,6 +441,7 @@ function createForum() {
               />
               <div className="w3-display-topright" style={{ padding: 4 }}>
                 <div
+                  onClick={cancelImageInsertion}
                   className="w3-circle w3-card w3-white w3-flex w3-flex-center"
                   style={{ width: 24, height: 24 }}
                 >
@@ -311,6 +486,14 @@ function createForum() {
               style={{ width: 16, height: 16, display: "none" }}
             />
           </button>
+          <button
+            id="deleteButton"
+            onClick={supprimer}
+            className="w3-button w3-border w3-border-red w3-text-red w3-round-xxlarge w3-block w3-flex w3-flex-center"
+            style={{ marginTop: 16, display: 'none' }}
+          >
+            Supprimer le forum
+          </button>
         </div>
       </div>
 
@@ -321,7 +504,7 @@ function createForum() {
           style={{ maxWidth: 420, top: 32 }}
         >
 
-          <div onClick={()=>document.getElementById('modalForumListe').style.display = 'none'} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+          <div onClick={() => document.getElementById('modalForumListe').style.display = 'none'} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
             <FontAwesomeIcon icon={faArrowLeft} />
           </div>
 
