@@ -307,6 +307,7 @@ function createForum() {
     }
 
     document.getElementById('deleteButton').style.display = 'block';
+    document.getElementById('modalForumListe').style.display = 'none';
   }
 
   useEffect(() => {
