@@ -973,9 +973,9 @@ function PostCreate() {
                         />
                     </div>
                     <div style={{ height: '50vh', paddingInline: 12, marginBottom: 16 }} className="w3-overflow-scroll w3-noscrollbar">
-                        {
+                        {/* {
                             postListe
-                        }
+                        } */}
                     </div>
 
                 </div>
