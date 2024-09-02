@@ -64,6 +64,7 @@ function PostCreate() {
             console.error('CSRF token fetch failed:', error);
         }
     }
+
     const save = async (state) => {
 
         postInfo.state = state;
@@ -100,15 +101,101 @@ function PostCreate() {
 
             try {
                 await setCSRFToken();
+                if (forumInfos.id) {
+                    await axios
+                        .patch(source + "/_post/" + forumInfos.id, data)
+                        .then((res) => {
+                            if (res.data.logedin) {
+                                if (state == 'public') {
+                                    document.getElementById("forumPublicSpinner").style.display = "none";
+                                    document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                                } else if (state == 'draft') {
+                                    document.getElementById("forumDraftSpinner").style.display = "none";
 
-                const response = await axios.post(source + '/_post', data);
-                document.getElementById('postPublicSpinner').style.display = 'inline-block';
-                document.getElementById('postPublicIcon').style.display = 'none';
-                closeModalPost();
-                reloadPost(response.data.data);
+                                }
+                                reloadPost(res.data.data.reverse());
+                                document.getElementById('modalForumListe').style.display = 'block'
+                                document.getElementById('forumTitle').value = ''
+                                document.getElementById('forumContent').innerHTML = 'Que pensez-vous ?'
+                                cancelImageInsertion()
+                                document.getElementById('deleteButton').style.display = 'none';
+                            } else {
+                                if (document.getElementById('modalLogin')) {
+                                    document.getElementById('modalLogin').style.display = 'block'
+                                }
+                                if (state == 'public') {
+                                    document.getElementById("forumPublicSpinner").style.display = "none";
+                                    document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                                } else if (state == 'draft') {
+                                    document.getElementById("forumDraftSpinner").style.display = "none";
+                                }
+                            }
+
+                        })
+                        .catch((e) => {
+                            if (state == 'public') {
+                                document.getElementById("forumPublicSpinner").style.display = "none";
+                                document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                            } else if (state == 'draft') {
+                                document.getElementById("forumDraftSpinner").style.display = "none";
+                            }
+                            if (e.response && e.response.status === 419) {
+                                console.error('CSRF token missing or incorrect');
+                            } else {
+                                console.error('Request failed:', error);
+                            }
+                        });
+                } else {
+                    await axios
+                        .post(source + "/_post", data)
+                        .then((res) => {
+                            if (res.data.logedin) {
+                                if (state == 'public') {
+                                    document.getElementById("forumPublicSpinner").style.display = "none";
+                                    document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                                } else if (state == 'draft') {
+                                    document.getElementById("forumDraftSpinner").style.display = "none";
+
+                                }
+                                reloadPost(res.data.data.reverse());
+                                document.getElementById('modalForumListe').style.display = 'block'
+                                document.getElementById('forumTitle').value = ''
+                                document.getElementById('forumContent').innerHTML = 'Que pensez-vous ?'
+                                cancelImageInsertion()
+                            } else {
+                                if (document.getElementById('modalLogin')) {
+                                    document.getElementById('modalLogin').style.display = 'block'
+                                }
+                                if (state == 'public') {
+                                    document.getElementById("forumPublicSpinner").style.display = "none";
+                                    document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                                } else if (state == 'draft') {
+                                    document.getElementById("forumDraftSpinner").style.display = "none";
+                                }
+                            }
+
+                        })
+                        .catch((e) => {
+                            if (state == 'public') {
+                                document.getElementById("forumPublicSpinner").style.display = "none";
+                                document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                            } else if (state == 'draft') {
+                                document.getElementById("forumDraftSpinner").style.display = "none";
+                            }
+                            if (e.response && e.response.status === 419) {
+                                console.error('CSRF token missing or incorrect');
+                            } else {
+                                console.error('Request failed:', error);
+                            }
+                        });
+                }
             } catch (error) {
-                document.getElementById('postPublicSpinner').style.display = 'inline-block';
-                document.getElementById('postPublicIcon').style.display = 'none';
+                if (state == 'public') {
+                    document.getElementById("forumPublicSpinner").style.display = "none";
+                    document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                } else if (state == 'draft') {
+                    document.getElementById("forumDraftSpinner").style.display = "none";
+                }
 
                 if (error.response && error.response.status === 419) {
                     console.error('CSRF token missing or incorrect');
@@ -116,26 +203,6 @@ function PostCreate() {
                     console.error('Request failed:', error);
                 }
             }
-
-            await axios
-                .post(source + "/_post", data)
-                .then((res) => {
-                    document.getElementById("postPublicSpinner").style.display =
-                        "inline-block";
-                    document.getElementById("postPublicIcon").style.display = "none";
-                    closeModalPost();
-                    reloadPost(res.data.data);
-                })
-                .catch((e) => {
-                    document.getElementById("postPublicSpinner").style.display =
-                        "inline-block";
-                    document.getElementById("postPublicIcon").style.display = "none";
-                    if (e.response && e.response.status === 419) {
-                        console.error('CSRF token missing or incorrect');
-                    } else {
-                        console.error('Request failed:', error);
-                    }
-                });
 
         }
     };
@@ -297,139 +364,92 @@ function PostCreate() {
         document.getElementById("modalPost").style.display = "block";
     };
 
-    const deletePost = async () => {
-        document.getElementById("postDeleteSpinner").style.display =
-            "inline-block";
-        await axios
-            .delete(
-                "/_post/" +
-                postInfo.id +
-                "?q=" +
-                postInfo.owner_id +
-                "&c=" +
-                postInfo.category
-            )
-            .then((res) => {
-                document.getElementById("postDeleteSpinner").style.display =
-                    "none";
+    const supprimer = async () => {
+        const xcode = localStorage.getItem("x-code");
+        if (forumInfos.id) {
+            document.getElementById("modalWarning").style.display = "block";
+            document.getElementById("textWarning").innerText =
+                "Voulez vous vraiment supprimer ce Forum ...";
 
-                closeModalPost();
-                reloadPost(res.data.data.reverse());
-            })
-            .catch((e) => {
-                console.error("failure", e);
-                window.alert("There is a probleme, your post is not deleted!!");
-                document.getElementById("postDeleteSpinner").style.display =
-                    "none";
-            });
-    };
-
-    const savePost = async () => {
-        if (postInfo.title.length > 0) {
-            if (postInfo.id == null) {
-                document.getElementById("postSaveSpinner").style.display =
+            const deleteHandler = async () => {
+                document.getElementById("confirmSpinner").style.display =
                     "inline-block";
-                var data;
-                if (postInfo.media) {
-                    data = postInfo.media;
-
-                    data.append("title", postInfo.title);
-                    data.append("slug", postInfo.slug);
-                    data.append("type", postInfo.type);
-                    data.append("owner_id", postInfo.owner_id);
-                    data.append("category", postInfo.category);
-                    data.append("info", JSON.stringify(postInfo.info));
-                } else {
-                    data = {
-                        title: postInfo.title,
-                        slug: postInfo.slug,
-                        type: postInfo.type,
-                        owner_id: postInfo.owner_id,
-                        category: postInfo.category,
-                        info: JSON.stringify(postInfo.info),
-                        videoUrl: postInfo.videoUrl,
-                    };
-                }
-
+                await setCSRFToken();
                 await axios
-                    .post("/_post", data)
+                    .delete(source + "/_post/" + forumInfos.id + '?xcode=' + xcode)
                     .then((res) => {
-                        document.getElementById(
-                            "postSaveSpinner"
-                        ).style.display = "none";
+                        if (res.data.logedin) {
+                            document.getElementById("confirmSpinner").style.display = "none";
+                            document.getElementById("modalWarning").style.display = "none";
 
-                        closeModalPost();
-                        reloadPost(res.data.data);
+                            document
+                                .getElementById("confirmWarning")
+                                .removeEventListener("click", deleteHandler);
+                            document
+                                .getElementById("cancelWarning")
+                                .removeEventListener("click", cancelHandler);
+
+                            reloadForums(res.data.data.reverse());
+                            document.getElementById('modalForumListe').style.display = 'block'
+                            document.getElementById('forumTitle').value = ''
+                            document.getElementById('forumContent').innerHTML = 'Que pensez-vous ?'
+                            cancelImageInsertion()
+                            document.getElementById('deleteButton').style.display = 'none';
+                        } else {
+                            if (document.getElementById('modalLogin')) {
+                                document.getElementById('modalLogin').style.display = 'block'
+                            }
+                            document.getElementById("confirmSpinner").style.display = "none";
+                            document.getElementById("modalWarning").style.display = "none";
+                        }
+
                     })
                     .catch((e) => {
-                        document.getElementById(
-                            "postSaveSpinner"
-                        ).style.display = "none";
-                        window.alert(
-                            "There is a probleme, your post is not saved!!"
-                        );
                         console.error("failure", e);
                     });
-            } else {
-                document.getElementById("postSaveSpinner").style.display =
-                    "inline-block";
-                var data;
-                if (postInfo.media) {
-                    data = postInfo.media;
+            };
+            const cancelHandler = async () => {
+                document.getElementById("modalWarning").style.display = "none";
 
-                    data.append("id", postInfo.id);
-                    data.append("title", postInfo.title);
-                    data.append("slug", postInfo.slug);
-                    data.append("type", postInfo.type);
-                    data.append("owner_id", postInfo.owner_id);
-                    data.append("category", postInfo.category);
-                    data.append("info", JSON.stringify(postInfo.info));
+                document
+                    .getElementById("confirmWarning")
+                    .removeEventListener("click", deleteHandler);
+                document
+                    .getElementById("cancelWarning")
+                    .removeEventListener("click", cancelHandler);
+            };
 
-                    await axios
-                        .post("/_post", data)
-                        .then((res) => {
-                            document.getElementById(
-                                "postSaveSpinner"
-                            ).style.display = "none";
-
-                            closeModalPost();
-                            reloadPost(res.data.data.reverse());
-                        })
-                        .catch((e) => {
-                            console.error("failure", e);
-                            document.getElementById(
-                                "postSaveSpinner"
-                            ).style.display = "none";
-                            window.alert(
-                                "There is a probleme, your post is not updated!!"
-                            );
-                        });
-                } else {
-                    postInfo;
-
-                    await axios
-                        .patch("/_post/" + postInfo.id, postInfo)
-                        .then((res) => {
-                            document.getElementById(
-                                "postSaveSpinner"
-                            ).style.display = "none";
-
-                            closeModalPost();
-                            reloadPost(res.data.data.reverse());
-                        })
-                        .catch((e) => {
-                            console.error("failure", e);
-                            document.getElementById(
-                                "postSaveSpinner"
-                            ).style.display = "none";
-                            window.alert(
-                                "There is a probleme, your post is not updated!!"
-                            );
-                        });
-                }
-            }
+            document
+                .getElementById("confirmWarning")
+                .addEventListener("click", deleteHandler);
+            document
+                .getElementById("cancelWarning")
+                .addEventListener("click", cancelHandler);
+        } else {
+            document.getElementById('modalShowTopic').style.display = 'none';
+            document.getElementById('topicTitle').value = '';
+            document.getElementById('topicContent').innerHTML = '';
         }
-    };
+    }
+
+
+
+    const showThisForum = (data) => {
+        forumInfos.title = data.title
+        forumInfos.content = data.content
+        forumInfos.id = data.id
+
+        document.getElementById('forumTitle').value = data.title
+        document.getElementById('forumContent').innerHTML = data.content
+
+        if (data.type == 'image') {
+            document.getElementById("showImage").src = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + data.link;
+            document.getElementById("showImageWrapper").style.display = "block";
+            document.getElementById("inputImage").style.display = "none";
+        }
+
+        document.getElementById('deleteButton').style.display = 'block';
+    }
 
     const closeModalCategory = () => {
         singleCategoryInfo.name = ''
@@ -575,6 +595,7 @@ function PostCreate() {
         document.getElementById("audioSection").style.display = "none";
         document.getElementById("videoEmbed").style.display = "flex";
     }
+
     const closeModalVideoPreview = () => {
         document.getElementById("videoSource").src = "";
         document.getElementById("modalVideoPreview").style.display = "none";
@@ -917,7 +938,7 @@ function PostCreate() {
                     >
                         <input
                             id="postVideo"
-                            onChange={(e) => postInfo.videoUrl = e.target.value }
+                            onChange={(e) => postInfo.videoUrl = e.target.value}
                             className="w3-border-0 w3-flex-1 w3-block w3-input w3-light-grey w3-round-xxlarge"
                             type="text"
                             placeholder="Lien video"
@@ -947,15 +968,15 @@ function PostCreate() {
                         onClick={() => save("pubic")}
                         className="w3-button w3-black w3-round-xxlarge w3-block w3-flex w3-flex-center"
                     >
-                        Publier votre post{" "}
+                        Publier votre forum{" "}
                         <FontAwesomeIcon
-                            id="postPublicIcon"
+                            id="forumPublicIcon"
                             className="w3-margin-left"
                             icon={faArrowRight}
                             style={{ width: 16, height: 16 }}
                         />
                         <FontAwesomeIcon
-                            id="postPublicSpinner"
+                            id="forumPublicSpinner"
                             className="w3-spin w3-margin-left"
                             icon={faSpinner}
                             style={{ width: 16, height: 16, display: "none" }}
@@ -968,11 +989,19 @@ function PostCreate() {
                     >
                         Enregistrer comme brouillon
                         <FontAwesomeIcon
-                            id="postDraftSpinner"
+                            id="forumDraftSpinner"
                             className="w3-spin w3-margin-left"
                             icon={faSpinner}
                             style={{ width: 16, height: 16, display: "none" }}
                         />
+                    </button>
+                    <button
+                        id="deleteButton"
+                        onClick={supprimer}
+                        className="w3-button w3-border w3-border-red w3-text-red w3-round-xxlarge w3-block w3-flex w3-flex-center"
+                        style={{ marginTop: 16, display: 'none' }}
+                    >
+                        Supprimer le forum
                     </button>
                 </div>
             </div>
@@ -1022,7 +1051,7 @@ function PostCreate() {
                         <FontAwesomeIcon icon={faTimes} />
                     </div>
 
-                    <div style={{ height: 320,marginTop:16 }}>
+                    <div style={{ height: 320, marginTop: 16 }}>
                         <iframe
                             id="videoSource"
                             className="w3-block"

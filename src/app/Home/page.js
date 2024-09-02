@@ -574,24 +574,26 @@ export default function Home(props) {
     setdisplayDesignations(glitchDesignations);
   };
 
-  const openDropdown = (ID, EL) => {
+  const openDropdown = (ID, IDW) => {
     const allDropContent = document.getElementsByClassName('w3-dropdown-content')
+    const dropButton = document.getElementsByClassName('dropButton')
     for (let i = 0; i < allDropContent.length; i++) {
-      if (allDropContent[i].id != ID) {
-        allDropContent[i].className = allDropContent[i].className.replace(" w3-show", "").replace(" w3-black", " w3-white");
+      if (allDropContent[i].id != ID) {        
+        allDropContent[i].className = allDropContent[i].className.replace(" w3-show", "");
+        dropButton[i].className = dropButton[i].className.replace("w3-black", "w3-white");
       }
     }
     if (document.getElementById(ID)) {
       var x = document.getElementById(ID);
       if (x.className.indexOf("w3-show") == -1) {
-        x.className += " w3-show";
-        if (EL) {
-          EL.target.className = EL.target.className.replace("w3-white", "w3-black")
+        x.className += " w3-show";        
+        if (document.getElementById(ID+'Wrapper')) {
+          document.getElementById(ID+'Wrapper').className = document.getElementById(ID+'Wrapper').className.replace("w3-white", "w3-black")
         }
       } else {
         x.className = x.className.replace(" w3-show", "");
-        if (EL) {
-          EL.target.className = EL.target.className.replace("w3-black", "w3-white")
+        if (document.getElementById(ID+'Wrapper')) {
+          document.getElementById(ID+'Wrapper').className = document.getElementById(ID+'Wrapper').className.replace("w3-black", "w3-white")
         }
       }
     }
@@ -1284,8 +1286,9 @@ export default function Home(props) {
             className="w3-dropdown-click w3-hover-white"
           >
             <div
-              onClick={(e) => openDropdown("setting", e)}
-              className="w3-flex w3-flex-center w3-card w3-round w3-white"
+              id="settingWrapper"
+              onClick={(e) => openDropdown("setting")}
+              className="dropButton w3-flex w3-flex-center w3-card w3-round w3-white"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
@@ -1477,8 +1480,9 @@ export default function Home(props) {
                 </div>
               </div>
               <div
-                onClick={(e) => openDropdown("contentMaker", e)}
-                className="w3-flex w3-flex-center w3-overflow w3-card w3-round w3-white"
+                id="contentMakerWrapper"
+                onClick={(e) => openDropdown("contentMaker")}
+                className="dropButton w3-flex w3-flex-center w3-overflow w3-card w3-round w3-white"
                 style={{ width: 36, height: 36, marginInline: "auto" }}
               >
                 <FontAwesomeIcon
