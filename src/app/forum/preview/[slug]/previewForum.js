@@ -33,7 +33,7 @@ function previewForum({ forum }) {
                         className="w3-light-grey post-image"
                     />
                 }
-                <div className='w3-big w3-large'>
+                <div className='w3-big w3-large w3-margin-top'>
                     {forum.title}
                 </div>
                 <div style={{marginBlock:16}}>
