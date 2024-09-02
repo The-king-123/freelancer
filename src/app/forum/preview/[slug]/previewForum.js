@@ -30,7 +30,7 @@ function previewForum({ forum }) {
                             objectPosition: "center",
                             objectFit: "cover",
                         }}
-                        className="w3-light-grey post-image"
+                        className="w3-light-grey post-image w3-round w3-overflow"
                     />
                 }
                 <div className='w3-big w3-large w3-margin-top'>
