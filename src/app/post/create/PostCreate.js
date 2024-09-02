@@ -4,6 +4,7 @@ import { console_source as source } from "@/app/data";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+    faArrowLeft,
     faArrowRight,
     faEye,
     faImage,
@@ -54,6 +55,8 @@ function PostCreate() {
         key: "",
     });
 
+    const [forumListe, setforumListe] = useState('')
+
     async function setCSRFToken() {
         try {
             // Fetch CSRF token from the server
@@ -66,6 +69,8 @@ function PostCreate() {
     }
 
     const save = async (state) => {
+
+        const xcode = localStorage.getItem("x-code");
 
         postInfo.state = state;
         postInfo.slug = slugify(postInfo.title, { lower: true });
@@ -101,9 +106,9 @@ function PostCreate() {
 
             try {
                 await setCSRFToken();
-                if (forumInfos.id) {
+                if (postInfo.id) {
                     await axios
-                        .patch(source + "/_post/" + forumInfos.id, data)
+                        .patch(source + "/_post/" + forumInfos.id + "?xcode" + xcode, data)
                         .then((res) => {
                             if (res.data.logedin) {
                                 if (state == 'public') {
@@ -147,7 +152,7 @@ function PostCreate() {
                         });
                 } else {
                     await axios
-                        .post(source + "/_post", data)
+                        .post(source + "/_post?xcode" + xcode, data)
                         .then((res) => {
                             if (res.data.logedin) {
                                 if (state == 'public') {
@@ -217,12 +222,6 @@ function PostCreate() {
         },
     });
 
-    const [step, setstep] = useState({ at: 1, editID: null, this: null });
-
-    const [displayPost, setdisplayPost] = useState("");
-
-    const [displayStep, setdisplayStep] = useState("");
-
     const getUrl = (embed) => {
         const start = embed.indexOf('src="') + 5;
         const end = embed.indexOf('"', start);
@@ -231,138 +230,28 @@ function PostCreate() {
     };
 
     const reloadPost = (data) => {
-        const glitchPost = data.map((post, key) => (
-            <div key={key} className="w3-half" style={{ padding: 8 }}>
-                <div
-                    onClick={() => displayThisPost(post)}
-                    className="w3-flex-column w3-overflow w3-border w3-round w3-pointer"
-                    style={{ height: 320 }}
-                >
-                    <div
-                        className="w3-nowrap w3-overflow w3-light-grey w3-big w3-border-bottom"
-                        style={{ paddingBlock: 8, paddingInline: 16 }}
-                    >
-                        {parse(post.title)}
+        var glitchForum
+        if (data.length > 0) {
+            glitchPost = data.map((post, key) => (
+                <div key={key} style={{ padding: 4 }}>
+                    <div onClick={() => showThisPost(post)} className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
+                        <div>{post.title}</div>
+                        <div className="w3-small w3-text-grey">{forum.state == 'public' ? 'Publique' : 'Brouillon'}</div>
                     </div>
-                    <div
-                        style={{ height: 81 }}
-                        className="w3-overflow w3-border-bottom"
-                    >
-                        <div
-                            className="w3-overflow w3-nowrap-multiline"
-                            style={{
-                                paddingInline: 16,
-                            }}
-                        >
-                            {parse(JSON.parse(post.info).description)}
-                        </div>
+                </div>
+            ))
+        } else {
+            //
+            <div style={{ padding: 8 }}>
+                <div className="w3-border w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
+                    <div style={{ paddingInline: 16 }}>
+                        Vous n'avez aucun forum pour le moment...
                     </div>
-                    {(post.type == "image" || post.type == "image/audio") && (
-                        <img
-                            alt={"image"}
-                            height={200}
-                            src={
-                                "/images.php?w=320&h=320&zlonk=2733&zlink=" +
-                                post.link
-                            }
-                            style={{
-                                objectPosition: "center",
-                                objectFit: "cover",
-                            }}
-                            className="w3-overflow w3-block w3-light-grey"
-                        />
-                    )}
-                    {post.type == "video" && (
-                        <iframe
-                            className="w3-block"
-                            height={200}
-                            src={getUrl(post.link)}
-                            title={"Title"}
-                            frameBorder={0}
-                            allowFullScreen
-                        ></iframe>
-                    )}
                 </div>
             </div>
-        ));
-        setdisplayPost(glitchPost);
-    };
-
-    const displayThisPost = (data) => {
-        postInfo.title = data.title;
-        postInfo.id = data.id;
-        postInfo.link = data.link;
-        postInfo.type = data.type;
-        postInfo.slug = data.slug;
-        postInfo.media = null;
-        postInfo.info.description = JSON.parse(data.info).description;
-
-        document.getElementById("postTitle").value = parse(data.title);
-        document.getElementById("postDescription").innerHTML = JSON.parse(
-            data.info
-        ).description;
-
-        if (data.type == "image" || data.type == "image/audio") {
-            document.getElementById("imageShower").style.backgroundImage =
-                "url(/images/post/" + data.link + ")";
-            document.getElementById("imageIcon").style.display = "none";
-
-            document.getElementById("videoLoader").pause();
-            document.getElementById("videoSource").src = "";
-            document.getElementById("videoLoader").style.display = "none";
-            document.getElementById("videoIcon").style.display = "inline-block";
-
-            document.getElementById("postMediaVideo").className =
-                "w3-right w3-button w3-grey w3-round w3-flex-1";
-            document.getElementById("postMediaImage").className =
-                "w3-right w3-button w3-hover-black w3-black w3-round w3-flex-1";
-
-            if (data.type == "image/audio") {
-                document.getElementById("audioBox").src =
-                    "/audios/post/" + data.link;
-                document.getElementById("audioBox").load();
-                document.getElementById("pauseRecordIcon").style.display =
-                    "none";
-                document.getElementById("playRecordIcon").style.display =
-                    "inline-block";
-                document.getElementById("noRecordIcon").style.display = "none";
-
-                document.getElementById("startRecord").className =
-                    "w3-text-black w3-margin-left w3-flex w3-white w3-border w3-border-black w3-circle w3-flex-center";
-
-                document.getElementById("startRecord").disabled = false;
-                document.getElementById("stopRecord").disabled = true;
-
-                document.getElementById("recordingState").innerText =
-                    "Voice recorded";
-                document.getElementById("playRecord").className =
-                    "w3-button w3-hover-text-white w3-black w3-hover-black w3-border w3-border-black w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
-            }
-
-            postInfo.type = data.type;
-        } else if (data.type == "video") {
-            postInfo.videoUrl = data.link;
-
-            document.getElementById("videoSource").src = getUrl(data.link);
-            document.getElementById("videoSource").style.display = "block";
-            document.getElementById("videoIcon").style.display = "none";
-
-            document.getElementById("postVideo").value = data.link;
-
-            document.getElementById("imageShower").style.backgroundImage = "";
-            document.getElementById("imageIcon").style.display = "inline-block";
-
-            document.getElementById("postMediaVideo").className =
-                "w3-right w3-button w3-hover-black w3-black w3-round w3-flex-1";
-            document.getElementById("postMediaImage").className =
-                "w3-right w3-button w3-grey w3-round w3-flex-1";
-            postInfo.type = data.type;
         }
-
-        document.getElementById("deletePostButton").style.display =
-            "inline-block";
-        document.getElementById("modalPost").style.display = "block";
-    };
+        setforumListe(glitchPost)
+    }
 
     const supprimer = async () => {
         const xcode = localStorage.getItem("x-code");
@@ -432,9 +321,7 @@ function PostCreate() {
         }
     }
 
-
-
-    const showThisForum = (data) => {
+    const showThisPost = (data) => {
         forumInfos.title = data.title
         forumInfos.content = data.content
         forumInfos.id = data.id
@@ -1065,6 +952,35 @@ function PostCreate() {
                 </div>
             </div>
             {/* end modal video preview */}
+
+            {/* modal forum liste */}
+            <div id="modalPostListe" className="w3-modal">
+                <div
+                    className="w3-modal-content w3-card w3-round w3-overflow"
+                    style={{ maxWidth: 420, top: 32 }}
+                >
+
+                    <div onClick={() => document.getElementById('modalPostListe').style.display = 'none'} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+                        <FontAwesomeIcon icon={faArrowLeft} />
+                    </div>
+
+                    <div style={{ paddingInline: 16, paddingBlock: 16 }}>
+                        <input
+                            id="searchInput"
+                            className="input w3-border-0 w3-input w3-border w3-round-xxlarge"
+                            placeholder="Chercher un forum"
+                            type="text"
+                        />
+                    </div>
+                    <div style={{ height: '50vh', paddingInline: 12, marginBottom: 16 }} className="w3-overflow-scroll w3-noscrollbar">
+                        {
+                            postListe
+                        }
+                    </div>
+
+                </div>
+            </div>
+            {/* end modal forum liste */}
         </div>
     );
 }

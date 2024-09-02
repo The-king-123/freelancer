@@ -23,14 +23,12 @@ function createForum() {
 
   const forumInfos = {
     id: null,
-    ownerId: null,
     title: "",
     content: "",
     image: null,
     type: "text",
     state: "",
     slug: "",
-    xcode: null,
   };
 
   const [userInfo, setuserInfo] = useState({
@@ -96,20 +94,16 @@ function createForum() {
 
         data.append("title", forumInfos.title);
         data.append("slug", forumInfos.slug);
-        data.append("ownerId", forumInfos.ownerId);
         data.append("content", forumInfos.content);
         data.append("type", forumInfos.type);
         data.append("state", forumInfos.state);
-        data.append("xcode", forumInfos.xcode);
       } else {
         data = {
-          ownerId: forumInfos.ownerId,
           title: forumInfos.title,
           content: forumInfos.content,
           type: forumInfos.type,
           slug: forumInfos.slug,
           state: forumInfos.state,
-          xcode: forumInfos.xcode,
         };
       }
 
@@ -512,7 +506,7 @@ function createForum() {
 
           <div style={{ paddingInline: 16, paddingBlock: 16 }}>
             <input
-              id="categoryTitle"
+              id="searchInput"
               className="input w3-border-0 w3-input w3-border w3-round-xxlarge"
               placeholder="Chercher un forum"
               type="text"
