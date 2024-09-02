@@ -21,7 +21,7 @@ function createForum() {
 
   const [forumListe, setforumListe] = useState('')
 
-  const forumInfos = {
+  const [forumInfos, setforumInfos] = useState({
     id: null,
     title: "",
     content: "",
@@ -29,7 +29,7 @@ function createForum() {
     type: "text",
     state: "",
     slug: "",
-  };
+  });
 
   const [userInfo, setuserInfo] = useState({
     id: null,
@@ -55,7 +55,7 @@ function createForum() {
         <div key={key} style={{ padding: 4 }}>
           <div onClick={() => showThisForum(forum)} className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
             <div>{forum.title}</div>
-            <div className="w3-small w3-text-grey">{forum.state == 'public' ? 'Publique' : 'Brouillon'}</div>
+            <div className="w3-small w3-text-grey">{forum.state == 'public' ? 'Publique' : 'Brouillon'}{}</div>
           </div>
         </div>
       ))
@@ -72,7 +72,34 @@ function createForum() {
     setforumListe(glitchForum)
   }
 
+  const showThisForum = (data) => {
+
+    console.log(data);
+    if (data.response == "_") {
+      forumInfos.title = data.title
+      forumInfos.content = data.content
+      forumInfos.id = data.id
+
+      document.getElementById('forumTitle').value = data.title
+      document.getElementById('forumContent').innerHTML = data.content
+
+      if (data.type == 'image') {
+        document.getElementById("showImage").src = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + data.link;
+        document.getElementById("showImageWrapper").style.display = "block";
+        document.getElementById("inputImage").style.display = "none";
+      }
+
+      document.getElementById('deleteButton').style.display = 'block';
+      document.getElementById('modalForumListe').style.display = 'none';
+    } else {
+      window.location = '/forum/preview/'+data.slug
+    }
+
+
+  }
+
   const save = async (state) => {
+    console.log(forumInfos);
 
     const xcode = localStorage.getItem("x-code");
 
@@ -292,23 +319,7 @@ function createForum() {
     document.getElementById("inputImage").style.display = "flex";
   }
 
-  const showThisForum = (data) => {
-    forumInfos.title = data.title
-    forumInfos.content = data.content
-    forumInfos.id = data.id
 
-    document.getElementById('forumTitle').value = data.title
-    document.getElementById('forumContent').innerHTML = data.content
-
-    if (data.type == 'image') {
-      document.getElementById("showImage").src = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + data.link;
-      document.getElementById("showImageWrapper").style.display = "block";
-      document.getElementById("inputImage").style.display = "none";
-    }
-
-    document.getElementById('deleteButton').style.display = 'block';
-    document.getElementById('modalForumListe').style.display = 'none';
-  }
 
   useEffect(() => {
 
@@ -396,7 +407,7 @@ function createForum() {
           onChange={(e) => (forumInfos.title = e.target.value)}
           className="w3-input w3-border-0 w3-light-grey w3-round"
           type="text"
-          maxLength={100}
+          maxLength={200}
           placeholder="Titre"
         />
         <div

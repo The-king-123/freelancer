@@ -673,7 +673,7 @@ function PostCreate() {
                     onChange={(e) => (postInfo.title = e.target.value)}
                     className="w3-input w3-border-0 w3-light-grey"
                     type="text"
-                    maxLength={100}
+                    maxLength={200}
                     style={{ marginTop: 16 }}
                     placeholder="Titre"
                 />
