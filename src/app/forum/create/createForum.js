@@ -76,6 +76,8 @@ function createForum() {
 
   const save = async (state) => {
 
+    const xcode = localStorage.getItem("x-code");
+
     forumInfos.state = state;
     forumInfos.slug = slugify(forumInfos.title, { lower: true });
 
@@ -115,7 +117,7 @@ function createForum() {
         await setCSRFToken();
         if (forumInfos.id) {
           await axios
-            .patch(source + "/_forum/" + forumInfos.id, data)
+            .patch(source + "/_forum/" + forumInfos.id + "?xcode=" + xcode, data)
             .then((res) => {
               if (res.data.logedin) {
                 if (state == 'public') {
@@ -159,7 +161,7 @@ function createForum() {
             });
         } else {
           await axios
-            .post(source + "/_forum", data)
+            .post(source + "/_forum?xcode=" + xcode, data)
             .then((res) => {
               if (res.data.logedin) {
                 if (state == 'public') {
