@@ -23,7 +23,7 @@ function previewForum({ forum }) {
                         width={520}
                         src={
                             source +
-                            "/images.php?w=720&h=720&zlonk=2733&zlink=" +
+                            "/images.php?w=720&h=720&zlonk=4733&zlink=" +
                             forum.link
                         }
                         style={{
