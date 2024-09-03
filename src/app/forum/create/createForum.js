@@ -30,7 +30,7 @@ function createForum() {
     type: "text",
     state: "",
     slug: "",
-    action_key: "",
+    action_key: "update",
   });
 
   const [userInfo, setuserInfo] = useState({
@@ -123,7 +123,7 @@ function createForum() {
         data.append("content", forumInfos.content);
         data.append("type", forumInfos.type);
         data.append("state", forumInfos.state);
-        data.append("action_key",generateRandomString())
+        data.append("action",forumInfos.action_key)
       } else {
         data = {
           title: forumInfos.title,
@@ -131,7 +131,7 @@ function createForum() {
           type: forumInfos.type,
           slug: forumInfos.slug,
           state: forumInfos.state,
-          action_key: generateRandomString(),
+          action: forumInfos.action_key,
         };
       }
 
@@ -318,20 +318,6 @@ function createForum() {
     document.getElementById("showImage").src = '';
     document.getElementById("showImageWrapper").style.display = "none";
     document.getElementById("inputImage").style.display = "flex";
-  }
-
-  const generateRandomString = () => {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    const length = 12;
-    let result = "";
-
-    for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-
-    result = result.substring(0, 2) + 'X' + result.substring(3, 8) + 'T' + result.substring(9);
-
-    return result;
   }
 
   useEffect(() => {
