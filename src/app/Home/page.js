@@ -1315,15 +1315,13 @@ export default function Home(props) {
                 />
               </div>
               {/* / arrow marker / */}
-              <div
-                className="w3-bar-item w3-button"
-              >
+              <Link className="w3-bar-item w3-button" href={'/profile'}>
                 <FontAwesomeIcon
                   className="w3-margin-right"
                   icon={faUser}
                 />
                 Votre profil
-              </div>
+              </Link>
               <Link className="w3-bar-item w3-button" href={'/chatbotmaker'}>
                 <FontAwesomeIcon
                   className="w3-margin-right"
@@ -1331,13 +1329,13 @@ export default function Home(props) {
                 />
                 Gérez votre chatbot
               </Link>
-              <Link className="w3-bar-item w3-button" href={'/settings'}>
+              {/* <Link className="w3-bar-item w3-button" href={'/settings'}>
                 <FontAwesomeIcon
                   className="w3-margin-right"
                   icon={faClock}
                 />
                 Paramètres
-              </Link>
+              </Link> */}
               <Link
                 href={'/security'}
                 className="w3-bar-item w3-button"
