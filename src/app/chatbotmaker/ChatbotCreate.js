@@ -138,7 +138,7 @@ function ChatbotCreate() {
                         document
                             .getElementById("cancelWarning")
                             .removeEventListener("click", cancelHandler);
-
+                        closeModalShowTopic();
                         reloadTopics(res.data.data.reverse());
                     })
                     .catch((e) => {
@@ -190,7 +190,7 @@ function ChatbotCreate() {
                 .get(source + "/_topic?xcode=" + xcode)
                 .then((res) => {
                     if (res.data.logedin) {
-                        reloadTopics(res.data.data)
+                        reloadTopics(res.data.data.reverse())
                         document.getElementById('chatbotCore').style.display = 'block'
                     } else {
                         if (document.getElementById('modalLogin')) {
@@ -281,11 +281,11 @@ function ChatbotCreate() {
                             id="deleteButton"
                             className="w3-flex-1 w3-button w3-round w3-border w3-border-black"
                         >
-                            Supprimer
+                            Supprimer&nbsp;
                             <FontAwesomeIcon
                                 id="deleteTopicSpinner"
                                 style={{ display: "none" }}
-                                className="w3-margin-left w3-spin"
+                                className="w3-spin"
                                 icon={faSpinner}
                             />
                         </button>
@@ -294,11 +294,11 @@ function ChatbotCreate() {
                             id="saveButton"
                             className="w3-flex-1 w3-button w3-round w3-white w3-black w3-margin-left"
                         >
-                            Sauvegarder
+                            Sauvegarder&nbsp;
                             <FontAwesomeIcon
                                 id="saveTopicSpinner"
                                 style={{ display: "none" }}
-                                className="w3-margin-left w3-spin"
+                                className="w3-spin"
                                 icon={faSpinner}
                             />
                         </button>
