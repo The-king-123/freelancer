@@ -84,7 +84,7 @@ function createForum() {
       document.getElementById('forumContent').innerHTML = data.content
 
       if (data.type == 'image') {
-        document.getElementById("showImage").src = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + data.link;
+        document.getElementById("showImage").src = source + "/images.php?w=100&h=100&zlonk=4733&zlink=" + data.link;
         document.getElementById("showImageWrapper").style.display = "block";
         document.getElementById("inputImage").style.display = "none";
       }
