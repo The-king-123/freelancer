@@ -53,7 +53,7 @@ function ChatbotCreate() {
         singleTopicInfo.name = data.name;
         singleTopicInfo.info.description = JSON.parse(data.info).description;
 
-        document.getElementById('topicTitle').innerText = data.name;
+        document.getElementById('topicTitle').innerHTML = data.name;
         document.getElementById('topicContent').innerHTML = JSON.parse(data.info).description;
         document.getElementById('modalShowTopic').style.display = 'block';
     }
