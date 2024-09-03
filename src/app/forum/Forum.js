@@ -7,7 +7,7 @@ import { console_source as source } from "@/app/data";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function Forum() {
+export default function Forum(props) {
 
   const [displayForum, setdisplayForum] = useState('')
 
@@ -88,14 +88,19 @@ export default function Forum() {
   }
 
   useEffect(() => {
-    axios
-      .get(source + "/_forum/default")
-      .then((res) => {        
-        reloadForums(res.data.data);
-      })
-      .catch((e) => {
-        console.error("failure", e);
-      });
+    if (props.forums) {
+      reloadForums(props.forums)
+    } else {
+      axios
+        .get(source + "/_forum/default")
+        .then((res) => {
+          reloadForums(res.data.data);
+        })
+        .catch((e) => {
+          console.error("failure", e);
+        });
+    }
+
 
   }, [])
 
