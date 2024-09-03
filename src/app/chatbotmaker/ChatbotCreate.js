@@ -64,6 +64,7 @@ function ChatbotCreate() {
         singleTopicInfo.info.description = '';
 
         document.getElementById('topicTitleModal').innerText = '';
+        document.getElementById('topicTitle').value = '';
         document.getElementById('topicContent').innerHTML = '';
         document.getElementById('modalShowTopic').style.display = 'none';
     };
