@@ -18,7 +18,7 @@ import slugify from "slugify";
 function createForum() {
   axios.defaults.withCredentials = true;
 
-   const [inputImage, setinputImage] = useState(null)
+  const [inputImage, setinputImage] = useState(null)
 
   const [forumListe, setforumListe] = useState('')
 
@@ -30,6 +30,7 @@ function createForum() {
     type: "text",
     state: "",
     slug: "",
+    action_key: "",
   });
 
   const [userInfo, setuserInfo] = useState({
@@ -56,7 +57,7 @@ function createForum() {
         <div key={key} style={{ padding: 4 }}>
           <div onClick={() => showThisForum(forum)} className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
             <div>{forum.title}</div>
-            <div className="w3-small w3-text-grey">{forum.state == 'public' ? 'Publique' : 'Brouillon'}{JSON.parse(forum.response).length>0 ? " - " + JSON.parse(forum.response).length + " Commentaire" + (JSON.parse(forum.response).length==1?'':'s'):''}</div>
+            <div className="w3-small w3-text-grey">{forum.state == 'public' ? 'Publique' : 'Brouillon'}{JSON.parse(forum.response).length > 0 ? " - " + JSON.parse(forum.response).length + " Commentaire" + (JSON.parse(forum.response).length == 1 ? '' : 's') : ''}</div>
           </div>
         </div>
       ))
@@ -75,7 +76,7 @@ function createForum() {
 
   const showThisForum = (data) => {
 
-    if (JSON.parse(data.response).length<=0) {
+    if (JSON.parse(data.response).length <= 0) {
       forumInfos.title = data.title
       forumInfos.content = data.content
       forumInfos.id = data.id
@@ -84,7 +85,7 @@ function createForum() {
       document.getElementById('forumContent').innerHTML = data.content
 
       if (data.type == 'image') {
-        document.getElementById("showImage").src = source + "/images.php?w=100&h=100&zlonk=4733&zlink=" + data.link;
+        document.getElementById("showImage").src = source + "/images.php?w=120&h=120&zlonk=4733&zlink=" + data.link;
         document.getElementById("showImageWrapper").style.display = "block";
         document.getElementById("inputImage").style.display = "none";
       }
@@ -92,13 +93,12 @@ function createForum() {
       document.getElementById('deleteButton').style.display = 'block';
       document.getElementById('modalForumListe').style.display = 'none';
     } else {
-      window.location = '/forum/preview/'+data.slug
+      window.location = '/forum/preview/' + data.slug
     }
 
   }
 
   const save = async (state) => {
-    console.log(forumInfos);
 
     const xcode = localStorage.getItem("x-code");
 
@@ -123,6 +123,7 @@ function createForum() {
         data.append("content", forumInfos.content);
         data.append("type", forumInfos.type);
         data.append("state", forumInfos.state);
+        data.append("action_key",generateRandomString())
       } else {
         data = {
           title: forumInfos.title,
@@ -130,6 +131,7 @@ function createForum() {
           type: forumInfos.type,
           slug: forumInfos.slug,
           state: forumInfos.state,
+          action_key: generateRandomString(),
         };
       }
 
@@ -318,7 +320,19 @@ function createForum() {
     document.getElementById("inputImage").style.display = "flex";
   }
 
+  const generateRandomString = () => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const length = 12;
+    let result = "";
 
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    result = result.substring(0, 2) + 'X' + result.substring(3, 8) + 'T' + result.substring(9);
+
+    return result;
+  }
 
   useEffect(() => {
 
