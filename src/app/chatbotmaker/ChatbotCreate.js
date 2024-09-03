@@ -88,12 +88,12 @@ function ChatbotCreate() {
                 await axios
                     .patch(source + "/_topic/" + singleTopicInfo.id + '?xcode=' + xcode, request)
                     .then((res) => {
-                        document.getElementById('saveTopicSpinner').style.display = 'none'
+                        document.getElementById('saveTopicSpinner').style.display = 'none';
                         reloadTopics(res.data.data.reverse());
-                        document.getElementById('modalShowTopic').style.display = 'none'
+                        closeModalShowTopic();
                     })
                     .catch((e) => {
-                        document.getElementById('saveTopicSpinner').style.display = 'none'
+                        document.getElementById('saveTopicSpinner').style.display = 'none';
                         console.error("failure", e);
                     });
             } else {
@@ -101,12 +101,12 @@ function ChatbotCreate() {
                 await axios
                     .post(source + "/_topic?xcode=" + xcode, request)
                     .then((res) => {
-                        document.getElementById('saveTopicSpinner').style.display = 'none'
+                        document.getElementById('saveTopicSpinner').style.display = 'none';
                         reloadTopics(res.data.data.reverse());
-                        document.getElementById('modalShowTopic').style.display = 'none'
+                        closeModalShowTopic();
                     })
                     .catch((e) => {
-                        document.getElementById('saveTopicSpinner').style.display = 'none'
+                        document.getElementById('saveTopicSpinner').style.display = 'none';
                         console.error("failure", e);
                     });
             }
@@ -183,7 +183,7 @@ function ChatbotCreate() {
     }
 
     useEffect(() => {
-        
+
         const xcode = localStorage.getItem("x-code");
 
         if (xcode) {
