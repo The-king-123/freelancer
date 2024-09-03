@@ -17,7 +17,8 @@ import slugify from "slugify";
 
 function createForum() {
   axios.defaults.withCredentials = true;
-  var inputImage = "";
+
+   const [inputImage, setinputImage] = useState(null)
 
   const [forumListe, setforumListe] = useState('')
 
@@ -345,11 +346,11 @@ function createForum() {
     }
 
     // Upload Image
-    inputImage = document.createElement("input");
-    inputImage.type = "file";
-    inputImage.accept = "image/*";
+    var imageSelector = document.createElement("input");
+    imageSelector.type = "file";
+    imageSelector.accept = "image/*";
 
-    inputImage.onchange = (e) => {
+    imageSelector.onchange = (e) => {
       const file = e.target.files[0];
 
       const reader = new FileReader();
@@ -369,6 +370,7 @@ function createForum() {
         forumInfos.type = "image";
       };
     };
+    setinputImage(imageSelector)
   }, []);
 
   return (
