@@ -20,6 +20,7 @@ function ChatbotCreate() {
     const createTopic = () => {
         if (singleTopicInfo.name.length > 3) {
             showTopic({
+                id: null,
                 name: singleTopicInfo.name,
                 info: JSON.stringify(singleTopicInfo.info)
             })

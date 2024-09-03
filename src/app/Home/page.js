@@ -817,21 +817,25 @@ export default function Home(props) {
   };
 
   const logout = async () => {
+
+    const xcode = localStorage.getItem('x-code');
+
     document.getElementById("logoutIcon").style.display = "none";
     document.getElementById("logoutSpinner").style.display = "inline-block";
 
     await axios
-      .patch(source + "/_auth/logout", userInfo)
+      .patch(source + "/_auth/logout?xcode=" + xcode, userInfo)
       .then((res) => {
         if (res.data.logedout) {
           openDropdown("setting");
-          localStorage.removeItem('x-code')
+          localStorage.removeItem('x-code');
           document.location = "/";
         } else {
           document.getElementById("logoutSpinner").style.display =
             "none";
           document.getElementById("logoutIcon").style.display =
             "inline-block";
+          openDropdown("setting");
         }
       })
       .catch((e) => {
