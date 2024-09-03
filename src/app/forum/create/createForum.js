@@ -124,6 +124,10 @@ function createForum() {
         data.append("type", forumInfos.type);
         data.append("state", forumInfos.state);
         data.append("action",forumInfos.action_key)
+        if (forumInfos.id) {
+          data.append("id",forumInfos.id)
+        }
+
       } else {
         data = {
           title: forumInfos.title,
@@ -137,7 +141,7 @@ function createForum() {
 
       try {
         await setCSRFToken();
-        if (forumInfos.id) {
+        if (!forumInfos.image && forumInfos.id) {
           await axios
             .patch(source + "/_forum/" + forumInfos.id + "?xcode=" + xcode, data)
             .then((res) => {
