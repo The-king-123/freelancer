@@ -53,7 +53,7 @@ function ChatbotCreate() {
         singleTopicInfo.name = data.name;
         singleTopicInfo.info.description = JSON.parse(data.info).description;
 
-        document.getElementById('topicTitle').innerHTML = data.name;
+        document.getElementById('topicTitleModal').innerText = data.name;
         document.getElementById('topicContent').innerHTML = JSON.parse(data.info).description;
         document.getElementById('modalShowTopic').style.display = 'block';
     }
@@ -63,7 +63,7 @@ function ChatbotCreate() {
         singleTopicInfo.name = '';
         singleTopicInfo.info.description = '';
 
-        document.getElementById('topicTitle').innerText = '';
+        document.getElementById('topicTitleModal').innerText = '';
         document.getElementById('topicContent').innerHTML = '';
         document.getElementById('modalShowTopic').style.display = 'none';
     };
@@ -72,6 +72,7 @@ function ChatbotCreate() {
 
         const xcode = localStorage.getItem("x-code");
         singleTopicInfo.info.description = document.getElementById('topicContent').innerHTML;
+        singleTopicInfo.name = document.getElementById('topicTitleModal').innerText;
 
         if (singleTopicInfo.info.description.length > 3) {
             document.getElementById('saveTopicSpinner').style.display = 'inline-block'
@@ -258,7 +259,7 @@ function ChatbotCreate() {
                     style={{ maxWidth: 420, top: '15%' }}
                 >
                     <div className='w3-flex w3-flex-row w3-flex-center-v' style={{ paddingInline: 16, paddingTop: 16 }}>
-                        <div id='topicTitle' className='w3-flex-1 w3-big'>Titre du topic</div>
+                        <div id='topicTitleModal' contentEditable={true} className='w3-flex-1 w3-big'></div>
                         <div onClick={closeModalShowTopic} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 32, height: 32 }}>
                             <FontAwesomeIcon icon={faTimes} />
                         </div>
