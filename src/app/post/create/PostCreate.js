@@ -77,7 +77,7 @@ function PostCreate() {
 
         postInfo.info.description = document.getElementById('postContent').innerHTML
 
-        if (postInfo.title.length > 0 && postInfo.info.description.length > 0) {
+        if (postInfo.title.length > 0 && postInfo.info.description.length > 0 && postInfo.category) {
             document.getElementById("postPublicSpinner").style.display =
                 "inline-block";
             document.getElementById("postPublicIcon").style.display = "none";
@@ -667,9 +667,9 @@ function PostCreate() {
                             onChange={(e) => postInfo.category = e.target.value}
                             className="w3-light-grey w3-input w3-border-0 w3-block w3-nowrap w3-overflow w3-round"
                             style={{ paddingBlock: 8 }}
-                            defaultValue={'category'}
+                            defaultValue={null}
                         >
-                            <option value="category" disabled>Sélectionner une catégorie</option>
+                            <option value={null} disabled>Sélectionner une catégorie</option>
                             {
                                 selectCategoryList.map((category,key) => (
                                     <option value={category.id}>{category.name}</option>
