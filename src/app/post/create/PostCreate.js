@@ -334,16 +334,44 @@ function PostCreate() {
         document.getElementById('postTitle').value = data.title;
         document.getElementById('postContent').innerHTML = JSON.parse(data.info).description;
 
-        if (data.type == 'image') {
-            document.getElementById("showImage").src = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + data.link;
+        if (data.type == 'image' || data.type == 'image/audio') {
+            document.getElementById("showImage").src = source + "/images.php?w=100&h=100&zlonk=2733&zlink=" + data.link;
             document.getElementById("showImageWrapper").style.display = "block";
             document.getElementById("inputImage").style.display = "none";
-        }
-        if (data.type == 'video') {
-            addEmbedVideo()
+
+            document.getElementById("audioSection").style.display = "block";
+            document.getElementById("videoEmbed").style.display = "none";
+            document.getElementById("videoSection").style.display = "none";
+
+        } else if (data.type == 'video') {
+            document.getElementById("inputImage").style.display = "none";
+            document.getElementById("videoSection").style.display = "block";
+
+            document.getElementById("iconVideo").style.display = "none";
+            document.getElementById("iconTimes").style.display = "inline-block";
+            document.getElementById("videoEmbed").style.display = "flex";
+
+            document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-light-grey', 'w3-black').replace('w3-text-grey', 'w3-text-white');
             document.getElementById("postVideo").value = data.link;
+
+            document.getElementById("showImageWrapper").style.display = "none";
+            document.getElementById("audioSection").style.display = "none";
+        } else {
+            document.getElementById("inputImage").style.display = "flex";
+
+            document.getElementById("videoSection").style.display = "none";
+
+            document.getElementById("iconVideo").style.display = "inline-block";
+            document.getElementById("iconTimes").style.display = "none";
+            document.getElementById("videoEmbed").style.display = "flex";
+
+            document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-light-grey', 'w3-black').replace('w3-text-grey', 'w3-text-white');
+
+            document.getElementById("showImageWrapper").style.display = "none";
+            document.getElementById("audioSection").style.display = "none";
         }
 
+        document.getElementById('modalPostListe').style.display = 'none';
         document.getElementById('deleteButton').style.display = 'block';
     }
 
@@ -376,10 +404,10 @@ function PostCreate() {
     const reloadCategory = (data) => {
         setselectCategoryList(data)
         const glitchCategory = data.map((element, key) => (
-            <div key={key} className="w3-flex-row w3-light-grey w3-round w3-overflow w3-flex-center-v" style={{marginBlock:4}}>
+            <div key={key} className="w3-flex-row w3-light-grey w3-round w3-overflow w3-flex-center-v" style={{ marginBlock: 4 }}>
                 <div
                     className="w3-nowrap w3-hover-grey w3-flex-1 w3-overflow"
-                    style={{paddingInline:8}}
+                    style={{ paddingInline: 8 }}
                 >
                     {element.name}
                 </div>
@@ -410,7 +438,7 @@ function PostCreate() {
         };
         await setCSRFToken();
         await axios
-            .post(source + "/_category?xcode="+xcode, request)
+            .post(source + "/_category?xcode=" + xcode, request)
             .then((res) => {
                 reloadCategory(res.data.data.reverse());
             })
@@ -476,6 +504,15 @@ function PostCreate() {
 
         document.getElementById("audioSection").style.display = "none";
         document.getElementById("videoEmbed").style.display = "flex";
+
+        document.getElementById("videoSection").style.display = "none";
+
+        document.getElementById("iconVideo").style.display = "inline-block";
+        document.getElementById("iconTimes").style.display = "none";
+
+        document.getElementById("postVideo").value = '';
+
+        document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-black', 'w3-light-grey').replace('w3-text-white', 'w3-text-grey');
     }
 
     const closeModalVideoPreview = () => {
@@ -671,7 +708,7 @@ function PostCreate() {
                         >
                             <option value={null}>Sélectionner une catégorie</option>
                             {
-                                selectCategoryList.map((category,key) => (
+                                selectCategoryList.map((category, key) => (
                                     <option value={category.id}>{category.name}</option>
                                 ))
                             }
@@ -933,7 +970,7 @@ function PostCreate() {
                         </button>
                     </div>
 
-                    <div className="w3-padding w3-overflow-scroll w3-noscrollbar" style={{height:'50vh'}}>
+                    <div className="w3-padding w3-overflow-scroll w3-noscrollbar" style={{ height: '50vh' }}>
                         {categoryListe}
                     </div>
                 </div>
