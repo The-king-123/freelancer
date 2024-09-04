@@ -665,6 +665,7 @@ function PostCreate() {
                     </div>
                     <div className="w3-right" style={{ paddingRight: 16, width: '65%' }}>
                         <select
+                            onChange={(e) => postInfo.category = e.target.value}
                             className="w3-light-grey w3-input w3-border-0 w3-block w3-nowrap w3-overflow w3-round"
                             style={{ paddingBlock: 8 }}
                             defaultValue={'category'}
@@ -672,7 +673,7 @@ function PostCreate() {
                             <option value="category" disabled>Sélectionner une catégorie</option>
                             {
                                 selectCategoryList.map((category,key) => (
-                                    <option value={category.name}>{category.name}</option>
+                                    <option value={category.id}>{category.name}</option>
                                 ))
                             }
                         </select>
@@ -689,6 +690,7 @@ function PostCreate() {
                     placeholder="Titre"
                 />
                 <div
+                    contentEditable
                     id="postContent"
                     className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
                     style={{
