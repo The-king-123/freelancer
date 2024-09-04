@@ -562,7 +562,7 @@ function PostCreate() {
             reader.readAsDataURL(file);
 
             const formData = new FormData();
-            formData.append("image", file);
+            formData.append("media", file);
 
             reader.onload = (readerEvent) => {
                 var content = readerEvent.target.result;
