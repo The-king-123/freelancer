@@ -409,6 +409,7 @@ function PostCreate() {
                 ),
             }),
         };
+        await setCSRFToken();
         await axios
             .post(source + "/_category?xcode="+xcode, request)
             .then((res) => {
