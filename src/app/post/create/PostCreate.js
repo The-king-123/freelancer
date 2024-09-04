@@ -117,7 +117,6 @@ function PostCreate() {
                                     document.getElementById("postPublicIcon").style.display = "inline-draft";
                                 } else if (state == 'draft') {
                                     document.getElementById("postDraftSpinner").style.display = "none";
-
                                 }
                                 reloadPost(res.data.data.reverse());
                                 document.getElementById('modalPostListe').style.display = 'block';
@@ -158,7 +157,7 @@ function PostCreate() {
                             if (res.data.logedin) {
                                 if (state == 'public') {
                                     document.getElementById("postPublicSpinner").style.display = "none";
-                                    document.getElementById("postPublicIcon").style.display = "inline-draft";
+                                    document.getElementById("postPublicIcon").style.display = "inline-block";
                                 } else if (state == 'draft') {
                                     document.getElementById("postDraftSpinner").style.display = "none";
 
@@ -174,7 +173,7 @@ function PostCreate() {
                                 }
                                 if (state == 'public') {
                                     document.getElementById("postPublicSpinner").style.display = "none";
-                                    document.getElementById("postPublicIcon").style.display = "inline-draft";
+                                    document.getElementById("postPublicIcon").style.display = "inline-block";
                                 } else if (state == 'draft') {
                                     document.getElementById("postDraftSpinner").style.display = "none";
                                 }

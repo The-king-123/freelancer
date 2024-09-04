@@ -148,7 +148,7 @@ function createForum() {
               if (res.data.logedin) {
                 if (state == 'public') {
                   document.getElementById("forumPublicSpinner").style.display = "none";
-                  document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                  document.getElementById("forumPublicIcon").style.display = "inline-block";
                 } else if (state == 'draft') {
                   document.getElementById("forumDraftSpinner").style.display = "none";
 
@@ -165,7 +165,7 @@ function createForum() {
                 }
                 if (state == 'public') {
                   document.getElementById("forumPublicSpinner").style.display = "none";
-                  document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                  document.getElementById("forumPublicIcon").style.display = "inline-block";
                 } else if (state == 'draft') {
                   document.getElementById("forumDraftSpinner").style.display = "none";
                 }
@@ -175,7 +175,7 @@ function createForum() {
             .catch((e) => {
               if (state == 'public') {
                 document.getElementById("forumPublicSpinner").style.display = "none";
-                document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                document.getElementById("forumPublicIcon").style.display = "inline-block";
               } else if (state == 'draft') {
                 document.getElementById("forumDraftSpinner").style.display = "none";
               }
@@ -192,7 +192,7 @@ function createForum() {
               if (res.data.logedin) {
                 if (state == 'public') {
                   document.getElementById("forumPublicSpinner").style.display = "none";
-                  document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                  document.getElementById("forumPublicIcon").style.display = "inline-block";
                 } else if (state == 'draft') {
                   document.getElementById("forumDraftSpinner").style.display = "none";
 
@@ -208,7 +208,7 @@ function createForum() {
                 }
                 if (state == 'public') {
                   document.getElementById("forumPublicSpinner").style.display = "none";
-                  document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                  document.getElementById("forumPublicIcon").style.display = "inline-block";
                 } else if (state == 'draft') {
                   document.getElementById("forumDraftSpinner").style.display = "none";
                 }
@@ -218,7 +218,7 @@ function createForum() {
             .catch((e) => {
               if (state == 'public') {
                 document.getElementById("forumPublicSpinner").style.display = "none";
-                document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                document.getElementById("forumPublicIcon").style.display = "inline-block";
               } else if (state == 'draft') {
                 document.getElementById("forumDraftSpinner").style.display = "none";
               }
@@ -232,7 +232,7 @@ function createForum() {
       } catch (error) {
         if (state == 'public') {
           document.getElementById("forumPublicSpinner").style.display = "none";
-          document.getElementById("forumPublicIcon").style.display = "inline-draft";
+          document.getElementById("forumPublicIcon").style.display = "inline-block";
         } else if (state == 'draft') {
           document.getElementById("forumDraftSpinner").style.display = "none";
         }
