@@ -19,6 +19,7 @@ import {
     faSpinner,
     faStop,
     faTimes,
+    faTrash,
     faTrashAlt,
     faVideo,
     faWarning,
@@ -29,23 +30,22 @@ import slugify from "slugify";
 function PostCreate() {
 
     axios.defaults.withCredentials = true;
-    var inputImage = "";
-    var inputAudio = "";
+    const [inputImage, setinputImage] = useState(null)
+    const [inputAudio, setinputAudio] = useState(null)
+    const [categoryListe, setcategoryListe] = useState('')
+    const [selectCategoryList, setselectCategoryList] = useState([])
 
     const [postInfo, setPostInfo] = useState({
         id: null,
         title: "",
         slug: "",
         type: "text",
-        link: null,
-        owner_id: null,
         category: null,
         info: {
             description: "",
         },
         media: null,
         videoUrl: "",
-        xcode: null,
         state: "",
     });
 
@@ -55,7 +55,7 @@ function PostCreate() {
         key: "",
     });
 
-    const [forumListe, setforumListe] = useState('')
+    const [postListe, setpostListe] = useState('')
 
     async function setCSRFToken() {
         try {
@@ -87,41 +87,42 @@ function PostCreate() {
 
                 data.append("title", postInfo.title);
                 data.append("slug", postInfo.slug);
-                data.append("owner_id", postInfo.owner_id);
                 data.append("info", JSON.stringify(postInfo.info));
                 data.append("type", postInfo.type);
                 data.append("state", postInfo.state);
-                data.append("xcode", postInfo.xcode);
+                data.append("category", postInfo.category);
+                if (postInfo.id) {
+                    data.append("id", postInfo.id);
+                }
             } else {
                 data = {
-                    owner_id: postInfo.owner_id,
                     title: postInfo.title,
                     info: JSON.stringify(postInfo.info),
                     type: postInfo.type,
                     slug: postInfo.slug,
                     state: postInfo.state,
-                    xcode: postInfo.xcode,
+                    category: postInfo.category,
                 };
             }
 
             try {
                 await setCSRFToken();
-                if (postInfo.id) {
+                if (!postInfo.media && postInfo.id) {
                     await axios
-                        .patch(source + "/_post/" + forumInfos.id + "?xcode" + xcode, data)
+                        .patch(source + "/_post/" + postInfo.id + "?xcode" + xcode, data)
                         .then((res) => {
                             if (res.data.logedin) {
                                 if (state == 'public') {
-                                    document.getElementById("forumPublicSpinner").style.display = "none";
-                                    document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                                    document.getElementById("postPublicSpinner").style.display = "none";
+                                    document.getElementById("postPublicIcon").style.display = "inline-draft";
                                 } else if (state == 'draft') {
-                                    document.getElementById("forumDraftSpinner").style.display = "none";
+                                    document.getElementById("postDraftSpinner").style.display = "none";
 
                                 }
                                 reloadPost(res.data.data.reverse());
-                                document.getElementById('modalForumListe').style.display = 'block'
-                                document.getElementById('forumTitle').value = ''
-                                document.getElementById('forumContent').innerHTML = 'Que pensez-vous ?'
+                                document.getElementById('modalPostListe').style.display = 'block';
+                                document.getElementById('postTitle').value = '';
+                                document.getElementById('postContent').innerHTML = 'Que pensez-vous ?';
                                 cancelImageInsertion()
                                 document.getElementById('deleteButton').style.display = 'none';
                             } else {
@@ -129,20 +130,20 @@ function PostCreate() {
                                     document.getElementById('modalLogin').style.display = 'block'
                                 }
                                 if (state == 'public') {
-                                    document.getElementById("forumPublicSpinner").style.display = "none";
-                                    document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                                    document.getElementById("postPublicSpinner").style.display = "none";
+                                    document.getElementById("postPublicIcon").style.display = "inline-draft";
                                 } else if (state == 'draft') {
-                                    document.getElementById("forumDraftSpinner").style.display = "none";
+                                    document.getElementById("postDraftSpinner").style.display = "none";
                                 }
                             }
 
                         })
                         .catch((e) => {
                             if (state == 'public') {
-                                document.getElementById("forumPublicSpinner").style.display = "none";
-                                document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                                document.getElementById("postPublicSpinner").style.display = "none";
+                                document.getElementById("postPublicIcon").style.display = "inline-draft";
                             } else if (state == 'draft') {
-                                document.getElementById("forumDraftSpinner").style.display = "none";
+                                document.getElementById("postDraftSpinner").style.display = "none";
                             }
                             if (e.response && e.response.status === 419) {
                                 console.error('CSRF token missing or incorrect');
@@ -156,36 +157,36 @@ function PostCreate() {
                         .then((res) => {
                             if (res.data.logedin) {
                                 if (state == 'public') {
-                                    document.getElementById("forumPublicSpinner").style.display = "none";
-                                    document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                                    document.getElementById("postPublicSpinner").style.display = "none";
+                                    document.getElementById("postPublicIcon").style.display = "inline-draft";
                                 } else if (state == 'draft') {
-                                    document.getElementById("forumDraftSpinner").style.display = "none";
+                                    document.getElementById("postDraftSpinner").style.display = "none";
 
                                 }
                                 reloadPost(res.data.data.reverse());
-                                document.getElementById('modalForumListe').style.display = 'block'
-                                document.getElementById('forumTitle').value = ''
-                                document.getElementById('forumContent').innerHTML = 'Que pensez-vous ?'
+                                document.getElementById('modalPostListe').style.display = 'block'
+                                document.getElementById('postTitle').value = ''
+                                document.getElementById('postContent').innerHTML = 'Que pensez-vous ?'
                                 cancelImageInsertion()
                             } else {
                                 if (document.getElementById('modalLogin')) {
                                     document.getElementById('modalLogin').style.display = 'block'
                                 }
                                 if (state == 'public') {
-                                    document.getElementById("forumPublicSpinner").style.display = "none";
-                                    document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                                    document.getElementById("postPublicSpinner").style.display = "none";
+                                    document.getElementById("postPublicIcon").style.display = "inline-draft";
                                 } else if (state == 'draft') {
-                                    document.getElementById("forumDraftSpinner").style.display = "none";
+                                    document.getElementById("postDraftSpinner").style.display = "none";
                                 }
                             }
 
                         })
                         .catch((e) => {
                             if (state == 'public') {
-                                document.getElementById("forumPublicSpinner").style.display = "none";
-                                document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                                document.getElementById("postPublicSpinner").style.display = "none";
+                                document.getElementById("postPublicIcon").style.display = "inline-draft";
                             } else if (state == 'draft') {
-                                document.getElementById("forumDraftSpinner").style.display = "none";
+                                document.getElementById("postDraftSpinner").style.display = "none";
                             }
                             if (e.response && e.response.status === 419) {
                                 console.error('CSRF token missing or incorrect');
@@ -196,10 +197,10 @@ function PostCreate() {
                 }
             } catch (error) {
                 if (state == 'public') {
-                    document.getElementById("forumPublicSpinner").style.display = "none";
-                    document.getElementById("forumPublicIcon").style.display = "inline-draft";
+                    document.getElementById("postPublicSpinner").style.display = "none";
+                    document.getElementById("postPublicIcon").style.display = "inline-draft";
                 } else if (state == 'draft') {
-                    document.getElementById("forumDraftSpinner").style.display = "none";
+                    document.getElementById("postDraftSpinner").style.display = "none";
                 }
 
                 if (error.response && error.response.status === 419) {
@@ -230,42 +231,42 @@ function PostCreate() {
     };
 
     const reloadPost = (data) => {
-        var glitchForum
+        var glitchPost
         if (data.length > 0) {
             glitchPost = data.map((post, key) => (
                 <div key={key} style={{ padding: 4 }}>
                     <div onClick={() => showThisPost(post)} className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
                         <div>{post.title}</div>
-                        <div className="w3-small w3-text-grey">{forum.state == 'public' ? 'Publique' : 'Brouillon'}</div>
+                        <div className="w3-small w3-text-grey">{post.state == 'public' ? 'Publique' : 'Brouillon'}</div>
                     </div>
                 </div>
             ))
         } else {
             //
-            <div style={{ padding: 8 }}>
+            glitchPost = (<div style={{ padding: 8 }}>
                 <div className="w3-border w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
                     <div style={{ paddingInline: 16 }}>
-                        Vous n'avez aucun forum pour le moment...
+                        Vous n'avez aucun post pour le moment...
                     </div>
                 </div>
-            </div>
+            </div>)
         }
-        setforumListe(glitchPost)
+        setpostListe(glitchPost)
     }
 
     const supprimer = async () => {
         const xcode = localStorage.getItem("x-code");
-        if (forumInfos.id) {
+        if (postInfo.id) {
             document.getElementById("modalWarning").style.display = "block";
             document.getElementById("textWarning").innerText =
-                "Voulez vous vraiment supprimer ce Forum ...";
+                "Voulez vous vraiment supprimer ce Post ...";
 
             const deleteHandler = async () => {
                 document.getElementById("confirmSpinner").style.display =
                     "inline-block";
                 await setCSRFToken();
                 await axios
-                    .delete(source + "/_post/" + forumInfos.id + '?xcode=' + xcode)
+                    .delete(source + "/_post/" + postInfo.id + '?xcode=' + xcode)
                     .then((res) => {
                         if (res.data.logedin) {
                             document.getElementById("confirmSpinner").style.display = "none";
@@ -278,10 +279,10 @@ function PostCreate() {
                                 .getElementById("cancelWarning")
                                 .removeEventListener("click", cancelHandler);
 
-                            reloadForums(res.data.data.reverse());
-                            document.getElementById('modalForumListe').style.display = 'block'
-                            document.getElementById('forumTitle').value = ''
-                            document.getElementById('forumContent').innerHTML = 'Que pensez-vous ?'
+                            reloadPosts(res.data.data.reverse());
+                            document.getElementById('modalPostListe').style.display = 'block'
+                            document.getElementById('postTitle').value = ''
+                            document.getElementById('postContent').innerHTML = 'Que pensez-vous ?'
                             cancelImageInsertion()
                             document.getElementById('deleteButton').style.display = 'none';
                         } else {
@@ -322,17 +323,26 @@ function PostCreate() {
     }
 
     const showThisPost = (data) => {
-        forumInfos.title = data.title
-        forumInfos.content = data.content
-        forumInfos.id = data.id
 
-        document.getElementById('forumTitle').value = data.title
-        document.getElementById('forumContent').innerHTML = data.content
+        postInfo.title = data.title
+        postInfo.info.description = JSON.parse(data.info).description
+        postInfo.id = data.id
+        postInfo.slug = data.slug
+        postInfo.type = data.type
+        postInfo.category = data.category
+        postInfo.videoUrl = data.link
+
+        document.getElementById('postTitle').value = data.title;
+        document.getElementById('postContent').innerHTML = JSON.parse(data.info).description;
 
         if (data.type == 'image') {
             document.getElementById("showImage").src = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + data.link;
             document.getElementById("showImageWrapper").style.display = "block";
             document.getElementById("inputImage").style.display = "none";
+        }
+        if (data.type == 'video') {
+            addEmbedVideo()
+            document.getElementById("postVideo").value = data.link;
         }
 
         document.getElementById('deleteButton').style.display = 'block';
@@ -365,42 +375,29 @@ function PostCreate() {
     };
 
     const reloadCategory = (data) => {
+        setselectCategoryList(data)
         const glitchCategory = data.map((element, key) => (
-            <div key={key} className="w3-flex-row w3-hover-grey topicbar">
+            <div key={key} className="w3-flex-row w3-light-grey w3-round w3-overflow w3-flex-center-v" style={{marginBlock:4}}>
                 <div
-                    onClick={() => changeCoreCategory("category", element)}
-                    className="w3-nowrap w3-hover-grey w3-button w3-left-align"
-                    style={{ width: 205 }}
+                    className="w3-nowrap w3-hover-grey w3-flex-1 w3-overflow"
+                    style={{paddingInline:8}}
                 >
                     {element.name}
                 </div>
                 <div
                     onClick={() => deleteCategory(element.id)}
-                    className="w3-hover-red w3-button w3-flex-center topicdelete"
-                    style={{ opacity: 0 }}
+                    className="w3-red w3-button w3-flex-center topicdelete"
                 >
                     <FontAwesomeIcon className="w3-medium" icon={faTrash} />
                 </div>
             </div>
         ));
-        document.getElementById("inputCategoryName").value = "";
-        setCategories(glitchCategory);
-    };
-
-    const changeCoreCategory = (type, data) => {
-        setCore("");
-        setTimeout(() => {
-            setCore(
-                <Category
-                    user={userInfo}
-                    reloadCategory={reloadCategory}
-                    data={data}
-                />
-            );
-        }, 10);
+        document.getElementById("categoryTitle").value = "";
+        setcategoryListe(glitchCategory);
     };
 
     const saveCategory = async () => {
+        const xcode = localStorage.getItem('x-code')
         const request = {
             name: categoryInfo.name,
             type: categoryInfo.type,
@@ -412,9 +409,8 @@ function PostCreate() {
                 ),
             }),
         };
-        return 0;
         await axios
-            .post(source + "/_category", request)
+            .post(source + "/_category?xcode="+xcode, request)
             .then((res) => {
                 reloadCategory(res.data.data.reverse());
             })
@@ -514,22 +510,31 @@ function PostCreate() {
         }
     }
 
-
     useEffect(() => {
 
-        const code = localStorage.getItem("x-code");
-        if (code) {
+        const xcode = localStorage.getItem("x-code");
+        if (xcode) {
             axios
-                .get(`${source}/_auth/${code}/edit`)
+                .get(`${source}/_post?xcode=${xcode}`)
                 .then((res) => {
                     if (res.data.logedin) {
-                        localStorage.setItem("userInfos", JSON.stringify(res.data.user));
-                        postInfo.owner_id = res.data.user.key;
-                        postInfo.owner_id = res.data.user.key;
-                        postInfo.xcode = code;
                         document.getElementById('postCore').style.display = 'block'
-                        document.getElementById('modalLogin').style.display = 'none'
-                        console.log(JSON.parse(sessionStorage.getItem('userCredentials')));
+                        reloadPost(res.data.data)
+                    } else {
+                        if (document.getElementById('modalLogin')) {
+                            document.getElementById('modalLogin').style.display = 'block'
+                        }
+                    }
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                });
+
+            axios
+                .get(`${source}/_category?xcode=${xcode}`)
+                .then((res) => {
+                    if (res.data.logedin) {
+                        reloadCategory(res.data.data.reverse())
                     } else {
                         if (document.getElementById('modalLogin')) {
                             document.getElementById('modalLogin').style.display = 'block'
@@ -546,11 +551,12 @@ function PostCreate() {
         }
 
         // Upload Image
-        inputImage = document.createElement("input");
-        inputImage.type = "file";
-        inputImage.accept = "image/*";
 
-        inputImage.onchange = (e) => {
+        var imageSelector = document.createElement("input");
+        imageSelector.type = "file";
+        imageSelector.accept = "image/*";
+
+        imageSelector.onchange = (e) => {
             const file = e.target.files[0];
 
             const reader = new FileReader();
@@ -573,13 +579,14 @@ function PostCreate() {
                 postInfo.type = "image";
             };
         };
+        setinputImage(imageSelector)
 
         // Upload audio
-        inputAudio = document.createElement("input");
-        inputAudio.type = "file";
-        inputAudio.accept = "audio/*";
+        var audioSelector = document.createElement("input");
+        audioSelector.type = "file";
+        audioSelector.accept = "audio/*";
 
-        inputAudio.onchange = (e) => {
+        audioSelector.onchange = (e) => {
             const file = e.target.files[0];
 
             const reader = new FileReader();
@@ -614,6 +621,7 @@ function PostCreate() {
                 postInfo.type = "image/audio";
             };
         };
+        setinputAudio(audioSelector)
     }, []);
 
     return (
@@ -632,6 +640,7 @@ function PostCreate() {
                 </div>
                 <div>
                     <div
+                        onClick={() => document.getElementById("modalPostListe").style.display = 'block'}
                         className="w3-light-grey w3-circle w3-flex w3-flex-center"
                         style={{ width: 32, height: 32 }}
                     >
@@ -651,7 +660,7 @@ function PostCreate() {
                             className="w3-black w3-center w3-round"
                             style={{ paddingBlock: 7 }}
                         >
-                            <FontAwesomeIcon style={{ marginRight: 8 }} icon={faPlus} />Catégorie
+                            Catégorie
                         </div>
                     </div>
                     <div className="w3-right" style={{ paddingRight: 16, width: '65%' }}>
@@ -661,9 +670,11 @@ function PostCreate() {
                             defaultValue={'category'}
                         >
                             <option value="category" disabled>Sélectionner une catégorie</option>
-                            <option value="Acheteur">Acheteur</option>
-                            <option value="Rédaction">Rédaction</option>
-
+                            {
+                                selectCategoryList.map((category,key) => (
+                                    <option value={category.name}>{category.name}</option>
+                                ))
+                            }
                         </select>
                     </div>
                 </div>
@@ -679,13 +690,13 @@ function PostCreate() {
                 />
                 <div
                     id="postContent"
-                    className="w3-input w3-border-0 w3-light-grey w3-round"
+                    className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
                     style={{
-                        height: 120,
+                        height: 160,
                         minWidth: "100%",
                         marginTop: 16,
                     }}
-                >Qu'est-ce que vous pense ?</div>
+                >Qu'est-ce que vous pensez ?</div>
                 <div className="w3-container" style={{ padding: 0 }}>
 
                     <div
@@ -855,15 +866,15 @@ function PostCreate() {
                         onClick={() => save("pubic")}
                         className="w3-button w3-black w3-round-xxlarge w3-block w3-flex w3-flex-center"
                     >
-                        Publier votre forum{" "}
+                        Publier votre post{" "}
                         <FontAwesomeIcon
-                            id="forumPublicIcon"
+                            id="postPublicIcon"
                             className="w3-margin-left"
                             icon={faArrowRight}
                             style={{ width: 16, height: 16 }}
                         />
                         <FontAwesomeIcon
-                            id="forumPublicSpinner"
+                            id="postPublicSpinner"
                             className="w3-spin w3-margin-left"
                             icon={faSpinner}
                             style={{ width: 16, height: 16, display: "none" }}
@@ -876,7 +887,7 @@ function PostCreate() {
                     >
                         Enregistrer comme brouillon
                         <FontAwesomeIcon
-                            id="forumDraftSpinner"
+                            id="postDraftSpinner"
                             className="w3-spin w3-margin-left"
                             icon={faSpinner}
                             style={{ width: 16, height: 16, display: "none" }}
@@ -888,7 +899,7 @@ function PostCreate() {
                         className="w3-button w3-border w3-border-red w3-text-red w3-round-xxlarge w3-block w3-flex w3-flex-center"
                         style={{ marginTop: 16, display: 'none' }}
                     >
-                        Supprimer le forum
+                        Supprimer le post
                     </button>
                 </div>
             </div>
@@ -897,14 +908,14 @@ function PostCreate() {
             <div id="modalCategory" className="w3-modal">
                 <div
                     className="w3-modal-content w3-card w3-round w3-overflow"
-                    style={{ maxWidth: 420, top: '30%' }}
+                    style={{ maxWidth: 420, top: 48 }}
                 >
 
                     <div onClick={closeModalCategory} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 32, height: 32, marginInline: 16, marginTop: 16 }}>
                         <FontAwesomeIcon icon={faTimes} />
                     </div>
 
-                    <div style={{ paddingInline: 16, paddingBlock: 24 }}>
+                    <div className="w3-flex-row w3-flex-center-v" style={{ paddingInline: 16, paddingBlock: 24 }}>
                         <input
                             id="categoryTitle"
                             onChange={(e) => categoryInfo.name = e.target.value}
@@ -912,16 +923,18 @@ function PostCreate() {
                             placeholder="Nom de la catégorie"
                             type="text"
                         />
-                    </div>
-
-                    <div className="w3-container w3-light-grey w3-padding">
                         <button
                             onClick={saveCategory}
                             id="cancelWarning"
-                            className="w3-button w3-right w3-round w3-white w3-black"
+                            className="w3-button w3-margin-left w3-round w3-white w3-black w3-flex w3-flex-center"
+                            style={{ height: 40 }}
                         >
-                            Créer une catégorie
+                            <FontAwesomeIcon icon={faPlus} />
                         </button>
+                    </div>
+
+                    <div className="w3-padding w3-overflow-scroll w3-noscrollbar" style={{height:'50vh'}}>
+                        {categoryListe}
                     </div>
                 </div>
             </div>
@@ -953,7 +966,7 @@ function PostCreate() {
             </div>
             {/* end modal video preview */}
 
-            {/* modal forum liste */}
+            {/* modal post liste */}
             <div id="modalPostListe" className="w3-modal">
                 <div
                     className="w3-modal-content w3-card w3-round w3-overflow"
@@ -968,19 +981,19 @@ function PostCreate() {
                         <input
                             id="searchInput"
                             className="input w3-border-0 w3-input w3-border w3-round-xxlarge"
-                            placeholder="Chercher un forum"
+                            placeholder="Chercher un post"
                             type="text"
                         />
                     </div>
                     <div style={{ height: '50vh', paddingInline: 12, marginBottom: 16 }} className="w3-overflow-scroll w3-noscrollbar">
-                        {/* {
+                        {
                             postListe
-                        } */}
+                        }
                     </div>
 
                 </div>
             </div>
-            {/* end modal forum liste */}
+            {/* end modal post liste */}
         </div>
     );
 }

@@ -417,7 +417,7 @@ function createForum() {
         <div
           id="forumContent"
           contentEditable={true}
-          className="w3-input w3-border-0 w3-light-grey w3-round"
+          className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
           style={{
             height: 160,
             minWidth: "100%",
