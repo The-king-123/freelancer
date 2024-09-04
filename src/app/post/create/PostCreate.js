@@ -109,7 +109,7 @@ function PostCreate() {
                 await setCSRFToken();
                 if (!postInfo.media && postInfo.id) {
                     await axios
-                        .patch(source + "/_post/" + postInfo.id + "?xcode" + xcode, data)
+                        .patch(source + "/_post/" + postInfo.id + "?xcode=" + xcode, data)
                         .then((res) => {
                             if (res.data.logedin) {
                                 if (state == 'public') {
@@ -152,7 +152,7 @@ function PostCreate() {
                         });
                 } else {
                     await axios
-                        .post(source + "/_post?xcode" + xcode, data)
+                        .post(source + "/_post?xcode=" + xcode, data)
                         .then((res) => {
                             if (res.data.logedin) {
                                 if (state == 'public') {
