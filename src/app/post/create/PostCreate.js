@@ -448,7 +448,7 @@ function PostCreate() {
                     console.error("failure", e);
                 });
         };
-        const cancelHandler = async () => {
+        const cancelHandler = () => {
             document.getElementById("modalWarning").style.display = "none";
 
             document
