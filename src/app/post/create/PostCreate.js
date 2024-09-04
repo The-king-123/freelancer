@@ -669,7 +669,7 @@ function PostCreate() {
                             style={{ paddingBlock: 8 }}
                             defaultValue={null}
                         >
-                            <option value={null} disabled>Sélectionner une catégorie</option>
+                            <option value={null}>Sélectionner une catégorie</option>
                             {
                                 selectCategoryList.map((category,key) => (
                                     <option value={category.id}>{category.name}</option>
