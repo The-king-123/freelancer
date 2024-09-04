@@ -422,14 +422,13 @@ function PostCreate() {
 
     const deleteCategory = async (id) => {
         document.getElementById("modalWarning").style.display = "block";
-        document.getElementById("textWarning").innerText =
-            "Voulez vous vraiment supprimer cette categorie avec Ses elements ...";
+        document.getElementById("textWarning").innerText = "Voulez vous vraiment supprimer cette categorie avec ses elements ...";
 
+        const xcode = localStorage.getItem('x-code');
         const deleteHandler = async () => {
-            document.getElementById("confirmSpinner").style.display =
-                "inline-block";
+            document.getElementById("confirmSpinner").style.display = "inline-block";
             await axios
-                .delete(source + "/_category/" + id)
+                .delete(source + "/_category/" + id + "xcode=" + xcode)
                 .then((res) => {
                     document.getElementById("confirmSpinner").style.display =
                         "none";
