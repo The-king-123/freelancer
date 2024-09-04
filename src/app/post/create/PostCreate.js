@@ -864,7 +864,7 @@ function PostCreate() {
                 {/* buton save public | draft */}
                 <div style={{ marginTop: 24 }}>
                     <button
-                        onClick={() => save("pubic")}
+                        onClick={() => save("public")}
                         className="w3-button w3-black w3-round-xxlarge w3-block w3-flex w3-flex-center"
                     >
                         Publier votre post{" "}
