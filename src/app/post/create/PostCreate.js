@@ -925,7 +925,6 @@ function PostCreate() {
                         />
                         <button
                             onClick={saveCategory}
-                            id="cancelWarning"
                             className="w3-button w3-margin-left w3-round w3-white w3-black w3-flex w3-flex-center"
                             style={{ height: 40 }}
                         >
