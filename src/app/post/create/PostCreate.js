@@ -78,8 +78,12 @@ function PostCreate() {
         postInfo.info.description = document.getElementById('postContent').innerHTML
 
         if (postInfo.title.length > 0 && postInfo.info.description.length > 0 && postInfo.category) {
-            document.getElementById("postPublicSpinner").style.display = "inline-block";
-            document.getElementById("postPublicIcon").style.display = "none";
+            if (state == 'public') {
+                document.getElementById("postPublicSpinner").style.display = "inline-block";
+                document.getElementById("postPublicIcon").style.display = "none";
+            } else if (state == 'draft') {
+                document.getElementById("postDraftSpinner").style.display = "inline-block";
+            }
             var data;
             if (postInfo.media) {
                 data = postInfo.media;
@@ -281,22 +285,8 @@ function PostCreate() {
                     .delete(source + "/_post/" + postInfo.id + '?xcode=' + xcode)
                     .then((res) => {
                         if (res.data.logedin) {
-                            document.getElementById("confirmSpinner").style.display = "none";
-                            document.getElementById("modalWarning").style.display = "none";
-
-                            document
-                                .getElementById("confirmWarning")
-                                .removeEventListener("click", deleteHandler);
-                            document
-                                .getElementById("cancelWarning")
-                                .removeEventListener("click", cancelHandler);
-
+                            cancel()
                             reloadPost(res.data.data.reverse());
-                            document.getElementById('modalPostListe').style.display = 'block'
-                            document.getElementById('postTitle').value = ''
-                            document.getElementById('postContent').innerHTML = 'Que pensez-vous ?'
-                            cancelImageInsertion()
-                            document.getElementById('deleteButton').style.display = 'none';
                         } else {
                             if (document.getElementById('modalLogin')) {
                                 document.getElementById('modalLogin').style.display = 'block'
