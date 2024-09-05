@@ -113,30 +113,8 @@ function PostCreate() {
                         .patch(source + "/_post/" + postInfo.id + "?xcode=" + xcode, data)
                         .then((res) => {
                             if (res.data.logedin) {
-                                if (state == 'public') {
-                                    document.getElementById("postPublicSpinner").style.display = "none";
-                                    document.getElementById("postPublicIcon").style.display = "inline-block";
-                                } else if (state == 'draft') {
-                                    document.getElementById("postDraftSpinner").style.display = "none";
-                                }
                                 reloadPost(res.data.data.reverse());
-                                document.getElementById('modalPostListe').style.display = 'block';
-                                document.getElementById('postTitle').value = '';
-                                document.getElementById('postContent').innerHTML = 'Que pensez-vous ?';
-                                document.getElementById('postCategory').value = null
-                                cancelImageInsertion()
-                                document.getElementById('deleteButton').style.display = 'none';
-
-                                postInfo.id = null
-                                postInfo.title = ""
-                                postInfo.slug = ""
-                                postInfo.type = "text"
-                                postInfo.category = null
-                                postInfo.info.description = ""
-                                postInfo.media = null
-                                postInfo.videoUrl = "_"
-                                postInfo.state = ""
-
+                                cancel()
                             } else {
                                 if (document.getElementById('modalLogin')) {
                                     document.getElementById('modalLogin').style.display = 'block'
@@ -168,30 +146,8 @@ function PostCreate() {
                         .post(source + "/_post?xcode=" + xcode, data)
                         .then((res) => {
                             if (res.data.logedin) {
-                                if (state == 'public') {
-                                    document.getElementById("postPublicSpinner").style.display = "none";
-                                    document.getElementById("postPublicIcon").style.display = "inline-block";
-                                } else if (state == 'draft') {
-                                    document.getElementById("postDraftSpinner").style.display = "none";
-
-                                }
                                 reloadPost(res.data.data.reverse());
-                                document.getElementById('modalPostListe').style.display = 'block'
-                                document.getElementById('postTitle').value = ''
-                                document.getElementById('postCategory').value = null
-                                document.getElementById('postContent').innerHTML = 'Que pensez-vous ?'
-                                document.getElementById('deleteButton').style.display = 'none';
-                                cancelImageInsertion()
-
-                                postInfo.id = null
-                                postInfo.title = ""
-                                postInfo.slug = ""
-                                postInfo.type = "text"
-                                postInfo.category = null
-                                postInfo.info.description = ""
-                                postInfo.media = null
-                                postInfo.videoUrl = "_"
-                                postInfo.state = ""
+                                cancel()
                             } else {
                                 if (document.getElementById('modalLogin')) {
                                     document.getElementById('modalLogin').style.display = 'block'
@@ -236,6 +192,31 @@ function PostCreate() {
 
         }
     };
+
+    const cancel = () => {
+        if (state == 'public') {
+            document.getElementById("postPublicSpinner").style.display = "none";
+            document.getElementById("postPublicIcon").style.display = "inline-block";
+        } else if (state == 'draft') {
+            document.getElementById("postDraftSpinner").style.display = "none";
+        }
+        document.getElementById('modalPostListe').style.display = 'block';
+        document.getElementById('postTitle').value = '';
+        document.getElementById('postContent').innerHTML = 'Que pensez-vous ?';
+        document.getElementById('postCategory').value = null
+        document.getElementById('deleteButton').style.display = 'none';
+        cancelImageInsertion()
+
+        postInfo.id = null
+        postInfo.title = ""
+        postInfo.slug = ""
+        postInfo.type = "text"
+        postInfo.category = null
+        postInfo.info.description = ""
+        postInfo.media = null
+        postInfo.videoUrl = "_"
+        postInfo.state = ""
+    }
 
     const [singleCategoryInfo, setsingleCategoryInfo] = useState({
         id: null,
