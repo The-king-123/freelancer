@@ -641,50 +641,42 @@ function PostCreate() {
         let audioChunks = [];
 
         startButton.addEventListener("click", async () => {
-            if (
-                postInfo.type == "image" &&
-                document.getElementById("imageShower").style.backgroundImage
-            ) {
-                if (!audioElement.src) {
-                    postInfo.type = "image/audio";
-                    startButton.className =
-                        "w3-text-white w3-margin-left w3-flex w3-green w3-border w3-border-green w3-circle w3-flex-center";
+            if (postInfo.media) {
+                postInfo.type = "image/audio";
+                startButton.style.display = 'none';
+                stopButton.style.display = 'flex'
 
-                    startButton.disabled = true;
-                    stopButton.disabled = false;
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: true,
+                });
+                mediaRecorder = new MediaRecorder(stream);
 
-                    const stream = await navigator.mediaDevices.getUserMedia({
-                        audio: true,
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, {
+                        type: "audio/wav",
                     });
-                    mediaRecorder = new MediaRecorder(stream);
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audioElement.src = audioUrl;
 
-                    mediaRecorder.ondataavailable = (event) => {
-                        audioChunks.push(event.data);
-                    };
+                    audioChunks = []; // Clear the audio chunks array
+                    postInfo.media.append(
+                        "audio",
+                        audioBlob,
+                        "recording.wav"
+                    );
+                };
 
-                    mediaRecorder.onstop = () => {
-                        const audioBlob = new Blob(audioChunks, {
-                            type: "audio/wav",
-                        });
-                        const audioUrl = URL.createObjectURL(audioBlob);
-                        audioElement.src = audioUrl;
+                mediaRecorder.start();
 
-                        audioChunks = []; // Clear the audio chunks array
-                        postInfo.media.append(
-                            "audio",
-                            audioBlob,
-                            "recording.wav"
-                        );
-                    };
+                iconPause.style.display = "none";
+                iconPlay.style.display = "none";
+                iconMicro.style.display = "inline-block";
 
-                    mediaRecorder.start();
-
-                    iconPause.style.display = "none";
-                    iconPlay.style.display = "inline-block";
-                    iconMicro.style.display = "none";
-
-                    recordingState.innerText = "Recording...";
-                }
+                recordingState.innerText = "En cours d'enregistrement...";
             } else {
                 alert("Une image est obligatoire pour ajouter une voix");
             }
@@ -692,24 +684,25 @@ function PostCreate() {
 
         stopButton.addEventListener("click", () => {
             if (mediaRecorder && mediaRecorder.state === "recording") {
-                startButton.className =
-                    "w3-text-green w3-margin-left w3-flex w3-white w3-border w3-border-green w3-circle w3-flex-center";
-
-                startButton.disabled = false;
-                stopButton.disabled = true;
-
                 mediaRecorder.stop();
+                startButton.style.display = 'none'
+                stopButton.style.display = 'none'
+                repeatButton.style.display = 'flex'
+                recordingState.innerText = "Écouter l'enregistrement"
 
-                recordingState.innerText = "Voice recorded";
-                playButton.className =
-                    "w3-button w3-hover-text-white w3-green w3-hover-green w3-border w3-border-green w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
+                playButton.className = "w3-flex-1 w3-button w3-hover-text-white w3-black w3-hover-black w3-border w3-border-black w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
+                postInfo.type = "image/audio";
+
+                iconMicro.style.display = 'none'
+                iconPause.style.display = 'none'
+                iconPlay.style.display = 'inline-block'
             }
         });
 
         playButton.addEventListener("click", () => {
             if (audioElement.src) {
                 console.log(iconPause.style.display);
-                
+
                 if (iconPause.style.display == "none") {
                     if (mediaRecorder) {
                         mediaRecorder.stop();
@@ -748,27 +741,19 @@ function PostCreate() {
 
                 audioElement.pause();
 
-                startButton.className =
-                    "w3-text-green w3-margin-left w3-flex w3-white w3-border w3-border-green w3-circle w3-flex-center";
-
-                stopButton.className =
-                    "w3-text-green w3-margin-left w3-flex w3-white w3-border w3-border-green w3-circle w3-flex-center";
+                startButton.style.display = 'flex'
+                stopButton.style.display = 'none'
+                repeatButton.style.display = 'none'
 
                 iconPause.style.display = "none";
                 iconPlay.style.display = "none";
                 iconMicro.style.display = "inline-block";
 
-                startButton.disabled = false;
-                stopButton.disabled = true;
-
-                playButton.disabled = true;
-                playButton.className =
-                    "w3-button w3-hover-text-green w3-hover-white w3-border w3-border-green w3-text-green w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
+                playButton.className = "w3-flex-1 w3-button w3-hover-text-black w3-hover-white w3-light-grey w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v"
 
                 audioElement.removeAttribute("src");
-                repeatButton.disabled = true;
 
-                recordingState.innerText = "No record";
+                recordingState.innerText = "Pas d'enregistrement";
 
                 postInfo.media.delete("audio");
             }
