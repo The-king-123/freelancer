@@ -721,19 +721,19 @@ function PostCreate() {
                     iconPause.style.display = "inline-block";
                     iconPlay.style.display = "none";
 
+                    recordingState.innerText = "Arrêter l'écoute"
+
                     audioElement.play().catch((error) => {
                         console.error("Error playing audio:", error);
                     });
 
-                    recordingState.innerText = "Playing record...";
                 } else {
                     audioElement.pause();
 
                     iconPause.style.display = "none";
                     iconPlay.style.display = "inline-block";
+                    recordingState.innerText = "Écouter l'enregistrement"
 
-                    recordingState.innerText = "Voice recorded";
-                    0;
                 }
             }
         });
