@@ -102,6 +102,7 @@ function PostCreate() {
                     slug: postInfo.slug,
                     state: postInfo.state,
                     category: postInfo.category,
+                    videoUrl : postInfo.videoUrl,
                 };
             }
 
