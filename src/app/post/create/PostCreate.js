@@ -624,6 +624,163 @@ function PostCreate() {
         };
         setinputImage(imageSelector)
 
+        // Audio recording control
+        const startButton = document.getElementById("startRecord");
+        const stopButton = document.getElementById("stopRecord");
+        const repeatButton = document.getElementById("repeatRecord");
+        const playButton = document.getElementById("playRecord");
+        const recordingState = document.getElementById("recordingState");
+
+        const iconMicro = document.getElementById("noRecordIcon");
+        const iconPause = document.getElementById("pauseRecordIcon");
+        const iconPlay = document.getElementById("playRecordIcon");
+
+        const audioElement = document.getElementById("audioBox");
+
+        let mediaRecorder;
+        let audioChunks = [];
+
+        startButton.addEventListener("click", async () => {
+            if (
+                postInfo.type == "image" &&
+                document.getElementById("imageShower").style.backgroundImage
+            ) {
+                if (!audioElement.src) {
+                    postInfo.type = "image/audio";
+                    startButton.className =
+                        "w3-text-white w3-margin-left w3-flex w3-green w3-border w3-border-green w3-circle w3-flex-center";
+
+                    startButton.disabled = true;
+                    stopButton.disabled = false;
+
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        audio: true,
+                    });
+                    mediaRecorder = new MediaRecorder(stream);
+
+                    mediaRecorder.ondataavailable = (event) => {
+                        audioChunks.push(event.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, {
+                            type: "audio/wav",
+                        });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        audioElement.src = audioUrl;
+
+                        audioChunks = []; // Clear the audio chunks array
+                        postInfo.media.append(
+                            "audio",
+                            audioBlob,
+                            "recording.wav"
+                        );
+                    };
+
+                    mediaRecorder.start();
+
+                    iconPause.style.display = "none";
+                    iconPlay.style.display = "inline-block";
+                    iconMicro.style.display = "none";
+
+                    recordingState.innerText = "Recording...";
+                }
+            } else {
+                alert("Une image est obligatoire pour ajouter une voix");
+            }
+        });
+
+        stopButton.addEventListener("click", () => {
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                startButton.className =
+                    "w3-text-green w3-margin-left w3-flex w3-white w3-border w3-border-green w3-circle w3-flex-center";
+
+                startButton.disabled = false;
+                stopButton.disabled = true;
+
+                mediaRecorder.stop();
+
+                recordingState.innerText = "Voice recorded";
+                playButton.className =
+                    "w3-button w3-hover-text-white w3-green w3-hover-green w3-border w3-border-green w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
+            }
+        });
+
+        playButton.addEventListener("click", () => {
+            if (audioElement.src) {
+                console.log(iconPause.style.display);
+                
+                if (iconPause.style.display == "none") {
+                    if (mediaRecorder) {
+                        mediaRecorder.stop();
+                    }
+
+                    startButton.disabled = false;
+                    stopButton.disabled = true;
+
+                    iconPause.style.display = "inline-block";
+                    iconPlay.style.display = "none";
+
+                    audioElement.play().catch((error) => {
+                        console.error("Error playing audio:", error);
+                    });
+
+                    recordingState.innerText = "Playing record...";
+                } else {
+                    audioElement.pause();
+
+                    iconPause.style.display = "none";
+                    iconPlay.style.display = "inline-block";
+
+                    recordingState.innerText = "Voice recorded";
+                    0;
+                }
+            }
+        });
+
+        repeatButton.addEventListener("click", () => {
+            if (audioElement.src) {
+                postInfo.type = "image";
+
+                if (mediaRecorder) {
+                    mediaRecorder.stop();
+                }
+
+                audioElement.pause();
+
+                startButton.className =
+                    "w3-text-green w3-margin-left w3-flex w3-white w3-border w3-border-green w3-circle w3-flex-center";
+
+                stopButton.className =
+                    "w3-text-green w3-margin-left w3-flex w3-white w3-border w3-border-green w3-circle w3-flex-center";
+
+                iconPause.style.display = "none";
+                iconPlay.style.display = "none";
+                iconMicro.style.display = "inline-block";
+
+                startButton.disabled = false;
+                stopButton.disabled = true;
+
+                playButton.disabled = true;
+                playButton.className =
+                    "w3-button w3-hover-text-green w3-hover-white w3-border w3-border-green w3-text-green w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
+
+                audioElement.removeAttribute("src");
+                repeatButton.disabled = true;
+
+                recordingState.innerText = "No record";
+
+                postInfo.media.delete("audio");
+            }
+        });
+
+        audioElement.addEventListener("ended", () => {
+            iconPause.style.display = "none";
+            iconPlay.style.display = "inline-block";
+
+            recordingState.innerText = "Voice recorded";
+        });
+
         // Upload audio
         var audioSelector = document.createElement("input");
         audioSelector.type = "file";
@@ -639,32 +796,23 @@ function PostCreate() {
 
             reader.onload = (readerEvent) => {
                 var content = readerEvent.target.result;
-                document.getElementById("audioBox").src = content;
+                audioElement.src = content;
 
-                document.getElementById("videoLoader").pause();
-                document.getElementById("videoSource").src = "";
+                startButton.style.display = 'none'
+                stopButton.style.display = 'none'
+                repeatButton.style.display = 'flex'
+                recordingState.innerText = "Écouter l'enregistrement"
 
-                document.getElementById("startRecord").className =
-                    "w3-text-black w3-margin-left w3-flex w3-white w3-border w3-border-black w3-circle w3-flex-center";
+                iconMicro.style.display = 'none'
+                iconPause.style.display = 'none'
+                iconPlay.style.display = 'inline-block'
 
-                document.getElementById("startRecord").disabled = false;
-                document.getElementById("stopRecord").disabled = true;
-
-                document.getElementById("recordingState").innerText =
-                    "Voice recorded";
-                document.getElementById("playRecord").className =
-                    "w3-button w3-hover-text-white w3-black w3-hover-black w3-border w3-border-black w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
-
-                document.getElementById("pauseRecordIcon").style.display = "none";
-                document.getElementById("playRecordIcon").style.display =
-                    "inline-block";
-                document.getElementById("noRecordIcon").style.display = "none";
-
-                inputAudio.value = "";
+                playButton.className = "w3-flex-1 w3-button w3-hover-text-white w3-black w3-hover-black w3-border w3-border-black w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
                 postInfo.type = "image/audio";
             };
         };
         setinputAudio(audioSelector)
+
     }, []);
 
     return (
