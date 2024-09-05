@@ -78,8 +78,7 @@ function PostCreate() {
         postInfo.info.description = document.getElementById('postContent').innerHTML
 
         if (postInfo.title.length > 0 && postInfo.info.description.length > 0 && postInfo.category) {
-            document.getElementById("postPublicSpinner").style.display =
-                "inline-block";
+            document.getElementById("postPublicSpinner").style.display = "inline-block";
             document.getElementById("postPublicIcon").style.display = "none";
             var data;
             if (postInfo.media) {
@@ -113,8 +112,8 @@ function PostCreate() {
                         .patch(source + "/_post/" + postInfo.id + "?xcode=" + xcode, data)
                         .then((res) => {
                             if (res.data.logedin) {
-                                reloadPost(res.data.data.reverse());
                                 cancel()
+                                reloadPost(res.data.data.reverse());
                             } else {
                                 if (document.getElementById('modalLogin')) {
                                     document.getElementById('modalLogin').style.display = 'block'
@@ -146,8 +145,8 @@ function PostCreate() {
                         .post(source + "/_post?xcode=" + xcode, data)
                         .then((res) => {
                             if (res.data.logedin) {
-                                reloadPost(res.data.data.reverse());
                                 cancel()
+                                reloadPost(res.data.data.reverse());
                             } else {
                                 if (document.getElementById('modalLogin')) {
                                     document.getElementById('modalLogin').style.display = 'block'
@@ -205,6 +204,15 @@ function PostCreate() {
         document.getElementById('postContent').innerHTML = 'Que pensez-vous ?';
         document.getElementById('postCategory').value = null
         document.getElementById('deleteButton').style.display = 'none';
+        document.getElementById("confirmSpinner").style.display = "none";
+        document.getElementById("modalWarning").style.display = "none";
+        document
+            .getElementById("confirmWarning")
+            .removeEventListener("click", deleteHandler);
+        document
+            .getElementById("cancelWarning")
+            .removeEventListener("click", cancelHandler);
+
         cancelImageInsertion()
 
         postInfo.id = null
@@ -263,8 +271,7 @@ function PostCreate() {
         const xcode = localStorage.getItem("x-code");
         if (postInfo.id) {
             document.getElementById("modalWarning").style.display = "block";
-            document.getElementById("textWarning").innerText =
-                "Voulez vous vraiment supprimer ce Post ...";
+            document.getElementById("textWarning").innerText = "Voulez vous vraiment supprimer ce Post ...";
 
             const deleteHandler = async () => {
                 document.getElementById("confirmSpinner").style.display =
@@ -284,7 +291,7 @@ function PostCreate() {
                                 .getElementById("cancelWarning")
                                 .removeEventListener("click", cancelHandler);
 
-                            reloadPosts(res.data.data.reverse());
+                            reloadPost(res.data.data.reverse());
                             document.getElementById('modalPostListe').style.display = 'block'
                             document.getElementById('postTitle').value = ''
                             document.getElementById('postContent').innerHTML = 'Que pensez-vous ?'

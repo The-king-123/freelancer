@@ -45,17 +45,12 @@ export default function Home(props) {
 
   const [fullPath, setfullPath] = useState({ path: "" });
   const [imagePDP, setimagePDP] = useState(null);
-  const [imagePostModal, setimagePostModal] = useState(
-    source + "/images.php?w=720&h=720&zlonk=3733&zlink=160471339156947"
-  );
   const [contact, setcontact] = useState({
     phone: null,
     whatsapp: null,
     messenger: null,
   });
 
-  const [audioBox, setaudioBox] = useState({ chaine: null });
-  const [showThisPost, setshowThisPost] = useState();
   const [height, setHeight] = useState(0);
   const [displayDesignations, setdisplayDesignations] = useState("");
   const [displayChat, setdisplayChat] = useState(
@@ -670,29 +665,6 @@ export default function Home(props) {
     }
   };
 
-  const showSinglePost = (post) => {
-    setshowThisPost(post);
-    setimagePostModal(
-      source + "/images.php?w=420&h=420&zlonk=2733&zlink=" + post.link
-    );
-    if (post.type == "image/audio" && audioBox.chaine) {
-      audioBox.chaine.src =
-        source + "/audios.php?zlonk=1733&zlink=" + post.link;
-      audioBox.chaine.load();
-      audioBox.chaine.play();
-
-      document.getElementById("iconPlay").style.display = "none";
-      document.getElementById("iconPause").style.display = "inline-block";
-
-      document.getElementById("audioControl").style.display = "flex";
-    } else {
-      document.getElementById("audioControl").style.display = "none";
-    }
-    setTimeout(() => {
-      document.getElementById("modalSinglePost").style.display = "block";
-    }, 100);
-  };
-
   const expand = () => {
     if (document.getElementById("chatChoice").clientHeight == 60) {
       document.getElementById("chatChoice").style.overflow = "auto";
@@ -864,13 +836,13 @@ export default function Home(props) {
         document.getElementById("coreMain").style.display = "block";
       }
 
-      const posts = document.getElementsByClassName("postMedia");
-      for (let i = 0; i < posts.length; i++) {
-        posts[i].addEventListener("click", () => {
-          const post = posts[i].getAttribute("data");
-          showSinglePost(JSON.parse(post));
-        });
-      }
+      // const posts = document.getElementsByClassName("postMedia");
+      // for (let i = 0; i < posts.length; i++) {
+      //   posts[i].addEventListener("click", () => {
+      //     const post = posts[i].getAttribute("data");
+      //     showSinglePost(JSON.parse(post));
+      //   });
+      // }
 
       var times = 0;
 
@@ -956,9 +928,6 @@ export default function Home(props) {
           console.error("failure", e);
         });
 
-
-
-
       if (!props.core) {
         axios
           .get(source + "/_post/default?c=default")
@@ -990,13 +959,6 @@ export default function Home(props) {
           login();
         }
       };
-
-      audioBox.chaine = document.getElementById("audioBox");
-
-      audioBox.chaine.addEventListener("ended", () => {
-        document.getElementById("iconPlay").style.display = "inline-block";
-        document.getElementById("iconPause").style.display = "none";
-      });
 
       window.addEventListener("scroll", function () {
         // Calculate the scrollable height
@@ -1666,120 +1628,6 @@ export default function Home(props) {
       </div>
       {/*end modal logedin */}
 
-      {/* modal single post */}
-      <div
-        id="modalSinglePost"
-        className="mobileHeight w3-light-grey w3-modal w3-noscrollbar"
-        style={{ width: "100vw", padding: 24 }}
-      >
-        <audio id="audioBox" className="w3-hide"></audio>
-        <div
-          className="w3-white w3-noscrollbar w3-container w3-round-large w3-content w3-overflow w3-height"
-          style={{ minHeight: 320, padding: 0 }}
-        >
-          {/* Button control */}
-          <div className="w3-top" style={{ padding: 16 }}>
-            <div
-              onClick={() => {
-                if (audioBox) {
-                  audioBox.chaine.pause();
-                }
-                document.getElementById("modalSinglePost").style.display =
-                  "none";
-              }}
-              className="w3-white w3-card w3-round w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
-              style={{ width: 32, height: 32 }}
-            >
-              <FontAwesomeIcon
-                icon={faArrowLeft}
-                style={{ width: 16, height: 16 }}
-              />
-            </div>
-          </div>
-
-          <div
-            id="audioControl"
-            className="w3-bottom w3-flex-row w3-flex"
-            style={{ padding: 16, bottom: 46 }}
-          >
-            <div
-              onClick={() => {
-                audioBox.chaine.currentTime = 0;
-              }}
-              className="w3-white w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
-              style={{ width: 32, height: 32, marginRight: 12 }}
-            >
-              <FontAwesomeIcon
-                icon={faRefresh}
-                style={{ width: 14, height: 14 }}
-              />
-            </div>
-            <div
-              onClick={() => {
-                if (
-                  document.getElementById("iconPause").style.display == "none"
-                ) {
-                  audioBox.chaine.play();
-                  document.getElementById("iconPlay").style.display = "none";
-                  document.getElementById("iconPause").style.display =
-                    "inline-block";
-                } else {
-                  audioBox.chaine.pause();
-                  document.getElementById("iconPlay").style.display =
-                    "inline-block";
-                  document.getElementById("iconPause").style.display = "none";
-                }
-              }}
-              className="w3-white w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
-              style={{ width: 32, height: 32 }}
-            >
-              <FontAwesomeIcon
-                id="iconPlay"
-                icon={faPlay}
-                style={{ width: 14, height: 14, marginLeft: 2 }}
-              />
-              <FontAwesomeIcon
-                id="iconPause"
-                icon={faPause}
-                style={{ width: 14, height: 14, display: "none" }}
-              />
-            </div>
-          </div>
-
-          {/* End button control */}
-          <div className="w3-height w3-overflow-scroll w3-noscrollbar">
-            <div className="w3-half w3-height w3-black">
-              <div className="w3-red w3-height w3-black">
-                <Image
-                  unoptimized
-                  loading="lazy"
-                  width={100}
-                  height={320}
-                  alt="post image"
-                  style={{
-                    objectFit: "contain",
-                    objectPosition: "center",
-                  }}
-                  src={imagePostModal}
-                  className="w3-overflow w3-black post-image w3-height"
-                />
-              </div>
-            </div>
-            <div className="w3-half" style={{ padding: 24 }}>
-              <div>
-                <div className="w3-large w3-big w3-padding">
-                  {showThisPost != null ? showThisPost.title : ""}
-                </div>
-                <div className="w3-padding">
-                  {showThisPost != null
-                    ? parse(JSON.parse(showThisPost.info).description)
-                    : ""}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
