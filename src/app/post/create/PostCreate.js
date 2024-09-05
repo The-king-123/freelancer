@@ -102,7 +102,7 @@ function PostCreate() {
                     slug: postInfo.slug,
                     state: postInfo.state,
                     category: postInfo.category,
-                    videoUrl : postInfo.videoUrl,
+                    videoUrl: postInfo.videoUrl,
                 };
             }
 
@@ -123,8 +123,20 @@ function PostCreate() {
                                 document.getElementById('modalPostListe').style.display = 'block';
                                 document.getElementById('postTitle').value = '';
                                 document.getElementById('postContent').innerHTML = 'Que pensez-vous ?';
+                                document.getElementById('postCategory').value = null
                                 cancelImageInsertion()
                                 document.getElementById('deleteButton').style.display = 'none';
+
+                                postInfo.id = null
+                                postInfo.title = ""
+                                postInfo.slug = ""
+                                postInfo.type = "text"
+                                postInfo.category = null
+                                postInfo.info.description = ""
+                                postInfo.media = null
+                                postInfo.videoUrl = "_"
+                                postInfo.state = ""
+
                             } else {
                                 if (document.getElementById('modalLogin')) {
                                     document.getElementById('modalLogin').style.display = 'block'
@@ -166,9 +178,20 @@ function PostCreate() {
                                 reloadPost(res.data.data.reverse());
                                 document.getElementById('modalPostListe').style.display = 'block'
                                 document.getElementById('postTitle').value = ''
+                                document.getElementById('postCategory').value = null
                                 document.getElementById('postContent').innerHTML = 'Que pensez-vous ?'
                                 document.getElementById('deleteButton').style.display = 'none';
                                 cancelImageInsertion()
+
+                                postInfo.id = null
+                                postInfo.title = ""
+                                postInfo.slug = ""
+                                postInfo.type = "text"
+                                postInfo.category = null
+                                postInfo.info.description = ""
+                                postInfo.media = null
+                                postInfo.videoUrl = "_"
+                                postInfo.state = ""
                             } else {
                                 if (document.getElementById('modalLogin')) {
                                     document.getElementById('modalLogin').style.display = 'block'
