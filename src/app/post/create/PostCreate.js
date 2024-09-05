@@ -115,7 +115,7 @@ function PostCreate() {
                             if (res.data.logedin) {
                                 if (state == 'public') {
                                     document.getElementById("postPublicSpinner").style.display = "none";
-                                    document.getElementById("postPublicIcon").style.display = "inline-draft";
+                                    document.getElementById("postPublicIcon").style.display = "inline-block";
                                 } else if (state == 'draft') {
                                     document.getElementById("postDraftSpinner").style.display = "none";
                                 }
@@ -131,7 +131,7 @@ function PostCreate() {
                                 }
                                 if (state == 'public') {
                                     document.getElementById("postPublicSpinner").style.display = "none";
-                                    document.getElementById("postPublicIcon").style.display = "inline-draft";
+                                    document.getElementById("postPublicIcon").style.display = "inline-block";
                                 } else if (state == 'draft') {
                                     document.getElementById("postDraftSpinner").style.display = "none";
                                 }
@@ -141,7 +141,7 @@ function PostCreate() {
                         .catch((e) => {
                             if (state == 'public') {
                                 document.getElementById("postPublicSpinner").style.display = "none";
-                                document.getElementById("postPublicIcon").style.display = "inline-draft";
+                                document.getElementById("postPublicIcon").style.display = "inline-block";
                             } else if (state == 'draft') {
                                 document.getElementById("postDraftSpinner").style.display = "none";
                             }
@@ -167,6 +167,7 @@ function PostCreate() {
                                 document.getElementById('modalPostListe').style.display = 'block'
                                 document.getElementById('postTitle').value = ''
                                 document.getElementById('postContent').innerHTML = 'Que pensez-vous ?'
+                                document.getElementById('deleteButton').style.display = 'none';
                                 cancelImageInsertion()
                             } else {
                                 if (document.getElementById('modalLogin')) {
@@ -184,7 +185,7 @@ function PostCreate() {
                         .catch((e) => {
                             if (state == 'public') {
                                 document.getElementById("postPublicSpinner").style.display = "none";
-                                document.getElementById("postPublicIcon").style.display = "inline-draft";
+                                document.getElementById("postPublicIcon").style.display = "inline-block";
                             } else if (state == 'draft') {
                                 document.getElementById("postDraftSpinner").style.display = "none";
                             }
@@ -198,7 +199,7 @@ function PostCreate() {
             } catch (error) {
                 if (state == 'public') {
                     document.getElementById("postPublicSpinner").style.display = "none";
-                    document.getElementById("postPublicIcon").style.display = "inline-draft";
+                    document.getElementById("postPublicIcon").style.display = "inline-block";
                 } else if (state == 'draft') {
                     document.getElementById("postDraftSpinner").style.display = "none";
                 }
@@ -334,6 +335,7 @@ function PostCreate() {
 
         document.getElementById('postTitle').value = data.title;
         document.getElementById('postContent').innerHTML = JSON.parse(data.info).description;
+        document.getElementById('postCategory').value = data.category;
 
         if (data.type == 'image' || data.type == 'image/audio') {
             document.getElementById("showImage").src = source + "/images.php?w=100&h=100&zlonk=2733&zlink=" + data.link;
@@ -702,6 +704,7 @@ function PostCreate() {
                     </div>
                     <div className="w3-right" style={{ paddingRight: 16, width: '65%' }}>
                         <select
+                            id="postCategory"
                             onChange={(e) => postInfo.category = e.target.value}
                             className="w3-light-grey w3-input w3-border-0 w3-block w3-nowrap w3-overflow w3-round"
                             style={{ paddingBlock: 8 }}
