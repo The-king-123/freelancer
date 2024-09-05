@@ -45,7 +45,7 @@ function PostCreate() {
             description: "",
         },
         media: null,
-        videoUrl: "",
+        videoUrl: "_",
         state: "",
     });
 
