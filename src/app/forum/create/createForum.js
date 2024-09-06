@@ -487,7 +487,7 @@ function createForum() {
           </button>
           <button
             onClick={() => save("draft")}
-            className="w3-button w3-border w3-border-black w3-round-xxlarge w3-block w3-flex w3-flex-center"
+            className="w3-button w3-hover-black w3-border w3-border-black w3-round-xxlarge w3-block w3-flex w3-flex-center"
             style={{ marginTop: 16 }}
           >
             Enregistrer comme brouillon
@@ -501,7 +501,7 @@ function createForum() {
           <button
             id="deleteButton"
             onClick={supprimer}
-            className="w3-button w3-border w3-border-red w3-text-red w3-round-xxlarge w3-block w3-flex w3-flex-center"
+            className="w3-button w3-hover-red w3-border w3-border-red w3-text-red w3-round-xxlarge w3-block w3-flex w3-flex-center"
             style={{ marginTop: 16, display: 'none' }}
           >
             Supprimer le forum
