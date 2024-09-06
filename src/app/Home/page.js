@@ -1405,8 +1405,8 @@ export default function Home(props) {
             className="w3-dropdown-click w3-hover-white"
           >
             <div
-              id="settingWrapper"
-              onClick={(e) => openDropdown("setting")}
+              id="settingMobileWrapper"
+              onClick={(e) => openDropdown("settingMobile")}
               className="dropButton w3-flex w3-flex-center w3-card w3-round w3-white"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
@@ -1417,7 +1417,7 @@ export default function Home(props) {
               />
             </div>
             <div
-              id="setting"
+              id="settingMobile"
               className="w3-dropdown-content w3-bar-block w3-card w3-round"
               style={{ right: 0, minWidth: 260, marginTop: 8, paddingBottom: 4 }}
             >
