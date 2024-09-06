@@ -77,7 +77,7 @@ function PostCreate() {
         await axios
             .delete(source + "/_post/" + postInfo.id + '?xcode=' + xcode)
             .then((res) => {
-                if (res.data.logedin) {                            
+                if (res.data.logedin) {
                     cancel('supprimer')
                     reloadPost(res.data.data.reverse());
                 } else {
@@ -106,7 +106,7 @@ function PostCreate() {
     };
 
     const cancel = (state) => {
-        
+
         if (state == 'public') {
             document.getElementById("postPublicSpinner").style.display = "none";
             document.getElementById("postPublicIcon").style.display = "inline-block";
@@ -120,7 +120,7 @@ function PostCreate() {
         document.getElementById('deleteButton').style.display = 'none';
         document.getElementById("confirmSpinner").style.display = "none";
         document.getElementById("modalWarning").style.display = "none";
-        
+
         postInfo.id = null
         postInfo.title = ""
         postInfo.slug = ""
@@ -130,12 +130,12 @@ function PostCreate() {
         postInfo.media = null
         postInfo.videoUrl = "_"
         postInfo.state = ""
-        
+
         cancelImageInsertion()
-        if (postInfo.type=='video') {
+        if (postInfo.type == 'video') {
             addEmbedVideo()
         }
-        
+
 
         document
             .getElementById("confirmWarning")
@@ -193,7 +193,7 @@ function PostCreate() {
                     await axios
                         .patch(source + "/_post/" + postInfo.id + "?xcode=" + xcode, data)
                         .then((res) => {
-                            if (res.data.logedin) {                                
+                            if (res.data.logedin) {
                                 cancel(state)
                                 reloadPost(res.data.data.reverse());
                             } else {
@@ -226,7 +226,7 @@ function PostCreate() {
                     await axios
                         .post(source + "/_post?xcode=" + xcode, data)
                         .then((res) => {
-                            if (res.data.logedin) {                                
+                            if (res.data.logedin) {
                                 cancel(state)
                                 reloadPost(res.data.data.reverse());
                             } else {
@@ -355,6 +355,21 @@ function PostCreate() {
             document.getElementById("audioSection").style.display = "block";
             document.getElementById("videoEmbed").style.display = "none";
             document.getElementById("videoSection").style.display = "none";
+
+            if (data.type == 'image/audio') {
+                document.getElementById("audioBox").src = source + "/audios.php?zlonk=1733&zlink=" + data.link;
+                
+                document.getElementById("startRecord").style.display = 'none'
+                document.getElementById("stopRecord").style.display = 'none'
+                document.getElementById("repeatRecord").style.display = 'flex'
+                document.getElementById("recordingState").innerText = "Écouter l'enregistrement"
+
+                document.getElementById("playRecord").className = "w3-flex-1 w3-button w3-hover-text-white w3-black w3-hover-black w3-border w3-border-black w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
+
+                document.getElementById("noRecordIcon").style.display = 'none'
+                document.getElementById("pauseRecordIcon").style.display = 'none'
+                document.getElementById("playRecordIcon").style.display = 'inline-block'
+            }
 
         } else if (data.type == 'video') {
             document.getElementById("inputImage").style.display = "none";
@@ -807,7 +822,7 @@ function PostCreate() {
     }, []);
 
     return (
-        <div id="postCore" style={{ display: 'none',position:'relative' }}>
+        <div id="postCore" style={{ display: 'none', position: 'relative' }}>
             <div
                 className="w3-medium w3-big w3-flex-row w3-flex-center-v"
                 style={{ padding: 8 }}
@@ -1090,7 +1105,7 @@ function PostCreate() {
             </div>
 
             {/* modal add new category */}
-            <div id="modalCategory" className="w3-modal w3-round white-opacity" style={{position:'absolute',height:'calc(100vh - 16px)'}}>
+            <div id="modalCategory" className="w3-modal w3-round white-opacity" style={{ position: 'absolute', height: 'calc(100vh - 16px)' }}>
                 <div
                     className="w3-modal-content w3-card w3-round w3-overflow"
                     style={{ maxWidth: 420, top: 48 }}
@@ -1125,7 +1140,7 @@ function PostCreate() {
             {/* end modal add new category */}
 
             {/* modal video preview */}
-            <div id="modalVideoPreview" className="w3-modal w3-round white-opacity" style={{position:'absolute',height:'calc(100vh - 16px)'}}>
+            <div id="modalVideoPreview" className="w3-modal w3-round white-opacity" style={{ position: 'absolute', height: 'calc(100vh - 16px)' }}>
                 <div
                     className="w3-modal-content w3-card w3-round w3-overflow"
                     style={{ maxWidth: 420, top: 64 }}
@@ -1151,7 +1166,7 @@ function PostCreate() {
             {/* end modal video preview */}
 
             {/* modal post liste */}
-            <div id="modalPostListe" className="w3-modal w3-round white-opacity" style={{position:'absolute',height:'calc(100vh - 16px)'}}>
+            <div id="modalPostListe" className="w3-modal w3-round white-opacity" style={{ position: 'absolute', height: 'calc(100vh - 16px)' }}>
                 <div
                     className="w3-modal-content w3-card w3-round w3-overflow"
                     style={{ maxWidth: 420, top: 32 }}
