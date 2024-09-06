@@ -68,6 +68,43 @@ function PostCreate() {
         }
     }
 
+    const cancel = (state) => {
+        
+        if (state == 'public') {
+            document.getElementById("postPublicSpinner").style.display = "none";
+            document.getElementById("postPublicIcon").style.display = "inline-block";
+        } else if (state == 'draft') {
+            document.getElementById("postDraftSpinner").style.display = "none";
+        }
+        document.getElementById('modalPostListe').style.display = 'block';
+        document.getElementById('postTitle').value = '';
+        document.getElementById('postContent').innerHTML = 'Que pensez-vous ?';
+        document.getElementById('postCategory').value = null
+        document.getElementById('deleteButton').style.display = 'none';
+        document.getElementById("confirmSpinner").style.display = "none";
+        document.getElementById("modalWarning").style.display = "none";
+        
+
+        postInfo.id = null
+        postInfo.title = ""
+        postInfo.slug = ""
+        postInfo.type = "text"
+        postInfo.category = null
+        postInfo.info.description = ""
+        postInfo.media = null
+        postInfo.videoUrl = "_"
+        postInfo.state = ""
+        
+        document
+            .getElementById("confirmWarning")
+            .removeEventListener("click", deleteHandler);
+        document
+            .getElementById("cancelWarning")
+            .removeEventListener("click", cancelHandler);
+
+        cancelImageInsertion()
+    }
+
     const save = async (state) => {
 
         const xcode = localStorage.getItem("x-code");
@@ -115,10 +152,8 @@ function PostCreate() {
                     await axios
                         .patch(source + "/_post/" + postInfo.id + "?xcode=" + xcode, data)
                         .then((res) => {
-                            if (res.data.logedin) {
-                                console.log('Patch exixting post');
-                                
-                                cancel()
+                            if (res.data.logedin) {                                
+                                cancel(state)
                                 reloadPost(res.data.data.reverse());
                             } else {
                                 if (document.getElementById('modalLogin')) {
@@ -150,10 +185,8 @@ function PostCreate() {
                     await axios
                         .post(source + "/_post?xcode=" + xcode, data)
                         .then((res) => {
-                            if (res.data.logedin) {
-                                console.log('Post new post');
-                                
-                                cancel()
+                            if (res.data.logedin) {                                
+                                cancel(state)
                                 reloadPost(res.data.data.reverse());
                             } else {
                                 if (document.getElementById('modalLogin')) {
@@ -199,43 +232,6 @@ function PostCreate() {
 
         }
     };
-
-    const cancel = () => {
-        if (state == 'public') {
-            document.getElementById("postPublicSpinner").style.display = "none";
-            document.getElementById("postPublicIcon").style.display = "inline-block";
-        } else if (state == 'draft') {
-            document.getElementById("postDraftSpinner").style.display = "none";
-        }
-        document.getElementById('modalPostListe').style.display = 'block';
-        document.getElementById('postTitle').value = '';
-        document.getElementById('postContent').innerHTML = 'Que pensez-vous ?';
-        document.getElementById('postCategory').value = null
-        document.getElementById('deleteButton').style.display = 'none';
-        document.getElementById("confirmSpinner").style.display = "none";
-        document.getElementById("modalWarning").style.display = "none";
-        
-
-        postInfo.id = null
-        postInfo.title = ""
-        postInfo.slug = ""
-        postInfo.type = "text"
-        postInfo.category = null
-        postInfo.info.description = ""
-        postInfo.media = null
-        postInfo.videoUrl = "_"
-        postInfo.state = ""
-        
-        document
-            .getElementById("confirmWarning")
-            .removeEventListener("click", deleteHandler);
-        document
-            .getElementById("cancelWarning")
-            .removeEventListener("click", cancelHandler);
-
-        cancelImageInsertion()
-
-    }
 
     const [singleCategoryInfo, setsingleCategoryInfo] = useState({
         id: null,
@@ -291,10 +287,8 @@ function PostCreate() {
                 await axios
                     .delete(source + "/_post/" + postInfo.id + '?xcode=' + xcode)
                     .then((res) => {
-                        if (res.data.logedin) {
-                            console.log('Supprimer a Post');
-                            
-                            cancel()
+                        if (res.data.logedin) {                            
+                            cancel('supprimer')
                             reloadPost(res.data.data.reverse());
                         } else {
                             if (document.getElementById('modalLogin')) {
