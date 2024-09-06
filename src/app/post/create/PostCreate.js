@@ -116,6 +116,8 @@ function PostCreate() {
                         .patch(source + "/_post/" + postInfo.id + "?xcode=" + xcode, data)
                         .then((res) => {
                             if (res.data.logedin) {
+                                console.log('Patch exixting post');
+                                
                                 cancel()
                                 reloadPost(res.data.data.reverse());
                             } else {
@@ -149,6 +151,8 @@ function PostCreate() {
                         .post(source + "/_post?xcode=" + xcode, data)
                         .then((res) => {
                             if (res.data.logedin) {
+                                console.log('Post new post');
+                                
                                 cancel()
                                 reloadPost(res.data.data.reverse());
                             } else {

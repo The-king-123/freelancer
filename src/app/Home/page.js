@@ -267,23 +267,23 @@ export default function Home(props) {
     if (data.length > 0) {
       glitchTopic = data.map((topic, key) =>
         type == "topic" ? (
-          <button
+          <div
             key={key}
             onClick={() => thisChoice(topic, type)}
-            style={{ marginInline: 8, maxWidth: 320, marginBlock: 8 }}
-            className="w3-button chat-black w3-round"
+            style={{ marginInline: 8, maxWidth: 320, marginBlock: 8, paddingBlock: 8 }}
+            className="w3-pointer chat-black w3-round"
           >
             {topic.name}
-          </button>
+          </div>
         ) : (
-          <button
+          <div
             key={key}
             onClick={() => thisChoice(topic, type)}
-            style={{ marginInline: 8, maxWidth: 320, marginBlock: 8 }}
-            className="w3-button chat-black w3-round"
+            style={{ marginInline: 8, maxWidth: 320, marginBlock: 8, paddingBlock: 8 }}
+            className="w3-pointer chat-black w3-round"
           >
             {topic.name}
-          </button>
+          </div>
         )
       );
     } else {
