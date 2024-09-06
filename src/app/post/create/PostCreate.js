@@ -292,6 +292,8 @@ function PostCreate() {
                     .delete(source + "/_post/" + postInfo.id + '?xcode=' + xcode)
                     .then((res) => {
                         if (res.data.logedin) {
+                            console.log('Supprimer a Post');
+                            
                             cancel()
                             reloadPost(res.data.data.reverse());
                         } else {
