@@ -19,20 +19,20 @@ export default function PostContent({ content }) {
             style={{ padding: 8 }}
           >
             <div
-              className="w3-flex w3-flex-row w3-light-grey w3-flex-center"
-              style={{ padding: 16 }}
+              className="w3-flex w3-flex-row w3-light-grey w3-flex-center w3-round"
+              style={{ padding: 12 }}
             >
               <Image
                 loading="lazy"
                 unoptimized
-                width={64}
-                height={64}
+                width={48}
+                height={48}
                 src={
                   source + "/images.php?w=80&h=80&zlonk=3733&zlink=" + user.key
                 }
                 className="w3-circle w3-margin-right"
                 alt={user.fullname}
-                style={{ objectFit: "cover", objectPosition: "center", minHeight: 64, minWidth: 64 }}
+                style={{ objectFit: "cover", objectPosition: "center", minHeight: 48, minWidth: 48 }}
               />
               <div className="w3-flex-1 w3-medium w3-big w3-nowrap w3-overflow w3-block">
                 {user.fullname}

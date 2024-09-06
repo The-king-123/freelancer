@@ -10,7 +10,7 @@ export default function PostContent({ content }) {
     <div>
       {content.length > 0 &&
         content.map((des, key) => (
-          <div key={key} className="w3-half" style={{ padding: 8 }}>
+          <div key={key} style={{ padding: 8 }}>
             <Link
               href={"/talent/" + slugify(des.designation, { lower: true })}
               key={key}
@@ -18,14 +18,14 @@ export default function PostContent({ content }) {
               style={{ padding: 8 }}
             >
               <div
-                className="w3-flex w3-flex-row w3-light-grey w3-flex-center"
+                className="w3-flex w3-flex-row w3-light-grey w3-flex-center w3-round"
                 style={{ padding: 16 }}
               >
                 <Image
                   loading="lazy"
                   unoptimized
-                  width={60}
-                  height={60}
+                  width={40}
+                  height={40}
                   src={
                     source +
                     "/images.php?w=320&h=320&zlonk=5733&zlink=" +
@@ -36,8 +36,8 @@ export default function PostContent({ content }) {
                   style={{
                     objectFit: "cover",
                     objectPosition: "center",
-                    minHeight: 60,
-                    minWidth: 60,
+                    minHeight: 40,
+                    minWidth: 40,
                   }}
                 />
                 <div

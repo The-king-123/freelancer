@@ -47,11 +47,12 @@ export default function PostContent({ posts }) {
     }
     setTimeout(() => {
       document.getElementById("modalSinglePost").style.display = "block";
+      document.getElementById("homePostCore").style.display = 'none'
     }, 100);
   };
 
   useEffect(() => {
-    
+
     audioBox.chaine = document.getElementById("audioBox");
 
     audioBox.chaine.addEventListener("ended", () => {
@@ -59,99 +60,101 @@ export default function PostContent({ posts }) {
       document.getElementById("iconPause").style.display = "none";
     });
   }, [])
-  
+
 
   return (
-    <div>
-      {posts.length > 0 &&
-        posts.map((post, key) => (
-          <div key={key} style={{ padding: 8, zIndex: 1 }}>
-            <div
-              className="w3-small w3-text-grey"
-              style={{ paddingInline: 8, textAlign: "right", display: "none" }}
-              id={"flashInfo" + key}
-            >
-              Texte copié...
-            </div>
-            <div className="w3-flex-column w3-overflow w3-card w3-round w3-pointer w3-white">
+    <div style={{ position: 'relative' }}>
+      <div id="homePostCore">
+        {posts.length > 0 &&
+          posts.map((post, key) => (
+            <div key={key} style={{ padding: 8, zIndex: 1 }}>
               <div
-                data={"https://freelancer.mg/post/" + post.slug}
-                className="postTitle w3-nowrap w3-overflow w3-light-grey w3-big"
-                style={{ paddingBlock: 8, paddingInline: 16 }}
-                title="Click to copy post link"
+                className="w3-small w3-text-grey"
+                style={{ paddingInline: 8, textAlign: "right", display: "none" }}
+                id={"flashInfo" + key}
               >
-                {parse(post.title)}
+                Texte copié...
               </div>
-              <div>
-                <div className="postCore">
-                  <div
-                    id={"post" + key}
-                    className="w3-overflow w3-nowrap-multiline"
-                    style={{ marginInline: 16, marginBlock: 8 }}
-                  >
-                    {parse(JSON.parse(post.info).description)}
+              <div className="w3-flex-column w3-overflow w3-card w3-round w3-pointer w3-white">
+                <div
+                  data={"https://freelancer.mg/post/" + post.slug}
+                  className="postTitle w3-nowrap w3-overflow w3-light-grey w3-big"
+                  style={{ paddingBlock: 8, paddingInline: 16 }}
+                  title="Click to copy post link"
+                >
+                  {parse(post.title)}
+                </div>
+                <div>
+                  <div className="postCore">
+                    <div
+                      id={"post" + key}
+                      className="w3-overflow w3-nowrap-multiline"
+                      style={{ marginInline: 16, marginBlock: 8 }}
+                    >
+                      {parse(JSON.parse(post.info).description)}
+                    </div>
                   </div>
                 </div>
-              </div>
-              {(post.type == "image" || post.type == "image/audio") && (
-                <div
-                  onClick={() => showSinglePost(post)}
-                  className="postMedia w3-display-container w3-light-grey post-image"
-                  data={JSON.stringify(post)}
-                  style={{ zIndex: 2 }}
-                >
-                  <Image
-                    alt={"image" + key}
-                    unoptimized
-                    loading="lazy"
-                    onContextMenu={(e) => e.preventDefault()}
-                    height={320}
-                    width={520}
-                    src={
-                      source +
-                      "/images.php?w=420&h=420&zlonk=2733&zlink=" +
-                      post.link
-                    }
-                    style={{
-                      objectPosition: "center",
-                      objectFit: "cover",
-                      zIndex: 1,
-                    }}
-                    className="w3-overflow w3-light-grey post-image"
-                  />
-                  {post.type == "image/audio" && (
-                    <div className="w3-black w3-opacity w3-block w3-height w3-padding w3-display-middle"></div>
-                  )}
-                  {post.type == "image/audio" && (
-                    <div
-                      className="w3-white w3-circle w3-display-middle"
-                      style={{ width: 60, height: 60 }}
-                    >
-                      <div className="w3-block w3-height w3-flex w3-flex-center">
-                        <FontAwesomeIcon
-                          icon={faPlay}
-                          style={{ height: 24, width: 24, marginLeft: 4 }}
-                        />
+                {(post.type == "image" || post.type == "image/audio") && (
+                  <div
+                    onClick={() => showSinglePost(post)}
+                    className="postMedia w3-display-container w3-light-grey post-image"
+                    data={JSON.stringify(post)}
+                    style={{ zIndex: 2 }}
+                  >
+                    <Image
+                      alt={"image" + key}
+                      unoptimized
+                      loading="lazy"
+                      onContextMenu={(e) => e.preventDefault()}
+                      height={320}
+                      width={520}
+                      src={
+                        source +
+                        "/images.php?w=420&h=420&zlonk=2733&zlink=" +
+                        post.link
+                      }
+                      style={{
+                        objectPosition: "center",
+                        objectFit: "cover",
+                        zIndex: 1,
+                      }}
+                      className="w3-overflow w3-light-grey post-image"
+                    />
+                    {post.type == "image/audio" && (
+                      <div className="w3-black w3-opacity w3-block w3-height w3-padding w3-display-middle"></div>
+                    )}
+                    {post.type == "image/audio" && (
+                      <div
+                        className="w3-white w3-circle w3-display-middle"
+                        style={{ width: 60, height: 60 }}
+                      >
+                        <div className="w3-block w3-height w3-flex w3-flex-center">
+                          <FontAwesomeIcon
+                            icon={faPlay}
+                            style={{ height: 24, width: 24, marginLeft: 4 }}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              )}
+                    )}
+                  </div>
+                )}
 
-              {post.type == "video" && (
-                <iframe
-                  id={"videoPosts" + key}
-                  className="videoPosts w3-block"
-                  height="420"
-                  src={getUrl(post.link)}
-                  title={getTitle(post.link)}
-                  frameBorder={0}
-                  allowFullScreen
-                ></iframe>
-              )}
+                {post.type == "video" && (
+                  <iframe
+                    id={"videoPosts" + key}
+                    className="videoPosts w3-block"
+                    height="420"
+                    src={getUrl(post.link)}
+                    title={getTitle(post.link)}
+                    frameBorder={0}
+                    allowFullScreen
+                  ></iframe>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+      </div>
 
       {posts.length <= 0 && (
         <div style={{ paddingInline: 8 }}>
@@ -171,22 +174,22 @@ export default function PostContent({ posts }) {
           <div
             id="modalSinglePost"
             className="w3-white w3-modal w3-noscrollbar"
-            style={{ paddingInline: 16, paddingBlock: 68 }}
+            style={{ paddingInline: 8, position: 'absolute', height: 'calc(100vh - 120px)' }}
           >
             <audio id="audioBox" className="w3-hide"></audio>
             <div
               className="w3-light-grey w3-noscrollbar w3-round-large w3-content w3-overflow w3-height"
-              style={{ minHeight: 320,maxWidth:486, padding: 0 }}
+              style={{ minHeight: 320, maxWidth: 486, padding: 0 }}
             >
               {/* Button control */}
-              <div className="w3-top" style={{ paddingTop: 76, paddingLeft:8 }}>
+              <div className="w3-top" style={{ paddingTop: 64, paddingLeft: 16 }}>
                 <div
                   onClick={() => {
                     if (audioBox) {
                       audioBox.chaine.pause();
                     }
-                    document.getElementById("modalSinglePost").style.display =
-                      "none";
+                    document.getElementById("modalSinglePost").style.display = "none";
+                    document.getElementById("homePostCore").style.display = "block";
                   }}
                   className="w3-white w3-card w3-round w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
                   style={{ width: 32, height: 32 }}
@@ -201,7 +204,7 @@ export default function PostContent({ posts }) {
               <div
                 id="audioControl"
                 className="w3-bottom w3-flex-row w3-flex"
-                style={{ padding: 16, bottom: 46 }}
+                style={{ padding: 16, bottom: 52 }}
               >
                 <div
                   onClick={() => {
@@ -271,11 +274,12 @@ export default function PostContent({ posts }) {
                     <div className="w3-large w3-big">
                       {showThisPost != null ? showThisPost.title : ""}
                     </div>
-                    <div>
+                    <div className="w3-medium">
                       {showThisPost != null
                         ? parse(JSON.parse(showThisPost.info).description)
                         : ""}
                     </div>
+                    <div style={{height:32}}></div>
                   </div>
                 </div>
               </div>

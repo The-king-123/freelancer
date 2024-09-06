@@ -11,11 +11,13 @@ import {
   faChevronCircleUp,
   faClock,
   faDoorOpen,
+  faGear,
   faHome,
   faICursor,
   faImages,
   faKey,
   faNewspaper,
+  faPager,
   faPaperPlane,
   faPause,
   faPhone,
@@ -573,7 +575,7 @@ export default function Home(props) {
     const allDropContent = document.getElementsByClassName('w3-dropdown-content')
     const dropButton = document.getElementsByClassName('dropButton')
     for (let i = 0; i < allDropContent.length; i++) {
-      if (allDropContent[i].id != ID) {        
+      if (allDropContent[i].id != ID) {
         allDropContent[i].className = allDropContent[i].className.replace(" w3-show", "");
         dropButton[i].className = dropButton[i].className.replace("w3-black", "w3-white");
       }
@@ -581,14 +583,14 @@ export default function Home(props) {
     if (document.getElementById(ID)) {
       var x = document.getElementById(ID);
       if (x.className.indexOf("w3-show") == -1) {
-        x.className += " w3-show";        
-        if (document.getElementById(ID+'Wrapper')) {
-          document.getElementById(ID+'Wrapper').className = document.getElementById(ID+'Wrapper').className.replace("w3-white", "w3-black")
+        x.className += " w3-show";
+        if (document.getElementById(ID + 'Wrapper')) {
+          document.getElementById(ID + 'Wrapper').className = document.getElementById(ID + 'Wrapper').className.replace("w3-white", "w3-black")
         }
       } else {
         x.className = x.className.replace(" w3-show", "");
-        if (document.getElementById(ID+'Wrapper')) {
-          document.getElementById(ID+'Wrapper').className = document.getElementById(ID+'Wrapper').className.replace("w3-black", "w3-white")
+        if (document.getElementById(ID + 'Wrapper')) {
+          document.getElementById(ID + 'Wrapper').className = document.getElementById(ID + 'Wrapper').className.replace("w3-black", "w3-white")
         }
       }
     }
@@ -1030,6 +1032,7 @@ export default function Home(props) {
           width: 250,
           top: 8,
           borderRadius: "0px 8px 8px 0px",
+          overflow: 'visible'
         }}
         id="sidebarMenu"
       >
@@ -1038,28 +1041,178 @@ export default function Home(props) {
             onClick={Home}
             className="w3-pointer w3-center w3-flex-row w3-flex-center w3-large"
           >
-            <b className="userNameTitle w3-overflow w3-nowrap"></b>
+            <b className="userNameTitle w3-overflow w3-nowrap"><span className="w3-text-light-grey">|</span></b>
           </div>
         </div>
         <div
           className="w3-padding-32 w3-large w3-text-grey"
           style={{ paddingInline: 16 }}
         >
-          {/* {displayDesignations} */}
-          {/* <div className="w3-flex w3-flex-row w3-flex-center-v">
+          {/* menu desktop */}
+          <div
+            className="w3-block w3-flex w3-flex-column"
+            style={{ paddingBlock: 8, zIndex: 9999 }}
+          >
+
             <Link
-              onClick={() => {
-                if (fullPath.path != "/talent/" && fullPath.path != "/talent") {
-                  stopAllIntervalAndTimeout();
-                  closeAllPanel();
-                }
-              }}
-              className="w3-small w3-text-grey w3-padding w3-white"
+              className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+              style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+              href={"/"}
+            >
+              <FontAwesomeIcon
+                icon={faHome}
+                width={20}
+                height={20}
+              />
+              <div className="w3-margin-left w3-medium">Accueil</div>
+            </Link>
+
+            <div
+              className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round w3-pointer"
+              style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+              onClick={userForum}
+            >
+              <FontAwesomeIcon
+                icon={faNewspaper}
+                width={20}
+                height={20}
+              />
+              <div className="w3-margin-left w3-medium">Les forums</div>
+            </div>
+
+            <Link
+              className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+              style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+              href={"/post/create"}
+            >
+              <FontAwesomeIcon
+                icon={faImages}
+                width={20}
+                height={20}
+              />
+              <div className="w3-margin-left w3-medium">Créer un post</div>
+            </Link>
+
+            <Link
+              className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+              style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+              href={"/forum/create"}
+            >
+              <FontAwesomeIcon
+                icon={faPager}
+                width={20}
+                height={20}
+              />
+              <div className="w3-margin-left w3-medium">Créer un forum</div>
+            </Link>
+
+            <Link
+              className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+              style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
               href={"/talent"}
             >
-              Voir plus
+              <FontAwesomeIcon
+                icon={faUsers}
+                width={20}
+                height={20}
+              />
+              <div className="w3-margin-left w3-medium">Les talents</div>
             </Link>
-          </div> */}
+
+            <div style={{ height: 40 }}>
+              <div
+                className="w3-dropdown-click w3-hover-light-grey"
+              >
+
+                <div
+                  id="setting"
+                  className="w3-dropdown-content w3-bar-block w3-card w3-round w3-medium"
+                  style={{ left: 234, bottom: 4, minWidth: 260 }}
+                >
+                  <div className="w3-flex-row">
+                    {/* / arrow marker / */}
+                    <div className="w3-display-container" style={{ width: 0, zIndex: 1 }}>
+                      <FontAwesomeIcon
+                        icon={faPlay}
+                        className="rotate180 w3-text-white w3-right w3-display-bottomleft"
+                        style={{ marginLeft: -8, marginBottom: 12 }}
+                      />
+                    </div>
+                    {/* / arrow marker / */}
+                    <div className="w3-flex-1 w3-overflow w3-round" style={{ zIndex: 2 }}>
+                      <Link className="w3-bar-item w3-button" href={'/profile'}>
+                        <FontAwesomeIcon
+                          className="w3-margin-right"
+                          icon={faUser}
+                        />
+                        Votre profil
+                      </Link>
+                      <Link className="w3-bar-item w3-button" href={'/chatbotmaker'}>
+                        <FontAwesomeIcon
+                          className="w3-margin-right"
+                          icon={faRobot}
+                        />
+                        Gérez votre chatbot
+                      </Link>
+                      {/* <Link className="w3-bar-item w3-button" href={'/settings'}>
+                      <FontAwesomeIcon
+                        className="w3-margin-right"
+                        icon={faClock}
+                      />
+                      Paramètres
+                    </Link> */}
+                      <Link
+                        href={'/security'}
+                        className="w3-bar-item w3-button"
+                      >
+                        <FontAwesomeIcon
+                          className="w3-margin-right"
+                          icon={faShieldAlt}
+                        />
+                        Sécurité
+                      </Link>
+                      {/* {adminCore} */}
+                      <div
+                        onClick={logout}
+                        className="w3-bar-item w3-button"
+                      >
+                        <FontAwesomeIcon
+                          id="logoutIcon"
+                          className="w3-margin-right"
+                          icon={faDoorOpen}
+                        />
+                        <FontAwesomeIcon
+                          id="logoutSpinner"
+                          style={{ display: "none" }}
+                          className="w3-margin-right w3-spin"
+                          icon={faSpinner}
+                        />
+                        Déconnexion
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div
+                  id="settingWrapper"
+                  onClick={(e) => openDropdown("setting")}
+                  className="dropButton w3-flex-row w3-flex-center-v w3-round w3-white"
+                  style={{ height: 40, paddingInline: 16, marginBlock: 4 }}
+                >
+                  <FontAwesomeIcon
+                    icon={faGear}
+                    width={20}
+                    height={20}
+                  />
+                  <div className="w3-margin-left w3-medium">Paramètres</div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+          {/* end menu desktop */}
         </div>
       </nav>
 
@@ -1428,7 +1581,7 @@ export default function Home(props) {
                   >
                     <div className="w3-white w3-circle w3-flex w3-flex-center w3-margin-right" style={{ width: 40, height: 40 }}>
                       <FontAwesomeIcon
-                        icon={faNewspaper}
+                        icon={faPager}
                       />
                     </div>
                     Créer un forum
