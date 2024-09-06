@@ -68,6 +68,43 @@ function PostCreate() {
         }
     }
 
+    const deleteHandler = async () => {
+
+        const xcode = localStorage.getItem("x-code");
+        document.getElementById("confirmSpinner").style.display =
+            "inline-block";
+        await setCSRFToken();
+        await axios
+            .delete(source + "/_post/" + postInfo.id + '?xcode=' + xcode)
+            .then((res) => {
+                if (res.data.logedin) {                            
+                    cancel('supprimer')
+                    reloadPost(res.data.data.reverse());
+                } else {
+                    if (document.getElementById('modalLogin')) {
+                        document.getElementById('modalLogin').style.display = 'block'
+                    }
+                    document.getElementById("confirmSpinner").style.display = "none";
+                    document.getElementById("modalWarning").style.display = "none";
+                }
+
+            })
+            .catch((e) => {
+                console.error("failure", e);
+            });
+    };
+
+    const cancelHandler = async () => {
+        document.getElementById("modalWarning").style.display = "none";
+
+        document
+            .getElementById("confirmWarning")
+            .removeEventListener("click", deleteHandler);
+        document
+            .getElementById("cancelWarning")
+            .removeEventListener("click", cancelHandler);
+    };
+
     const cancel = (state) => {
         
         if (state == 'public') {
@@ -84,7 +121,6 @@ function PostCreate() {
         document.getElementById("confirmSpinner").style.display = "none";
         document.getElementById("modalWarning").style.display = "none";
         
-
         postInfo.id = null
         postInfo.title = ""
         postInfo.slug = ""
@@ -95,6 +131,12 @@ function PostCreate() {
         postInfo.videoUrl = "_"
         postInfo.state = ""
         
+        cancelImageInsertion()
+        if (postInfo.type=='video') {
+            addEmbedVideo()
+        }
+        
+
         document
             .getElementById("confirmWarning")
             .removeEventListener("click", deleteHandler);
@@ -102,7 +144,6 @@ function PostCreate() {
             .getElementById("cancelWarning")
             .removeEventListener("click", cancelHandler);
 
-        cancelImageInsertion()
     }
 
     const save = async (state) => {
@@ -275,44 +316,9 @@ function PostCreate() {
     }
 
     const supprimer = async () => {
-        const xcode = localStorage.getItem("x-code");
         if (postInfo.id) {
             document.getElementById("modalWarning").style.display = "block";
             document.getElementById("textWarning").innerText = "Voulez vous vraiment supprimer ce Post ...";
-
-            const deleteHandler = async () => {
-                document.getElementById("confirmSpinner").style.display =
-                    "inline-block";
-                await setCSRFToken();
-                await axios
-                    .delete(source + "/_post/" + postInfo.id + '?xcode=' + xcode)
-                    .then((res) => {
-                        if (res.data.logedin) {                            
-                            cancel('supprimer')
-                            reloadPost(res.data.data.reverse());
-                        } else {
-                            if (document.getElementById('modalLogin')) {
-                                document.getElementById('modalLogin').style.display = 'block'
-                            }
-                            document.getElementById("confirmSpinner").style.display = "none";
-                            document.getElementById("modalWarning").style.display = "none";
-                        }
-
-                    })
-                    .catch((e) => {
-                        console.error("failure", e);
-                    });
-            };
-            const cancelHandler = async () => {
-                document.getElementById("modalWarning").style.display = "none";
-
-                document
-                    .getElementById("confirmWarning")
-                    .removeEventListener("click", deleteHandler);
-                document
-                    .getElementById("cancelWarning")
-                    .removeEventListener("click", cancelHandler);
-            };
 
             document
                 .getElementById("confirmWarning")
