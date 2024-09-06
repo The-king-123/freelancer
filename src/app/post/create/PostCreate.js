@@ -210,14 +210,7 @@ function PostCreate() {
         document.getElementById('deleteButton').style.display = 'none';
         document.getElementById("confirmSpinner").style.display = "none";
         document.getElementById("modalWarning").style.display = "none";
-        document
-            .getElementById("confirmWarning")
-            .removeEventListener("click", deleteHandler);
-        document
-            .getElementById("cancelWarning")
-            .removeEventListener("click", cancelHandler);
-
-        cancelImageInsertion()
+        
 
         postInfo.id = null
         postInfo.title = ""
@@ -228,6 +221,16 @@ function PostCreate() {
         postInfo.media = null
         postInfo.videoUrl = "_"
         postInfo.state = ""
+        
+        document
+            .getElementById("confirmWarning")
+            .removeEventListener("click", deleteHandler);
+        document
+            .getElementById("cancelWarning")
+            .removeEventListener("click", cancelHandler);
+
+        cancelImageInsertion()
+
     }
 
     const [singleCategoryInfo, setsingleCategoryInfo] = useState({
@@ -798,7 +801,7 @@ function PostCreate() {
     }, []);
 
     return (
-        <div id="postCore" style={{ display: 'none' }}>
+        <div id="postCore" style={{ display: 'none',position:'relative' }}>
             <div
                 className="w3-medium w3-big w3-flex-row w3-flex-center-v"
                 style={{ padding: 8 }}
@@ -857,7 +860,7 @@ function PostCreate() {
                 <input
                     id="postTitle"
                     onChange={(e) => (postInfo.title = e.target.value)}
-                    className="w3-input w3-border-0 w3-light-grey"
+                    className="w3-input w3-border-0 w3-light-grey w3-round"
                     type="text"
                     maxLength={200}
                     style={{ marginTop: 16 }}
@@ -1081,7 +1084,7 @@ function PostCreate() {
             </div>
 
             {/* modal add new category */}
-            <div id="modalCategory" className="w3-modal">
+            <div id="modalCategory" className="w3-modal w3-round white-opacity" style={{position:'absolute',height:'calc(100vh - 16px)'}}>
                 <div
                     className="w3-modal-content w3-card w3-round w3-overflow"
                     style={{ maxWidth: 420, top: 48 }}
@@ -1116,7 +1119,7 @@ function PostCreate() {
             {/* end modal add new category */}
 
             {/* modal video preview */}
-            <div id="modalVideoPreview" className="w3-modal">
+            <div id="modalVideoPreview" className="w3-modal w3-round white-opacity" style={{position:'absolute',height:'calc(100vh - 16px)'}}>
                 <div
                     className="w3-modal-content w3-card w3-round w3-overflow"
                     style={{ maxWidth: 420, top: 64 }}
@@ -1142,7 +1145,7 @@ function PostCreate() {
             {/* end modal video preview */}
 
             {/* modal post liste */}
-            <div id="modalPostListe" className="w3-modal">
+            <div id="modalPostListe" className="w3-modal w3-round white-opacity" style={{position:'absolute',height:'calc(100vh - 16px)'}}>
                 <div
                     className="w3-modal-content w3-card w3-round w3-overflow"
                     style={{ maxWidth: 420, top: 32 }}

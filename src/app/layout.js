@@ -19,45 +19,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         {children}
-        {/* modal warning */}
-        <div id="modalWarning" className="w3-modal">
-          <div
-            className="w3-modal-content w3-card-4 w3-animate-top w3-round w3-overflow"
-            style={{ width: 320 }}
-          >
-            <div style={{ padding: 24 }}>
-              <FontAwesomeIcon
-                icon={faWarning}
-                className="w3-text-red w3-large w3-opacity-min"
-              />
-              <div id="textWarning">
-                Voulez vous vraiment supprimer ce Topic avec son
-                contenu ...
-              </div>
-            </div>
-            <div className="w3-container w3-light-grey w3-padding">
-              <button
-                id="confirmWarning"
-                className="w3-button w3-right w3-round w3-border w3-red"
-              >
-                <FontAwesomeIcon
-                  id="confirmSpinner"
-                  style={{ display: "none" }}
-                  className="w3-medium w3-spin w3-margin-right"
-                  icon={faSpinner}
-                />
-                Supprimer
-              </button>
-              <button
-                id="cancelWarning"
-                className="w3-button w3-right w3-round w3-white w3-border w3-margin-right"
-              >
-                Annuler
-              </button>
-            </div>
-          </div>
-        </div>
-        {/* end modal warning */}
       </body>
     </html>
   );

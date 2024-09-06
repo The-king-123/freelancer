@@ -8,7 +8,7 @@ import {
   faArrowRight,
   faImage,
   faListDots,
-  faNewspaper,
+  faPager,
   faSpinner,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
@@ -378,7 +378,7 @@ function createForum() {
   }, []);
 
   return (
-    <div id="forumCore" style={{ display: 'none' }}>
+    <div id="forumCore" style={{ display: 'none',position: 'relative' }}>
       <div
         className="w3-medium w3-big w3-flex-row w3-flex-center-v"
         style={{ padding: 8 }}
@@ -386,7 +386,7 @@ function createForum() {
         <div className="w3-flex-row w3-flex-center-v w3-flex-1">
           <FontAwesomeIcon
             className="w3-margin-right"
-            icon={faNewspaper}
+            icon={faPager}
             style={{ width: 24, height: 24 }}
           />{" "}
           Créer votre forum
@@ -510,7 +510,7 @@ function createForum() {
       </div>
 
       {/* modal forum liste */}
-      <div id="modalForumListe" className="w3-modal">
+      <div id="modalForumListe" className="w3-modal w3-round white-opacity" style={{position:'absolute',height:'calc(100vh - 16px)'}}>
         <div
           className="w3-modal-content w3-card w3-round w3-overflow"
           style={{ maxWidth: 420, top: 32 }}

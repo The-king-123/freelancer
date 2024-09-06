@@ -30,6 +30,7 @@ import {
   faTimesCircle,
   faUser,
   faUsers,
+  faWarning,
 } from "@fortawesome/free-solid-svg-icons";
 import "cloudinary-video-player/cld-video-player.min.css";
 import Link from "next/link";
@@ -1077,7 +1078,7 @@ export default function Home(props) {
                 width={20}
                 height={20}
               />
-              <div className="w3-margin-left w3-medium">Les forums</div>
+              <div className="w3-margin-left w3-medium">Forums</div>
             </div>
 
             <Link
@@ -1116,7 +1117,7 @@ export default function Home(props) {
                 width={20}
                 height={20}
               />
-              <div className="w3-margin-left w3-medium">Les talents</div>
+              <div className="w3-margin-left w3-medium">Talents</div>
             </Link>
 
             <div style={{ height: 40 }}>
@@ -1218,8 +1219,8 @@ export default function Home(props) {
 
       <main
         id="mainCore"
-        className="mobileHeight w3-main w3-100vh w3-overflow-scroll w3-noscrollbar"
-        style={{ marginLeft: 250, marginRight: 320, padding: 8 }}
+        className="mobileHeight w3-main w3-100vh w3-overflow-scroll w3-noscrollbar "
+        style={{ marginLeft: 250, marginRight: 320, padding: 8, position:'relative' }}
       >
         <div
           className="w3-container"
@@ -1230,6 +1231,45 @@ export default function Home(props) {
           </div>
           {props.core ? props.core : core}
         </div>
+        {/* modal warning */}
+        <div id="modalWarning" className="white-opacity w3-modal w3-round" style={{position:'absolute',height:'calc(100vh - 16px)'}}>
+          <div
+            className="w3-modal-content w3-card-4 w3-animate-top w3-round w3-overflow"
+            style={{ width: 320,marginTop:'20vh' }}
+          >
+            <div style={{ padding: 24 }}>
+              <FontAwesomeIcon
+                icon={faWarning}
+                className="w3-text-red w3-large w3-opacity-min"
+              />
+              <div id="textWarning">
+                Voulez vous vraiment supprimer ce Topic avec son
+                contenu ...
+              </div>
+            </div>
+            <div className="w3-container w3-light-grey w3-padding">
+              <button
+                id="confirmWarning"
+                className="w3-button w3-right w3-round w3-border w3-red"
+              >
+                <FontAwesomeIcon
+                  id="confirmSpinner"
+                  style={{ display: "none" }}
+                  className="w3-medium w3-spin w3-margin-right"
+                  icon={faSpinner}
+                />
+                Supprimer
+              </button>
+              <button
+                id="cancelWarning"
+                className="w3-button w3-right w3-round w3-white w3-border w3-margin-right"
+              >
+                Annuler
+              </button>
+            </div>
+          </div>
+        </div>
+        {/* end modal warning */}
       </main>
 
       <nav
@@ -1323,7 +1363,9 @@ export default function Home(props) {
               </div>
             </div>
 
-            <div id="chatCore">{displayChat}</div>
+            <div id="chatCore">
+              {displayChat}
+            </div>
 
             <div
               id="chatLoaderCursor"
