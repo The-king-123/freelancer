@@ -878,6 +878,33 @@ export default function Home(props) {
         });
       }
 
+      const forumCore = document.getElementsByClassName("forumCore");
+      for (let i = 0; i < forumCore.length; i++) {
+        forumCore[i].addEventListener("click", () => {
+          if (document.getElementById("forum" + i).className == "_expand_") {
+            document.getElementById("forum" + i).className =
+              "w3-overflow w3-nowrap-multiline";
+          } else {
+            document.getElementById("forum" + i).className = "_expand_";
+          }
+        });
+      }
+
+      const forumComent = document.getElementsByClassName("forumComent");
+      for (let i = 0; i < forumComent.length; i++) {
+        console.log(forumComent[i].getAttribute("data"));
+        
+        forumComent[i].addEventListener("click", () => {
+          console.log(forumComent[i].getAttribute("data"))
+          if (document.getElementById("forum" + i).className == "_expand_") {
+            document.getElementById("forum" + i).className =
+              "w3-overflow w3-nowrap-multiline";
+          } else {
+            document.getElementById("forum" + i).className = "_expand_";
+          }
+        });
+      }
+
       const postsTitle = document.getElementsByClassName("postTitle");
       for (let i = 0; i < postsTitle.length; i++) {
         postsTitle[i].addEventListener("click", () => {

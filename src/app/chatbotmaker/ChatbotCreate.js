@@ -210,7 +210,7 @@ function ChatbotCreate() {
     }, [])
 
     return (
-        <div id="chatbotCore" style={{ display: 'none' }}>
+        <div id="chatbotCore" style={{ display: 'none',position:'relative' }}>
             <div
                 className="w3-medium w3-big w3-flex-row w3-flex-center-v"
                 style={{ padding: 8 }}
@@ -254,7 +254,7 @@ function ChatbotCreate() {
 
             </div>
             {/* modal show topic */}
-            <div id="modalShowTopic" className="w3-modal">
+            <div id="modalShowTopic" className="w3-modal w3-round white-opacity" style={{position:'absolute',height:'calc(100vh - 16px)'}}>
                 <div
                     className="w3-modal-content w3-card w3-round w3-overflow"
                     style={{ maxWidth: 420, top: '15%' }}

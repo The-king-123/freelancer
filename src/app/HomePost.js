@@ -53,12 +53,15 @@ export default function PostContent({ posts }) {
 
   useEffect(() => {
 
-    audioBox.chaine = document.getElementById("audioBox");
+    if (document.getElementById("audioBox")) {
+      audioBox.chaine = document.getElementById("audioBox");
 
-    audioBox.chaine.addEventListener("ended", () => {
-      document.getElementById("iconPlay").style.display = "inline-block";
-      document.getElementById("iconPause").style.display = "none";
-    });
+      audioBox.chaine.addEventListener("ended", () => {
+        document.getElementById("iconPlay").style.display = "inline-block";
+        document.getElementById("iconPause").style.display = "none";
+      });
+    }
+
   }, [])
 
 
@@ -279,7 +282,7 @@ export default function PostContent({ posts }) {
                         ? parse(JSON.parse(showThisPost.info).description)
                         : ""}
                     </div>
-                    <div style={{height:32}}></div>
+                    <div style={{ height: 32 }}></div>
                   </div>
                 </div>
               </div>

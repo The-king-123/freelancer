@@ -393,7 +393,7 @@ function PostCreate() {
             document.getElementById("iconTimes").style.display = "none";
             document.getElementById("videoEmbed").style.display = "flex";
 
-            document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-light-grey', 'w3-black').replace('w3-text-grey', 'w3-text-white');
+            document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-black', 'w3-light-grey').replace('w3-text-white', 'w3-text-grey');
 
             document.getElementById("showImageWrapper").style.display = "none";
             document.getElementById("audioSection").style.display = "none";
