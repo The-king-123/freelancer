@@ -16,6 +16,17 @@ export default function Forum(props) {
     usekey: '',
   })
 
+  async function setCSRFToken() {
+    try {
+      // Fetch CSRF token from the server
+      const response = await axios.get(source + '/csrf-token');
+      // Set CSRF token as a default header for all future requests
+      axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+    } catch (error) {
+      console.error('CSRF token fetch failed:', error);
+    }
+  }
+
   const isUserLogedin = async () => {
     const xcode = localStorage.getItem('x-code')
     await axios
@@ -36,10 +47,23 @@ export default function Forum(props) {
 
   const comment = async (data) => {
 
-    console.log(data);
-    console.log(commentInfo);
-
-
+    const response  = JSON.parse(data.response)
+    response.push(commentInfo);
+    console.log(response);
+    await setCSRFToken();
+    await axios
+            .patch(source + "/_forum/" + data.id + "?xcode=" + xcode, response)
+            .then((res) => {
+              
+            })
+            .catch((e) => {
+              if (e.response && e.response.status === 419) {
+                console.error('CSRF token missing or incorrect');
+              } else {
+                console.error('Request failed:', error);
+              }
+            });
+    
   }
 
   const reloadForums = (forums) => {
@@ -112,7 +136,7 @@ export default function Forum(props) {
                           className="w3-overflow w3-nowrap-multiline"
                           id={"forum" + key + "Coment" + k}
                         >
-                          {response}
+                          {response} Culpa aute esse sunt consectetur nulla officia. Voluptate qui aliqua Lorem reprehenderit nulla voluptate aliqua Lorem ad culpa enim elit ullamco.Deserunt ut fugiat velit culpa aute ut ex mollit amet. Adipisicing dolor pariatur labore eiusmod mollit fugiat sint et incididunt ex voluptate nostrud. Nisi ex consequat tempor est.
                         </div>
                       </div>
                       <div className="w3-text-grey w3-tiny">3829837498</div>

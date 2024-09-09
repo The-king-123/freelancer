@@ -866,43 +866,49 @@ export default function Home(props) {
         }
       }, 500);
 
-      const postCore = document.getElementsByClassName("postCore");
-      for (let i = 0; i < postCore.length; i++) {
-        console.log('post core here');
 
-        postCore[i].addEventListener("click", () => {
-          if (document.getElementById("post" + i).className == "_expand_") {
-            document.getElementById("post" + i).className =
-              "w3-overflow w3-nowrap-multiline";
-          } else {
-            document.getElementById("post" + i).className = "_expand_";
-          }
-        });
-      }
+      setTimeout(() => {
+        
+        const postCore = document.getElementsByClassName("postCore");
+        for (let i = 0; i < postCore.length; i++) {
+          console.log('post core here');
 
-      const forumCore = document.getElementsByClassName("forumCore");
-      for (let i = 0; i < forumCore.length; i++) {
-        forumCore[i].addEventListener("click", () => {
-          if (document.getElementById("forum" + i).className == "_expand_") {
-            document.getElementById("forum" + i).className =
-              "w3-overflow w3-nowrap-multiline";
-          } else {
-            document.getElementById("forum" + i).className = "_expand_";
-          }
-        });
-      }
+          postCore[i].addEventListener("click", () => {
+            if (document.getElementById("post" + i).className == "_expand_") {
+              document.getElementById("post" + i).className =
+                "w3-overflow w3-nowrap-multiline";
+            } else {
+              document.getElementById("post" + i).className = "_expand_";
+            }
+          });
+        }
 
-      const forumComent = document.getElementsByClassName("forumComent");
-      for (let i = 0; i < forumComent.length; i++) {
-        forumComent[i].addEventListener("click", () => {
-          if (document.getElementById(forumComent[i].getAttribute("data")).className == "_expand_") {
-            document.getElementById(forumComent[i].getAttribute("data")).className =
-              "w3-overflow w3-nowrap-multiline";
-          } else {
-            document.getElementById(forumComent[i].getAttribute("data")).className = "_expand_";
-          }
-        });
-      }
+        const forumCore = document.getElementsByClassName("forumCore");
+        for (let i = 0; i < forumCore.length; i++) {
+          forumCore[i].addEventListener("click", () => {
+            if (document.getElementById("forum" + i).className == "_expand_") {
+              document.getElementById("forum" + i).className =
+                "w3-overflow w3-nowrap-multiline";
+            } else {
+              document.getElementById("forum" + i).className = "_expand_";
+            }
+          });
+        }
+
+        const forumComent = document.getElementsByClassName("forumComent");
+        for (let i = 0; i < forumComent.length; i++) {
+          forumComent[i].addEventListener("click", () => {
+            if (document.getElementById(forumComent[i].getAttribute("data")).className == "_expand_") {
+              document.getElementById(forumComent[i].getAttribute("data")).className =
+                "w3-overflow w3-nowrap-multiline";
+            } else {
+              document.getElementById(forumComent[i].getAttribute("data")).className = "_expand_";
+            }
+          });
+        }
+
+      }, 1000);
+
 
       const postsTitle = document.getElementsByClassName("postTitle");
       for (let i = 0; i < postsTitle.length; i++) {
