@@ -44,7 +44,7 @@ export default function PostContent({ content }) {
                   title={des.designation}
                   className="w3-flex-1 w3-flex-column w3-nowrap w3-overflow"
                 >
-                  <span className="w3-medium w3-big w3-nowrap w3-overflow">{des.designation}sd aSHJDLajshd lakhsd</span>
+                  <span className="w3-medium w3-big w3-nowrap w3-overflow">{des.designation}</span>
                   <span className="w3-small w3-text-grey w3-nowrap w3-overflow">{des.users} utilisateur{des.users>1?'s':''}</span>
                 </div>
               </div>
