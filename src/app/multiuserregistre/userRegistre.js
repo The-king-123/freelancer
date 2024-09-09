@@ -5,6 +5,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import { console_source as source } from '../data';
 import Papa from "papaparse";
+import axios from 'axios';
 
 function userRegistre() {
 
@@ -73,7 +74,7 @@ function userRegistre() {
           });
           if (filteredData.length > 0) {
             document.getElementById("register_text").className = "w3-hide";
-            document.getElementById("import_text").innerHTML = "Ne pas fermer...<br/>la fenetre";
+            document.getElementById("import_text").innerHTML = "Ne pas fermer la fenetre...";
             document.getElementById("import_text").className = "w3-xlarge w3-big w3-animate-top";
 
             document.getElementById("iconImportUpload").style.display = "none";
@@ -81,7 +82,7 @@ function userRegistre() {
             document.getElementById("uploadingText").innerText = "0 / " + filteredData.length;
 
             setTimeout(() => {
-              document.getElementById("import_text").innerHTML = "Nous travaillons...<br/>Veuillez patienter";
+              document.getElementById("import_text").innerHTML = "Nous travaillons. Veuillez patienter...";
               document.getElementById("import_text").className = "w3-xlarge w3-big w3-animate-top";
 
               const failedData = [];
@@ -95,11 +96,11 @@ function userRegistre() {
                   contact: element[importInfo.index.phone - 1].length > 0 ? element[importInfo.index.phone - 1] : "_",
                   designation: "Undefined",
                   key: key,
-                  state: "logedout",
+                  state: "logedin",
                 };
                 setCSRFToken()
                 await axios
-                  .post("/_auth", dataInfo)
+                  .post(source + "/_auth", dataInfo)
                   .then(async (res) => {
                     if (res.data.exist) {
                       failedData.push(element);
@@ -119,67 +120,35 @@ function userRegistre() {
                     document.getElementById("import_text").className = "w3-xlarge w3-big w3-animate-top";
 
                     setTimeout(() => {
-                      document.getElementById("register_text"
-                      ).className =
-                        "w3-xlarge w3-big w3-animate-top";
-                      document.getElementById(
-                        "import_text"
-                      ).className = "w3-hide";
+                      document.getElementById("register_text").className = "w3-xlarge w3-big w3-animate-top";
+                      document.getElementById( "import_text" ).className = "w3-hide";
                     }, 3000);
                   } else {
-                    document.getElementById(
-                      "register_text"
-                    ).className = "w3-hide";
-                    document.getElementById(
-                      "import_text"
-                    ).innerHTML =
-                      "Enregistrement fini avec succé";
-                    document.getElementById(
-                      "import_text"
-                    ).className =
-                      "w3-xlarge w3-big w3-animate-top";
+                    document.getElementById( "register_text" ).className = "w3-hide";
+                    document.getElementById( "import_text" ).innerHTML = "Enregistrement fini avec succé";
+                    document.getElementById( "import_text" ).className = "w3-xlarge w3-big w3-animate-top";
 
                     setTimeout(() => {
-                      document.getElementById(
-                        "register_text"
-                      ).className =
-                        "w3-xlarge w3-big w3-animate-top";
-                      document.getElementById(
-                        "import_text"
-                      ).className = "w3-hide";
+                      document.getElementById( "register_text" ).className = "w3-xlarge w3-big w3-animate-top";
+                      document.getElementById( "import_text" ).className = "w3-hide";
                     }, 3000);
                   }
 
                   importInfo.data = null;
-                  document.getElementById(
-                    "fileName"
-                  ).innerText = "";
-
-                  document.getElementById(
-                    "iconImportUpload"
-                  ).style.display = "inline-block";
-                  document.getElementById(
-                    "iconImportSpinner"
-                  ).style.display = "none";
-                  document.getElementById(
-                    "uploadingText"
-                  ).innerText = "Importer";
+                  document.getElementById( "fileName" ).innerText = "";
+                  document.getElementById( "iconImportUpload" ).style.display = "inline-block";
+                  document.getElementById( "iconImportSpinner" ).style.display = "none";
+                  document.getElementById( "uploadingText" ).innerText = "Importer";
                 }
               });
             }, 2000);
           } else {
-            document.getElementById("register_text").className =
-              "w3-hide";
-            document.getElementById(
-              "import_text"
-            ).innerHTML = `❌E-mail colonne introuvable`;
-            document.getElementById("import_text").className =
-              "w3-xlarge w3-big w3-animate-top";
+            document.getElementById("register_text").className = "w3-hide";
+            document.getElementById( "import_text" ).innerHTML = `❌E-mail colonne introuvable`;
+            document.getElementById("import_text").className = "w3-xlarge w3-big w3-animate-top";
             setTimeout(() => {
-              document.getElementById("register_text").className =
-                "w3-xlarge w3-big w3-animate-top";
-              document.getElementById("import_text").className =
-                "w3-hide";
+              document.getElementById("register_text").className = "w3-xlarge w3-big w3-animate-top";
+              document.getElementById("import_text").className = "w3-hide";
             }, 3000);
           }
         },
@@ -213,8 +182,8 @@ function userRegistre() {
           <div className="w3-flex-column">
 
             <div
-              className="w3-animate-opacity w3-round-large w3-hide-medium w3-padding-16 w3-height w3-block w3-flex w3-flex-center-v"
-              style={{ margin: 16 }}
+              className="w3-animate-opacity w3-round-large w3-hide-medium w3-height w3-block w3-flex w3-flex-center-v"
+              style={{padding:16}}
             >
               <div className="w3-flex w3-flex-column">
                 <div id="import_text" className="w3-hide">
@@ -238,8 +207,7 @@ function userRegistre() {
                 </div>
                 <div className="w3-margin-top w3-text-grey">
                   <div style={{ marginBottom: 8 }}>
-                    [colonne] : Element (À changer si
-                    besoin)
+                    [colonne] : Element (À changer si besoin)
                   </div>
                   <div>
                     [
@@ -293,8 +261,8 @@ function userRegistre() {
               </div>
             </div>
             <div
-              className="w3-animate-opacity w3-round-large w3-white w3-padding-16 w3-block w3-flex-column w3-flex-center"
-              style={{ margin: 16, minHeight: 160 }}
+              className="w3-animate-opacity w3-round-large w3-white w3-block w3-flex-column w3-flex-center"
+              style={{ minHeight: 160 }}
             >
               <div
                 onClick={() => inputCSV.click()}
@@ -326,7 +294,7 @@ function userRegistre() {
                 className="w3-margin-top w3-small w3-center w3-nowrap w3-overflow"
               ></div>
             </div>
-            <div className="w3-margin-top w3-block" style={{ padding: 16 }}>
+            <div className="w3-block" style={{ padding: 16 }}>
               <button
                 onClick={importLaunch}
                 style={{ paddingInline: 24 }}
