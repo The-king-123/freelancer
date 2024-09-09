@@ -868,6 +868,8 @@ export default function Home(props) {
 
       const postCore = document.getElementsByClassName("postCore");
       for (let i = 0; i < postCore.length; i++) {
+        console.log('post core here');
+
         postCore[i].addEventListener("click", () => {
           if (document.getElementById("post" + i).className == "_expand_") {
             document.getElementById("post" + i).className =
@@ -892,15 +894,12 @@ export default function Home(props) {
 
       const forumComent = document.getElementsByClassName("forumComent");
       for (let i = 0; i < forumComent.length; i++) {
-        console.log(forumComent[i].getAttribute("data"));
-        
         forumComent[i].addEventListener("click", () => {
-          console.log(forumComent[i].getAttribute("data"))
-          if (document.getElementById("forum" + i).className == "_expand_") {
-            document.getElementById("forum" + i).className =
+          if (document.getElementById(forumComent[i].getAttribute("data")).className == "_expand_") {
+            document.getElementById(forumComent[i].getAttribute("data")).className =
               "w3-overflow w3-nowrap-multiline";
           } else {
-            document.getElementById("forum" + i).className = "_expand_";
+            document.getElementById(forumComent[i].getAttribute("data")).className = "_expand_";
           }
         });
       }
@@ -1247,7 +1246,7 @@ export default function Home(props) {
       <main
         id="mainCore"
         className="mobileHeight w3-main w3-100vh w3-overflow-scroll w3-noscrollbar "
-        style={{ marginLeft: 250, marginRight: 320, padding: 8, position:'relative' }}
+        style={{ marginLeft: 250, marginRight: 320, padding: 8, position: 'relative' }}
       >
         <div
           className="w3-container"
@@ -1259,10 +1258,10 @@ export default function Home(props) {
           {props.core ? props.core : core}
         </div>
         {/* modal warning */}
-        <div id="modalWarning" className="white-opacity w3-modal w3-round" style={{position:'absolute',height:'calc(100vh - 16px)'}}>
+        <div id="modalWarning" className="white-opacity w3-modal w3-round" style={{ position: 'absolute', height: 'calc(100vh - 16px)' }}>
           <div
             className="w3-modal-content w3-card-4 w3-animate-top w3-round w3-overflow"
-            style={{ width: 320,marginTop:'20vh' }}
+            style={{ width: 320, marginTop: '20vh' }}
           >
             <div style={{ padding: 24 }}>
               <FontAwesomeIcon
