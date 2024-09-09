@@ -52,10 +52,11 @@ function userRegistre() {
         "Bonjour ! Je suis " + name + ", Que puis-je faire pour vous!?",
       key: key,
     };
+    setCSRFToken()
     await axios
-      .post("/_topic", request)
+      .post(source+"/_topic", request)
       .then((res) => {
-        //nothing to say
+        return true;
       })
       .catch((e) => {
         console.error("failure", e);
@@ -98,53 +99,67 @@ function userRegistre() {
                   key: key,
                   state: "logedin",
                 };
+
+                const xcode = localStorage.getItem('x-code');
+
                 setCSRFToken()
                 await axios
-                  .post(source + "/_auth", dataInfo)
+                  .post(source + "/_auth?xcode=" + xcode, dataInfo)
                   .then(async (res) => {
-                    if (res.data.exist) {
-                      failedData.push(element);
+                    if (res.data.logedin) {
+
+                      if (res.data.exist) {
+                        failedData.push(element);
+                      } else {
+                        if(!await createStarter(key, dataInfo.fullname)){
+                          failedData.push(element);
+                        };
+                      }
+                      document.getElementById("uploadingText").innerText = k + " / " + filteredData.length;
+
                     } else {
-                      createStarter(key, dataInfo.fullname);
+                      if (document.getElementById('modalLogin')) {
+                        document.getElementById('modalLogin').style.display = 'block'
+                      }
                     }
-                    document.getElementById("uploadingText").innerText = k + " / " + filteredData.length;
                   })
                   .catch((e) => {
                     console.error("failure", e);
+                    failedData.push(element);
                   });
 
                 if (k == filteredData.length - 1) {
                   if (failedData.length > 0) {
                     document.getElementById("register_text").className = "w3-hide";
-                    document.getElementById("import_text").innerHTML = failedData.length + " n'ont pas été enregistrés";
+                    document.getElementById("import_text").innerHTML = "❌" + failedData.length + " n'ont pas été enregistrés";
                     document.getElementById("import_text").className = "w3-xlarge w3-big w3-animate-top";
 
                     setTimeout(() => {
                       document.getElementById("register_text").className = "w3-xlarge w3-big w3-animate-top";
-                      document.getElementById( "import_text" ).className = "w3-hide";
+                      document.getElementById("import_text").className = "w3-hide";
                     }, 3000);
                   } else {
-                    document.getElementById( "register_text" ).className = "w3-hide";
-                    document.getElementById( "import_text" ).innerHTML = "Enregistrement fini avec succé";
-                    document.getElementById( "import_text" ).className = "w3-xlarge w3-big w3-animate-top";
+                    document.getElementById("register_text").className = "w3-hide";
+                    document.getElementById("import_text").innerHTML = "Enregistrement fini avec succé";
+                    document.getElementById("import_text").className = "w3-xlarge w3-big w3-animate-top";
 
                     setTimeout(() => {
-                      document.getElementById( "register_text" ).className = "w3-xlarge w3-big w3-animate-top";
-                      document.getElementById( "import_text" ).className = "w3-hide";
+                      document.getElementById("register_text").className = "w3-xlarge w3-big w3-animate-top";
+                      document.getElementById("import_text").className = "w3-hide";
                     }, 3000);
                   }
 
                   importInfo.data = null;
-                  document.getElementById( "fileName" ).innerText = "";
-                  document.getElementById( "iconImportUpload" ).style.display = "inline-block";
-                  document.getElementById( "iconImportSpinner" ).style.display = "none";
-                  document.getElementById( "uploadingText" ).innerText = "Importer";
+                  document.getElementById("fileName").innerText = "";
+                  document.getElementById("iconImportUpload").style.display = "inline-block";
+                  document.getElementById("iconImportSpinner").style.display = "none";
+                  document.getElementById("uploadingText").innerText = "Importer";
                 }
               });
             }, 2000);
           } else {
             document.getElementById("register_text").className = "w3-hide";
-            document.getElementById( "import_text" ).innerHTML = `❌E-mail colonne introuvable`;
+            document.getElementById("import_text").innerHTML = `❌E-mail colonne introuvable`;
             document.getElementById("import_text").className = "w3-xlarge w3-big w3-animate-top";
             setTimeout(() => {
               document.getElementById("register_text").className = "w3-xlarge w3-big w3-animate-top";
@@ -183,7 +198,7 @@ function userRegistre() {
 
             <div
               className="w3-animate-opacity w3-round-large w3-hide-medium w3-height w3-block w3-flex w3-flex-center-v"
-              style={{padding:16}}
+              style={{ padding: 16 }}
             >
               <div className="w3-flex w3-flex-column">
                 <div id="import_text" className="w3-hide">
