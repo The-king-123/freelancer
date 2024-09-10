@@ -103,7 +103,7 @@ function userRegistre() {
                   contact: element[importInfo.index.phone - 1].length > 0 ? element[importInfo.index.phone - 1] : "_",
                   designation: "Undefined",
                   key: key,
-                  state: "logedin",
+                  state: "loged_in",
                 };
 
                 
