@@ -63,7 +63,7 @@ function userRegistre() {
       });
   };
 
-  const importLaunch = () => {
+  const importLaunch = async () => {
     if (importInfo.data) {
       Papa.parse(importInfo.data, {
         header: false,
@@ -83,14 +83,15 @@ function userRegistre() {
             document.getElementById("uploadingText").innerText = "0 / " + filteredData.length;
 
             
-            setTimeout(() => {
+            setTimeout(async () => {
               document.getElementById("import_text").innerHTML = "Nous travaillons. Veuillez patienter...";
               document.getElementById("import_text").className = "w3-xlarge w3-big w3-animate-top";
 
               const failedData = [];
 
               const xcode = localStorage.getItem('x-code');
-
+              
+              await setCSRFToken()
               filteredData.forEach(async (element, k) => {
 
                 const key = generateRandomNumber(15);
@@ -105,7 +106,7 @@ function userRegistre() {
                   state: "logedin",
                 };
 
-                await setCSRFToken()
+                
                 await axios
                   .post(source + "/_auth?xcode=" + xcode, dataInfo)
                   .then(async (res) => {
