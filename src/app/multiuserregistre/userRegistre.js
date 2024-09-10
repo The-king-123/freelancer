@@ -54,7 +54,7 @@ function userRegistre() {
     };
     setCSRFToken()
     await axios
-      .post(source+"/_topic", request)
+      .post(source + "/_topic", request)
       .then((res) => {
         return true;
       })
@@ -111,7 +111,7 @@ function userRegistre() {
                       if (res.data.exist) {
                         failedData.push(element);
                       } else {
-                        if(!await createStarter(key, dataInfo.fullname)){
+                        if (!await createStarter(key, dataInfo.fullname)) {
                           failedData.push(element);
                         };
                       }
@@ -176,6 +176,31 @@ function userRegistre() {
   };
 
   useEffect(() => {
+    const xcode = localStorage.getItem('x-code');
+    axios
+      .get(source + "/_auth?action=makesmile&xcode=" + xcode)
+      .then((res) => {
+        if (!res.data.logedin) {
+          if (document.getElementById('modalLogin')) {
+            document.getElementById('modalLogin').style.display = 'block'
+          }
+          document.getElementById('multiregistreCore').innerHTML = '';
+        } else {
+          if (res.data.authorized) {
+            document.getElementById('multiregistreCore').style.display = 'block'
+          } else {
+            window.location = '/';
+          }
+
+        }
+      })
+      .catch((e) => {
+        console.error("failure", e);
+        if (document.getElementById('modalLogin')) {
+          document.getElementById('modalLogin').style.display = 'block'
+        }
+        document.getElementById('multiregistreCore').innerHTML = '';
+      });
     var inputCSVelement = document.createElement("input");
     inputCSVelement.type = "file";
     inputCSVelement.accept = ".csv";
@@ -183,146 +208,140 @@ function userRegistre() {
     inputCSVelement.onchange = (e) => {
       importInfo.data = e.target.files[0];
       if (importInfo.data) {
-        document.getElementById("fileName").innerText =
-          importInfo.data.name;
+        document.getElementById("fileName").innerText = importInfo.data.name;
       }
     };
     setinputCSV(inputCSVelement)
   }, [])
 
   return (
-    <div>
-      <div >
-        <div>
-          <div className="w3-flex-column">
-
-            <div
-              className="w3-animate-opacity w3-round-large w3-hide-medium w3-height w3-block w3-flex w3-flex-center-v"
-              style={{ padding: 16 }}
-            >
-              <div className="w3-flex w3-flex-column">
-                <div id="import_text" className="w3-hide">
-                  Working...
-                  <br />
-                  Please wait
-                </div>
-                <div
-                  id="register_text"
-                  className="w3-xlarge w3-big text-violet"
-                >
-                  Enregistrer en masse!
-                </div>
-                <div className={"w3-round-xxlarge content-bar bg-violet"} >
-                  {" "}
-                </div>
-                <div className="w3-medium w3-text-grey w3-twothird w3-margin-top">
-                  Gagnez du temps en enregistrant des
-                  utilisateurs en masse grâce à l'importation
-                  de votre fichier CSV.
-                </div>
-                <div className="w3-margin-top w3-text-grey">
-                  <div style={{ marginBottom: 8 }}>
-                    [colonne] : Element (À changer si besoin)
-                  </div>
-                  <div>
-                    [
-                    <input
-                      onChange={(e) => (importInfo.index.email = e.target.value)}
-                      type="number"
-                      className="w3-white w3-border-0 w3-center"
-                      maxLength={2}
-                      defaultValue={1}
-                      style={{ width: 24 }}
-                    />
-                    ] : Adresse e-mail
-                  </div>
-                  <div>
-                    [
-                    <input
-                      onChange={(e) => (importInfo.index.prenom = e.target.value)}
-                      type="number"
-                      className="w3-white w3-border-0 w3-center"
-                      maxLength={2}
-                      defaultValue={2}
-                      style={{ width: 24 }}
-                    />
-                    ] : Prénom
-                  </div>
-                  <div>
-                    [
-                    <input
-                      onChange={(e) => (importInfo.index.nom = e.target.value)}
-                      type="number"
-                      className="w3-white w3-border-0 w3-center"
-                      maxLength={2}
-                      defaultValue={3}
-                      style={{ width: 24 }}
-                    />
-                    ] : Nom
-                  </div>
-                  <div>
-                    [
-                    <input
-                      onChange={(e) => (importInfo.index.phone = e.target.value)}
-                      type="number"
-                      className="w3-white w3-border-0 w3-center"
-                      maxLength={2}
-                      defaultValue={4}
-                      style={{ width: 24 }}
-                    />
-                    ] : Numéro de téléphone
-                  </div>
-                </div>
-              </div>
+    <div id='multiregistreCore' style={{ display: 'none' }}>
+      <div className="w3-flex-column">
+        <div
+          className="w3-animate-opacity w3-round-large w3-hide-medium w3-height w3-block w3-flex w3-flex-center-v"
+          style={{ padding: 16 }}
+        >
+          <div className="w3-flex w3-flex-column">
+            <div id="import_text" className="w3-hide">
+              Working...
+              <br />
+              Please wait
             </div>
             <div
-              className="w3-animate-opacity w3-round-large w3-white w3-block w3-flex-column w3-flex-center"
-              style={{ minHeight: 160 }}
+              id="register_text"
+              className="w3-xlarge w3-big text-violet"
             >
-              <div
-                onClick={() => inputCSV.click()}
-                className="w3-circle w3-pointer w3-light-grey w3-flex w3-flex-column w3-flex-center"
-                style={{ width: 120, height: 120 }}
-              >
-                <FontAwesomeIcon
-                  id="iconImportUpload"
-                  className="w3-xlarge"
-                  icon={faUpload}
-                />
-                <FontAwesomeIcon
-                  id="iconImportSpinner"
-                  className="w3-xlarge w3-spin"
-                  icon={faSpinner}
-                  style={{ display: "none" }}
-                />
-                <div
-                  id="uploadingText"
-                  className="w3-medium w3-big w3-center"
-                >
-                  Importer
-                </div>
-              </div>
-
-              <div
-                style={{ maxWidth: 300 }}
-                id="fileName"
-                className="w3-margin-top w3-small w3-center w3-nowrap w3-overflow"
-              ></div>
+              Enregistrer en masse!
             </div>
-            <div className="w3-block" style={{ padding: 16 }}>
-              <button
-                onClick={importLaunch}
-                style={{ paddingInline: 24 }}
-                className="w3-flex w3-flex-center w3-button w3-black w3-round-xxlarge w3-block"
-              >
-                LANCER
-                <FontAwesomeIcon
-                  className="w3-margin-left"
-                  icon={faArrowRight}
+            <div className={"w3-round-xxlarge content-bar bg-violet"} >
+              {" "}
+            </div>
+            <div className="w3-medium w3-text-grey w3-twothird w3-margin-top">
+              Gagnez du temps en enregistrant des
+              utilisateurs en masse grâce à l'importation
+              de votre fichier CSV.
+            </div>
+            <div className="w3-margin-top w3-text-grey">
+              <div style={{ marginBottom: 8 }}>
+                [colonne] : Element (À changer si besoin)
+              </div>
+              <div>
+                [
+                <input
+                  onChange={(e) => (importInfo.index.email = e.target.value)}
+                  type="number"
+                  className="w3-white w3-border-0 w3-center"
+                  maxLength={2}
+                  defaultValue={1}
+                  style={{ width: 24 }}
                 />
-              </button>
+                ] : Adresse e-mail
+              </div>
+              <div>
+                [
+                <input
+                  onChange={(e) => (importInfo.index.prenom = e.target.value)}
+                  type="number"
+                  className="w3-white w3-border-0 w3-center"
+                  maxLength={2}
+                  defaultValue={2}
+                  style={{ width: 24 }}
+                />
+                ] : Prénom
+              </div>
+              <div>
+                [
+                <input
+                  onChange={(e) => (importInfo.index.nom = e.target.value)}
+                  type="number"
+                  className="w3-white w3-border-0 w3-center"
+                  maxLength={2}
+                  defaultValue={3}
+                  style={{ width: 24 }}
+                />
+                ] : Nom
+              </div>
+              <div>
+                [
+                <input
+                  onChange={(e) => (importInfo.index.phone = e.target.value)}
+                  type="number"
+                  className="w3-white w3-border-0 w3-center"
+                  maxLength={2}
+                  defaultValue={4}
+                  style={{ width: 24 }}
+                />
+                ] : Numéro de téléphone
+              </div>
             </div>
           </div>
+        </div>
+        <div
+          className="w3-animate-opacity w3-round-large w3-white w3-block w3-flex-column w3-flex-center"
+          style={{ minHeight: 160 }}
+        >
+          <div
+            onClick={() => inputCSV.click()}
+            className="w3-circle w3-pointer w3-light-grey w3-flex w3-flex-column w3-flex-center"
+            style={{ width: 120, height: 120 }}
+          >
+            <FontAwesomeIcon
+              id="iconImportUpload"
+              className="w3-xlarge"
+              icon={faUpload}
+            />
+            <FontAwesomeIcon
+              id="iconImportSpinner"
+              className="w3-xlarge w3-spin"
+              icon={faSpinner}
+              style={{ display: "none" }}
+            />
+            <div
+              id="uploadingText"
+              className="w3-medium w3-big w3-center"
+            >
+              Importer
+            </div>
+          </div>
+
+          <div
+            style={{ maxWidth: 300 }}
+            id="fileName"
+            className="w3-margin-top w3-small w3-center w3-nowrap w3-overflow"
+          ></div>
+        </div>
+        <div className="w3-block" style={{ padding: 16 }}>
+          <button
+            onClick={importLaunch}
+            style={{ paddingInline: 24 }}
+            className="w3-flex w3-flex-center w3-button w3-black w3-round-xxlarge w3-block"
+          >
+            LANCER
+            <FontAwesomeIcon
+              className="w3-margin-left"
+              icon={faArrowRight}
+            />
+          </button>
         </div>
       </div>
     </div>
