@@ -115,9 +115,7 @@ function userRegistre() {
                       if (res.data.exist) {
                         failedData.push(element);
                       } else {
-                        if (!await createStarter(key, dataInfo.fullname)) {
-                          failedData.push(element);
-                        };
+                        await createStarter(key, dataInfo.fullname)
                       }
                       document.getElementById("uploadingText").innerText = k + " / " + filteredData.length;
 
