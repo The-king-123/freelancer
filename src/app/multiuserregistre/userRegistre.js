@@ -95,6 +95,8 @@ function userRegistre() {
               await setCSRFToken()
               filteredData.forEach(async (element, k) => {
 
+                var compter = 0;
+
                 const key = generateRandomNumber(15);
 
                 const dataInfo = {
@@ -117,7 +119,8 @@ function userRegistre() {
                       } else {
                         await createStarter(key, dataInfo.fullname)
                       }
-                      document.getElementById("uploadingText").innerText = k + " / " + filteredData.length;
+                      compter++
+                      document.getElementById("uploadingText").innerText = compter + " / " + filteredData.length;
 
                     } else {
                       if (document.getElementById('modalLogin')) {
