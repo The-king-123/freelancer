@@ -8,9 +8,7 @@ import Papa from "papaparse";
 import axios from 'axios';
 
 function userRegistre() {
-  axios.defaults.withCredentials = true;
-  console.log("with axios.defaults.withCredentials = true");
-  
+  axios.defaults.withCredentials = true;  
 
   const [importInfo, setimportInfo] = useState({
     index: {
@@ -93,7 +91,6 @@ function userRegistre() {
 
               const xcode = localStorage.getItem('x-code');
 
-              setCSRFToken()
               filteredData.forEach(async (element, k) => {
 
                 const key = generateRandomNumber(15);
@@ -108,7 +105,7 @@ function userRegistre() {
                   state: "logedin",
                 };
 
-
+                await setCSRFToken()
                 await axios
                   .post(source + "/_auth?xcode=" + xcode, dataInfo)
                   .then(async (res) => {
