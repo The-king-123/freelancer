@@ -178,7 +178,7 @@ function userRegistre() {
   useEffect(() => {
     const xcode = localStorage.getItem('x-code');
     axios
-      .get(source + "/_auth?action=makesmile&xcode=" + xcode)
+      .get(source + "/_auth?xcode=" + xcode)
       .then((res) => {
         if (!res.data.logedin) {
           if (document.getElementById('modalLogin')) {
