@@ -9,6 +9,8 @@ import axios from 'axios';
 
 function userRegistre() {
   axios.defaults.withCredentials = true;
+  console.log("with axios.defaults.withCredentials = true");
+  
 
   const [importInfo, setimportInfo] = useState({
     index: {
