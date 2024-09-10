@@ -8,6 +8,7 @@ import Papa from "papaparse";
 import axios from 'axios';
 
 function userRegistre() {
+  axios.defaults.withCredentials = true;
 
   const [importInfo, setimportInfo] = useState({
     index: {
