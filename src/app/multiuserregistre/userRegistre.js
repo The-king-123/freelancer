@@ -47,6 +47,7 @@ function userRegistre() {
   };
 
   const createStarter = async (key, name) => {
+    const xcode = localStorage.getItem('x-code');
     const request = {
       name: "_accrocher_",
       info:
@@ -54,7 +55,7 @@ function userRegistre() {
       key: key,
     };
     await axios
-      .post(source + "/_topic", request)
+      .post(source + "/_topic?xcode=" + xcode, request)
       .then((res) => {
         return true;
       })
