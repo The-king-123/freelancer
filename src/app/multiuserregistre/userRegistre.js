@@ -52,7 +52,6 @@ function userRegistre() {
         "Bonjour ! Je suis " + name + ", Que puis-je faire pour vous!?",
       key: key,
     };
-    setCSRFToken()
     await axios
       .post(source + "/_topic", request)
       .then((res) => {
@@ -82,12 +81,18 @@ function userRegistre() {
             document.getElementById("iconImportSpinner").style.display = "inline-block";
             document.getElementById("uploadingText").innerText = "0 / " + filteredData.length;
 
+            
             setTimeout(() => {
               document.getElementById("import_text").innerHTML = "Nous travaillons. Veuillez patienter...";
               document.getElementById("import_text").className = "w3-xlarge w3-big w3-animate-top";
 
               const failedData = [];
+
+              const xcode = localStorage.getItem('x-code');
+
+              setCSRFToken()
               filteredData.forEach(async (element, k) => {
+
                 const key = generateRandomNumber(15);
 
                 const dataInfo = {
@@ -100,9 +105,7 @@ function userRegistre() {
                   state: "logedin",
                 };
 
-                const xcode = localStorage.getItem('x-code');
 
-                setCSRFToken()
                 await axios
                   .post(source + "/_auth?xcode=" + xcode, dataInfo)
                   .then(async (res) => {
@@ -218,7 +221,7 @@ function userRegistre() {
     <div id='multiregistreCore' style={{ display: 'none' }}>
       <div className="w3-flex-column">
         <div
-          className="w3-animate-opacity w3-round-large w3-hide-medium w3-height w3-block w3-flex w3-flex-center-v"
+          className="w3-animate-opacity w3-round-large w3-height w3-block w3-flex w3-flex-center-v"
           style={{ padding: 16 }}
         >
           <div className="w3-flex w3-flex-column">
