@@ -8,7 +8,7 @@ import Papa from "papaparse";
 import axios from 'axios';
 
 function userRegistre() {
-  axios.defaults.withCredentials = true;  
+  axios.defaults.withCredentials = true;
 
   const [importInfo, setimportInfo] = useState({
     index: {
@@ -82,7 +82,7 @@ function userRegistre() {
             document.getElementById("iconImportSpinner").style.display = "inline-block";
             document.getElementById("uploadingText").innerText = "0 / " + filteredData.length;
 
-            
+
             setTimeout(async () => {
               document.getElementById("import_text").innerHTML = "Nous travaillons. Veuillez patienter...";
               document.getElementById("import_text").className = "w3-xlarge w3-big w3-animate-top";
@@ -90,7 +90,7 @@ function userRegistre() {
               const failedData = [];
 
               const xcode = localStorage.getItem('x-code');
-              
+
               await setCSRFToken()
               filteredData.forEach(async (element, k) => {
 
@@ -106,12 +106,11 @@ function userRegistre() {
                   state: "loged_in",
                 };
 
-                
+
                 await axios
                   .post(source + "/_auth?xcode=" + xcode, dataInfo)
                   .then(async (res) => {
                     if (res.data.logedin) {
-
                       if (res.data.exist) {
                         failedData.push(element);
                       } else {
