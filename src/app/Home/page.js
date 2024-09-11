@@ -1332,7 +1332,7 @@ export default function Home(props) {
                     unoptimized
                     loading="lazy"
                     className={
-                      !imagePDP.includes("160471339156947") ? "w3-circle" : ""
+                      !imagePDP.includes("160471339156947") ? "w3-circle" : "w3-round"
                     }
                     width={80}
                     height={80}
