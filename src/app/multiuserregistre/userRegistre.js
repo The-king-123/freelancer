@@ -147,7 +147,7 @@ function userRegistre() {
                 if (k == filteredData.length - 1) {
                   if (failedData.length > 0) {
                     document.getElementById("register_text").className = "w3-hide";
-                    document.getElementById("import_text").innerHTML = "❌" + failedData.length + " n'ont pas été enregistrés";
+                    document.getElementById("import_text").innerHTML = "❌ " + failedData.length + "mail n'ont pas été enregistrés";
                     document.getElementById("import_text").className = "w3-xlarge w3-big w3-animate-top";
 
                     var existant = ''
@@ -159,7 +159,6 @@ function userRegistre() {
                       } else {
                         erreurde += failedData[i].item[7] + ', '
                       }
-
                     }
 
                     var errorTxt = ''
