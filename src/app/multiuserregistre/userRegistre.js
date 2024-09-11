@@ -8,17 +8,13 @@ import Papa from "papaparse";
 import axios from 'axios';
 
 function userRegistre() {
-  axios.defaults.withCredentials = true;
-
-  console.log('Here');
-  
+  axios.defaults.withCredentials = true;  
 
   const [importInfo, setimportInfo] = useState({
     index: {
       email: 1,
       prenom: 2,
       nom: 3,
-      phone: 4,
     },
     data: null,
   });
@@ -111,7 +107,7 @@ function userRegistre() {
                   fullname: element[importInfo.index.nom - 1].length > 0 || element[importInfo.index.nom - 1].length > 0 ? element[importInfo.index.nom - 1].toUpperCase() + " " + element[importInfo.index.prenom - 1] : element[importInfo.index.email],
                   email: element[importInfo.index.email - 1],
                   password: element[importInfo.index.email - 1],
-                  contact: element[importInfo.index.phone - 1].length > 0 ? element[importInfo.index.phone - 1] : "_",
+                  contact: "_",
                   designation: "Undefined",
                   key: key,
                   state: "loged_in",
@@ -317,18 +313,6 @@ function userRegistre() {
                   style={{ width: 24 }}
                 />
                 ] : Nom
-              </div>
-              <div>
-                [
-                <input
-                  onChange={(e) => (importInfo.index.phone = e.target.value)}
-                  type="number"
-                  className="w3-white w3-border-0 w3-center"
-                  maxLength={2}
-                  defaultValue={4}
-                  style={{ width: 24 }}
-                />
-                ] : Numéro de téléphone
               </div>
             </div>
           </div>
