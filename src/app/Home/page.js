@@ -42,6 +42,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { console_source as source } from "@/app/data";
 import HomePost from "@/app/HomePost";
+import { patchFetch } from "next/dist/server/app-render/entry-base";
 
 export default function Home(props) {
   axios.defaults.withCredentials = true;
@@ -431,7 +432,6 @@ export default function Home(props) {
       userInfos = users.find((obj) => obj.key == key);
     }
     if (userInfos) {
-      console.log(userInfos.designation);
 
       if (userInfos.designation == "Admin") {
         document.getElementsByClassName("userNameTitle")[0].innerText =
@@ -952,7 +952,7 @@ export default function Home(props) {
             }
           } else {
 
-            if (user) {
+            if (user && fullPath.path != '/') {
               showUser(res.data.data, user == 'undefined' ? "160471339156947" : user, false);
             } else {
               localStorage.setItem("user", "160471339156947");
