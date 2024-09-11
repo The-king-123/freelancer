@@ -1,12 +1,224 @@
+'use client'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { console_source as source } from '../data';
+import axios from 'axios';
 
 function Profile() {
+  axios.defaults.withCredentials = true;
+
+  const [imagePDP, setimagePDP] = useState(source + "/images.php?w=100&h=100&zlonk=3733&zlink=160471339156947");
+  const [inputImage, setinputImage] = useState(null)
+  const [userInfo, setuserInfo] = useState({
+    id: null,
+    email: "",
+    newemail: "",
+    telephone: "",
+    whatsapp: "",
+    messenger: "",
+    fullname: "",
+    password: "",
+    designation: "",
+    key: "",
+  });
+
+  async function setCSRFToken() {
+    try {
+      // Fetch CSRF token from the server
+      const response = await axios.get(source + '/csrf-token');
+      // Set CSRF token as a default header for all future requests
+      axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+    } catch (error) {
+      console.error('CSRF token fetch failed:', error);
+    }
+  }
+
+  const updateUserinfo = async () => {
+    if (userInfo.fullname.length < 8) {
+        document.getElementById("fn_alert").className =
+            "w3-text-red w3-small";
+    } else if (
+        userInfo.newemail != userInfo.email &&
+        (!userInfo.newemail.includes("@") || userInfo.newemail.length < 7)
+    ) {
+        document.getElementById("email_alert").className = "w3-show";
+        document.getElementById("email_alert").className =
+            "w3-text-red w3-small";
+    } else if (userInfo.telephone.length < 10) {
+        document.getElementById("number_alert").className = "w3-show";
+        document.getElementById("number_alert").className =
+            "w3-text-red w3-small";
+    } else if (
+        userInfo.whatsapp.length < 10 &&
+        userInfo.whatsapp.length > 0
+    ) {
+        document.getElementById("whatsapp_alert").className = "w3-show";
+        document.getElementById("whatsapp_alert").className =
+            "w3-text-red w3-small";
+    } else if (
+        userInfo.messenger.length < 15 &&
+        userInfo.messenger.length > 0
+    ) {
+        document.getElementById("whatsapp_alert").className = "w3-show";
+        document.getElementById("whatsapp_alert").className =
+            "w3-text-red w3-small";
+    } else if (userInfo.password.length < 8) {
+        document.getElementById("password_alert").className = "w3-show";
+        document.getElementById("password_alert").className =
+            "w3-text-red w3-small";
+    } else {
+        document.getElementById("spinnerSave").style.display =
+            "inline-block";
+
+        updateAuthElement.email = userInfo.email;
+        const xcode = localStorage.getItem('x-code')
+        await setCSRFToken()
+        await axios
+            .patch(source + "/_contact/userinformation?xcode="+xcode, userInfo)
+            .then((res) => {
+                if (res.data.saved) {
+                    document.getElementById("user_password").value = "";
+                    userInfo.password = "";
+                    document.getElementById("spinnerSave").style.display =
+                        "none";
+                    document.getElementById("info_text").className =
+                        "w3-hide";
+                    document.getElementById("saved_text").className =
+                        "w3-xxlarge w3-big w3-animate-top";
+                    setTimeout(() => {
+                        document.getElementById("info_text").className =
+                            "w3-xxlarge w3-big w3-animate-top";
+                        document.getElementById("saved_text").className =
+                            "w3-hide";
+                    }, 3000);
+                } else if (!res.data.password) {
+                    document.getElementById("password_alert").className =
+                        "w3-show";
+                    document.getElementById("password_alert").className =
+                        "w3-text-red w3-small";
+                    document.getElementById("spinnerSave").style.display =
+                        "none";
+                } else {
+                    alert(
+                        "Une erreur s'est produite. Veuillez réessayer ultérieurement."
+                    );
+                }
+            })
+            .catch((e) => {
+                console.error("failure", e);
+            });
+    }
+};
+
+  useEffect(() => {
+
+    const xcode = localStorage.getItem('x-code');
+    axios
+      .get(source + "/_auth?xcode=" + xcode)
+      .then((res) => {
+        if (res.data.logedin) {
+          console.log(res.data.user);
+          userInfo.email = res.data.user.email;
+          userInfo.fullname = res.data.user.fullname;
+          userInfo.id = res.data.user.id;
+          userInfo.key = res.data.user.key;
+          userInfo.newemail = res.data.user.email;
+          userInfo.telephone =
+            res.data.user.contact.length > 12
+              ? JSON.parse(res.data.user.contact).telephone
+              : res.data.user.contact;
+          userInfo.whatsapp =
+            res.data.user.contact.length > 12
+              ? JSON.parse(res.data.user.contact).whatsapp
+              : "";
+          userInfo.messenger =
+            res.data.user.contact.length > 12
+              ? JSON.parse(res.data.user.contact).messenger
+              : "";
+          userInfo.designation = res.data.user.designation;
+
+          document.getElementById("fullname").value =
+            userInfo.fullname;
+          document.getElementById("email").value = userInfo.email;
+          document.getElementById("number").value =
+            userInfo.telephone;
+          document.getElementById("whatsapp").value =
+            userInfo.whatsapp;
+          document.getElementById("messenger").value =
+            userInfo.messenger;
+          document.getElementById("designation").value =
+            userInfo.designation;
+
+          setimagePDP( source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.user.key );
+
+          if (res.data.user.key == "160471339156947") {
+
+            document.getElementById("imagePDP").className =
+              "w3-overflow w3-display-container";
+          }
+
+          document.getElementById('profilCore').style.display = 'block';
+        } else {
+          if (document.getElementById('modalLogin')) {
+            document.getElementById('modalLogin').style.display = 'block'
+          }
+          document.getElementById('profilCore').innerHTML = '';
+
+        }
+      })
+      .catch((e) => {
+        console.error("failure", e);
+        if (document.getElementById('modalLogin')) {
+          document.getElementById('modalLogin').style.display = 'block'
+        }
+        document.getElementById('profilCore').innerHTML = '';
+      });
+
+    var inputImagePDP = document.createElement("input");
+    inputImagePDP.type = "file";
+    inputImagePDP.accept = "image/*";
+
+    inputImagePDP.onchange = (e) => {
+      const file = e.target.files[0];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      const formData = new FormData();
+      formData.append("media", file);
+
+      reader.onload = async (readerEvent) => {
+        document.getElementById("imagePDPSpinner").style.display = "flex";
+        var content = readerEvent.target.result;
+        document.getElementById("imagePDP").src = content;
+
+
+        await setCSRFToken()
+        await axios
+          .post(source + "/_auth?xcode=" + xcode, formData)
+          .then((res) => {
+            if (res.data.uploaded) {
+              document.getElementById(
+                "imagePDPSpinner"
+              ).style.display = "none";
+            } else {
+              window.alert(
+                "Profile picture not changed, something want wrong..."
+              );
+            }
+          })
+          .catch((e) => {
+            console.error("failure", e);
+          });
+      };
+    };
+    setinputImage(inputImagePDP)
+  }, [])
+
   return (
-    <div>
+    <div id='profilCore' style={{ display: 'none' }}>
       <div
         style={{ padding: 8 }}
       >
@@ -19,7 +231,8 @@ function Profile() {
           className="w3-overflow w3-display-container w3-circle"
         >
           <Image
-            // onClick={() => inputImage.click()}
+            alt='user PDP'
+            onClick={() => inputImage.click()}
             id="imagePDP"
             width={100}
             height={100}
@@ -30,7 +243,7 @@ function Profile() {
               objectPosition: "center",
             }}
             className="w3-display-middle"
-            src={source + "/images.php?w=100&h=100&zlonk=3733&zlink=160471339156947"}
+            src={imagePDP}
           />
           <div
             id="imagePDPSpinner"
@@ -256,7 +469,7 @@ function Profile() {
         </form>
       </div>
 
-      <div style={{padding:8}}>
+      <div style={{ padding: 8 }}>
         <div
           id="password_alert"
           className="w3-hide"

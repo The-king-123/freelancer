@@ -113,7 +113,6 @@ function userRegistre() {
                   state: "loged_in",
                 };
 
-
                 await axios
                   .post(source + "/_auth?xcode=" + xcode, dataInfo)
                   .then(async (res) => {
