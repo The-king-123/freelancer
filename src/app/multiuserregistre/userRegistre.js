@@ -92,10 +92,10 @@ function userRegistre() {
 
               const xcode = localStorage.getItem('x-code');
 
-              await setCSRFToken()
+              await setCSRFToken();
+              var compter = 0;
+              
               filteredData.forEach(async (element, k) => {
-
-                var compter = 0;
 
                 const key = generateRandomNumber(15);
 
@@ -119,7 +119,7 @@ function userRegistre() {
                       } else {
                         await createStarter(key, dataInfo.fullname)
                       }
-                      compter++
+                      compter++;
                       document.getElementById("uploadingText").innerText = compter + " / " + filteredData.length;
 
                     } else {
