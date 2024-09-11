@@ -65,6 +65,11 @@ function userRegistre() {
   };
 
   const importLaunch = async () => {
+
+    document.getElementById("error_text").innerHTML = '';
+    document.getElementById("register_text").className = "w3-xlarge w3-big w3-animate-top";
+    document.getElementById("import_text").className = "w3-hide";
+
     if (importInfo.data) {
       Papa.parse(importInfo.data, {
         header: false,
@@ -95,7 +100,7 @@ function userRegistre() {
               await setCSRFToken();
               var compter = 0;
 
-              filteredData.forEach(async (element, k) => {                
+              filteredData.forEach(async (element, k) => {
 
                 const key = generateRandomNumber(15);
 
@@ -154,18 +159,18 @@ function userRegistre() {
                       } else {
                         erreurde += failedData[i].item[7] + ', '
                       }
-                      
+
                     }
 
                     var errorTxt = ''
-                    if (existant.length>3) {
+                    if (existant.length > 3) {
                       errorTxt += "<div class='w3-big w3-margin-top'>Comptes existants : </div><div class='w3-text-grey w3-small'>" + existant + "</div>"
                     }
-                    if (erreurde.length>3) {
+                    if (erreurde.length > 3) {
                       errorTxt += "<div class='w3-big w3-margin-top'>Erreur d'enregistrement : </div><div class='w3-text-grey w3-small'>" + erreurde + "</div>"
                     }
                     document.getElementById("error_text").innerHTML = errorTxt;
-                    
+
                   } else {
                     document.getElementById("register_text").className = "w3-hide";
                     document.getElementById("import_text").innerHTML = "Enregistrement fini avec succé";
@@ -178,6 +183,7 @@ function userRegistre() {
                   }
 
                   importInfo.data = null;
+                  inputCSV.value = '';
                   document.getElementById("fileName").innerText = "";
                   document.getElementById("iconImportUpload").style.display = "inline-block";
                   document.getElementById("iconImportSpinner").style.display = "none";
