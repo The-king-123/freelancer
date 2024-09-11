@@ -868,7 +868,7 @@ export default function Home(props) {
 
 
       setTimeout(() => {
-        
+
         const postCore = document.getElementsByClassName("postCore");
         for (let i = 0; i < postCore.length; i++) {
           console.log('post core here');
@@ -951,6 +951,7 @@ export default function Home(props) {
               showUser(res.data.data, props.user, true);
             }
           } else {
+
             if (user) {
               showUser(res.data.data, user == 'undefined' ? "160471339156947" : user, false);
             } else {
@@ -1088,6 +1089,7 @@ export default function Home(props) {
           >
 
             <Link
+              onClick={() => localStorage.setItem("user", "160471339156947")}
               className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
               style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
               href={"/"}
