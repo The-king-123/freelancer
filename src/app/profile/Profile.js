@@ -192,7 +192,7 @@ function Profile() {
       reader.onload = async (readerEvent) => {
         document.getElementById("imagePDPSpinner").style.display = "flex";
         var content = readerEvent.target.result;
-        document.getElementById("imagePDP").src = content;
+        setimagePDP(content);
 
 
         await setCSRFToken()
@@ -204,6 +204,7 @@ function Profile() {
                 "imagePDPSpinner"
               ).style.display = "none";
             } else {
+              setimagePDP(source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + userInfo.key)
               window.alert(
                 "Profile picture not changed, something want wrong..."
               );
@@ -211,6 +212,13 @@ function Profile() {
           })
           .catch((e) => {
             console.error("failure", e);
+            setimagePDP(source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + userInfo.key)
+            document.getElementById(
+              "imagePDPSpinner"
+            ).style.display = "none";
+            window.alert(
+              "Profile picture not changed, something want wrong..."
+            );
           });
       };
     };
