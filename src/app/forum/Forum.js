@@ -7,13 +7,15 @@ import axios from "axios";
 
 export default function Forum(props) {
 
+  axios.defaults.withCredentials = true;
+
   const [displayForum, setdisplayForum] = useState('')
   const [comments, setcomments] = useState([])
 
   const [commentInfo, setcommentInfo] = useState({
     comment: '',
-    userpseudo: '',
-    usekey: '',
+    forum_owner: '',
+    forum_id: '',
   })
 
   async function setCSRFToken() {
@@ -47,23 +49,26 @@ export default function Forum(props) {
 
   const comment = async (data) => {
 
-    const response  = JSON.parse(data.response)
-    response.push(commentInfo);
-    console.log(response);
+    console.log(data);
+
+    commentInfo.forum_owner = data.owner_key
+    commentInfo.forum_id = data.id
+
+    const xcode = localStorage.getItem('x-code')
     await setCSRFToken();
     await axios
-            .patch(source + "/_forum/" + data.id + "?xcode=" + xcode, response)
-            .then((res) => {
-              
-            })
-            .catch((e) => {
-              if (e.response && e.response.status === 419) {
-                console.error('CSRF token missing or incorrect');
-              } else {
-                console.error('Request failed:', error);
-              }
-            });
-    
+      .post(source + "/_forumcoment?xcode=" + xcode, commentInfo)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((e) => {
+        if (e.response && e.response.status === 419) {
+          console.error('CSRF token missing or incorrect');
+        } else {
+          console.error('Request failed:', error);
+        }
+      });
+
   }
 
   const reloadForums = (forums) => {
