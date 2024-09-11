@@ -155,9 +155,9 @@ function userRegistre() {
 
                     for (let i = 0; i < failedData.length; i++) {
                       if (failedData[i].cause == 'existant') {
-                        existant += failedData[i].item[7] + ', '
+                        existant += failedData[i].item[importInfo.index.email - 1] + ', '
                       } else {
-                        erreurde += failedData[i].item[7] + ', '
+                        erreurde += failedData[i].item[importInfo.index.email - 1] + ', '
                       }
                     }
 

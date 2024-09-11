@@ -136,15 +136,15 @@ export default function Forum(props) {
                   JSON.parse(forum.response).length > 0 &&
                   JSON.parse(forum.response).map((response, k) => (
                     <div key={k} className="w3-border-left" style={{ paddingBlock: 4, paddingInline: 8, marginBlock: 4 }}>
+                      <div className="w3-text-grey w3-tiny">3829837498</div>
                       <div className="w3-small forumComent" data={"forum" + key + "Coment" + k}>
                         <div
                           className="w3-overflow w3-nowrap-multiline"
                           id={"forum" + key + "Coment" + k}
                         >
-                          {response} Culpa aute esse sunt consectetur nulla officia. Voluptate qui aliqua Lorem reprehenderit nulla voluptate aliqua Lorem ad culpa enim elit ullamco.Deserunt ut fugiat velit culpa aute ut ex mollit amet. Adipisicing dolor pariatur labore eiusmod mollit fugiat sint et incididunt ex voluptate nostrud. Nisi ex consequat tempor est.
+                          {response}
                         </div>
                       </div>
-                      <div className="w3-text-grey w3-tiny">3829837498</div>
                     </div>
                   ))
                 }
