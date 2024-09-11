@@ -94,8 +94,8 @@ function userRegistre() {
 
               await setCSRFToken();
               var compter = 0;
-              
-              filteredData.forEach(async (element, k) => {
+
+              filteredData.forEach(async (element, k) => {                
 
                 const key = generateRandomNumber(15);
 
@@ -115,7 +115,10 @@ function userRegistre() {
                   .then(async (res) => {
                     if (res.data.logedin) {
                       if (res.data.exist) {
-                        failedData.push(element);
+                        failedData.push({
+                          cause: 'existant',
+                          item: element,
+                        });
                       } else {
                         await createStarter(key, dataInfo.fullname)
                       }
@@ -130,7 +133,10 @@ function userRegistre() {
                   })
                   .catch((e) => {
                     console.error("failure", e);
-                    failedData.push(element);
+                    failedData.push({
+                      cause: "error",
+                      item: element,
+                    });
                   });
 
                 if (k == filteredData.length - 1) {
@@ -139,10 +145,27 @@ function userRegistre() {
                     document.getElementById("import_text").innerHTML = "❌" + failedData.length + " n'ont pas été enregistrés";
                     document.getElementById("import_text").className = "w3-xlarge w3-big w3-animate-top";
 
-                    setTimeout(() => {
-                      document.getElementById("register_text").className = "w3-xlarge w3-big w3-animate-top";
-                      document.getElementById("import_text").className = "w3-hide";
-                    }, 3000);
+                    var existant = ''
+                    var erreurde = ''
+
+                    for (let i = 0; i < failedData.length; i++) {
+                      if (failedData[i].cause == 'existant') {
+                        existant += failedData[i].item[7] + ', '
+                      } else {
+                        erreurde += failedData[i].item[7] + ', '
+                      }
+                      
+                    }
+
+                    var errorTxt = ''
+                    if (existant.length>3) {
+                      errorTxt += "<div class='w3-big w3-margin-top'>Comptes existants : </div><div class='w3-text-grey w3-small'>" + existant + "</div>"
+                    }
+                    if (erreurde.length>3) {
+                      errorTxt += "<div class='w3-big w3-margin-top'>Erreur d'enregistrement : </div><div class='w3-text-grey w3-small'>" + erreurde + "</div>"
+                    }
+                    document.getElementById("error_text").innerHTML = errorTxt;
+                    
                   } else {
                     document.getElementById("register_text").className = "w3-hide";
                     document.getElementById("import_text").innerHTML = "Enregistrement fini avec succé";
@@ -228,9 +251,7 @@ function userRegistre() {
         >
           <div className="w3-flex w3-flex-column">
             <div id="import_text" className="w3-hide">
-              Working...
-              <br />
-              Please wait
+              Working... Please wait
             </div>
             <div
               id="register_text"
@@ -241,6 +262,9 @@ function userRegistre() {
             <div className={"w3-round-xxlarge content-bar bg-violet"} >
               {" "}
             </div>
+
+            <div id='error_text'></div>
+
             <div className="w3-medium w3-text-grey w3-twothird w3-margin-top">
               Gagnez du temps en enregistrant des
               utilisateurs en masse grâce à l'importation
