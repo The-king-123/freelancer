@@ -10,6 +10,9 @@ import axios from 'axios';
 function userRegistre() {
   axios.defaults.withCredentials = true;
 
+  console.log('Here');
+  
+
   const [importInfo, setimportInfo] = useState({
     index: {
       email: 1,
