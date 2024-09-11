@@ -37,80 +37,79 @@ function Profile() {
 
   const updateUserinfo = async () => {
     if (userInfo.fullname.length < 8) {
-        document.getElementById("fn_alert").className =
-            "w3-text-red w3-small";
+      document.getElementById("fn_alert").className =
+        "w3-text-red w3-small";
     } else if (
-        userInfo.newemail != userInfo.email &&
-        (!userInfo.newemail.includes("@") || userInfo.newemail.length < 7)
+      userInfo.newemail != userInfo.email &&
+      (!userInfo.newemail.includes("@") || userInfo.newemail.length < 7)
     ) {
-        document.getElementById("email_alert").className = "w3-show";
-        document.getElementById("email_alert").className =
-            "w3-text-red w3-small";
+      document.getElementById("email_alert").className = "w3-show";
+      document.getElementById("email_alert").className =
+        "w3-text-red w3-small";
     } else if (userInfo.telephone.length < 10) {
-        document.getElementById("number_alert").className = "w3-show";
-        document.getElementById("number_alert").className =
-            "w3-text-red w3-small";
+      document.getElementById("number_alert").className = "w3-show";
+      document.getElementById("number_alert").className =
+        "w3-text-red w3-small";
     } else if (
-        userInfo.whatsapp.length < 10 &&
-        userInfo.whatsapp.length > 0
+      userInfo.whatsapp.length < 10 &&
+      userInfo.whatsapp.length > 0
     ) {
-        document.getElementById("whatsapp_alert").className = "w3-show";
-        document.getElementById("whatsapp_alert").className =
-            "w3-text-red w3-small";
+      document.getElementById("whatsapp_alert").className = "w3-show";
+      document.getElementById("whatsapp_alert").className =
+        "w3-text-red w3-small";
     } else if (
-        userInfo.messenger.length < 15 &&
-        userInfo.messenger.length > 0
+      userInfo.messenger.length < 15 &&
+      userInfo.messenger.length > 0
     ) {
-        document.getElementById("whatsapp_alert").className = "w3-show";
-        document.getElementById("whatsapp_alert").className =
-            "w3-text-red w3-small";
+      document.getElementById("whatsapp_alert").className = "w3-show";
+      document.getElementById("whatsapp_alert").className =
+        "w3-text-red w3-small";
     } else if (userInfo.password.length < 8) {
-        document.getElementById("password_alert").className = "w3-show";
-        document.getElementById("password_alert").className =
-            "w3-text-red w3-small";
+      document.getElementById("password_alert").className = "w3-show";
+      document.getElementById("password_alert").className =
+        "w3-text-red w3-small";
     } else {
-        document.getElementById("spinnerSave").style.display =
-            "inline-block";
+      document.getElementById("spinnerSave").style.display =
+        "inline-block";
 
-        updateAuthElement.email = userInfo.email;
-        const xcode = localStorage.getItem('x-code')
-        await setCSRFToken()
-        await axios
-            .patch(source + "/_contact/userinformation?xcode="+xcode, userInfo)
-            .then((res) => {
-                if (res.data.saved) {
-                    document.getElementById("user_password").value = "";
-                    userInfo.password = "";
-                    document.getElementById("spinnerSave").style.display =
-                        "none";
-                    document.getElementById("info_text").className =
-                        "w3-hide";
-                    document.getElementById("saved_text").className =
-                        "w3-xxlarge w3-big w3-animate-top";
-                    setTimeout(() => {
-                        document.getElementById("info_text").className =
-                            "w3-xxlarge w3-big w3-animate-top";
-                        document.getElementById("saved_text").className =
-                            "w3-hide";
-                    }, 3000);
-                } else if (!res.data.password) {
-                    document.getElementById("password_alert").className =
-                        "w3-show";
-                    document.getElementById("password_alert").className =
-                        "w3-text-red w3-small";
-                    document.getElementById("spinnerSave").style.display =
-                        "none";
-                } else {
-                    alert(
-                        "Une erreur s'est produite. Veuillez réessayer ultérieurement."
-                    );
-                }
-            })
-            .catch((e) => {
-                console.error("failure", e);
-            });
+      const xcode = localStorage.getItem('x-code')
+      await setCSRFToken()
+      await axios
+        .patch(source + "/_contact/userinformation?xcode=" + xcode, userInfo)
+        .then((res) => {
+          if (res.data.saved) {
+            document.getElementById("user_password").value = "";
+            userInfo.password = "";
+            document.getElementById("spinnerSave").style.display =
+              "none";
+            document.getElementById("info_text").className =
+              "w3-hide";
+            document.getElementById("saved_text").className =
+              "w3-xlarge w3-big w3-animate-top";
+            setTimeout(() => {
+              document.getElementById("info_text").className =
+                "w3-xlarge w3-big w3-animate-top";
+              document.getElementById("saved_text").className =
+                "w3-hide";
+            }, 3000);
+          } else if (!res.data.password) {
+            document.getElementById("password_alert").className =
+              "w3-show";
+            document.getElementById("password_alert").className =
+              "w3-text-red w3-small";
+            document.getElementById("spinnerSave").style.display =
+              "none";
+          } else {
+            alert(
+              "Une erreur s'est produite. Veuillez réessayer ultérieurement."
+            );
+          }
+        })
+        .catch((e) => {
+          console.error("failure", e);
+        });
     }
-};
+  };
 
   useEffect(() => {
 
@@ -151,10 +150,10 @@ function Profile() {
           document.getElementById("designation").value =
             userInfo.designation;
 
-          setimagePDP( source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.user.key );
+          setimagePDP(source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.user.key);
 
           if (res.data.user.key == "160471339156947") {
-
+            document.getElementById('designationWrapper').innerHTML = ''
             document.getElementById("imagePDP").className =
               "w3-overflow w3-display-container";
           }
@@ -199,15 +198,22 @@ function Profile() {
         await axios
           .post(source + "/_auth?xcode=" + xcode, formData)
           .then((res) => {
-            if (res.data.uploaded) {
-              document.getElementById(
-                "imagePDPSpinner"
-              ).style.display = "none";
+            if (res.data.logedin) {
+              if (res.data.uploaded) {
+                document.getElementById(
+                  "imagePDPSpinner"
+                ).style.display = "none";
+              } else {
+                setimagePDP(source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + userInfo.key)
+                window.alert(
+                  "Profile picture not changed, something want wrong..."
+                );
+              }
             } else {
-              setimagePDP(source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + userInfo.key)
-              window.alert(
-                "Profile picture not changed, something want wrong..."
-              );
+              if (document.getElementById('modalLogin')) {
+                document.getElementById('modalLogin').style.display = 'block'
+              }
+              document.getElementById('profilCore').innerHTML = '';
             }
           })
           .catch((e) => {
@@ -313,6 +319,7 @@ function Profile() {
             style={{ marginTop: 8 }}
           >
             <input
+              onChange={(e) => userInfo.fullname = e.target.value}
               type="text"
               className="w3-input w3-light-grey w3-round w3-text-grey w3-block w3-border-0"
               placeholder="Nom complet"
@@ -341,6 +348,7 @@ function Profile() {
             style={{ marginTop: 8 }}
           >
             <input
+              onChange={(e) => userInfo.newemail = e.target.value}
               type="email"
               className="w3-input w3-light-grey w3-round w3-text-grey w3-block w3-border-0"
               placeholder="Adresse e-mail"
@@ -369,6 +377,7 @@ function Profile() {
             style={{ marginTop: 8 }}
           >
             <input
+              onChange={(e) => userInfo.telephone = e.target.value}
               type="number"
               className="w3-input w3-light-grey w3-round w3-text-grey w3-block w3-border-0"
               placeholder="Numéro de téléphone"
@@ -398,6 +407,7 @@ function Profile() {
             style={{ marginTop: 8 }}
           >
             <input
+              onChange={(e) => userInfo.whatsapp = e.target.value}
               type="number"
               className="w3-input w3-light-grey w3-round w3-text-grey w3-block w3-border-0"
               placeholder="Numéro Whatsapp"
@@ -426,6 +436,7 @@ function Profile() {
             style={{ marginTop: 8 }}
           >
             <input
+              onChange={(e) => userInfo.messenger = e.target.value}
               type="text"
               className="w3-input w3-light-grey w3-round w3-text-grey w3-block w3-border-0"
               placeholder="Lien Messenger"
@@ -434,10 +445,13 @@ function Profile() {
               required
             />
           </div>
+          
           <div
+            id='designationWrapper'
             style={{ marginTop: 8 }}
           >
             <select
+              onChange={(e) => userInfo.designation = e.target.value}
               id="designation"
               className="w3-input w3-light-grey w3-round w3-text-grey w3-block w3-border-0"
               style={{ paddingBlock: 8 }}
@@ -492,6 +506,7 @@ function Profile() {
         </div>
         <div style={{ paddingBlock: 16 }}>
           <input
+            onChange={(e) => userInfo.password = e.target.value}
             type="password"
             className="input w3-white w3-round-xxlarge w3-block w3-text-grey w3-medium"
             placeholder="Entrer votre mot de passe"
@@ -501,6 +516,7 @@ function Profile() {
           />
         </div>
         <div
+          onClick={updateUserinfo}
           className="w3-block transition w3-medium w3-button w3-round-xxlarge w3-text-white w3-black w3-margin-bottom"
         >
           Sauvegarder

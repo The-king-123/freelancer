@@ -2,9 +2,42 @@
 import Image from "next/image";
 import Link from "next/link";
 import slugify from "slugify";
-import {console_source as source} from "@/app/data";
+import { console_source as source } from "@/app/data";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-export default function PostContent({ content }) {
+export default function PostContent() {
+
+  const [content, setcontent] = useState([])
+
+  useEffect(() => {
+    axios
+      .get(source + "/_auth/users")
+      .then((res) => {
+        const usersData = [];
+        res.data.data.forEach((user) => {
+          if (
+            !usersData.some(des => des.designation == user.designation) &&
+            user.designation != "Admin"
+          ) {
+            usersData.push({
+              designation: user.designation,
+              users: 1,
+            });
+          } else if (user.designation != 'Admin') {
+            const design = usersData.find(obj => obj.designation == user.designation);
+            if (design) {
+              design.users += 1;
+            }
+          }
+        });
+        setcontent(usersData);
+      })
+      .catch((e) => {
+        console.error("failure", e);
+      });
+  }, [])
+
 
   return (
     <div>
@@ -45,23 +78,12 @@ export default function PostContent({ content }) {
                   className="w3-flex-1 w3-flex-column w3-nowrap w3-overflow"
                 >
                   <span className="w3-medium w3-big w3-nowrap w3-overflow">{des.designation}</span>
-                  <span className="w3-small w3-text-grey w3-nowrap w3-overflow">{des.users} utilisateur{des.users>1?'s':''}</span>
+                  <span className="w3-small w3-text-grey w3-nowrap w3-overflow">{des.users} utilisateur{des.users > 1 ? 's' : ''}</span>
                 </div>
               </div>
             </Link>
           </div>
         ))}
-
-      {content.length <= 0 && (
-        <div>
-          <div
-            className="w3-text-black w3-border w3-flex-row w3-flex-center-v w3-round w3-block w3-medium w3-big"
-            style={{ marginBlock: 16, padding: 12 }}
-          >
-            You will find categories here...
-          </div>
-        </div>
-      )}
     </div>
   );
 }
