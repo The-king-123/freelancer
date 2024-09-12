@@ -126,6 +126,7 @@ function previewForum({ forum }) {
                         </div>
                     ))
                 }
+                <div id={"forumUserNewComent0"}></div>
                 {
                     forum.response.length > 0 &&
                     <hr />
