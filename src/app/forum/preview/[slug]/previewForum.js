@@ -10,6 +10,8 @@ import axios from 'axios';
 
 function previewForum({ forum }) {
 
+    axios.defaults.withCredentials = true;
+
     const [commentInfo, setcommentInfo] = useState({
         comment: '',
         forum_owner: '',
@@ -30,7 +32,7 @@ function previewForum({ forum }) {
     const comment = async (data, key) => {
 
         if (commentInfo.forum_owner) {
-            
+
         }
         if (commentInfo.comment.trim().length > 0) {
 
@@ -126,10 +128,11 @@ function previewForum({ forum }) {
                 }
                 {
                     forum.response.length > 0 &&
-                    <hr/>
+                    <hr />
                 }
                 <div className="w3-white w3-round-xxlarge w3-overflow w3-flex-row">
                     <input
+                        type='text'
                         id={"inputForumComent0"}
                         onChange={(e) => commentInfo.comment = e.target.value}
                         className="input w3-input w3-border-0 w3-light-grey w3-block w3-flex-1"

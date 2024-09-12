@@ -170,6 +170,7 @@ export default function Forum(props) {
               }
               <div className="w3-white w3-round-xxlarge w3-overflow w3-flex-row">
                 <input
+                  type='text'
                   id={"inputForumComent" + key}
                   onChange={(e) => commentInfo.comment = e.target.value}
                   className="input w3-input w3-border-0 w3-white w3-block w3-flex-1"
