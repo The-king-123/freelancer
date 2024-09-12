@@ -12,6 +12,8 @@ function previewForum({ forum }) {
 
     axios.defaults.withCredentials = true;
 
+    const xuser = localStorage.getItem('x-user')
+
     const [commentInfo, setcommentInfo] = useState({
         comment: '',
         forum_owner: '',
@@ -28,6 +30,75 @@ function previewForum({ forum }) {
             console.error('CSRF token fetch failed:', error);
         }
     }
+
+    
+  const supprimer = async (id, key) => {
+    const xcode = localStorage.getItem('x-code')
+    document.getElementById("modalWarning").style.display = "block";
+    document.getElementById("textWarning").innerText =
+      "Voulez vous vraiment supprimer ce commentaire ...";
+
+    const deleteHandler = async () => {
+      document.getElementById("confirmSpinner").style.display =
+        "inline-block";
+      await setCSRFToken();
+      await axios
+        .delete(source + "/_forumcoment/" + id + "?xcode=" + xcode)
+        .then((res) => {
+          if (res.data.logedin) {
+            if (res.data.deleted) {
+              document.getElementById("coment" + key + "_" + id).style.display = 'none';
+              document.getElementById("confirmSpinner").style.display = "none";
+              document.getElementById("modalWarning").style.display = "none";
+
+              document
+                .getElementById("confirmWarning")
+                .removeEventListener("click", deleteHandler);
+              document
+                .getElementById("cancelWarning")
+                .removeEventListener("click", cancelHandler);
+            } else {
+              document.getElementById("confirmSpinner").style.display = "none";
+            }
+          } else {
+            if (document.getElementById('modalLogin')) {
+              document.getElementById('modalLogin').style.display = 'block'
+            }
+            document.getElementById("confirmSpinner").style.display = "none";
+            document.getElementById("modalWarning").style.display = "none";
+          }
+
+        })
+        .catch((e) => {
+          document.getElementById("confirmSpinner").style.display = "none";
+          if (e.response && e.response.status === 419) {
+            console.error('CSRF token missing or incorrect');
+          } else {
+            console.error('Request failed:', error);
+          }
+        });
+    };
+    const cancelHandler = async () => {
+      document.getElementById("modalWarning").style.display = "none";
+
+      document
+        .getElementById("confirmWarning")
+        .removeEventListener("click", deleteHandler);
+      document
+        .getElementById("cancelWarning")
+        .removeEventListener("click", cancelHandler);
+    };
+
+    document
+      .getElementById("confirmWarning")
+      .addEventListener("click", deleteHandler);
+    document
+      .getElementById("cancelWarning")
+      .addEventListener("click", cancelHandler);
+
+    //---------------------------------
+
+  }
 
     const comment = async (data, key) => {
 
@@ -114,7 +185,7 @@ function previewForum({ forum }) {
                     forum.response.length > 0 &&
                     forum.response.map((response, k) => (
                         <div key={k} className="w3-border-left" style={{ paddingBlock: 4, paddingInline: 8, marginBlock: 4 }}>
-                            <div className="w3-text-grey w3-tiny">{response.user_key}</div>
+                            <div className="w3-text-grey w3-tiny">{response.user_key == xuser ? "¬vous" : response.user_key}</div>
                             <div className="w3-small forumComent" data={"forum0Coment" + k}>
                                 <div
                                     className="w3-overflow w3-nowrap-multiline"

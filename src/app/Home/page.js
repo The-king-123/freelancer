@@ -801,6 +801,7 @@ export default function Home(props) {
         if (res.data.logedout) {
           openDropdown("setting");
           localStorage.removeItem('x-code');
+          localStorage.removeItem('x-user');
           document.location = "/";
         } else {
           document.getElementById("logoutSpinner").style.display =

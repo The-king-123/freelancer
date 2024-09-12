@@ -47,7 +47,7 @@ export default function Forum(props) {
         .post(source + "/_forumcoment?xcode=" + xcode, commentInfo)
         .then((res) => {
           if (res.data.logedin) {
-            const commentaire = "<div class='w3-border-left' style='padding-block: 4px; padding-inline: 8px; margin-block: 4px'><div class='w3-text-grey w3-tiny'>*vous</div><div class='w3-small forumComent'><div>" + commentInfo.comment + "</div></div></div>";
+            const commentaire = "<div class='w3-border-left' style='padding-block: 4px; padding-inline: 8px; margin-block: 4px'><div class='w3-text-grey w3-tiny'>¬vous</div><div class='w3-small forumComent'><div>" + commentInfo.comment + "</div></div></div>";
             document.getElementById('forumUserNewComent' + key).innerHTML = document.getElementById('forumUserNewComent' + key).innerHTML + commentaire;
 
             commentInfo.comment = '';
@@ -78,7 +78,76 @@ export default function Forum(props) {
 
   }
 
+  const supprimer = async (id, key) => {
+    const xcode = localStorage.getItem('x-code')
+    document.getElementById("modalWarning").style.display = "block";
+    document.getElementById("textWarning").innerText =
+      "Voulez vous vraiment supprimer ce commentaire ...";
+
+    const deleteHandler = async () => {
+      document.getElementById("confirmSpinner").style.display =
+        "inline-block";
+      await setCSRFToken();
+      await axios
+        .delete(source + "/_forumcoment/" + id + "?xcode=" + xcode)
+        .then((res) => {
+          if (res.data.logedin) {
+            if (res.data.deleted) {
+              document.getElementById("coment" + key + "_" + id).style.display = 'none';
+              document.getElementById("confirmSpinner").style.display = "none";
+              document.getElementById("modalWarning").style.display = "none";
+
+              document
+                .getElementById("confirmWarning")
+                .removeEventListener("click", deleteHandler);
+              document
+                .getElementById("cancelWarning")
+                .removeEventListener("click", cancelHandler);
+            } else {
+              document.getElementById("confirmSpinner").style.display = "none";
+            }
+          } else {
+            if (document.getElementById('modalLogin')) {
+              document.getElementById('modalLogin').style.display = 'block'
+            }
+            document.getElementById("confirmSpinner").style.display = "none";
+            document.getElementById("modalWarning").style.display = "none";
+          }
+
+        })
+        .catch((e) => {
+          document.getElementById("confirmSpinner").style.display = "none";
+          if (e.response && e.response.status === 419) {
+            console.error('CSRF token missing or incorrect');
+          } else {
+            console.error('Request failed:', error);
+          }
+        });
+    };
+    const cancelHandler = async () => {
+      document.getElementById("modalWarning").style.display = "none";
+
+      document
+        .getElementById("confirmWarning")
+        .removeEventListener("click", deleteHandler);
+      document
+        .getElementById("cancelWarning")
+        .removeEventListener("click", cancelHandler);
+    };
+
+    document
+      .getElementById("confirmWarning")
+      .addEventListener("click", deleteHandler);
+    document
+      .getElementById("cancelWarning")
+      .addEventListener("click", cancelHandler);
+
+    //---------------------------------
+
+  }
+
   const reloadForums = (forums) => {
+    const xuser = localStorage.getItem('x-user');
     var glitchForum = ''
     if (forums.length > 0) {
       glitchForum = forums.map((forum, key) => (
@@ -90,11 +159,11 @@ export default function Forum(props) {
           >
             Lien copié...
           </div>
-          <div className="w3-flex-column w3-overflow w3-card w3-round w3-pointer w3-white">
+          <div className="w3-flex-column w3-overflow w3-card w3-round w3-white">
             <Link
               href={'/forum/preview/' + forum.slug}
               data={"https://freelancer.mg/forum/" + forum.slug}
-              className="forumTitle w3-nowrap w3-overflow w3-light-grey w3-big"
+              className="forumTitle w3-nowrap w3-overflow w3-light-grey w3-big w3-pointer"
               style={{ paddingBlock: 8, paddingInline: 16 }}
               title="Ouvrir le forum"
             >
@@ -104,7 +173,7 @@ export default function Forum(props) {
               <div className="forumCore">
                 <div
                   id={"forum" + key}
-                  className="w3-overflow w3-nowrap-multiline"
+                  className="w3-overflow w3-nowrap-multiline w3-pointer"
                   style={{ marginInline: 16, marginBlock: 8 }}
                 >
                   {parse(forum.content)}
@@ -112,8 +181,9 @@ export default function Forum(props) {
               </div>
             </div>
             {forum.type == "image" && (
-              <div
-                className="forumMedia w3-display-container w3-light-grey forum-image"
+              <Link
+                href={'/forum/preview/' + forum.slug}
+                className="forumMedia w3-display-container w3-light-grey forum-image w3-pointer"
                 data={JSON.stringify(forum)}
                 style={{ zIndex: 2 }}
               >
@@ -121,7 +191,6 @@ export default function Forum(props) {
                   alt={"image" + key}
                   unoptimized
                   loading="lazy"
-                  // onContextMenu={(e) => e.preventDefault()}
                   height={320}
                   width={520}
                   src={
@@ -136,16 +205,20 @@ export default function Forum(props) {
                   }}
                   className="w3-overflow w3-light-grey forum-image"
                 />
-              </div>
+              </Link>
             )}
-            <div style={{ padding: 16 }} className="w3-light-grey">
+            <div
+              style={{ padding: 16 }}
+              className="w3-light-grey"
+            >
               <div>
                 <div id={"forumUserNewComent" + key}></div>
                 {
                   forum.response.length > 0 &&
                   forum.response.map((response, k) => (
-                    <div key={k} className="w3-border-left" style={{ paddingBlock: 4, paddingInline: 8, marginBlock: 4 }}>
-                      <div className="w3-text-grey w3-tiny">{response.user_key}</div>
+                    k < 3 &&
+                    <div id={"coment" + key + "_" + response.id} key={k} className="w3-border-left" style={{ paddingBlock: 4, paddingInline: 8, marginBlock: 4 }}>
+                      <div className="w3-text-grey w3-tiny">{response.user_key == xuser ? <div>¬vous<span onClick={() => supprimer(response.id, key)} className="w3-margin-left w3-text-red w3-opacity w3-pointer">supprimer</span></div> : response.user_key}</div>
                       <div className="w3-small forumComent" data={"forum" + key + "Coment" + k}>
                         <div
                           className="w3-overflow w3-nowrap-multiline"
@@ -164,11 +237,7 @@ export default function Forum(props) {
                   <u>Voire tout les commentaires</u>
                 </Link>
               }
-              {
-                forum.response.length > 0 &&
-                <hr className="w3-border-bottom" />
-              }
-              <div className="w3-white w3-round-xxlarge w3-overflow w3-flex-row">
+              <div className={"w3-white w3-round-xxlarge w3-overflow w3-flex-row " + (forum.response.length > 0 ? 'w3-margin-top' : '')}>
                 <input
                   type='text'
                   id={"inputForumComent" + key}
@@ -184,7 +253,7 @@ export default function Forum(props) {
               </div>
             </div>
           </div>
-        </div>
+        </div >
       ))
     } else {
       glitchForum = (
