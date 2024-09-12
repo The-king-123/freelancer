@@ -5,11 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import axios from "axios";
 import {
-  faArrowLeft,
   faBars,
   faBell,
   faChevronCircleUp,
-  faClock,
   faDoorOpen,
   faGear,
   faHome,
@@ -36,13 +34,11 @@ import "cloudinary-video-player/cld-video-player.min.css";
 import Link from "next/link";
 import slugify from "slugify";
 import {
-  faBots,
   faFacebookMessenger,
   faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
 import { console_source as source } from "@/app/data";
 import HomePost from "@/app/HomePost";
-import { patchFetch } from "next/dist/server/app-render/entry-base";
 
 export default function Home(props) {
   axios.defaults.withCredentials = true;

@@ -9,7 +9,7 @@ import axios from 'axios';
 function Profile() {
   axios.defaults.withCredentials = true;
 
-  const [imagePDP, setimagePDP] = useState(source + "/images.php?w=100&h=100&zlonk=3733&zlink=160471339156947");
+  const [imagePDProfil, setimagePDProfil] = useState(source + "/images.php?w=100&h=100&zlonk=3733&zlink=160471339156947");
   const [inputImage, setinputImage] = useState(null)
   const [userInfo, setuserInfo] = useState({
     id: null,
@@ -150,11 +150,11 @@ function Profile() {
           document.getElementById("designation").value =
             userInfo.designation;
 
-          setimagePDP(source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.user.key);
+          setimagePDProfil(source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.user.key);
 
           if (res.data.user.key == "160471339156947") {
             document.getElementById('designationWrapper').innerHTML = ''
-            document.getElementById("imagePDP").className =
+            document.getElementById("imagePDProfil").className =
               "w3-overflow w3-display-container";
           }
 
@@ -175,11 +175,11 @@ function Profile() {
         document.getElementById('profilCore').innerHTML = '';
       });
 
-    var inputImagePDP = document.createElement("input");
-    inputImagePDP.type = "file";
-    inputImagePDP.accept = "image/*";
+    var inputimagePDProfil = document.createElement("input");
+    inputimagePDProfil.type = "file";
+    inputimagePDProfil.accept = "image/*";
 
-    inputImagePDP.onchange = (e) => {
+    inputimagePDProfil.onchange = (e) => {
       const file = e.target.files[0];
 
       const reader = new FileReader();
@@ -189,9 +189,9 @@ function Profile() {
       formData.append("media", file);
 
       reader.onload = async (readerEvent) => {
-        document.getElementById("imagePDPSpinner").style.display = "flex";
+        document.getElementById("imagePDProfilSpinner").style.display = "flex";
         var content = readerEvent.target.result;
-        setimagePDP(content);
+        setimagePDProfil(content);
 
 
         await setCSRFToken()
@@ -201,10 +201,10 @@ function Profile() {
             if (res.data.logedin) {
               if (res.data.uploaded) {
                 document.getElementById(
-                  "imagePDPSpinner"
+                  "imagePDProfilSpinner"
                 ).style.display = "none";
               } else {
-                setimagePDP(source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + userInfo.key)
+                setimagePDProfil(source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + userInfo.key)
                 window.alert(
                   "Profile picture not changed, something want wrong..."
                 );
@@ -218,9 +218,9 @@ function Profile() {
           })
           .catch((e) => {
             console.error("failure", e);
-            setimagePDP(source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + userInfo.key)
+            setimagePDProfil(source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + userInfo.key)
             document.getElementById(
-              "imagePDPSpinner"
+              "imagePDProfilSpinner"
             ).style.display = "none";
             window.alert(
               "Profile picture not changed, something want wrong..."
@@ -228,7 +228,7 @@ function Profile() {
           });
       };
     };
-    setinputImage(inputImagePDP)
+    setinputImage(inputimagePDProfil)
   }, [])
 
   return (
@@ -247,7 +247,7 @@ function Profile() {
           <Image
             alt='user PDP'
             onClick={() => inputImage.click()}
-            id="imagePDP"
+            id="imagePDProfil"
             width={100}
             height={100}
             style={{
@@ -257,10 +257,10 @@ function Profile() {
               objectPosition: "center",
             }}
             className="w3-display-middle"
-            src={imagePDP}
+            src={imagePDProfil}
           />
           <div
-            id="imagePDPSpinner"
+            id="imagePDProfilSpinner"
             className="w3-display-middle w3-black-semitransparent w3-flex w3-flex-center"
             style={{
               width: 100,
