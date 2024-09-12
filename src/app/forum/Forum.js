@@ -6,13 +6,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
 
 export default function Forum(props) {
 
   axios.defaults.withCredentials = true;
 
   const [displayForum, setdisplayForum] = useState('')
-  const [comments, setcomments] = useState([])
 
   const [commentInfo, setcommentInfo] = useState({
     comment: '',
@@ -29,24 +29,6 @@ export default function Forum(props) {
     } catch (error) {
       console.error('CSRF token fetch failed:', error);
     }
-  }
-
-  const isUserLogedin = async () => {
-    const xcode = localStorage.getItem('x-code')
-    await axios
-      .get(source + "/_auth?xcode=" + xcode)
-      .then((res) => {
-        if (res.data.logedin) {
-          console.log(res.data.user);
-          commentInfo.usekey = res.data.user.key;
-          commentInfo.userpseudo = res.data.user.key;
-        } else {
-          return false;
-        }
-      })
-      .catch((e) => {
-        console.error("failure", e);
-      });
   }
 
   const comment = async (data, key) => {
@@ -109,15 +91,15 @@ export default function Forum(props) {
             Lien copié...
           </div>
           <div className="w3-flex-column w3-overflow w3-card w3-round w3-pointer w3-white">
-            <div
-              onClick={() => window.location = '/forum/preview/' + forum.slug}
+            <Link
+              href={'/forum/preview/' + forum.slug}
               data={"https://freelancer.mg/forum/" + forum.slug}
               className="forumTitle w3-nowrap w3-overflow w3-light-grey w3-big"
               style={{ paddingBlock: 8, paddingInline: 16 }}
               title="Ouvrir le forum"
             >
               {parse(forum.title)}
-            </div>
+            </Link>
             <div>
               <div className="forumCore">
                 <div
@@ -178,9 +160,9 @@ export default function Forum(props) {
               </div>
               {
                 forum.response.length > 3 &&
-                <div onClick={() => window.location = '/forum/preview/' + forum.slug} className="w3-small w3-text-grey" style={{ marginTop: 8 }}>
+                <Link href={'/forum/preview/' + forum.slug} className="w3-small w3-text-grey" style={{ marginTop: 8 }}>
                   <u>Voire tout les commentaires</u>
-                </div>
+                </Link>
               }
               {
                 forum.response.length > 0 &&
@@ -218,7 +200,7 @@ export default function Forum(props) {
   }
 
   useEffect(() => {
-    isUserLogedin()
+
     if (props.forums) {
       reloadForums(props.forums)
     } else {
