@@ -57,7 +57,7 @@ function createForum() {
         <div key={key} style={{ padding: 4 }}>
           <div onClick={() => showThisForum(forum)} className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
             <div>{forum.title}</div>
-            <div className="w3-small w3-text-grey">{forum.state == 'public' ? 'Publique' : 'Brouillon'}{JSON.parse(forum.response).length > 0 ? " - " + JSON.parse(forum.response).length + " Commentaire" + (JSON.parse(forum.response).length == 1 ? '' : 's') : ''}</div>
+            <div className="w3-small w3-text-grey">{forum.state == 'public' ? 'Publique' : 'Brouillon'}{forum.response.length > 0 ? " - " + forum.response.length + " Commentaire" + (forum.response.length == 1 ? '' : 's') : ''}</div>
           </div>
         </div>
       ))

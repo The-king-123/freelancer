@@ -747,6 +747,7 @@ export default function Home(props) {
           if (res.data.logedin) {
 
             localStorage.setItem("x-code", res.data.xcode);
+            localStorage.setItem("x-user", res.data.user.key);
 
             userInfo.email = res.data.user.email;
             userInfo.fullname = res.data.user.fullname;

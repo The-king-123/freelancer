@@ -110,10 +110,11 @@ export default function Forum(props) {
           </div>
           <div className="w3-flex-column w3-overflow w3-card w3-round w3-pointer w3-white">
             <div
+              onClick={() => window.location = '/forum/preview/' + forum.slug}
               data={"https://freelancer.mg/forum/" + forum.slug}
               className="forumTitle w3-nowrap w3-overflow w3-light-grey w3-big"
               style={{ paddingBlock: 8, paddingInline: 16 }}
-              title="Click to copy forum link"
+              title="Ouvrir le forum"
             >
               {parse(forum.title)}
             </div>
@@ -159,16 +160,16 @@ export default function Forum(props) {
               <div>
                 <div id={"forumUserNewComent" + key}></div>
                 {
-                  JSON.parse(forum.response).length > 0 &&
-                  JSON.parse(forum.response).map((response, k) => (
+                  forum.response.length > 0 &&
+                  forum.response.map((response, k) => (
                     <div key={k} className="w3-border-left" style={{ paddingBlock: 4, paddingInline: 8, marginBlock: 4 }}>
-                      <div className="w3-text-grey w3-tiny">3829837498</div>
+                      <div className="w3-text-grey w3-tiny">{response.user_key}</div>
                       <div className="w3-small forumComent" data={"forum" + key + "Coment" + k}>
                         <div
                           className="w3-overflow w3-nowrap-multiline"
                           id={"forum" + key + "Coment" + k}
                         >
-                          {response}
+                          {response.comment}
                         </div>
                       </div>
                     </div>
@@ -176,13 +177,13 @@ export default function Forum(props) {
                 }
               </div>
               {
-                JSON.parse(forum.response).length > 3 &&
-                <div className="w3-small w3-text-grey" style={{ marginTop: 8 }}>
+                forum.response.length > 3 &&
+                <div onClick={() => window.location = '/forum/preview/' + forum.slug} className="w3-small w3-text-grey" style={{ marginTop: 8 }}>
                   <u>Voire tout les commentaires</u>
                 </div>
               }
               {
-                JSON.parse(forum.response).length > 0 &&
+                forum.response.length > 0 &&
                 <hr className="w3-border-bottom" />
               }
               <div className="w3-white w3-round-xxlarge w3-overflow w3-flex-row">
