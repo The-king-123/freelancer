@@ -4,6 +4,8 @@ import parse from "html-react-parser";
 import { console_source as source } from "@/app/data";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export default function Forum(props) {
 
@@ -47,27 +49,50 @@ export default function Forum(props) {
       });
   }
 
-  const comment = async (data) => {
+  const comment = async (data, key) => {
 
-    console.log(data);
+    if (commentInfo.comment.trim().length > 0) {
 
-    commentInfo.forum_owner = data.owner_key
-    commentInfo.forum_id = data.id
+      document.getElementById('comentTextSpinner' + key).style.display = 'none';
+      document.getElementById('comentButtonSpinner' + key).style.display = 'inline-block';
 
-    const xcode = localStorage.getItem('x-code')
-    await setCSRFToken();
-    await axios
-      .post(source + "/_forumcoment?xcode=" + xcode, commentInfo)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((e) => {
-        if (e.response && e.response.status === 419) {
-          console.error('CSRF token missing or incorrect');
-        } else {
-          console.error('Request failed:', error);
-        }
-      });
+      commentInfo.forum_owner = data.owner_key
+      commentInfo.forum_id = data.id
+
+      const xcode = localStorage.getItem('x-code')
+      await setCSRFToken();
+      await axios
+        .post(source + "/_forumcoment?xcode=" + xcode, commentInfo)
+        .then((res) => {
+          if (res.data.logedin) {
+            const commentaire = "<div class='w3-border-left' style='padding-block: 4px; padding-inline: 8px; margin-block: 4px'><div class='w3-text-grey w3-tiny'>*vous</div><div class='w3-small forumComent'><div>" + commentInfo.comment + "</div></div></div>";
+            document.getElementById('forumUserNewComent' + key).innerHTML = document.getElementById('forumUserNewComent' + key).innerHTML + commentaire;
+
+            commentInfo.comment = '';
+            document.getElementById('inputForumComent' + key).value = '';
+          } else {
+            if (document.getElementById('modalLogin')) {
+              document.getElementById('modalLogin').style.display = 'block'
+            }
+          }
+
+          document.getElementById('comentTextSpinner' + key).style.display = 'inline-block';
+          document.getElementById('comentButtonSpinner' + key).style.display = 'none';
+
+        })
+        .catch((e) => {
+
+          document.getElementById('comentButtonSpinner' + key).style.display = 'none';
+          document.getElementById('comentTextSpinner' + key).style.display = 'inline-block';
+
+          if (e.response && e.response.status === 419) {
+            console.error('CSRF token missing or incorrect');
+          } else {
+            console.error('Request failed:', error);
+          }
+        });
+    }
+
 
   }
 
@@ -132,6 +157,7 @@ export default function Forum(props) {
             )}
             <div style={{ padding: 16 }} className="w3-light-grey">
               <div>
+                <div id={"forumUserNewComent" + key}></div>
                 {
                   JSON.parse(forum.response).length > 0 &&
                   JSON.parse(forum.response).map((response, k) => (
@@ -161,13 +187,15 @@ export default function Forum(props) {
               }
               <div className="w3-white w3-round-xxlarge w3-overflow w3-flex-row">
                 <input
+                  id={"inputForumComent" + key}
                   onChange={(e) => commentInfo.comment = e.target.value}
                   className="input w3-input w3-border-0 w3-white w3-block w3-flex-1"
                   style={{ borderBottomLeftRadius: 32, borderTopLeftRadius: 32 }}
                   placeholder="Laisser un commentaire"
                 />
-                <button onClick={() => comment(forum)} className="w3-bitton w3-border-0 w3-black w3-pointer" style={{ paddingInline: 16 }}>
-                  Envoyer
+                <button onClick={() => comment(forum, key)} className="w3-bitton w3-border-0 w3-black w3-pointer" style={{ minWidth: 80 }}>
+                  <span id={"comentTextSpinner" + key}>Envoyer</span>
+                  <FontAwesomeIcon id={"comentButtonSpinner" + key} icon={faSpinner} className="w3-spin" style={{ display: 'none' }} />
                 </button>
               </div>
             </div>
