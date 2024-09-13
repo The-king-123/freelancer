@@ -15,28 +15,28 @@ export default function PostContent({ posts }) {
   );
   const [showThisPost, setshowThisPost] = useState();
 
-  const showSinglePost = (post) => {
-    setshowThisPost(post);
-    setimagePostModal(
-      source + "/images.php?w=420&h=420&zlonk=2733&zlink=" + post.link
-    );
-    if (post.type == "image/audio" && audioBox.chaine) {
-      audioBox.chaine.src = source + "/audios.php?zlonk=1733&zlink=" + post.link;
-      audioBox.chaine.load();
-      audioBox.chaine.play();
+  // const showSinglePost = (post) => {
+  //   setshowThisPost(post);
+  //   setimagePostModal(
+  //     source + "/images.php?w=420&h=420&zlonk=2733&zlink=" + post.link
+  //   );
+  //   if (post.type == "image/audio" && audioBox.chaine) {
+  //     audioBox.chaine.src = source + "/audios.php?zlonk=1733&zlink=" + post.link;
+  //     audioBox.chaine.load();
+  //     audioBox.chaine.play();
 
-      document.getElementById("iconPlay").style.display = "none";
-      document.getElementById("iconPause").style.display = "inline-block";
+  //     document.getElementById("iconPlay").style.display = "none";
+  //     document.getElementById("iconPause").style.display = "inline-block";
 
-      document.getElementById("audioControl").style.display = "flex";
-    } else {
-      document.getElementById("audioControl").style.display = "none";
-    }
-    setTimeout(() => {
-      document.getElementById("modalSinglePost").style.display = "block";
-      document.getElementById("homePostCore").style.display = 'none'
-    }, 100);
-  };
+  //     document.getElementById("audioControl").style.display = "flex";
+  //   } else {
+  //     document.getElementById("audioControl").style.display = "none";
+  //   }
+  //   setTimeout(() => {
+  //     document.getElementById("modalSinglePost").style.display = "block";
+  //     document.getElementById("homePostCore").style.display = 'none'
+  //   }, 100);
+  // };
 
   useEffect(() => {
 
@@ -104,7 +104,7 @@ export default function PostContent({ posts }) {
                     }}
                     className="w3-overflow w3-light-grey post-image"
                   />
-                  {(post.type == "image/audio" || post.type == "video") && (
+                  {(post.type == "image/audio" || post.type == "video" || post.type == "image/video") && (
                     <div className="w3-black w3-opacity w3-block w3-height w3-padding w3-display-middle"></div>
                   )}
                   {post.type == "image/audio" && (
@@ -120,7 +120,7 @@ export default function PostContent({ posts }) {
                       </div>
                     </div>
                   )}
-                  {post.type == "video" && (
+                  {(post.type == "video" || post.type == "image/video") && (
                     <div
                       className="w3-white w3-circle w3-display-middle"
                       style={{ width: 40, height: 40 }}

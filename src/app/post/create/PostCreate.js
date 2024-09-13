@@ -372,7 +372,7 @@ function PostCreate() {
                 document.getElementById("playRecordIcon").style.display = 'inline-block'
             }
 
-        } else if (data.type == 'video') {
+        } else if (data.type == 'video' || data.type == 'image/video') {
             document.getElementById("inputImage").style.display = "none";
             document.getElementById("videoSection").style.display = "block";
 
@@ -381,10 +381,14 @@ function PostCreate() {
             document.getElementById("videoEmbed").style.display = "flex";
 
             document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-light-grey', 'w3-black').replace('w3-text-grey', 'w3-text-white');
-            document.getElementById("postVideo").value = data.link;
+            document.getElementById("postVideo").value = JSON.parse(data.info).videoUrl;
 
             document.getElementById("showImageWrapper").style.display = "none";
             document.getElementById("audioSection").style.display = "none";
+
+            document.getElementById("showImageVideo").src = source + "/images.php?w=100&h=100&zlonk=2733&zlink=" + data.link;;
+            document.getElementById("showImageVideoWrapper").style.display = "block";
+            document.getElementById("inputImageVideoWrapper").style.display = "none";
         } else {
             document.getElementById("inputImage").style.display = "flex";
 
@@ -554,6 +558,14 @@ function PostCreate() {
         if (document.getElementById("videoEmbed").className.includes('w3-black')) {
             postInfo.info.videoUrl = '';
             postInfo.type = 'text';
+            postInfo.media = null;
+
+            document.getElementById("showImageVideo").src = '';
+            document.getElementById("inputImageVideoWrapper").value = null;
+            document.getElementById("showImageVideoWrapper").style.display = "none";
+            document.getElementById("inputImageVideoWrapper").style.display = "flex";
+
+
             document.getElementById("inputImage").style.display = "flex";
             document.getElementById("videoSection").style.display = "none";
 
@@ -1125,7 +1137,7 @@ function PostCreate() {
                                     marginRight: 16
                                 }}
                             />
-                            <div className="w3-display-topright" style={{ paddingTop:12, }}>
+                            <div className="w3-display-topright" style={{ paddingTop: 12, }}>
                                 <div
                                     onClick={cancelImageVideoInsertion}
                                     className="w3-circle w3-card w3-white w3-flex w3-flex-center"

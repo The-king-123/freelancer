@@ -32,6 +32,7 @@ export default function PostContent({ content }) {
     link: content.link,
     updated_at: content.updated_at,
     created_at: content.created_at,
+    videoUrl: JSON.parse(content.info).videoUrl,
   };
 
   const typer = (text) => {
@@ -278,7 +279,7 @@ export default function PostContent({ content }) {
                   className="w3-light-grey post-image"
                 />
               )}
-            {(singlePostInfo.type == "image/video" || singlePostInfo.type == "video") && (
+            {!singlePostInfo.videoUrl.includes('<iframe') && (singlePostInfo.type == "image/video" || singlePostInfo.type == "video") && (
               <video
                 style={{
                   objectPosition: "center",
@@ -287,16 +288,23 @@ export default function PostContent({ content }) {
                 controls
               >
                 <source
-                  src={
-                    source +
-                    "/videos.php?zlonk=1733&zlink=" +
-                    singlePostInfo.link
-                  }
+                  src={singlePostInfo.videoUrl}
                   type="video/mp4"
                 />
                 Your browser does not support the video tag.
               </video>
             )}
+            {singlePostInfo.videoUrl.includes('<iframe') && singlePostInfo.videoUrl.includes('src=') && (singlePostInfo.type == "image/video" || singlePostInfo.type == "video") &&
+              <iframe
+              id={"videoPosts"}
+              className="w3-block" //videoPosts
+              height="420"
+              src={getUrl(singlePostInfo.videoUrl)}
+              title={getTitle(singlePostInfo.videoUrl)}
+              frameBorder={0}
+              allowFullScreen
+            ></iframe>
+            }
           </div>
           <div className="w3-large w3-big" style={{ marginTop: 8 }}>
             {parse(singlePostInfo.title)}
