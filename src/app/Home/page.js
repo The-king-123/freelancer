@@ -950,7 +950,7 @@ export default function Home(props) {
             }
           } else {
 
-            if (user && fullPath.path != '/') {
+            if (user) {
               showUser(res.data.data, user == 'undefined' ? "160471339156947" : user, false);
             } else {
               localStorage.setItem("user", "160471339156947");

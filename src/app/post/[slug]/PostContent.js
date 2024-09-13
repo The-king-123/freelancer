@@ -11,7 +11,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import Link from "next/link";
-import {console_source as source} from "@/app/data";
+import { console_source as source } from "@/app/data";
 
 export default function PostContent({ content }) {
 
@@ -152,6 +152,20 @@ export default function PostContent({ content }) {
     }
   };
 
+  const getUrl = (embed) => {
+    const start = embed.indexOf('src="') + 5;
+    const end = embed.indexOf('"', start);
+    const result = embed.substring(start, end);
+    return result;
+  };
+
+  const getTitle = (embed) => {
+    const start = embed.indexOf('title="') + 7;
+    const end = embed.indexOf('"', start);
+    const result = embed.substring(start, end);
+    return result;
+  };
+
   useEffect(() => {
     audioBox.chaine = document.getElementById("audioBox");
     audioBox.chaine.src =
@@ -162,21 +176,28 @@ export default function PostContent({ content }) {
       document.getElementById("iconPause").style.display = "none";
     });
 
-    document.getElementById("postImageMedia").style.transition = "1s";
-    document.getElementById("postImageMedia").style.height = "auto";
-
+    if (document.getElementById("postImageMedia")) {
+      document.getElementById("postImageMedia").style.transition = "1s";
+      document.getElementById("postImageMedia").style.height = "auto";
+    }
     typer(singlePostInfo.description);
+
+    document.getElementById('backButton').addEventListener('click', () => {
+      if (window.history.length > 0) {
+        window.history.back();
+      }
+    })
   }, []);
 
   return (
     <div>
       <h3 className="w3-wide w3-flex-row w3-flex-center-v w3-large">
-        <Link href={'/'} className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large" style={{paddingInline:4}}>
+        <div id="backButton" className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large" style={{ paddingInline: 4 }}>
           <FontAwesomeIcon
             icon={faArrowLeft}
             style={{ width: 24 }}
           />
-        </Link>
+        </div>
 
         <audio id="audioBox" className="w3-hide"></audio>
         {content.type == "image/audio" && (
@@ -226,7 +247,7 @@ export default function PostContent({ content }) {
           </div>
         )}
       </h3>
-      <div className="w3-container singlePostFlex" style={{padding:8}}>
+      <div className="w3-container singlePostFlex" style={{ padding: 8 }}>
         <div
           id="chatCoreWrapper"
           className="w3-overflow-scroll w3-noscrollbar"
@@ -235,33 +256,29 @@ export default function PostContent({ content }) {
             marginInline: "auto",
           }}
         >
-          <div className="w3-large w3-big" style={{ marginTop: 8 }}>
-            {parse(singlePostInfo.title)}
-          </div>
-          <div id="typingField" style={{ marginBottom: 24 }}></div>
           <div className="w3-overflow w3-light-grey w3-round-large">
             {(singlePostInfo.type == "image" ||
               singlePostInfo.type == "image/audio") && (
-              <Image
-                id="postImageMedia"
-                alt={singlePostInfo.title}
-                unoptimized
-                loading="lazy"
-                height={420}
-                width={520}
-                src={
-                  source +
-                  "/images.php?w=720&h=720&zlonk=2733&zlink=" +
-                  singlePostInfo.link
-                }
-                style={{
-                  objectPosition: "center",
-                  objectFit: "cover",
-                }}
-                className="w3-light-grey post-image"
-              />
-            )}
-            {singlePostInfo.type == "video" && (
+                <Image
+                  id="postImageMedia"
+                  alt={singlePostInfo.title}
+                  unoptimized
+                  loading="lazy"
+                  height={420}
+                  width={520}
+                  src={
+                    source +
+                    "/images.php?w=720&h=720&zlonk=2733&zlink=" +
+                    singlePostInfo.link
+                  }
+                  style={{
+                    objectPosition: "center",
+                    objectFit: "cover",
+                  }}
+                  className="w3-light-grey post-image"
+                />
+              )}
+            {(singlePostInfo.type == "image/video" || singlePostInfo.type == "video") && (
               <video
                 style={{
                   objectPosition: "center",
@@ -281,6 +298,10 @@ export default function PostContent({ content }) {
               </video>
             )}
           </div>
+          <div className="w3-large w3-big" style={{ marginTop: 8 }}>
+            {parse(singlePostInfo.title)}
+          </div>
+          <div>{parse(singlePostInfo.description)}</div>
         </div>
       </div>
     </div>

@@ -31,6 +31,7 @@ function PostCreate() {
 
     axios.defaults.withCredentials = true;
     const [inputImage, setinputImage] = useState(null)
+    const [inputImageVideo, setinputImageVideo] = useState(null)
     const [inputAudio, setinputAudio] = useState(null)
     const [categoryListe, setcategoryListe] = useState('')
     const [selectCategoryList, setselectCategoryList] = useState([])
@@ -43,9 +44,9 @@ function PostCreate() {
         category: null,
         info: {
             description: "",
+            videoUrl: "_",
         },
         media: null,
-        videoUrl: "_",
         state: "",
     });
 
@@ -128,7 +129,7 @@ function PostCreate() {
         postInfo.category = null
         postInfo.info.description = ""
         postInfo.media = null
-        postInfo.videoUrl = "_"
+        postInfo.info.videoUrl = "_"
         postInfo.state = ""
 
         cancelImageInsertion()
@@ -154,8 +155,9 @@ function PostCreate() {
         postInfo.slug = slugify(postInfo.title, { lower: true });
 
         postInfo.info.description = document.getElementById('postContent').innerHTML
+        const videoState = postInfo.type == 'image/video' ? (postInfo.info.videoUrl.length > 3 ? true : false) : true
 
-        if (postInfo.title.length > 0 && postInfo.info.description.length > 0 && postInfo.category) {
+        if (postInfo.title.length > 0 && postInfo.info.description.length > 0 && postInfo.category && postInfo.type != 'video' && postInfo.type != 'text' && videoState) {
             if (state == 'public') {
                 document.getElementById("postPublicSpinner").style.display = "inline-block";
                 document.getElementById("postPublicIcon").style.display = "none";
@@ -183,7 +185,6 @@ function PostCreate() {
                     slug: postInfo.slug,
                     state: postInfo.state,
                     category: postInfo.category,
-                    videoUrl: postInfo.videoUrl,
                 };
             }
 
@@ -341,7 +342,7 @@ function PostCreate() {
         postInfo.slug = data.slug
         postInfo.type = data.type
         postInfo.category = data.category
-        postInfo.videoUrl = data.link
+        postInfo.info.videoUrl = JSON.parse(data.info).videoUrl
 
         document.getElementById('postTitle').value = data.title;
         document.getElementById('postContent').innerHTML = JSON.parse(data.info).description;
@@ -358,7 +359,7 @@ function PostCreate() {
 
             if (data.type == 'image/audio') {
                 document.getElementById("audioBox").src = source + "/audios.php?zlonk=1733&zlink=" + data.link;
-                
+
                 document.getElementById("startRecord").style.display = 'none'
                 document.getElementById("stopRecord").style.display = 'none'
                 document.getElementById("repeatRecord").style.display = 'flex'
@@ -416,7 +417,7 @@ function PostCreate() {
     };
 
     const previewVideo = () => {
-        document.getElementById("videoSource").src = getUrl(postInfo.videoUrl);
+        document.getElementById("videoSource").src = getUrl(postInfo.info.videoUrl);
         document.getElementById("modalVideoPreview").style.display = "block";
     };
 
@@ -551,7 +552,7 @@ function PostCreate() {
     const addEmbedVideo = () => {
 
         if (document.getElementById("videoEmbed").className.includes('w3-black')) {
-            postInfo.videoUrl = '';
+            postInfo.info.videoUrl = '';
             postInfo.type = 'text';
             document.getElementById("inputImage").style.display = "flex";
             document.getElementById("videoSection").style.display = "none";
@@ -572,6 +573,15 @@ function PostCreate() {
 
             document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-light-grey', 'w3-black').replace('w3-text-grey', 'w3-text-white');
         }
+    }
+
+    const cancelImageVideoInsertion = () => {
+        postInfo.media = null;
+        postInfo.type = "video";
+
+        document.getElementById("showImageVideo").src = '';
+        document.getElementById("showImageVideoWrapper").style.display = "none";
+        document.getElementById("inputImageVideoWrapper").style.display = "flex";
     }
 
     useEffect(() => {
@@ -644,6 +654,34 @@ function PostCreate() {
             };
         };
         setinputImage(imageSelector)
+
+        // Upload Image for video miniature
+
+        var imageVideoSelector = document.createElement("input");
+        imageVideoSelector.type = "file";
+        imageVideoSelector.accept = "image/*";
+
+        imageVideoSelector.onchange = (e) => {
+            const file = e.target.files[0];
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+
+            const formData = new FormData();
+            formData.append("media", file);
+
+            reader.onload = (readerEvent) => {
+                var content = readerEvent.target.result;
+
+                document.getElementById("showImageVideo").src = content;
+                document.getElementById("showImageVideoWrapper").style.display = "block";
+                document.getElementById("inputImageVideoWrapper").style.display = "none";
+
+                postInfo.media = formData;
+                postInfo.type = "image/video";
+            };
+        };
+        setinputImageVideo(imageVideoSelector)
 
         // Audio recording control
         const startButton = document.getElementById("startRecord");
@@ -1036,7 +1074,7 @@ function PostCreate() {
                     >
                         <input
                             id="postVideo"
-                            onChange={(e) => postInfo.videoUrl = e.target.value}
+                            onChange={(e) => postInfo.info.videoUrl = e.target.value}
                             className="w3-border-0 w3-flex-1 w3-block w3-input w3-light-grey w3-round-xxlarge"
                             type="text"
                             placeholder="Lien video"
@@ -1055,6 +1093,52 @@ function PostCreate() {
                         >
                             Preview
                         </div>
+                    </div>
+                    <div>
+                        <div id="inputImageVideoWrapper" onClick={() => inputImageVideo.click()} className="w3-pointer w3-flex-row w3-flex-center-v" style={{ marginTop: 16 }}>
+                            <div
+                                className="w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center"
+                                style={{ height: 40, width: 40 }}
+                            >
+                                <FontAwesomeIcon icon={faImage} style={{ width: 16, height: 16 }} />
+                            </div>
+                            <div>
+                                ¬ Ajouter un miniature a votre video
+                            </div>
+                        </div>
+
+                        <div
+                            className="w3-display-container"
+                            id="showImageVideoWrapper"
+                            style={{ display: "none", height: 120, width: 120 }}
+                        >
+                            <Image
+                                id="showImageVideo"
+                                src={''}
+                                className="w3-display-middle w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
+                                height={100}
+                                width={100}
+                                style={{
+                                    objectFit: "cover",
+                                    objectPosition: "center",
+                                    marginTop: 16,
+                                    marginRight: 16
+                                }}
+                            />
+                            <div className="w3-display-topright" style={{ paddingTop:12, }}>
+                                <div
+                                    onClick={cancelImageVideoInsertion}
+                                    className="w3-circle w3-card w3-white w3-flex w3-flex-center"
+                                    style={{ width: 24, height: 24 }}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faTimes}
+                                        style={{ width: 16, height: 16 }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
