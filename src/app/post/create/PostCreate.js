@@ -342,7 +342,7 @@ function PostCreate() {
         postInfo.slug = data.slug
         postInfo.type = data.type
         postInfo.category = data.category
-        postInfo.info.videoUrl = JSON.parse(data.info).videoUrl
+        postInfo.info.videoUrl = JSON.parse(data.info).videoUrl ? JSON.parse(data.info).videoUrl : data.link
 
         document.getElementById('postTitle').value = data.title;
         document.getElementById('postContent').innerHTML = JSON.parse(data.info).description;
@@ -381,7 +381,7 @@ function PostCreate() {
             document.getElementById("videoEmbed").style.display = "flex";
 
             document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-light-grey', 'w3-black').replace('w3-text-grey', 'w3-text-white');
-            document.getElementById("postVideo").value = JSON.parse(data.info).videoUrl;
+            document.getElementById("postVideo").value = JSON.parse(data.info).videoUrl? JSON.parse(data.info).videoUrl : data.link;
 
             document.getElementById("showImageWrapper").style.display = "none";
             document.getElementById("audioSection").style.display = "none";
