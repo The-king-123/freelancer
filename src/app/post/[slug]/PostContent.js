@@ -32,7 +32,7 @@ export default function PostContent({ content }) {
     link: content.link,
     updated_at: content.updated_at,
     created_at: content.created_at,
-    videoUrl: JSON.parse(content.info).videoUrl,
+    videoUrl: JSON.parse(content.info).videoUrl ? JSON.parse(content.info).videoUrl : content.link,
   };
 
   const typer = (text) => {
