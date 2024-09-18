@@ -1493,7 +1493,7 @@ function PostCreate() {
                             </div>
                         </div>
                     </div>
-                    <div id="newKeyArea" style={{display:'none'}}>
+                    <div id="newKeyArea" style={{display:'none', paddingBottom:24}}>
                         <div className="w3-flex-row w3-flex-center-v" style={{ paddingInline: 16, paddingBlock: 24 }}>
                             <input
                                 id="categoryTitle"
