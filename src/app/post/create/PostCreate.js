@@ -677,17 +677,26 @@ function PostCreate() {
         setkeyListe(glicthKeyList)
     }
 
-    function isNumericSequence(str) {
+    const isNumericSequence = (str) => {
         const numberRegex = /^\d+$/;
         return numberRegex.test(str);
     }
 
-    function isValidEmail(email) {
+    const isValidEmail = (email) => {
         // Regular expression for basic email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
-
+    const copyToClipboard = (id) => {
+        const copyText = document.getElementById(id).innerText;
+        const textarea = document.createElement("textarea");
+        textarea.value = copyText;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+        alert("Copied to clipboard: " + copyText);
+    }
     const addKeyToUser = async () => {
         if (isValidEmail(codeInfo.email) || isNumericSequence(codeInfo.email)) {
             const xcode = localStorage.getItem('x-code')
@@ -1482,7 +1491,7 @@ function PostCreate() {
                         <div id="infoFullname">RAMBININTSOA Safidy</div>
                         <div className="w3-text-grey w3-small"><span id="infoEmail"></span> - <span id="infoKey"></span></div>
                         <div style={{ marginTop: 8 }}>
-                            <div className="w3-round w3-black w3-big w3-center w3-pointer" style={{ paddingInline: 16, paddingBlock: 8 }}>
+                            <div onClick={()=>copyToClipboard('infoCode')} className="w3-round w3-black w3-big w3-center w3-pointer" style={{ paddingInline: 16, paddingBlock: 8 }}>
                                 code : <span id="infoCode"></span>
                             </div>
                         </div>
