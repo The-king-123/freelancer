@@ -90,7 +90,7 @@ function PostCreate() {
         fullname: '',
         email: '',
         key: '',
-        media_id: '',
+        media_id: 17,
     })
     const [postInfo, setPostInfo] = useState({
         id: null,
@@ -681,7 +681,7 @@ function PostCreate() {
         const numberRegex = /^\d+$/;
         return numberRegex.test(str);
     }
-    
+
     function isValidEmail(email) {
         // Regular expression for basic email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -695,12 +695,44 @@ function PostCreate() {
             await axios
                 .post(source + "/_links?xcode=" + xcode, codeInfo)
                 .then((res) => {
-                    console.log(res.data);
+                    if (res.data.logedin) {
+                        if (res.data.authexist) {
+                            if (!res.data.codeexist) {
+                                document.getElementById('infoBull').innerHTML = "<div>L'utilisateur est ajouter avec succes:</div>"
+                                document.getElementById('infoFullname').innerText = res.data.user.fullname
+                                document.getElementById('infoEmail').innerText = res.data.user.email
+                                document.getElementById('infoKey').innerText = res.data.user.key
+                                document.getElementById('infoCode').innerText = res.data.code
+
+                                document.getElementById('infoUser').style.display = 'block'
+                            } else {
+                                document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Le code pour cet utilisateur exist deja.</div>"
+                                document.getElementById('infoUser').style.display = 'none'
+                                document.getElementById('infoBull').style.display = 'block'
+
+                                setTimeout(() => {
+                                    document.getElementById('infoBull').style.display = 'none'
+                                }, 3000);
+                            }
+                        } else {
+                            document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Cet utilisateur n'est inscrit sur la plateforme.</div>"
+                            document.getElementById('infoUser').style.display = 'none'
+                            document.getElementById('infoBull').style.display = 'block'
+
+                            setTimeout(() => {
+                                document.getElementById('infoBull').style.display = 'none'
+                            }, 3000);
+                        }
+                    } else {
+                        if (document.getElementById('modalLogin')) {
+                            document.getElementById('modalLogin').style.display = 'block'
+                        }
+                    }
                 })
                 .catch((e) => {
                     console.error("failure", e);
                 });
-        }else{
+        } else {
             alert("Entrer une adresse mail ou une clé de référence valide.")
         }
 
@@ -1443,13 +1475,14 @@ function PostCreate() {
                             <FontAwesomeIcon icon={faKey} />
                         </button>
                     </div>
-                    <div style={{ paddingInline: 16 }}>
-                        <div id="infoBull" style={{ marginBottom: 8 }}>L'utilisateur est ajouter avec succes:</div>
-                        <div>RAMBININTSOA Safidy</div>
-                        <div className="w3-text-grey w3-small">email1@gmail.com - 8936450364503450</div>
+                    <div id="infoBull" style={{ marginBottom: 8,paddingInline:16,display:'none' }}>L'utilisateur est ajouter avec succes:</div>
+                    <div id="infoUser" style={{ paddingInline: 16,display:'none' }}>
+                        
+                        <div id="infoFullname">RAMBININTSOA Safidy</div>
+                        <div className="w3-text-grey w3-small"><span id="infoEmail"></span> - <span id="infoKey"></span></div>
                         <div style={{ marginTop: 8 }}>
                             <div className="w3-round w3-black w3-big w3-center w3-pointer" style={{ paddingInline: 16, paddingBlock: 8 }}>
-                                code : sdhL45U65Hu6dhfl5ShhKJAHja
+                                code : <span id="infoCode"></span>
                             </div>
                         </div>
                     </div>
