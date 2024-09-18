@@ -31,54 +31,6 @@ import slugify from "slugify";
 
 function PostCreate() {
 
-    const fakeKeyData = [
-        {
-            fullname: "RAMBININTSOA Safidy",
-            email: "thisisemail1@gmail.com",
-            key: "264982364971823649341234",
-            media_id: 11,
-            media_owner_key: "38573924750238475",
-            link: "364592384759_36582937465",
-            state: "available"
-        },
-        {
-            fullname: "Randrianarisoa Jean",
-            email: "email2@example.com",
-            key: "387464874320987563210987",
-            media_id: 12,
-            media_owner_key: "23409872349023847",
-            link: "239487234987_12342398479",
-            state: "available"
-        },
-        {
-            fullname: "Rakotoarison Marie",
-            email: "email3@example.com",
-            key: "129837465234876982134675",
-            media_id: 13,
-            media_owner_key: "34980234872093847",
-            link: "249837234870_98234792834",
-            state: "available"
-        },
-        {
-            fullname: "Andrianjafy Paul",
-            email: "email4@example.com",
-            key: "098234234589765430986543",
-            media_id: 14,
-            media_owner_key: "34870234870239847",
-            link: "123490238475_23749234795",
-            state: "available"
-        },
-        {
-            fullname: "Rasoarivelo Lala",
-            email: "email5@example.com",
-            key: "187234097123478123456789",
-            media_id: 15,
-            media_owner_key: "23487234987029384",
-            link: "983247923847_09823409784",
-            state: "available"
-        }
-    ]
-
     axios.defaults.withCredentials = true;
     const [inputImage, setinputImage] = useState(null)
     const [inputImageVideo, setinputImageVideo] = useState(null)
@@ -370,6 +322,7 @@ function PostCreate() {
                 </div>
             </div>)
         }
+        document.getElementById('premiumCodeManager').style.display = 'none'
         setpostListe(glitchPost)
     }
 
@@ -391,7 +344,7 @@ function PostCreate() {
         }
     }
 
-    const showThisPost = (data) => {
+    const showThisPost = async (data) => {
 
         postInfo.title = data.title
         postInfo.info.description = JSON.parse(data.info).description
@@ -463,6 +416,31 @@ function PostCreate() {
 
         document.getElementById('modalPostListe').style.display = 'none';
         document.getElementById('deleteButton').style.display = 'block';
+
+        if (data.category == 'premium') {
+            displayKeyListArea()
+            document.getElementById('premiumCodeManager').style.display = 'flex'
+            const xcode = localStorage.getItem('x-code')
+            await setCSRFToken();
+            await axios
+                .get(source + "/_links/" + data.id + "?xcode=" + xcode)
+                .then((res) => {
+                    if (res.data.logedin) {
+                        console.log(res.data.data);
+
+                        reloadKeyList(res.data.data)
+                    } else {
+                        if (document.getElementById('modalLogin')) {
+                            document.getElementById('modalLogin').style.display = 'block'
+                        }
+                    }
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                });
+        }else{
+            document.getElementById('premiumCodeManager').style.display = 'none'
+        }
     }
 
     const closeModalCategory = () => {
@@ -658,7 +636,7 @@ function PostCreate() {
         if (data.length > 0) {
             glicthKeyList = data.map((code, key) => (
                 <div key={key} style={{ padding: 4 }}>
-                    <div onClick={() => showThisPost(code)} className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
+                    <div /*onClick={}*/ className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
                         <div>{code.fullname}</div>
                         <div className="w3-small w3-text-grey">{code.email}</div>
                     </div>
@@ -1055,9 +1033,10 @@ function PostCreate() {
                 </div>
                 <div>
                     <div
+                        id="premiumCodeManager"
                         onClick={() => document.getElementById("modalKeyListe").style.display = 'block'}
                         className="w3-black w3-circle w3-flex w3-flex-center"
-                        style={{ width: 32, height: 32 }}
+                        style={{ width: 32, height: 32, display: 'none' }}
                         title="Gérer votre code premium."
                     >
                         <FontAwesomeIcon
@@ -1100,7 +1079,7 @@ function PostCreate() {
                             defaultValue={null}
                         >
                             <option value={null}>Sélectionner une catégorie</option>
-                            <option value="premim">Premium</option>
+                            <option value="premium">Premium</option>
                             <option value="standard">Standard</option>
                             {
                                 selectCategoryList.map((category, key) => (
@@ -1493,7 +1472,7 @@ function PostCreate() {
                             </div>
                         </div>
                     </div>
-                    <div id="newKeyArea" style={{display:'none', paddingBottom:24}}>
+                    <div id="newKeyArea" style={{ display: 'none', paddingBottom: 24 }}>
                         <div className="w3-flex-row w3-flex-center-v" style={{ paddingInline: 16, paddingBlock: 24 }}>
                             <input
                                 id="categoryTitle"

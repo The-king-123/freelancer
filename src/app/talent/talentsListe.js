@@ -52,17 +52,17 @@ export default function PostContent() {
             >
               <div
                 className="w3-flex w3-flex-row w3-light-grey w3-flex-center w3-round"
-                style={{ padding: 16 }}
+                style={{ padding: 8 }}
               >
                 <Image
                   loading="lazy"
                   unoptimized
-                  width={40}
-                  height={40}
+                  width={60}
+                  height={60}
                   src={
                     source +
                     "/images.php?w=320&h=320&zlonk=5733&zlink=" +
-                    slugify(des.designation, { lower: true })
+                    slugify(des.designation, { lower: true }) + '.png'
                   }
                   className="w3-round-large w3-margin-right"
                   alt={des.designation}

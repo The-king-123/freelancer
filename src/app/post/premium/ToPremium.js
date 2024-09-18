@@ -4,8 +4,10 @@ import { faArrowRight, faKey, faSpinner, faTimesCircle, faUser } from '@fortawes
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect } from 'react'
+import slugify from 'slugify';
 
 function ToPremium({ slug }) {
+   
     useEffect(() => {
         const xcode = localStorage.getItem('x-code')
         axios
@@ -51,7 +53,7 @@ function ToPremium({ slug }) {
                         style={{ paddingBlock: 0, paddingInline: 8 }}
                     >
                         <div
-                            onClick={()=>document.getElementById('modalCodePremium').style.display = 'none'}
+                            onClick={() => document.getElementById('modalCodePremium').style.display = 'none'}
                             className="w3-pointer w3-right w3-flex w3-flex-center"
                             style={{ width: 32, height: 32 }}
                         >
@@ -95,7 +97,7 @@ function ToPremium({ slug }) {
                                         onClick={() => confirmer()}
                                         className="transition w3-medium w3-text-yellow w3-block w3-button w3-round-xxlarge w3-black"
                                     >
-                                        Confirmer 
+                                        Confirmer
                                         <span
                                             className="w3-margin-left"
                                             id="iconConfirm"
