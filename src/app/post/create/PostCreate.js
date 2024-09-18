@@ -705,6 +705,7 @@ function PostCreate() {
                                 document.getElementById('infoCode').innerText = res.data.code
 
                                 document.getElementById('infoUser').style.display = 'block'
+                                document.getElementById('infoBull').style.display = 'block'
                             } else {
                                 document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Le code pour cet utilisateur exist deja.</div>"
                                 document.getElementById('infoUser').style.display = 'none'
