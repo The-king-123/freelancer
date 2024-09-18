@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
-import Link from "next/link";
 import { console_source as source } from "@/app/data";
 
 export default function PostContent({ content }) {
@@ -35,123 +34,123 @@ export default function PostContent({ content }) {
     videoUrl: JSON.parse(content.info).videoUrl ? JSON.parse(content.info).videoUrl : content.link,
   };
 
-  const typer = (text) => {
-    if (stepper.fielTester == null) {
-      stepper.fielTester = setInterval(() => {
-        if (document.getElementById("typingField")) {
-          clearInterval(stepper.fielTester);
-          stepper.fielTester = null;
+  // const typer = (text) => {
+  //   if (stepper.fielTester == null) {
+  //     stepper.fielTester = setInterval(() => {
+  //       if (document.getElementById("typingField")) {
+  //         clearInterval(stepper.fielTester);
+  //         stepper.fielTester = null;
 
-          if (text.length > 0) {
-            document.getElementById("typingField").innerHTML = "";
+  //         if (text.length > 0) {
+  //           document.getElementById("typingField").innerHTML = "";
 
-            const semiPlainText = text
-              .replace(/<br\s*\/?>|\n/g, "~")
-              .replace(/<\/li>/g, "^")
-              .replace(/<\/p>/g, "`");
-            const plainText = semiPlainText.replace(/<[^>]*>/g, "");
-            const convertedPlainText = plainText.split("");
+  //           const semiPlainText = text
+  //             .replace(/<br\s*\/?>|\n/g, "~")
+  //             .replace(/<\/li>/g, "^")
+  //             .replace(/<\/p>/g, "`");
+  //           const plainText = semiPlainText.replace(/<[^>]*>/g, "");
+  //           const convertedPlainText = plainText.split("");
 
-            var charCounter = 0;
-            var lineCounter = 0;
-            var paragrapheCounter = 0;
-            var listeCounter = 0;
+  //           var charCounter = 0;
+  //           var lineCounter = 0;
+  //           var paragrapheCounter = 0;
+  //           var listeCounter = 0;
 
-            stepper.intervalTyper = setInterval(() => {
-              let testingChar = convertedPlainText[charCounter];
+  //           stepper.intervalTyper = setInterval(() => {
+  //             let testingChar = convertedPlainText[charCounter];
 
-              if (["~", "^", "`"].includes(convertedPlainText[charCounter])) {
-                var lineCounterSemiPlainText = 0;
-                var paragrapheCounterSemiPlainText = 0;
-                var listeCounterSemiPlainText = 0;
+  //             if (["~", "^", "`"].includes(convertedPlainText[charCounter])) {
+  //               var lineCounterSemiPlainText = 0;
+  //               var paragrapheCounterSemiPlainText = 0;
+  //               var listeCounterSemiPlainText = 0;
 
-                for (let i = 0; i < semiPlainText.length; i++) {
-                  let currentChar = semiPlainText[i];
-                  // Current character in the loop
+  //               for (let i = 0; i < semiPlainText.length; i++) {
+  //                 let currentChar = semiPlainText[i];
+  //                 // Current character in the loop
 
-                  // Perform actions based on character and counter comparisons
-                  if (
-                    testingChar === "^" &&
-                    currentChar === "^" &&
-                    listeCounterSemiPlainText === listeCounter
-                  ) {
-                    document.getElementById("typingField").innerHTML =
-                      semiPlainText
-                        .substring(0, i)
-                        .replace(/\^/g, "</li>")
-                        .replace(/`/g, "</p>")
-                        .replace(/~/g, "<br/>") + "</li>";
-                  }
-                  if (
-                    testingChar === "~" &&
-                    currentChar === "~" &&
-                    lineCounterSemiPlainText === lineCounter
-                  ) {
-                    document.getElementById("typingField").innerHTML =
-                      semiPlainText
-                        .substring(0, i)
-                        .replace(/\^/g, "</li>")
-                        .replace(/`/g, "</p>")
-                        .replace(/~/g, "<br/>") + "<br/>";
-                  }
-                  if (
-                    testingChar === "`" &&
-                    currentChar === "`" &&
-                    paragrapheCounterSemiPlainText === paragrapheCounter
-                  ) {
-                    document.getElementById("typingField").innerHTML =
-                      semiPlainText
-                        .substring(0, i)
-                        .replace(/\^/g, "</li>")
-                        .replace(/`/g, "</p>")
-                        .replace(/~/g, "<br/>") + "</p>";
-                  }
+  //                 // Perform actions based on character and counter comparisons
+  //                 if (
+  //                   testingChar === "^" &&
+  //                   currentChar === "^" &&
+  //                   listeCounterSemiPlainText === listeCounter
+  //                 ) {
+  //                   document.getElementById("typingField").innerHTML =
+  //                     semiPlainText
+  //                       .substring(0, i)
+  //                       .replace(/\^/g, "</li>")
+  //                       .replace(/`/g, "</p>")
+  //                       .replace(/~/g, "<br/>") + "</li>";
+  //                 }
+  //                 if (
+  //                   testingChar === "~" &&
+  //                   currentChar === "~" &&
+  //                   lineCounterSemiPlainText === lineCounter
+  //                 ) {
+  //                   document.getElementById("typingField").innerHTML =
+  //                     semiPlainText
+  //                       .substring(0, i)
+  //                       .replace(/\^/g, "</li>")
+  //                       .replace(/`/g, "</p>")
+  //                       .replace(/~/g, "<br/>") + "<br/>";
+  //                 }
+  //                 if (
+  //                   testingChar === "`" &&
+  //                   currentChar === "`" &&
+  //                   paragrapheCounterSemiPlainText === paragrapheCounter
+  //                 ) {
+  //                   document.getElementById("typingField").innerHTML =
+  //                     semiPlainText
+  //                       .substring(0, i)
+  //                       .replace(/\^/g, "</li>")
+  //                       .replace(/`/g, "</p>")
+  //                       .replace(/~/g, "<br/>") + "</p>";
+  //                 }
 
-                  // Increment counters based on the character
-                  if (testingChar == "~" && currentChar == "~") {
-                    lineCounterSemiPlainText++;
-                  }
-                  if (testingChar == "`" && currentChar == "`") {
-                    paragrapheCounterSemiPlainText++;
-                  }
-                  if (testingChar == "^" && currentChar == "^") {
-                    listeCounterSemiPlainText++;
-                  }
-                }
+  //                 // Increment counters based on the character
+  //                 if (testingChar == "~" && currentChar == "~") {
+  //                   lineCounterSemiPlainText++;
+  //                 }
+  //                 if (testingChar == "`" && currentChar == "`") {
+  //                   paragrapheCounterSemiPlainText++;
+  //                 }
+  //                 if (testingChar == "^" && currentChar == "^") {
+  //                   listeCounterSemiPlainText++;
+  //                 }
+  //               }
 
-                if (convertedPlainText[charCounter] == "~") {
-                  lineCounter++;
-                }
-                if (convertedPlainText[charCounter] == "^") {
-                  listeCounter++;
-                }
-                if (convertedPlainText[charCounter] == "`") {
-                  paragrapheCounter++;
-                }
-              } else {
-                document.getElementById("typingField").innerHTML =
-                  document.getElementById("typingField").innerHTML +
-                  testingChar;
-              }
+  //               if (convertedPlainText[charCounter] == "~") {
+  //                 lineCounter++;
+  //               }
+  //               if (convertedPlainText[charCounter] == "^") {
+  //                 listeCounter++;
+  //               }
+  //               if (convertedPlainText[charCounter] == "`") {
+  //                 paragrapheCounter++;
+  //               }
+  //             } else {
+  //               document.getElementById("typingField").innerHTML =
+  //                 document.getElementById("typingField").innerHTML +
+  //                 testingChar;
+  //             }
 
-              if (charCounter == plainText.length - 1) {
-                clearInterval(stepper.intervalTyper);
-                document.getElementById("typingField").innerHTML = text;
-              }
-              const chatElement = document.getElementById("chatCoreWrapper");
-              if (chatElement.scrollHeight > stepper.scrollHeight) {
-                chatElement.scrollTop = chatElement.scrollHeight;
-                stepper.scrollHeight = chatElement.scrollHeight;
-              }
+  //             if (charCounter == plainText.length - 1) {
+  //               clearInterval(stepper.intervalTyper);
+  //               document.getElementById("typingField").innerHTML = text;
+  //             }
+  //             const chatElement = document.getElementById("chatCoreWrapper");
+  //             if (chatElement.scrollHeight > stepper.scrollHeight) {
+  //               chatElement.scrollTop = chatElement.scrollHeight;
+  //               stepper.scrollHeight = chatElement.scrollHeight;
+  //             }
 
-              charCounter++;
-              //
-            }, 30);
-          }
-        }
-      }, 10);
-    }
-  };
+  //             charCounter++;
+  //             //
+  //           }, 30);
+  //         }
+  //       }
+  //     }, 10);
+  //   }
+  // };
 
   const getUrl = (embed) => {
     const start = embed.indexOf('src="') + 5;
@@ -181,7 +180,6 @@ export default function PostContent({ content }) {
       document.getElementById("postImageMedia").style.transition = "1s";
       document.getElementById("postImageMedia").style.height = "auto";
     }
-    typer(singlePostInfo.description);
 
     document.getElementById('backButton').addEventListener('click', () => {
       if (window.history.length > 0) {

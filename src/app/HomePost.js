@@ -1,5 +1,5 @@
 'use client'
-import { faArrowLeft, faPause, faPlay, faRefresh, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faCrown, faPause, faPlay, faRefresh, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import parse from "html-react-parser";
@@ -57,7 +57,7 @@ export default function PostContent({ posts }) {
       <div id="homePostCore">
         {posts.length > 0 &&
           posts.map((post, key) => (
-            <Link href={'/post/'+ post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '50%', display: 'inline-block' }}>
+            <Link href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '50%', display: 'inline-block' }}>
               <div className="w3-overflow w3-round w3-pointer w3-white">
                 <div
                   className="w3-nowrap w3-overflow w3-light-grey w3-big w3-small"
@@ -65,6 +65,19 @@ export default function PostContent({ posts }) {
                   title={parse(post.title)}
                 >
                   {parse(post.title)}
+                  {post.category == 'premium' &&
+                    <div
+                      className="w3-yellow w3-circle w3-display-bottomright"
+                      style={{ width: 26, height: 26, margin: 8 }}
+                    >
+                      <div className="w3-block w3-height w3-flex w3-flex-center">
+                        <FontAwesomeIcon
+                          icon={faCrown}
+                          style={{ height: 12, width: 12 }}
+                        />
+                      </div>
+                    </div>
+                  }
                 </div>
                 {/* <div>
                   <div className="postCore">
@@ -104,12 +117,12 @@ export default function PostContent({ posts }) {
                     }}
                     className="w3-overflow w3-light-grey post-image"
                   />
-                  {(post.type == "image/audio" || post.type == "video" || post.type == "image/video") && (
-                    <div className="w3-black w3-opacity w3-block w3-height w3-padding w3-display-middle"></div>
-                  )}
+                  {/* {(post.type == "image/audio" || post.type == "video" || post.type == "image/video") && (
+                    <div className="w3-black w3-opacity-max w3-block w3-height w3-padding w3-display-middle"></div>
+                  )} */}
                   {post.type == "image/audio" && (
                     <div
-                      className="w3-white w3-circle w3-display-middle"
+                      className="w3-white w3-circle w3-display-middle w3-opacity-max"
                       style={{ width: 40, height: 40 }}
                     >
                       <div className="w3-block w3-height w3-flex w3-flex-center">
@@ -122,7 +135,7 @@ export default function PostContent({ posts }) {
                   )}
                   {(post.type == "video" || post.type == "image/video") && (
                     <div
-                      className="w3-white w3-circle w3-display-middle"
+                      className="w3-white w3-circle w3-display-middle w3-opacity-max"
                       style={{ width: 40, height: 40 }}
                     >
                       <div className="w3-block w3-height w3-flex w3-flex-center">
@@ -133,6 +146,19 @@ export default function PostContent({ posts }) {
                       </div>
                     </div>
                   )}
+                  {post.category == 'premium' &&
+                    <div
+                      className="w3-yellow w3-circle w3-display-bottomright"
+                      style={{ width: 26, height: 26, margin: 8 }}
+                    >
+                      <div className="w3-block w3-height w3-flex w3-flex-center">
+                        <FontAwesomeIcon
+                          icon={faCrown}
+                          style={{ height: 12, width: 12 }}
+                        />
+                      </div>
+                    </div>
+                  }
                 </div>
 
               </div>

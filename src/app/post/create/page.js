@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import Home from "@/app/Home/page";
 import PostCreate from "./PostCreate";
 import {app_name, console_source as source} from "@/app/data";

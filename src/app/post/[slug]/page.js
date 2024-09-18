@@ -1,8 +1,9 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import PostContent from "./PostContent";
 import axios from "axios";
 import Home from "@/app/Home/page";
-import {app_name, console_source as source} from "@/app/data";
+import { app_name, console_source as source } from "@/app/data";
+import ToPremium from "../premium/ToPremium";
 
 var slug = ''
 
@@ -14,7 +15,11 @@ export default async function page({ params }) {
     const post = await axios
       .get(source + "/_post/" + params.slug + "/edit")
       .then((res) => {
-        return res.data.data[0];
+        if (!res.data.premium) {
+          return res.data.data[0]
+        } else {
+          return 'premium'
+        }
       })
       .catch((e) => {
         console.error("failure", e);
@@ -22,7 +27,12 @@ export default async function page({ params }) {
     if (!post) {
       notFound();
     }
-    return <Home core={<PostContent content={post} />} />;
+    if (post != 'premium') {
+      return <Home core={<PostContent content={post} />} />
+    } else {
+      return <Home core={<ToPremium slug={params.slug} />} />
+    }
+
   } catch (error) {
     console.error(`Error rendering page for slug ${params.slug}:`, error);
     return (
@@ -38,11 +48,14 @@ export default async function page({ params }) {
 export async function metadata() {
 
   const response = await axios.get(`${source}/_post/${slug}/edit`);
-  const post = response.data.data[0];
 
-  const meta = {
-    title: post.title + " - " + app_name,
-    description: JSON.parse(post.info).description.replace(/<\/?[^>]+(>|$)/g, ""),
-  };
-  return meta
+  if (!response.data.premium) {
+    const post = response.data.data[0];
+    const meta = {
+      title: post.title + " - " + app_name,
+      description: JSON.parse(post.info).description.replace(/<\/?[^>]+(>|$)/g, ""),
+    };
+    return meta
+  }
+
 };

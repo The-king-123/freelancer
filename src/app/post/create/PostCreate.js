@@ -6,9 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faArrowLeft,
     faArrowRight,
+    faCrown,
     faEye,
     faImage,
     faImages,
+    faKey,
     faListDots,
     faMicrophone,
     faNewspaper,
@@ -29,6 +31,54 @@ import slugify from "slugify";
 
 function PostCreate() {
 
+    const fakeKeyData = [
+        {
+            fullname: "RAMBININTSOA Safidy",
+            email: "thisisemail1@gmail.com",
+            key: "264982364971823649341234",
+            media_id: 11,
+            media_owner_key: "38573924750238475",
+            link: "364592384759_36582937465",
+            state: "available"
+        },
+        {
+            fullname: "Randrianarisoa Jean",
+            email: "email2@example.com",
+            key: "387464874320987563210987",
+            media_id: 12,
+            media_owner_key: "23409872349023847",
+            link: "239487234987_12342398479",
+            state: "available"
+        },
+        {
+            fullname: "Rakotoarison Marie",
+            email: "email3@example.com",
+            key: "129837465234876982134675",
+            media_id: 13,
+            media_owner_key: "34980234872093847",
+            link: "249837234870_98234792834",
+            state: "available"
+        },
+        {
+            fullname: "Andrianjafy Paul",
+            email: "email4@example.com",
+            key: "098234234589765430986543",
+            media_id: 14,
+            media_owner_key: "34870234870239847",
+            link: "123490238475_23749234795",
+            state: "available"
+        },
+        {
+            fullname: "Rasoarivelo Lala",
+            email: "email5@example.com",
+            key: "187234097123478123456789",
+            media_id: 15,
+            media_owner_key: "23487234987029384",
+            link: "983247923847_09823409784",
+            state: "available"
+        }
+    ]
+
     axios.defaults.withCredentials = true;
     const [inputImage, setinputImage] = useState(null)
     const [inputImageVideo, setinputImageVideo] = useState(null)
@@ -36,6 +86,12 @@ function PostCreate() {
     const [categoryListe, setcategoryListe] = useState('')
     const [selectCategoryList, setselectCategoryList] = useState([])
 
+    const [codeInfo, setcodeInfo] = useState({
+        fullname: '',
+        email: '',
+        key: '',
+        media_id: '',
+    })
     const [postInfo, setPostInfo] = useState({
         id: null,
         title: "",
@@ -57,6 +113,7 @@ function PostCreate() {
     });
 
     const [postListe, setpostListe] = useState('')
+    const [keyListe, setkeyListe] = useState('')
 
     async function setCSRFToken() {
         try {
@@ -299,7 +356,7 @@ function PostCreate() {
                 <div key={key} style={{ padding: 4 }}>
                     <div onClick={() => showThisPost(post)} className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
                         <div>{post.title}</div>
-                        <div className="w3-small w3-text-grey">{post.state == 'public' ? 'Publique' : 'Brouillon'}</div>
+                        <div className="w3-small w3-text-grey">{post.state == 'public' ? 'Publique' : 'Brouillon'}{post.category == 'premium' ? ' - ' : ''}{post.category == 'premium' ? <span className="w3-text-yellow">Premium</span> : ''}</div>
                     </div>
                 </div>
             ))
@@ -381,7 +438,7 @@ function PostCreate() {
             document.getElementById("videoEmbed").style.display = "flex";
 
             document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-light-grey', 'w3-black').replace('w3-text-grey', 'w3-text-white');
-            document.getElementById("postVideo").value = JSON.parse(data.info).videoUrl? JSON.parse(data.info).videoUrl : data.link;
+            document.getElementById("postVideo").value = JSON.parse(data.info).videoUrl ? JSON.parse(data.info).videoUrl : data.link;
 
             document.getElementById("showImageWrapper").style.display = "none";
             document.getElementById("audioSection").style.display = "none";
@@ -596,8 +653,61 @@ function PostCreate() {
         document.getElementById("inputImageVideoWrapper").style.display = "flex";
     }
 
-    useEffect(() => {
+    const reloadKeyList = (data) => {
+        var glicthKeyList
+        if (data.length > 0) {
+            glicthKeyList = data.map((code, key) => (
+                <div key={key} style={{ padding: 4 }}>
+                    <div onClick={() => showThisPost(code)} className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
+                        <div>{code.fullname}</div>
+                        <div className="w3-small w3-text-grey">{code.email}</div>
+                    </div>
+                </div>
+            ))
+        } else {
+            //
+            glicthKeyList = (<div style={{ padding: 8 }}>
+                <div className="w3-border w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
+                    <div style={{ paddingInline: 16 }}>
+                        Ce post n'a aucune code pour le moment...
+                    </div>
+                </div>
+            </div>)
+        }
+        setkeyListe(glicthKeyList)
+    }
 
+    function isNumericSequence(str) {
+        const numberRegex = /^\d+$/;
+        return numberRegex.test(str);
+    }
+    
+    function isValidEmail(email) {
+        // Regular expression for basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    const addKeyToUser = async () => {
+        if (isValidEmail(codeInfo.email) || isNumericSequence(codeInfo.email)) {
+            const xcode = localStorage.getItem('x-code')
+            await setCSRFToken();
+            await axios
+                .post(source + "/_links?xcode=" + xcode, codeInfo)
+                .then((res) => {
+                    console.log(res.data);
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                });
+        }else{
+            alert("Entrer une adresse mail ou une clé de référence valide.")
+        }
+
+    }
+
+    useEffect(() => {
+        reloadKeyList(11)
         const xcode = localStorage.getItem("x-code");
         if (xcode) {
             axios
@@ -887,8 +997,21 @@ function PostCreate() {
                 </div>
                 <div>
                     <div
+                        onClick={() => document.getElementById("modalKeyListe").style.display = 'block'}
+                        className="w3-black w3-circle w3-flex w3-flex-center"
+                        style={{ width: 32, height: 32 }}
+                        title="Gérer votre code premium."
+                    >
+                        <FontAwesomeIcon
+                            icon={faKey}
+                            style={{ width: 16, height: 16 }}
+                        />
+                    </div>
+                </div>
+                <div>
+                    <div
                         onClick={() => document.getElementById("modalPostListe").style.display = 'block'}
-                        className="w3-light-grey w3-circle w3-flex w3-flex-center"
+                        className="w3-light-grey w3-circle w3-flex w3-flex-center w3-margin-left"
                         style={{ width: 32, height: 32 }}
                     >
                         <FontAwesomeIcon
@@ -919,6 +1042,8 @@ function PostCreate() {
                             defaultValue={null}
                         >
                             <option value={null}>Sélectionner une catégorie</option>
+                            <option value="premim">Premium</option>
+                            <option value="standard">Standard</option>
                             {
                                 selectCategoryList.map((category, key) => (
                                     <option value={category.id}>{category.name}</option>
@@ -1289,6 +1414,63 @@ function PostCreate() {
                 </div>
             </div>
             {/* end modal post liste */}
+
+            {/* modal key liste */}
+            <div id="modalKeyListe" className="w3-modal w3-round white-opacity" style={{ position: 'absolute', height: 'calc(100vh - 16px)' }}>
+                <div
+                    className="w3-modal-content w3-card w3-round w3-overflow"
+                    style={{ maxWidth: 420, top: 32 }}
+                >
+
+                    <div onClick={() => document.getElementById('modalKeyListe').style.display = 'none'} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+                        <FontAwesomeIcon icon={faArrowLeft} />
+                    </div>
+
+                    <div className="w3-flex-row w3-flex-center-v" style={{ paddingInline: 16, paddingBlock: 24 }}>
+                        <input
+                            id="categoryTitle"
+                            onChange={(e) => codeInfo.email = e.target.value}
+                            className="w3-border-0 w3-input w3-border w3-round"
+                            placeholder="E-mail ou clé de reference"
+                            type="text"
+                        />
+                        <button
+                            onClick={addKeyToUser}
+                            className="w3-button w3-margin-left w3-round w3-white w3-black w3-flex w3-flex-center"
+                            style={{ height: 40 }}
+                            title="Generer un code d'acces."
+                        >
+                            <FontAwesomeIcon icon={faKey} />
+                        </button>
+                    </div>
+                    <div style={{ paddingInline: 16 }}>
+                        <div id="infoBull" style={{ marginBottom: 8 }}>L'utilisateur est ajouter avec succes:</div>
+                        <div>RAMBININTSOA Safidy</div>
+                        <div className="w3-text-grey w3-small">email1@gmail.com - 8936450364503450</div>
+                        <div style={{ marginTop: 8 }}>
+                            <div className="w3-round w3-black w3-big w3-center w3-pointer" style={{ paddingInline: 16, paddingBlock: 8 }}>
+                                code : sdhL45U65Hu6dhfl5ShhKJAHja
+                            </div>
+                        </div>
+                    </div>
+                    <div style={{ paddingInline: 16, paddingBlock: 16 }}>
+                        <input
+                            id="searchInput"
+                            className="input w3-border-0 w3-input w3-border w3-round-xxlarge"
+                            placeholder="Chercher un key"
+                            type="text"
+                        />
+                    </div>
+
+                    <div style={{ height: '50vh', paddingInline: 12, marginBottom: 16 }} className="w3-overflow-scroll w3-noscrollbar">
+                        {
+                            keyListe
+                        }
+                    </div>
+
+                </div>
+            </div>
+            {/* end modal key liste */}
         </div>
     );
 }

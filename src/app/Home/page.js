@@ -8,6 +8,7 @@ import {
   faBars,
   faBell,
   faChevronCircleUp,
+  faCrown,
   faDoorOpen,
   faGear,
   faHome,
@@ -1566,7 +1567,7 @@ export default function Home(props) {
 
         <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
           <Link
-            className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
+            className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
             onClick={() => {
               localStorage.removeItem("user");
@@ -1590,7 +1591,7 @@ export default function Home(props) {
           style={{ width: 36, height: 36 }}
         >
           <div
-            className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
+            className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
           >
             <FontAwesomeIcon
@@ -1607,7 +1608,7 @@ export default function Home(props) {
           style={{ width: 36, height: 36 }}
         >
           <div
-            className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
+            className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
           >
             <FontAwesomeIcon
@@ -1617,6 +1618,23 @@ export default function Home(props) {
             />
           </div>
         </div>
+
+        <Link
+          href={'/premiumarea'}
+          className="w3-flex-1"
+          style={{ width: 36, height: 36 }}
+        >
+          <div
+            className="w3-flex w3-flex-center w3-overflow w3-round w3-black w3-text-yellow"
+            style={{ width: 36, height: 36, marginInline: "auto" }}
+          >
+            <FontAwesomeIcon
+              icon={faCrown}
+              width={20}
+              height={20}
+            />
+          </div>
+        </Link>
 
         {/* ///// */}
         <div
@@ -1673,7 +1691,7 @@ export default function Home(props) {
               <div
                 id="contentMakerWrapper"
                 onClick={(e) => openDropdown("contentMaker")}
-                className="dropButton w3-flex w3-flex-center w3-overflow w3-card w3-round w3-white"
+                className="dropButton w3-flex w3-flex-center w3-overflow w3-light-grey w3-round w3-white"
                 style={{ width: 36, height: 36, marginInline: "auto" }}
               >
                 <FontAwesomeIcon
@@ -1688,7 +1706,7 @@ export default function Home(props) {
         {/* ////// */}
         <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
           <div
-            className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
+            className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
           >
             <FontAwesomeIcon
@@ -1705,7 +1723,7 @@ export default function Home(props) {
           style={{ width: 36, height: 36 }}
         >
           <div
-            className="w3-flex w3-flex-center w3-overflow w3-card w3-round"
+            className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
           >
             <FontAwesomeIcon
