@@ -128,7 +128,7 @@ function ToPremium({ slug }) {
                                     <button
                                         id="buttonConnexion"
                                         disabled={false}
-                                        onClick={() => confirm()}
+                                        onClick={confirm}
                                         className="transition w3-medium w3-text-yellow w3-block w3-button w3-round-xxlarge w3-black"
                                     >
                                         Confirmer
