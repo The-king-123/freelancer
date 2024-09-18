@@ -667,7 +667,7 @@ function PostCreate() {
         } else {
             //
             glicthKeyList = (<div style={{ padding: 8 }}>
-                <div className="w3-border w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
+                <div className="w3-light-grey w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
                     <div style={{ paddingInline: 16 }}>
                         Ce post n'a aucune code pour le moment...
                     </div>
@@ -687,6 +687,7 @@ function PostCreate() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
+
     const copyToClipboard = (id) => {
         const copyText = document.getElementById(id).innerText;
         const textarea = document.createElement("textarea");
@@ -697,6 +698,7 @@ function PostCreate() {
         document.body.removeChild(textarea);
         alert("Copied to clipboard: " + copyText);
     }
+
     const addKeyToUser = async () => {
         if (isValidEmail(codeInfo.email) || isNumericSequence(codeInfo.email)) {
             const xcode = localStorage.getItem('x-code')
@@ -746,6 +748,20 @@ function PostCreate() {
             alert("Entrer une adresse mail ou une clé de référence valide.")
         }
 
+    }
+
+    const displayAddNewKeyArea = () => {
+        document.getElementById('newKeyArea').style.display = 'block';
+        document.getElementById('keyListArea').style.display = 'none';
+        document.getElementById('afficheNewKeyArea').style.display = 'none';
+        document.getElementById('afficheKeyListArea').style.display = 'flex';
+    }
+
+    const displayKeyListArea = () => {
+        document.getElementById('newKeyArea').style.display = 'none';
+        document.getElementById('keyListArea').style.display = 'block';
+        document.getElementById('afficheNewKeyArea').style.display = 'flex';
+        document.getElementById('afficheKeyListArea').style.display = 'none';
     }
 
     useEffect(() => {
@@ -1463,54 +1479,66 @@ function PostCreate() {
                     className="w3-modal-content w3-card w3-round w3-overflow"
                     style={{ maxWidth: 420, top: 32 }}
                 >
-
-                    <div onClick={() => document.getElementById('modalKeyListe').style.display = 'none'} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
-                        <FontAwesomeIcon icon={faArrowLeft} />
-                    </div>
-
-                    <div className="w3-flex-row w3-flex-center-v" style={{ paddingInline: 16, paddingBlock: 24 }}>
-                        <input
-                            id="categoryTitle"
-                            onChange={(e) => codeInfo.email = e.target.value}
-                            className="w3-border-0 w3-input w3-border w3-round"
-                            placeholder="E-mail ou clé de reference"
-                            type="text"
-                        />
-                        <button
-                            onClick={addKeyToUser}
-                            className="w3-button w3-margin-left w3-round w3-white w3-black w3-flex w3-flex-center"
-                            style={{ height: 40 }}
-                            title="Generer un code d'acces."
-                        >
-                            <FontAwesomeIcon icon={faKey} />
-                        </button>
-                    </div>
-                    <div id="infoBull" style={{ marginBottom: 8,paddingInline:16,display:'none' }}>L'utilisateur est ajouter avec succes:</div>
-                    <div id="infoUser" style={{ paddingInline: 16,display:'none' }}>
-                        
-                        <div id="infoFullname">RAMBININTSOA Safidy</div>
-                        <div className="w3-text-grey w3-small"><span id="infoEmail"></span> - <span id="infoKey"></span></div>
-                        <div style={{ marginTop: 8 }}>
-                            <div onClick={()=>copyToClipboard('infoCode')} className="w3-round w3-black w3-big w3-center w3-pointer" style={{ paddingInline: 16, paddingBlock: 8 }}>
-                                code : <span id="infoCode"></span>
+                    <div className="w3-flex-row w3-flex-center-v">
+                        <div onClick={() => document.getElementById('modalKeyListe').style.display = 'none'} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+                            <FontAwesomeIcon icon={faArrowLeft} />
+                        </div>
+                        <div className="w3-flex-1"></div>
+                        <div>
+                            <div id="afficheNewKeyArea" title="Ajouter un nouveau code utilisateur" onClick={displayAddNewKeyArea} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+                                <FontAwesomeIcon icon={faPlus} />
+                            </div>
+                            <div id="afficheKeyListArea" title="Afficher la liste code utilisateur" onClick={displayKeyListArea} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16, display: 'none' }}>
+                                <FontAwesomeIcon icon={faListDots} />
                             </div>
                         </div>
                     </div>
-                    <div style={{ paddingInline: 16, paddingBlock: 16 }}>
-                        <input
-                            id="searchInput"
-                            className="input w3-border-0 w3-input w3-border w3-round-xxlarge"
-                            placeholder="Chercher un key"
-                            type="text"
-                        />
-                    </div>
+                    <div id="newKeyArea" style={{display:'none'}}>
+                        <div className="w3-flex-row w3-flex-center-v" style={{ paddingInline: 16, paddingBlock: 24 }}>
+                            <input
+                                id="categoryTitle"
+                                onChange={(e) => codeInfo.email = e.target.value}
+                                className="w3-border-0 w3-input w3-border w3-round"
+                                placeholder="E-mail ou clé de reference"
+                                type="text"
+                            />
+                            <button
+                                onClick={addKeyToUser}
+                                className="w3-button w3-margin-left w3-round w3-white w3-black w3-flex w3-flex-center"
+                                style={{ height: 40 }}
+                                title="Generer un code d'acces."
+                            >
+                                <FontAwesomeIcon icon={faKey} />
+                            </button>
+                        </div>
+                        <div id="infoBull" style={{ marginBottom: 8, paddingInline: 16, display: 'none' }}>L'utilisateur est ajouter avec succes:</div>
+                        <div id="infoUser" style={{ paddingInline: 16, display: 'none' }}>
 
-                    <div style={{ height: '50vh', paddingInline: 12, marginBottom: 16 }} className="w3-overflow-scroll w3-noscrollbar">
-                        {
-                            keyListe
-                        }
+                            <div id="infoFullname">RAMBININTSOA Safidy</div>
+                            <div className="w3-text-grey w3-small"><span id="infoEmail"></span> - <span id="infoKey"></span></div>
+                            <div style={{ marginTop: 8 }}>
+                                <div onClick={() => copyToClipboard('infoCode')} className="w3-round w3-black w3-big w3-center w3-pointer" style={{ paddingInline: 16, paddingBlock: 8 }}>
+                                    code : <span id="infoCode"></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <div id="keyListArea">
+                        <div style={{ paddingInline: 16, paddingBlock: 16 }}>
+                            <input
+                                id="searchInput"
+                                className="input w3-border-0 w3-input w3-border w3-round-xxlarge"
+                                placeholder="Chercher un key"
+                                type="text"
+                            />
+                        </div>
 
+                        <div style={{ height: '50vh', paddingInline: 12, marginBottom: 16 }} className="w3-overflow-scroll w3-noscrollbar">
+                            {
+                                keyListe
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
             {/* end modal key liste */}
