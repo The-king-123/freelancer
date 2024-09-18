@@ -8,11 +8,27 @@ import slugify from 'slugify';
 
 function ToPremium({ slug }) {
 
+    axios.defaults.withCredentials = true;
+
     const [premiumInfo, setpremiumInfo] = useState({
         password: null,
     })
 
+    async function setCSRFToken() {
+        try {
+            // Fetch CSRF token from the server
+            const response = await axios.get(source + '/csrf-token');
+            // Set CSRF token as a default header for all future requests
+            axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+        } catch (error) {
+            console.error('CSRF token fetch failed:', error);
+        }
+    }
+
     const confirm = async () => {
+
+        document.getElementById('iconConfirmPremium').style.display = 'inline-block'
+        document.getElementById('spinnerPremium').style.display = 'none'
 
         const xcode = localStorage.getItem('x-code')
         await setCSRFToken();
