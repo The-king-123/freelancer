@@ -1,12 +1,11 @@
 'use client'
 import { console_source as source } from '@/app/data';
-import { faArrowRight, faKey, faSpinner, faTimesCircle, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faKey, faSpinner, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import slugify from 'slugify';
 
-function ToPremium({ slug }) {
+function ToPremium(props) {
 
     axios.defaults.withCredentials = true;
 
@@ -27,20 +26,21 @@ function ToPremium({ slug }) {
 
     const confirm = async () => {
 
-        document.getElementById('iconConfirmPremium').style.display = 'inline-block'
-        document.getElementById('spinnerPremium').style.display = 'none'
+        document.getElementById('iconConfirmPremium').style.display = 'none'
+        document.getElementById('spinnerPremium').style.display = 'inline-block'
 
         const xcode = localStorage.getItem('x-code')
         await setCSRFToken();
         await axios
-            .patch(source + "/_links?xcode=" + xcode, premiumInfo)
+            .patch(source + "/_links/" + props.slug + "?xcode=" + xcode, premiumInfo)
             .then((res) => {
                 if (res.data.logedin) {
                     if (res.data.linkexist) {
-                        if (codematch) {
+                        if (res.data.codematch) {
+                            document.getElementById('alert_code').className = 'w3-hide'
                             window.location = '/post/premium/' + res.data.newlink
                         } else {
-                            document.getElementById('alert_code').className = 'w3-text-red w3-opacity-min'
+                            document.getElementById('alert_code').className = 'w3-text-red w3-opacity-min w3-show'
                         }
                     } else {
                         if (document.getElementById('modalNotPremiumMembers')) {
@@ -52,13 +52,19 @@ function ToPremium({ slug }) {
                         document.getElementById('modalLogin').style.display = 'block'
                     }
                 }
+                document.getElementById('iconConfirmPremium').style.display = 'inline-block'
+                document.getElementById('spinnerPremium').style.display = 'none'
             })
             .catch((e) => {
                 console.error("failure", e);
+                document.getElementById('iconConfirmPremium').style.display = 'inline-block'
+                document.getElementById('spinnerPremium').style.display = 'none'
             });
     }
 
     useEffect(() => {
+        console.log(props.slug);
+
         const xcode = localStorage.getItem('x-code')
         axios
             .get(source + "/_auth?xcode=" + xcode)
@@ -103,7 +109,7 @@ function ToPremium({ slug }) {
                         style={{ paddingBlock: 0, paddingInline: 8 }}
                     >
                         <div
-                            onClick={() => document.getElementById('modalCodePremium').style.display = 'none'}
+                            onClick={() => window.history.back()}
                             className="w3-pointer w3-right w3-flex w3-flex-center"
                             style={{ width: 32, height: 32 }}
                         >
@@ -116,7 +122,7 @@ function ToPremium({ slug }) {
                     </div>
                     <div className="w3-block w3-flex-column w3-flex-center">
                         <div className="w3-block">
-                            <div id="alert_code" className="w3-hide">
+                            <div id="alert_code" style={{ paddingInline: 24, textAlign: 'center' }} className="w3-hide">
                                 Votre code est incorrect...
                             </div>
                             <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
@@ -190,7 +196,7 @@ function ToPremium({ slug }) {
                         style={{ paddingBlock: 0, paddingInline: 8 }}
                     >
                         <div
-                            onClick={() => document.getElementById('modalNotPremium').style.display = 'none'}
+                            onClick={() => document.getElementById('modalNotPremiumMembers').style.display = 'none'}
                             className="w3-pointer w3-right w3-flex w3-flex-center"
                             style={{ width: 32, height: 32 }}
                         >
@@ -203,15 +209,14 @@ function ToPremium({ slug }) {
                     </div>
                     <div className="w3-block w3-flex-column w3-flex-center">
                         <div className="w3-block">
-                            <div>
+                            <div style={{ padding: 24 }}>
                                 Vous n'êtes pas éligible pour accéder à ce contenu.
                             </div>
                             <div className="w3-center w3-white w3-flex w3-flex-center">
-                                <div className="w3-margin w3-col l8 m8 s8">
+                                <div className="w3-margin">
                                     <button
-                                        id="buttonConnexion"
                                         disabled={false}
-                                        onClick={() => confirm()}
+                                        onClick={() => window.history.back()}
                                         className="transition w3-medium w3-text-yellow w3-block w3-button w3-round-xxlarge w3-black"
                                     >
                                         Revenir sur la page precedente ?

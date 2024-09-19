@@ -838,14 +838,6 @@ export default function Home(props) {
         document.getElementById("coreMain").style.display = "block";
       }
 
-      // const posts = document.getElementsByClassName("postMedia");
-      // for (let i = 0; i < posts.length; i++) {
-      //   posts[i].addEventListener("click", () => {
-      //     const post = posts[i].getAttribute("data");
-      //     showSinglePost(JSON.parse(post));
-      //   });
-      // }
-
       var times = 0;
 
       const videoPostInterval = setInterval(() => {
@@ -864,7 +856,6 @@ export default function Home(props) {
           }
         }
       }, 500);
-
 
       setTimeout(() => {
 
@@ -908,6 +899,15 @@ export default function Home(props) {
 
       }, 1000);
 
+      if (document.getElementById('lienInvalideButton')) {
+        document.getElementById('lienInvalideButton').addEventListener('click', ()=>{
+          if (window.history.length>0) {
+            window.history.back()
+          }else{
+            window.location = '/'
+          }
+        })
+      }
 
       const postsTitle = document.getElementsByClassName("postTitle");
       for (let i = 0; i < postsTitle.length; i++) {
