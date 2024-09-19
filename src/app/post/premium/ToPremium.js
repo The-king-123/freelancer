@@ -38,7 +38,9 @@ function ToPremium(props) {
                     if (res.data.linkexist) {
                         if (res.data.codematch) {
                             document.getElementById('alert_code').className = 'w3-hide'
-                            window.location = '/post/premium/' + res.data.newlink
+                            setTimeout(() => {
+                                window.location = '/post/premium/' + res.data.newlink
+                            }, 3000);
                         } else {
                             document.getElementById('alert_code').className = 'w3-text-red w3-opacity-min w3-show'
                         }

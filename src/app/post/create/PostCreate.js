@@ -438,7 +438,7 @@ function PostCreate() {
                 .catch((e) => {
                     console.error("failure", e);
                 });
-        }else{
+        } else {
             document.getElementById('premiumCodeManager').style.display = 'none'
         }
     }
@@ -631,14 +631,66 @@ function PostCreate() {
         document.getElementById("inputImageVideoWrapper").style.display = "flex";
     }
 
+    const deleteKey = (id) => {
+        document.getElementById("modalWarning").style.display = "block";
+        document.getElementById("textWarning").innerText = "Voulez vous vraiment supprimer ce code d'acces ...";
+
+        const xcode = localStorage.getItem('x-code');
+        const deleteHandler = async () => {
+            document.getElementById("confirmSpinner").style.display = "inline-block";
+            await axios
+                .delete(source + "/_links/" + id + "?xcode=" + xcode)
+                .then((res) => {
+                    document.getElementById("confirmSpinner").style.display =
+                        "none";
+                    document.getElementById("modalWarning").style.display =
+                        "none";
+
+                    document
+                        .getElementById("confirmWarning")
+                        .removeEventListener("click", deleteHandler);
+                    document
+                        .getElementById("cancelWarning")
+                        .removeEventListener("click", cancelHandler);
+
+                    reloadKeyList(res.data.data.reverse());
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                });
+        };
+        const cancelHandler = () => {
+            document.getElementById("modalWarning").style.display = "none";
+
+            document
+                .getElementById("confirmWarning")
+                .removeEventListener("click", deleteHandler);
+            document
+                .getElementById("cancelWarning")
+                .removeEventListener("click", cancelHandler);
+        };
+
+        document
+            .getElementById("confirmWarning")
+            .addEventListener("click", deleteHandler);
+        document
+            .getElementById("cancelWarning")
+            .addEventListener("click", cancelHandler);
+    }
+
     const reloadKeyList = (data) => {
         var glicthKeyList
         if (data.length > 0) {
             glicthKeyList = data.map((code, key) => (
                 <div key={key} style={{ padding: 4 }}>
-                    <div /*onClick={}*/ className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
-                        <div>{code.fullname}</div>
-                        <div className="w3-small w3-text-grey">{code.email}</div>
+                    <div className="w3-light-grey w3-round w3-padding w3-flex-row w3-flex-center-v">
+                        <div className="w3-nowrap w3-overflow w3-flex-column w3-flex-1">
+                            <div>{code.fullname}</div>
+                            <div className="w3-small w3-text-grey">{code.email}</div>
+                        </div>
+                        <div onClick={() => deleteKey(code.id)} className="w3-margin-left ">
+                            <FontAwesomeIcon icon={faTrashAlt} className="w3-opacity-min w3-hover-text-red" />
+                        </div>
                     </div>
                 </div>
             ))

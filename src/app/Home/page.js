@@ -421,7 +421,7 @@ export default function Home(props) {
     }, 10);
   };
 
-  const showUser = async (data, key, others) => {
+  const showUser = async (data, key) => {
     closeAllPanel();
     var users = data;
     var userInfos = null;
@@ -485,7 +485,6 @@ export default function Home(props) {
     setdisplayChat("");
     setdisplayChoice("");
 
-    if (others) {
       await axios
         .get(source + "/_accrocher/" + key)
         .then((res) => {
@@ -508,13 +507,6 @@ export default function Home(props) {
         .catch((e) => {
           console.error("failure", e);
         });
-    } else {
-      var accrocher = localStorage.getItem("accrocher");
-      var topic = localStorage.getItem("topic");
-
-      reloadStarter(JSON.parse(accrocher));
-      reloadChoice("topic", JSON.parse(topic));
-    }
   };
 
   const reloadDesignation = (data) => {
@@ -786,7 +778,16 @@ export default function Home(props) {
     document.getElementById("password").value = "";
     signinAuthElement.email = "";
     signinAuthElement.password = "";
-    window.location = '/'
+    var user = localStorage.getItem("user");
+    if (user) {
+      if (user == "160471339156947") {
+        window.location = "/";
+      } else {
+        window.location = "/user/" + user;
+      }
+    } else {
+      window.location = "/";
+    }
   };
 
   const logout = async () => {
@@ -944,18 +945,17 @@ export default function Home(props) {
           var user = localStorage.getItem("user");
           if (props.user) {
             if (props.user == user) {
-              showUser(res.data.data, user, false);
+              showUser(res.data.data, user);
             } else {
               localStorage.setItem("user", props.user);
-              showUser(res.data.data, props.user, true);
+              showUser(res.data.data, props.user);
             }
           } else {
-
             if (user) {
-              showUser(res.data.data, user == 'undefined' ? "160471339156947" : user, false);
+              showUser(res.data.data, user == 'undefined' ? "160471339156947" : user);
             } else {
               localStorage.setItem("user", "160471339156947");
-              showUser(res.data.data, "160471339156947", true);
+              showUser(res.data.data, "160471339156947");
             }
           }
         })

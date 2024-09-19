@@ -50,6 +50,30 @@ function createForum() {
     }
   }
 
+  const showThisForum = (data) => {
+
+    if (data.response.length <= 0) {
+      forumInfos.title = data.title
+      forumInfos.content = data.content
+      forumInfos.id = data.id
+
+      document.getElementById('forumTitle').value = data.title
+      document.getElementById('forumContent').innerHTML = data.content
+
+      if (data.type == 'image') {
+        document.getElementById("showImage").src = source + "/images.php?w=120&h=120&zlonk=4733&zlink=" + data.link;
+        document.getElementById("showImageWrapper").style.display = "block";
+        document.getElementById("inputImage").style.display = "none";
+      }
+
+      document.getElementById('deleteButton').style.display = 'block';
+      document.getElementById('modalForumListe').style.display = 'none';
+    } else {
+      window.location = '/forum/preview/' + data.slug
+    }
+
+  }
+
   const reloadForums = (data) => {
     var glitchForum
     if (data.length > 0) {
@@ -74,29 +98,6 @@ function createForum() {
     setforumListe(glitchForum)
   }
 
-  const showThisForum = (data) => {
-
-    if (JSON.parse(data.response).length <= 0) {
-      forumInfos.title = data.title
-      forumInfos.content = data.content
-      forumInfos.id = data.id
-
-      document.getElementById('forumTitle').value = data.title
-      document.getElementById('forumContent').innerHTML = data.content
-
-      if (data.type == 'image') {
-        document.getElementById("showImage").src = source + "/images.php?w=120&h=120&zlonk=4733&zlink=" + data.link;
-        document.getElementById("showImageWrapper").style.display = "block";
-        document.getElementById("inputImage").style.display = "none";
-      }
-
-      document.getElementById('deleteButton').style.display = 'block';
-      document.getElementById('modalForumListe').style.display = 'none';
-    } else {
-      window.location = '/forum/preview/' + data.slug
-    }
-
-  }
 
   const save = async (state) => {
 
