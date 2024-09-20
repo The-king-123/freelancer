@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import axios from "axios";
 import {
+  faArrowLeft,
   faBars,
   faBell,
   faChevronCircleUp,
@@ -40,6 +41,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { console_source as source } from "@/app/data";
 import HomePost from "@/app/HomePost";
+import CreatePost from '../post/create/PostCreate'
 
 export default function Home(props) {
   axios.defaults.withCredentials = true;
@@ -422,6 +424,7 @@ export default function Home(props) {
   };
 
   const showUser = async (data, key) => {
+
     closeAllPanel();
     var users = data;
     var userInfos = null;
@@ -485,28 +488,27 @@ export default function Home(props) {
     setdisplayChat("");
     setdisplayChoice("");
 
-      await axios
-        .get(source + "/_accrocher/" + key)
-        .then((res) => {
-          localStorage.setItem("accrocher", JSON.stringify(res.data.data[0]));
-          reloadStarter(res.data.data[0]);
-        })
-        .catch((e) => {
-          console.error("failure", e);
-        });
+    await axios
+      .get(source + "/_accrocher/" + key)
+      .then((res) => {
+        reloadStarter(res.data.data[0]);
+      })
+      .catch((e) => {
+        console.error("failure", e);
+      });
 
-      await axios
-        .get(source + "/_topic/" + key)
-        .then((res) => {
-          res.data.data.forEach((tpc) => {
-            topicData.push(tpc);
-          });
-          localStorage.setItem("topic", JSON.stringify(res.data.data));
-          reloadChoice("topic", res.data.data);
-        })
-        .catch((e) => {
-          console.error("failure", e);
+    await axios
+      .get(source + "/_topic/" + key)
+      .then((res) => {
+        res.data.data.forEach((tpc) => {
+          topicData.push(tpc);
         });
+        localStorage.setItem("topic", JSON.stringify(res.data.data));
+        reloadChoice("topic", res.data.data);
+      })
+      .catch((e) => {
+        console.error("failure", e);
+      });
   };
 
   const reloadDesignation = (data) => {
@@ -901,10 +903,10 @@ export default function Home(props) {
       }, 1000);
 
       if (document.getElementById('lienInvalideButton')) {
-        document.getElementById('lienInvalideButton').addEventListener('click', ()=>{
-          if (window.history.length>0) {
+        document.getElementById('lienInvalideButton').addEventListener('click', () => {
+          if (window.history.length > 0) {
             window.history.back()
-          }else{
+          } else {
             window.location = '/'
           }
         })
@@ -937,11 +939,24 @@ export default function Home(props) {
           stopAllIntervalAndTimeout();
         });
       }
+      const xcode = localStorage.getItem('x-code');
+      axios
+        .get(source + "/_auth?xcode="+xcode)
+        .then((res) => {
+          console.log(res.data.user);
+          
+          document.getElementById('userPDP').style.backgroundImage = "url("+source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.user.key+")"
+        })
+        .catch((e) => {
+          console.error("failure", e);
+        });
 
       axios
         .get(source + "/_auth/users")
         .then((res) => {
           reloadDesignation(res.data.data);
+          document.getElementById('userPDP').style.backgroundImage = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.data
+
           var user = localStorage.getItem("user");
           if (props.user) {
             if (props.user == user) {
@@ -962,6 +977,8 @@ export default function Home(props) {
         .catch((e) => {
           console.error("failure", e);
         });
+
+
 
       if (!props.core) {
         axios
@@ -1124,7 +1141,7 @@ export default function Home(props) {
                 width={20}
                 height={20}
               />
-              <div className="w3-margin-left w3-medium">Créer un post</div>
+              <div className="w3-margin-left w3-medium">Gérer votre post</div>
             </Link>
 
             <Link
@@ -1636,74 +1653,6 @@ export default function Home(props) {
           </div>
         </Link>
 
-        {/* ///// */}
-        <div
-          className="w3-flex-1"
-        >
-          <div style={{ width: 36, height: 36, marginInline: "auto" }}>
-            <div
-              className="w3-dropdown-click w3-hover-white"
-            >
-              <div
-                id="contentMaker"
-                className="w3-dropdown-content w3-bar-block w3-card w3-round"
-                style={{ bottom: 0, minWidth: 260, marginBottom: 44, right: -87, padding: 4 }}
-              >
-
-                <div style={{ padding: 4 }}>
-                  <Link
-                    href={'/post/create'}
-                    className="w3-light-grey w3-round w3-flex-row w3-flex-center-v"
-                    style={{ padding: 8 }}
-                  >
-                    <div className="w3-white w3-circle w3-flex w3-flex-center w3-margin-right" style={{ width: 40, height: 40 }}>
-                      <FontAwesomeIcon
-                        icon={faImages}
-                      />
-                    </div>
-                    Créer un post
-                  </Link>
-                </div>
-
-                <div style={{ padding: 4, marginBottom: -2 }}>
-                  <Link
-                    href={'/forum/create'}
-                    className="w3-light-grey w3-round w3-flex-row w3-flex-center-v"
-                    style={{ padding: 8 }}
-                  >
-                    <div className="w3-white w3-circle w3-flex w3-flex-center w3-margin-right" style={{ width: 40, height: 40 }}>
-                      <FontAwesomeIcon
-                        icon={faPager}
-                      />
-                    </div>
-                    Créer un forum
-                  </Link>
-                </div>
-
-                <div style={{ height: 2 }}>
-                  <FontAwesomeIcon
-                    icon={faPlay}
-                    className="rotate90 w3-text-white"
-                    style={{ marginLeft: 145, marginBottom: 4 }}
-                  />
-                </div>
-              </div>
-              <div
-                id="contentMakerWrapper"
-                onClick={(e) => openDropdown("contentMaker")}
-                className="dropButton w3-flex w3-flex-center w3-overflow w3-light-grey w3-round w3-white"
-                style={{ width: 36, height: 36, marginInline: "auto" }}
-              >
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  width={20}
-                  height={20}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* ////// */}
         <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
           <div
             className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
@@ -1872,6 +1821,41 @@ export default function Home(props) {
         </div>
       </div>
       {/*end modal logedin */}
+
+      {/* modal createPostOnDesktop */}
+      <div
+        id="createPostOnDesktop"
+        className="w3-modal w3-noscrollbar"
+        style={{ padding: 24, zIndex: 9999 }}
+      >
+        <div
+          className="w3-white w3-overflow w3-display-middle w3-block w3-round-large w3-content"
+          style={{
+            height: 520,
+            maxWidth: 520,
+          }}
+        >
+          <div
+            className="w3-container w3-light-grey"
+            style={{ paddingBlock: 0, padding: 16 }}
+          >
+            <div
+              onClick={() => document.getElementById('createPostOnDesktop').style.display = 'none'}
+              className="w3-pointer w3-flex w3-flex-center w3-black w3-circle"
+              style={{ width: 32, height: 32, }}
+            >
+              <FontAwesomeIcon
+                icon={faArrowLeft}
+                style={{ width: 16, height: 16 }}
+              />
+            </div>
+          </div>
+          <div className="w3-block w3-noscrollbar w3-overflow-scroll" style={{ paddingInline: 8, paddingTop: 8, height: 450 }}>
+            <CreatePost />
+          </div>
+        </div>
+      </div>
+      {/*end modal createPostOnDesktop */}
 
     </div>
   );

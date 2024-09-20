@@ -1097,9 +1097,12 @@ function PostCreate() {
                         />
                     </div>
                 </div>
-                <div>
+                <div id="openPostListeButton">
                     <div
-                        onClick={() => document.getElementById("modalPostListe").style.display = 'block'}
+                        onClick={() => {
+                            document.getElementById('createPostCore').style.display = 'none'
+                            document.getElementById("modalPostListe").style.display = 'block'
+                        }}
                         className="w3-light-grey w3-circle w3-flex w3-flex-center w3-margin-left"
                         style={{ width: 32, height: 32 }}
                     >
@@ -1111,7 +1114,7 @@ function PostCreate() {
                 </div>
             </div>
 
-            <div style={{ padding: 8 }}>
+            <div id="createPostCore" style={{ padding: 8 }}>
                 <div className="w3-container" style={{ padding: 0 }}>
                     <div className="w3-right" style={{ width: '35%' }}>
                         <div
@@ -1135,7 +1138,7 @@ function PostCreate() {
                             <option value="standard">Standard</option>
                             {
                                 selectCategoryList.map((category, key) => (
-                                    <option value={category.id}>{category.name}</option>
+                                    <option key={key} value={category.id}>{category.name}</option>
                                 ))
                             }
                         </select>
@@ -1482,7 +1485,10 @@ function PostCreate() {
                     style={{ maxWidth: 420, top: 32 }}
                 >
 
-                    <div onClick={() => document.getElementById('modalPostListe').style.display = 'none'} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+                    <div onClick={() => {
+                        document.getElementById('createPostCore').style.display = 'block'
+                        document.getElementById('modalPostListe').style.display = 'none'
+                    }} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
                         <FontAwesomeIcon icon={faArrowLeft} />
                     </div>
 

@@ -2,7 +2,7 @@ import Home from "@/app/Home/page";
 import PostCreate from "./PostCreate";
 import {app_name, console_source as source} from "@/app/data";
 
-export default async function page({ params }) {
+export default async function page() {
 
   return <Home core={<PostCreate />} />;
 }

@@ -20,6 +20,11 @@ function createForum() {
 
   const [inputImage, setinputImage] = useState(null)
 
+  const [withcmInfo, setwithcmInfo] = useState({
+    id:null,
+    slug:'',
+  })
+
   const [forumListe, setforumListe] = useState('')
 
   const [forumInfos, setforumInfos] = useState({
@@ -69,7 +74,10 @@ function createForum() {
       document.getElementById('deleteButton').style.display = 'block';
       document.getElementById('modalForumListe').style.display = 'none';
     } else {
-      window.location = '/forum/preview/' + data.slug
+      document.getElementById('modalOptionForum').style.display = 'block'
+      withcmInfo.id = data.id
+      withcmInfo.slug = data.slug
+      // window.location = '/forum/preview/' + data.slug
     }
 
   }
@@ -98,7 +106,6 @@ function createForum() {
     setforumListe(glitchForum)
   }
 
-
   const save = async (state) => {
 
     const xcode = localStorage.getItem("x-code");
@@ -124,9 +131,9 @@ function createForum() {
         data.append("content", forumInfos.content);
         data.append("type", forumInfos.type);
         data.append("state", forumInfos.state);
-        data.append("action",forumInfos.action_key)
+        data.append("action", forumInfos.action_key)
         if (forumInfos.id) {
-          data.append("id",forumInfos.id)
+          data.append("id", forumInfos.id)
         }
 
       } else {
@@ -248,72 +255,72 @@ function createForum() {
     }
   };
 
-  const supprimer = async () => {
+  const supprimer = async (cm) => {
     const xcode = localStorage.getItem("x-code");
-    if (forumInfos.id) {
-      document.getElementById("modalWarning").style.display = "block";
-      document.getElementById("textWarning").innerText =
-        "Voulez vous vraiment supprimer ce Forum ...";
+      if (forumInfos.id || withcmInfo.id) {
+        document.getElementById("modalWarning").style.display = "block";
+        document.getElementById("textWarning").innerText =
+          "Voulez vous vraiment supprimer ce Forum ...";
 
-      const deleteHandler = async () => {
-        document.getElementById("confirmSpinner").style.display =
-          "inline-block";
-        await setCSRFToken();
-        await axios
-          .delete(source + "/_forum/" + forumInfos.id + '?xcode=' + xcode)
-          .then((res) => {
-            if (res.data.logedin) {
-              document.getElementById("confirmSpinner").style.display = "none";
-              document.getElementById("modalWarning").style.display = "none";
+        const deleteHandler = async () => {
+          document.getElementById("confirmSpinner").style.display =
+            "inline-block";
+          await setCSRFToken();
+          await axios
+            .delete(source + "/_forum/" + (cm<=0 ? forumInfos.id : withcmInfo.id) + '?xcode=' + xcode)
+            .then((res) => {
+              if (res.data.logedin) {
+                document.getElementById("confirmSpinner").style.display = "none";
+                document.getElementById("modalWarning").style.display = "none";
 
-              document
-                .getElementById("confirmWarning")
-                .removeEventListener("click", deleteHandler);
-              document
-                .getElementById("cancelWarning")
-                .removeEventListener("click", cancelHandler);
+                document
+                  .getElementById("confirmWarning")
+                  .removeEventListener("click", deleteHandler);
+                document
+                  .getElementById("cancelWarning")
+                  .removeEventListener("click", cancelHandler);
 
-              reloadForums(res.data.data.reverse());
-              document.getElementById('modalForumListe').style.display = 'block'
-              document.getElementById('forumTitle').value = ''
-              document.getElementById('forumContent').innerHTML = 'Que pensez-vous ?'
-              cancelImageInsertion()
-              document.getElementById('deleteButton').style.display = 'none';
-            } else {
-              if (document.getElementById('modalLogin')) {
-                document.getElementById('modalLogin').style.display = 'block'
+                reloadForums(res.data.data.reverse());
+                document.getElementById('modalForumListe').style.display = 'block'
+                document.getElementById('forumTitle').value = ''
+                document.getElementById('forumContent').innerHTML = 'Que pensez-vous ?'
+                cancelImageInsertion()
+                document.getElementById('deleteButton').style.display = 'none';
+                if (cm>0) {
+                  document.getElementById('modalOptionForum').style.display = 'none';
+                }
+              } else {
+                if (document.getElementById('modalLogin')) {
+                  document.getElementById('modalLogin').style.display = 'block'
+                }
+                document.getElementById("confirmSpinner").style.display = "none";
+                document.getElementById("modalWarning").style.display = "none";
               }
-              document.getElementById("confirmSpinner").style.display = "none";
-              document.getElementById("modalWarning").style.display = "none";
-            }
 
-          })
-          .catch((e) => {
-            console.error("failure", e);
-          });
-      };
-      const cancelHandler = async () => {
-        document.getElementById("modalWarning").style.display = "none";
+            })
+            .catch((e) => {
+              console.error("failure", e);
+            });
+        };
+        const cancelHandler = async () => {
+          document.getElementById("modalWarning").style.display = "none";
+
+          document
+            .getElementById("confirmWarning")
+            .removeEventListener("click", deleteHandler);
+          document
+            .getElementById("cancelWarning")
+            .removeEventListener("click", cancelHandler);
+        };
 
         document
           .getElementById("confirmWarning")
-          .removeEventListener("click", deleteHandler);
+          .addEventListener("click", deleteHandler);
         document
           .getElementById("cancelWarning")
-          .removeEventListener("click", cancelHandler);
-      };
+          .addEventListener("click", cancelHandler);
+      } 
 
-      document
-        .getElementById("confirmWarning")
-        .addEventListener("click", deleteHandler);
-      document
-        .getElementById("cancelWarning")
-        .addEventListener("click", cancelHandler);
-    } else {
-      document.getElementById('modalShowTopic').style.display = 'none';
-      document.getElementById('topicTitle').value = '';
-      document.getElementById('topicContent').innerHTML = '';
-    }
   }
 
   const cancelImageInsertion = () => {
@@ -323,6 +330,16 @@ function createForum() {
     document.getElementById("showImage").src = '';
     document.getElementById("showImageWrapper").style.display = "none";
     document.getElementById("inputImage").style.display = "flex";
+  }
+
+  const closeModalOptionForum = () => {
+    document.getElementById('modalOptionForum').style.display = 'none'
+    withcmInfo.id = null;
+    withcmInfo.slug = '';
+  }
+
+  const afficher = () => {
+    window.location = '/forum/preview/' + withcmInfo.slug
   }
 
   useEffect(() => {
@@ -379,7 +396,7 @@ function createForum() {
   }, []);
 
   return (
-    <div id="forumCore" style={{ display: 'none',position: 'relative' }}>
+    <div id="forumCore" style={{ display: 'none', position: 'relative' }}>
       <div
         className="w3-medium w3-big w3-flex-row w3-flex-center-v"
         style={{ padding: 8 }}
@@ -501,7 +518,7 @@ function createForum() {
           </button>
           <button
             id="deleteButton"
-            onClick={supprimer}
+            onClick={() => supprimer(0)}
             className="w3-button w3-hover-red w3-border w3-border-red w3-text-red w3-round-xxlarge w3-block w3-flex w3-flex-center"
             style={{ marginTop: 16, display: 'none' }}
           >
@@ -511,7 +528,7 @@ function createForum() {
       </div>
 
       {/* modal forum liste */}
-      <div id="modalForumListe" className="w3-modal w3-round white-opacity" style={{position:'absolute',height:'calc(100vh - 16px)'}}>
+      <div id="modalForumListe" className="w3-modal w3-round white-opacity" style={{ position: 'absolute', height: 'calc(100vh - 16px)' }}>
         <div
           className="w3-modal-content w3-card w3-round w3-overflow"
           style={{ maxWidth: 420, top: 32 }}
@@ -538,6 +555,39 @@ function createForum() {
         </div>
       </div>
       {/* end modal forum liste */}
+
+      {/* modal option */}
+      <div id="modalOptionForum" className="white-opacity w3-modal w3-round" style={{ position: 'absolute', height: 'calc(100vh - 16px)' }}>
+        <div
+          className="w3-modal-content w3-card-4 w3-animate-top w3-round w3-overflow"
+          style={{ width: 320, marginTop: '20vh', paddingBlock: 8 }}
+        >
+          <div className="w3-flex-row w3-flex-center-v w3-padding">
+            <button
+              onClick={closeModalOptionForum}
+              style={{ paddingInline: 16, paddingBlock: 8 }}
+              className="w3-round-xxlarge w3-border-0 w3-black w3-margin-right"
+            >
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </button>
+            <button
+              onClick={afficher}
+              style={{ paddingInline: 16, paddingBlock: 8 }}
+              className="w3-round-xxlarge w3-black w3-border-0 w3-margin-right w3-flex-1"
+            >
+              Afficher
+            </button>
+            <button
+              onClick={() => supprimer(1)}
+              style={{ paddingInline: 16, paddingBlock: 8 }}
+              className="w3-round-xxlarge w3-border-0 w3-red w3-flex-1"
+            >
+              Supprimer
+            </button>
+          </div>
+        </div>
+      </div>
+      {/* end modal warning */}
     </div>
   );
 }

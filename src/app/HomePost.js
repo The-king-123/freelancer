@@ -15,6 +15,14 @@ export default function PostContent({ posts }) {
   );
   const [showThisPost, setshowThisPost] = useState();
 
+  const createPost = () => {
+    if (window.innerWidth>992) {
+      document.getElementById('createPostOnDesktop').style.display = 'block';
+      document.getElementById('openPostListeButton').style.display = 'none';
+    }else{
+      window.location = '/post/create'
+    }
+  }
   // const showSinglePost = (post) => {
   //   setshowThisPost(post);
   //   setimagePostModal(
@@ -42,7 +50,6 @@ export default function PostContent({ posts }) {
 
     if (document.getElementById("audioBox")) {
       audioBox.chaine = document.getElementById("audioBox");
-
       audioBox.chaine.addEventListener("ended", () => {
         document.getElementById("iconPlay").style.display = "inline-block";
         document.getElementById("iconPause").style.display = "none";
@@ -54,6 +61,16 @@ export default function PostContent({ posts }) {
   return (
     <div style={{ position: 'relative' }}>
       <div id="homePostCore">
+        <div style={{ padding: 8 }}>
+          <div onClick={createPost} className="w3-flex-row w3-flex-center-v w3-light-grey w3-round" style={{ padding: 16 }}>
+            <div id="userPDP" className="w3-circle w3-overflow w3-white w3-margin-right" style={{ width: 42, height: 42, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
+            <input
+              className="w3-white w3-input w3-round-xxlarge w3-border-0 w3-flex-1"
+              style={{ height: 42, paddingInline: 16, }}
+              placeholder="Qu'est-ce que vous pensez!?"
+            />
+          </div>
+        </div>
         {posts.length > 0 &&
           posts.map((post, key) => (
             <Link href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '50%', display: 'inline-block' }}>
@@ -62,11 +79,11 @@ export default function PostContent({ posts }) {
                   className="w3-light-grey w3-big w3-small w3-flex-row w3-flex-center-v"
                   title={parse(post.title)}
                 >
-                  <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding:8 }}>{parse(post.title)}</div>
+                  <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>{parse(post.title)}</div>
                   {post.category == 'premium' &&
                     <div
                       className="w3-yellow w3-circle"
-                      style={{ width: 26, height: 26,marginRight:4 }}
+                      style={{ width: 26, height: 26, marginRight: 4 }}
                     >
                       <div className="w3-block w3-height w3-flex w3-flex-center">
                         <FontAwesomeIcon
@@ -77,7 +94,7 @@ export default function PostContent({ posts }) {
                     </div>
                   }
                 </div>
-            
+
                 <div
                   className="postMedia w3-display-container w3-light-grey post-image"
                   style={{ zIndex: 2 }}
