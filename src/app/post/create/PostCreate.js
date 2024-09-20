@@ -237,8 +237,15 @@ function PostCreate() {
                         .post(source + "/_post?xcode=" + xcode, data)
                         .then((res) => {
                             if (res.data.logedin) {
-                                cancel(state)
-                                reloadPost(res.data.data.reverse());
+                                if (document.getElementById('createPostOnDesktop')) {
+                                    document.getElementById('createPostOnDesktop').style.display = 'none';
+                                    console.log(res.data);
+
+                                } else {
+                                    cancel(state)
+                                    reloadPost(res.data.data.reverse());
+
+                                }
                             } else {
                                 if (document.getElementById('modalLogin')) {
                                     document.getElementById('modalLogin').style.display = 'block'
@@ -265,6 +272,7 @@ function PostCreate() {
                                 console.error('Request failed:', error);
                             }
                         });
+
                 }
             } catch (error) {
                 if (state == 'public') {
@@ -416,6 +424,7 @@ function PostCreate() {
 
         document.getElementById('modalPostListe').style.display = 'none';
         document.getElementById('deleteButton').style.display = 'block';
+        document.getElementById('createPostCore').style.display = 'block';
 
         if (data.category == 'premium') {
             displayKeyListArea()

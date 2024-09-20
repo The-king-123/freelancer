@@ -409,7 +409,7 @@ function createForum() {
           />{" "}
           Créer votre forum
         </div>
-        <div>
+        <div id="openForumListeButton">
           <div
             onClick={() => document.getElementById('modalForumListe').style.display = 'block'}
             className="w3-light-grey w3-circle w3-flex w3-flex-center"

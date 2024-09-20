@@ -42,6 +42,7 @@ import {
 import { console_source as source } from "@/app/data";
 import HomePost from "@/app/HomePost";
 import CreatePost from '../post/create/PostCreate'
+import CreateForum from '../forum/create/createForum'
 
 export default function Home(props) {
   axios.defaults.withCredentials = true;
@@ -1154,7 +1155,7 @@ export default function Home(props) {
                 width={20}
                 height={20}
               />
-              <div className="w3-margin-left w3-medium">Créer un forum</div>
+              <div className="w3-margin-left w3-medium">Gérer votre forum</div>
             </Link>
 
             <Link
@@ -1852,6 +1853,41 @@ export default function Home(props) {
           </div>
           <div className="w3-block w3-noscrollbar w3-overflow-scroll" style={{ paddingInline: 8, paddingTop: 8, height: 450 }}>
             <CreatePost />
+          </div>
+        </div>
+      </div>
+      {/*end modal createPostOnDesktop */}
+
+      {/* modal create Forum OnDesktop */}
+      <div
+        id="createForumOnDesktop"
+        className="w3-modal w3-noscrollbar"
+        style={{ padding: 24, zIndex: 9999 }}
+      >
+        <div
+          className="w3-white w3-overflow w3-display-middle w3-block w3-round-large w3-content"
+          style={{
+            height: 520,
+            maxWidth: 520,
+          }}
+        >
+          <div
+            className="w3-container w3-light-grey"
+            style={{ paddingBlock: 0, padding: 16 }}
+          >
+            <div
+              onClick={() => document.getElementById('createForumOnDesktop').style.display = 'none'}
+              className="w3-pointer w3-flex w3-flex-center w3-black w3-circle"
+              style={{ width: 32, height: 32, }}
+            >
+              <FontAwesomeIcon
+                icon={faArrowLeft}
+                style={{ width: 16, height: 16 }}
+              />
+            </div>
+          </div>
+          <div className="w3-block w3-noscrollbar w3-overflow-scroll" style={{ paddingInline: 8, paddingTop: 8, height: 450 }}>
+            <CreateForum />
           </div>
         </div>
       </div>
