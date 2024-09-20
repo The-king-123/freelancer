@@ -1,5 +1,5 @@
 'use client'
-import { faArrowLeft, faCrown, faPause, faPlay, faRefresh, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faCrown, faPause, faPlay, faRefresh, faTag, faTags, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import parse from "html-react-parser";
@@ -82,12 +82,27 @@ export default function PostContent({ posts }) {
                   <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>{parse(post.title)}</div>
                   {post.category == 'premium' &&
                     <div
+                      title="Premium"
                       className="w3-yellow w3-circle"
-                      style={{ width: 26, height: 26, marginRight: 4 }}
+                      style={{ width: 24, height: 24, marginRight: 4 }}
                     >
                       <div className="w3-block w3-height w3-flex w3-flex-center">
                         <FontAwesomeIcon
                           icon={faCrown}
+                          style={{ height: 12, width: 12 }}
+                        />
+                      </div>
+                    </div>
+                  }
+                  {post.category != 'premium' &&
+                    <div
+                      title="Free"
+                      className="w3-green w3-circle"
+                      style={{ width: 24, height: 24, marginRight: 4 }}
+                    >
+                      <div className="w3-block w3-height w3-flex w3-flex-center">
+                        <FontAwesomeIcon
+                          icon={faTags}
                           style={{ height: 12, width: 12 }}
                         />
                       </div>

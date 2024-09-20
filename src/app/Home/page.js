@@ -426,6 +426,12 @@ export default function Home(props) {
 
   const showUser = async (data, key) => {
 
+    console.log('-------------------');
+
+    console.log(data);
+    console.log(key);
+
+
     closeAllPanel();
     var users = data;
     var userInfos = null;
@@ -942,11 +948,11 @@ export default function Home(props) {
       }
       const xcode = localStorage.getItem('x-code');
       axios
-        .get(source + "/_auth?xcode="+xcode)
+        .get(source + "/_auth?xcode=" + xcode)
         .then((res) => {
-          console.log(res.data.user);
-          
-          document.getElementById('userPDP').style.backgroundImage = "url("+source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.user.key+")"
+          if (res.data.logedin) {
+            document.getElementById('userPDP').style.backgroundImage = "url(" + source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.user.key + ")"
+          }
         })
         .catch((e) => {
           console.error("failure", e);
@@ -956,7 +962,9 @@ export default function Home(props) {
         .get(source + "/_auth/users")
         .then((res) => {
           reloadDesignation(res.data.data);
-          document.getElementById('userPDP').style.backgroundImage = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.data
+          if (document.getElementById('userPDP')) {
+            document.getElementById('userPDP').style.backgroundImage = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.data
+          }
 
           var user = localStorage.getItem("user");
           if (props.user) {
