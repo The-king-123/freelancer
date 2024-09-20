@@ -112,7 +112,7 @@ function page() {
             const key = generateRandomNumber(15);
             document.getElementById("spinner").style.display = "inline-block";
             await axios
-                .post(source+"/_auth", {
+                .post(source + "/_auth", {
                     fullname: signupAuthElement.fullname,
                     email: signupAuthElement.email,
                     password: signupAuthElement.password,
@@ -150,210 +150,214 @@ function page() {
 
     });
     return (
-        <div>
-            <div style={{paddingBlock:24}} className="w3-center w3-flex w3-flex-center">
-                <span className="w3-padding-small w3-overflow w3-flex w3-flex-center">
-                    <Image
-                        id="imagePDP"
-                        unoptimized
-                        loading="lazy"
-                        width={60}
-                        height={60}
-                        alt="App profile"
-                        style={{
-                            objectFit: "cover",
-                            objectPosition: "center",
-                        }}
-                        src={
-                            source +
-                            "/images.php?w=720&h=720&zlonk=3733&zlink=160471339156947"
-                        }
-                    />
-                </span>
-                <span className="w3-text-black w3-padding w3-large">
-                    S'inscrire
-                </span>
-            </div>
-            <div className="w3-block">
-                <div id="alert_connexion" className="w3-hide">
-                    Adresse e-mail ou mot de passe incorrect...
-                </div>
-                <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
-                    <input
-                        onChange={(e) => fullnameRegister(e)}
-                        type="text"
-                        className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium"
-                        placeholder="Nom complet"
-                        id="fullname"
-                        name="user_fullname"
-                        required
-                    />
+        <div className="w3-100vh w3-block w3-light-grey" style={{paddingTop:42}}>
 
-                    <div
-                        className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
-                        style={{ marginRight: 20 }}
-                    >
-                        <span
-                            id="fullnameAlert"
-                            className="w3-text-white"
-                        >
-                            <FontAwesomeIcon icon={faUser} />
-                        </span>
-                    </div>
+            <div className="w3-card w3-round w3-overflow w3-white" style={{ maxWidth: 420, marginInline: 'auto'}}>
+                <div style={{ paddingBlock: 24 }} className="w3-center w3-flex w3-flex-center">
+                    <span className="w3-padding-small w3-overflow w3-flex w3-flex-center">
+                        <Image
+                        className="w3-round"
+                            id="imagePDP"
+                            unoptimized
+                            loading="lazy"
+                            width={60}
+                            height={60}
+                            alt="App profile"
+                            style={{
+                                objectFit: "cover",
+                                objectPosition: "center",
+                            }}
+                            src={
+                                source +
+                                "/images.php?w=720&h=720&zlonk=3733&zlink=160471339156947"
+                            }
+                        />
+                    </span>
+                    <span className="w3-text-black w3-padding w3-large">
+                        S'inscrire
+                    </span>
                 </div>
-                <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
-                    <input
-                        onChange={(e) => emailRegister(e)}
-                        type="text"
-                        className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium"
-                        placeholder="Adresse e-mail"
-                        id="email"
-                        name="user_email"
-                        required
-                    />
-                    <div
-                        className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
-                        style={{ marginRight: 20 }}
-                    >
-                        <span id="emailAlert" className="w3-text-white">
-                            <FontAwesomeIcon icon={faEnvelope} />
-                        </span>
+                <div className="w3-block">
+                    <div id="alert_connexion" className="w3-hide">
+                        Adresse e-mail ou mot de passe incorrect...
                     </div>
-                </div>
-                <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
-                    <input
-                        onChange={(e) => contactRegister(e)}
-                        type="number"
-                        min={300000000}
-                        max={399999999}
-                        className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium"
-                        placeholder="Numéro de téléphone"
-                        id="number"
-                        name="user_number"
-                        required
-                    />
+                    <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
+                        <input
+                            onChange={(e) => fullnameRegister(e)}
+                            type="text"
+                            className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium w3-border-0"
+                            placeholder="Nom complet"
+                            id="fullname"
+                            name="user_fullname"
+                            required
+                        />
 
-                    <div
-                        className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
-                        style={{ marginRight: 20 }}
-                    >
-                        <span
-                            id="numberAlert"
-                            className="w3-text-white"
+                        <div
+                            className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            style={{ marginRight: 20 }}
                         >
-                            <FontAwesomeIcon icon={faPhoneAlt} />
-                        </span>
-                    </div>
-                </div>
-                <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
-                    <select
-                        onChange={(e) => designationRegister(e)}
-                        id="designation"
-                        className="input w3-block  w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium"
-                        style={{ paddingBlock: 8 }}
-                    >
-                        <option value="Acheteur">Acheteur</option>
-                        <option value="Rédaction">Rédaction</option>
-                        <option value="Graphisme & Design">
-                            Graphisme & Design
-                        </option>
-                        <option value="Marketing Digital">
-                            Marketing Digital
-                        </option>
-                        <option value="Développement Web & Tech">
-                            Développement Web & Tech
-                        </option>
-                        <option value="Vidéo & Animation">
-                            Vidéo & Animation
-                        </option>
-                        <option value="Traduction & Transcription">
-                            Traduction & Transcription
-                        </option>
-                        <option value="Consulting & Coaching">
-                            Consulting & Coaching
-                        </option>
-                        <option value="Services Administratifs">
-                            Services Administratifs
-                        </option>
-                        <option value="Audio & Musique">
-                            Audio & Musique
-                        </option>
-                    </select>
-                    <div
-                        className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
-                        style={{ marginRight: 20 }}
-                    >
-                        <span
-                            id="numberAlert"
-                            className="w3-text-white"
-                        >
-                            <FontAwesomeIcon icon={faTags} />
-                        </span>
-                    </div>
-                </div>
-                <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
-                    <input
-                        onChange={(e) => passwordRegister(e)}
-                        type="password"
-                        className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium"
-                        placeholder="Mot de passe"
-                        id="password"
-                        name="user_password"
-                        required
-                    />
-
-                    <div
-                        className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
-                        style={{ marginRight: 20 }}
-                    >
-                        <span
-                            id="passwordAlert"
-                            className="w3-text-white"
-                        >
-                            <FontAwesomeIcon icon={faKey} />
-                        </span>
-                    </div>
-                </div>
-                <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
-                    <input
-                        onChange={(e) => passwordconfirm(e)}
-                        type="password"
-                        className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium"
-                        placeholder="Confirmer"
-                        id="confirm"
-                        name="user_confirm"
-                        required
-                    />
-
-                    <div
-                        className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
-                        style={{ marginRight: 20 }}
-                    >
-                        <span
-                            id="confirmAlert"
-                            className="w3-text-white"
-                        >
-                            <FontAwesomeIcon icon={faCheckDouble} />
-                        </span>
-                    </div>
-                </div>
-                <div className="w3-center w3-white w3-flex w3-flex-center">
-                    <div className="w3-margin w3-col l8 m8 s8">
-                        <button
-                            id="buttonConnexion"
-                            disabled={false}
-                            onClick={signup}
-                            className="transition w3-medium w3-block w3-button w3-round-xxlarge w3-text-white w3-black"
-                        >
-                            Créer mon compte
                             <span
-                                className="w3-spin w3-margin-left"
-                                style={{ display: "none" }}
-                                id="spinner"
+                                id="fullnameAlert"
+                                className="w3-text-white"
                             >
-                                <FontAwesomeIcon icon={faSpinner} />
+                                <FontAwesomeIcon icon={faUser} />
                             </span>
-                        </button>
+                        </div>
+                    </div>
+                    <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
+                        <input
+                            onChange={(e) => emailRegister(e)}
+                            type="text"
+                            className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium  w3-border-0"
+                            placeholder="Adresse e-mail"
+                            id="email"
+                            name="user_email"
+                            required
+                        />
+                        <div
+                            className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            style={{ marginRight: 20 }}
+                        >
+                            <span id="emailAlert" className="w3-text-white">
+                                <FontAwesomeIcon icon={faEnvelope} />
+                            </span>
+                        </div>
+                    </div>
+                    <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
+                        <input
+                            onChange={(e) => contactRegister(e)}
+                            type="number"
+                            min={300000000}
+                            max={399999999}
+                            className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium  w3-border-0"
+                            placeholder="Numéro de téléphone"
+                            id="number"
+                            name="user_number"
+                            required
+                        />
+
+                        <div
+                            className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            style={{ marginRight: 20 }}
+                        >
+                            <span
+                                id="numberAlert"
+                                className="w3-text-white"
+                            >
+                                <FontAwesomeIcon icon={faPhoneAlt} />
+                            </span>
+                        </div>
+                    </div>
+                    <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
+                        <select
+                            onChange={(e) => designationRegister(e)}
+                            id="designation"
+                            className="input w3-block  w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium  w3-border-0"
+                            style={{ paddingBlock: 8 }}
+                        >
+                            <option value="Acheteur">Acheteur</option>
+                            <option value="Rédaction">Rédaction</option>
+                            <option value="Graphisme & Design">
+                                Graphisme & Design
+                            </option>
+                            <option value="Marketing Digital">
+                                Marketing Digital
+                            </option>
+                            <option value="Développement Web & Tech">
+                                Développement Web & Tech
+                            </option>
+                            <option value="Vidéo & Animation">
+                                Vidéo & Animation
+                            </option>
+                            <option value="Traduction & Transcription">
+                                Traduction & Transcription
+                            </option>
+                            <option value="Consulting & Coaching">
+                                Consulting & Coaching
+                            </option>
+                            <option value="Services Administratifs">
+                                Services Administratifs
+                            </option>
+                            <option value="Audio & Musique">
+                                Audio & Musique
+                            </option>
+                        </select>
+                        <div
+                            className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            style={{ marginRight: 20 }}
+                        >
+                            <span
+                                id="numberAlert"
+                                className="w3-text-white"
+                            >
+                                <FontAwesomeIcon icon={faTags} />
+                            </span>
+                        </div>
+                    </div>
+                    <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
+                        <input
+                            onChange={(e) => passwordRegister(e)}
+                            type="password"
+                            className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium  w3-border-0"
+                            placeholder="Mot de passe"
+                            id="password"
+                            name="user_password"
+                            required
+                        />
+
+                        <div
+                            className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            style={{ marginRight: 20 }}
+                        >
+                            <span
+                                id="passwordAlert"
+                                className="w3-text-white"
+                            >
+                                <FontAwesomeIcon icon={faKey} />
+                            </span>
+                        </div>
+                    </div>
+                    <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
+                        <input
+                            onChange={(e) => passwordconfirm(e)}
+                            type="password"
+                            className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium  w3-border-0"
+                            placeholder="Confirmer"
+                            id="confirm"
+                            name="user_confirm"
+                            required
+                        />
+
+                        <div
+                            className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            style={{ marginRight: 20 }}
+                        >
+                            <span
+                                id="confirmAlert"
+                                className="w3-text-white"
+                            >
+                                <FontAwesomeIcon icon={faCheckDouble} />
+                            </span>
+                        </div>
+                    </div>
+                    <div className="w3-center w3-white w3-flex w3-flex-center">
+                        <div className="w3-margin w3-col l8 m8 s8">
+                            <button
+                                id="buttonConnexion"
+                                disabled={false}
+                                onClick={signup}
+                                className="transition w3-medium w3-block w3-button w3-round-xxlarge w3-text-white w3-black"
+                            >
+                                Créer mon compte
+                                <span
+                                    className="w3-spin w3-margin-left"
+                                    style={{ display: "none" }}
+                                    id="spinner"
+                                >
+                                    <FontAwesomeIcon icon={faSpinner} />
+                                </span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

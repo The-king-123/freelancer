@@ -1809,7 +1809,7 @@ export default function Home(props) {
                   <button
                     id="buttonSignup"
                     onClick={() =>
-                      (window.location = "https://console.freelancer.mg/signup")
+                      (window.location = "/signup")
                     }
                     className="transition w3-medium w3-block w3-button w3-round-xxlarge w3-text-black w3-yellow"
                   >

@@ -42,7 +42,7 @@ function PostCreate() {
         fullname: '',
         email: '',
         key: '',
-        media_id: 17,
+        media_id: null,
     })
     const [postInfo, setPostInfo] = useState({
         id: null,
@@ -204,6 +204,7 @@ function PostCreate() {
                         .patch(source + "/_post/" + postInfo.id + "?xcode=" + xcode, data)
                         .then((res) => {
                             if (res.data.logedin) {
+                                codeInfo.media_id = null
                                 cancel(state)
                                 reloadPost(res.data.data.reverse());
                             } else {
@@ -237,6 +238,7 @@ function PostCreate() {
                         .post(source + "/_post?xcode=" + xcode, data)
                         .then((res) => {
                             if (res.data.logedin) {
+                                codeInfo.media_id = null
                                 if (document.getElementById('createPostOnDesktop')) {
                                     document.getElementById('createPostOnDesktop').style.display = 'none';
                                     console.log(res.data);
@@ -353,6 +355,8 @@ function PostCreate() {
     }
 
     const showThisPost = async (data) => {
+
+        codeInfo.media_id = data.id
 
         postInfo.title = data.title
         postInfo.info.description = JSON.parse(data.info).description
@@ -748,28 +752,17 @@ function PostCreate() {
                     if (res.data.logedin) {
                         if (res.data.authexist) {
                             if (!res.data.codeexist) {
-                                document.getElementById('infoBull').innerHTML = "<div>L'utilisateur est ajouter avec succes:</div>"
-                                document.getElementById('infoFullname').innerText = res.data.user.fullname
-                                document.getElementById('infoEmail').innerText = res.data.user.email
-                                document.getElementById('infoKey').innerText = res.data.user.key
-                                document.getElementById('infoCode').innerText = res.data.code
-
-                                document.getElementById('infoUser').style.display = 'block'
-                                document.getElementById('infoBull').style.display = 'block'
+                                document.getElementById('infoBull').innerHTML = "<div>L'utilisateur est ajouter avec succes</div>"
+                                
                             } else {
                                 document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Le code pour cet utilisateur exist deja.</div>"
-                                document.getElementById('infoUser').style.display = 'none'
-                                document.getElementById('infoBull').style.display = 'block'
-
                                 setTimeout(() => {
                                     document.getElementById('infoBull').style.display = 'none'
                                 }, 3000);
                             }
                         } else {
                             document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Cet utilisateur n'est inscrit sur la plateforme.</div>"
-                            document.getElementById('infoUser').style.display = 'none'
-                            document.getElementById('infoBull').style.display = 'block'
-
+                           
                             setTimeout(() => {
                                 document.getElementById('infoBull').style.display = 'none'
                             }, 3000);
@@ -1557,17 +1550,7 @@ function PostCreate() {
                                 <FontAwesomeIcon icon={faKey} />
                             </button>
                         </div>
-                        <div id="infoBull" style={{ marginBottom: 8, paddingInline: 16, display: 'none' }}>L'utilisateur est ajouter avec succes:</div>
-                        <div id="infoUser" style={{ paddingInline: 16, display: 'none' }}>
-
-                            <div id="infoFullname">RAMBININTSOA Safidy</div>
-                            <div className="w3-text-grey w3-small"><span id="infoEmail"></span> - <span id="infoKey"></span></div>
-                            <div style={{ marginTop: 8 }}>
-                                <div onClick={() => copyToClipboard('infoCode')} className="w3-round w3-black w3-big w3-center w3-pointer" style={{ paddingInline: 16, paddingBlock: 8 }}>
-                                    code : <span id="infoCode"></span>
-                                </div>
-                            </div>
-                        </div>
+                        <div id="infoBull" style={{ marginBottom: 8, paddingInline: 16, display: 'none' }}>L'utilisateur est ajouter avec succes</div>
                     </div>
                     <div id="keyListArea">
                         <div style={{ paddingInline: 16, paddingBlock: 16 }}>
