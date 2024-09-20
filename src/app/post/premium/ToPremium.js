@@ -1,68 +1,18 @@
 'use client'
 import { console_source as source } from '@/app/data';
-import { faArrowRight, faKey, faSpinner, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 function ToPremium(props) {
 
     axios.defaults.withCredentials = true;
 
-    const [premiumInfo, setpremiumInfo] = useState({
-        password: null,
-    })
-
-    async function setCSRFToken() {
-        try {
-            // Fetch CSRF token from the server
-            const response = await axios.get(source + '/csrf-token');
-            // Set CSRF token as a default header for all future requests
-            axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
-        } catch (error) {
-            console.error('CSRF token fetch failed:', error);
-        }
-    }
-
-    const confirm = async () => {
-
-        document.getElementById('iconConfirmPremium').style.display = 'none'
-        document.getElementById('spinnerPremium').style.display = 'inline-block'
-
-        const xcode = localStorage.getItem('x-code')
-        await setCSRFToken();
-        await axios
-            .get(source + "/_links/" + props.slug + "?xcode=" + xcode)
-            .then((res) => {
-                if (res.data.logedin) {
-                    if (res.data.linkexist) {
-                            window.location = '/post/premium/' + res.data.newlink
-                    } else {
-                        if (document.getElementById('modalNotPremiumMembers')) {
-                            document.getElementById('modalNotPremiumMembers').style.display = 'block'
-                        }
-                    }
-                } else {
-                    if (document.getElementById('modalLogin')) {
-                        document.getElementById('modalLogin').style.display = 'block'
-                    }
-                }
-                document.getElementById('iconConfirmPremium').style.display = 'inline-block'
-                document.getElementById('spinnerPremium').style.display = 'none'
-            })
-            .catch((e) => {
-                console.error("failure", e);
-                document.getElementById('iconConfirmPremium').style.display = 'inline-block'
-                document.getElementById('spinnerPremium').style.display = 'none'
-            });
-    }
-
     useEffect(() => {
-        console.log(props.slug);
-
         const xcode = localStorage.getItem('x-code')
         axios
-            .get(source + "/_links/" + props.slug + "?xcode=" + xcode)
+            .get(source + "/_links/" + props.slug + "?xcode=" + xcode + "/edit")
             .then((res) => {
                 if (res.data.logedin) {
                     if (res.data.linkexist) {
@@ -82,9 +32,6 @@ function ToPremium(props) {
             })
             .catch((e) => {
                 console.error("failure", e);
-                if (document.getElementById('modalLogin')) {
-                    document.getElementById('modalLogin').style.display = 'block'
-                }
             });
 
         // document.location = '/post/premium/' + slug;
