@@ -352,20 +352,12 @@ function createForum() {
           if (res.data.logedin) {
             document.getElementById('forumCore').style.display = 'block';
             reloadForums(res.data.data.reverse())
-          } else {
-            if (document.getElementById('modalLogin')) {
-              document.getElementById('modalLogin').style.display = 'block'
-            }
-          }
+          } 
         })
         .catch((e) => {
           console.error("failure", e);
         });
-    } else {
-      if (document.getElementById('modalLogin')) {
-        document.getElementById('modalLogin').style.display = 'block'
-      }
-    }
+    } 
 
     // Upload Image
     var imageSelector = document.createElement("input");
@@ -396,7 +388,7 @@ function createForum() {
   }, []);
 
   return (
-    <div id="forumCore" style={{ display: 'none', position: 'relative' }}>
+    <div id="forumCore" style={{ position: 'relative' }}>
       <div
         className="w3-medium w3-big w3-flex-row w3-flex-center-v"
         style={{ padding: 8 }}

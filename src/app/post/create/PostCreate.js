@@ -767,11 +767,7 @@ function PostCreate() {
                                 document.getElementById('infoBull').style.display = 'none'
                             }, 3000);
                         }
-                    } else {
-                        if (document.getElementById('modalLogin')) {
-                            document.getElementById('modalLogin').style.display = 'block'
-                        }
-                    }
+                    } 
                 })
                 .catch((e) => {
                     console.error("failure", e);
@@ -830,10 +826,6 @@ function PostCreate() {
                 .catch((e) => {
                     console.error("failure", e);
                 });
-        } else {
-            if (document.getElementById('modalLogin')) {
-                document.getElementById('modalLogin').style.display = 'block'
-            }
         }
 
         // Upload Image
@@ -1072,7 +1064,7 @@ function PostCreate() {
     }, []);
 
     return (
-        <div id="postCore" style={{ display: 'none', position: 'relative' }}>
+        <div id="postCore" style={{position: 'relative' }}>
             <div
                 className="w3-medium w3-big w3-flex-row w3-flex-center-v"
                 style={{ padding: 8 }}

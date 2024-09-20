@@ -123,7 +123,7 @@ function page() {
         ) {
             const key = generateRandomNumber(15);
             document.getElementById("spinner").style.display = "inline-block";
-            setCSRFToken()
+            await setCSRFToken()
             await axios
                 .post(source + "/_auth", {
                     fullname: signupAuthElement.fullname,
