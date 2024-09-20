@@ -16,6 +16,8 @@ import Image from "next/image";
 
 function page() {
 
+    axios.defaults.withCredentials = true;
+
     const signupAuthElement = {
         fullname: "",
         email: "",
@@ -101,6 +103,16 @@ function page() {
         }
         return randomNumber;
     };
+    async function setCSRFToken() {
+        try {
+            // Fetch CSRF token from the server
+            const response = await axios.get(source + "/csrf-token");
+            // Set CSRF token as a default header for all future requests
+            axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.csrfToken;
+        } catch (error) {
+            console.error("CSRF token fetch failed:", error);
+        }
+    }
     const signup = async () => {
         if (
             signupAuthElement.fullname.length > 3 &&
@@ -111,6 +123,7 @@ function page() {
         ) {
             const key = generateRandomNumber(15);
             document.getElementById("spinner").style.display = "inline-block";
+            setCSRFToken()
             await axios
                 .post(source + "/_auth", {
                     fullname: signupAuthElement.fullname,
@@ -150,13 +163,13 @@ function page() {
 
     });
     return (
-        <div className="w3-100vh w3-block w3-light-grey" style={{paddingTop:42}}>
+        <div className="w3-100vh w3-block w3-light-grey" style={{ paddingTop: 42 }}>
 
-            <div className="w3-card w3-round w3-overflow w3-white" style={{ maxWidth: 420, marginInline: 'auto'}}>
+            <div className="w3-card w3-round w3-overflow w3-white" style={{ maxWidth: 420, marginInline: 'auto' }}>
                 <div style={{ paddingBlock: 24 }} className="w3-center w3-flex w3-flex-center">
                     <span className="w3-padding-small w3-overflow w3-flex w3-flex-center">
                         <Image
-                        className="w3-round"
+                            className="w3-round"
                             id="imagePDP"
                             unoptimized
                             loading="lazy"
