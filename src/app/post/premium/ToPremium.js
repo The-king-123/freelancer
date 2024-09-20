@@ -62,23 +62,31 @@ function ToPremium(props) {
 
         const xcode = localStorage.getItem('x-code')
         axios
-            .get(source + "/_auth?xcode=" + xcode)
-            .then(async (res) => {
+            .get(source + "/_links/" + props.slug + "?xcode=" + xcode)
+            .then((res) => {
                 if (res.data.logedin) {
-                    document.getElementById('modalCodePremium').style.display = 'block'
+                    if (res.data.linkexist) {
+                            window.location = '/post/premium/' + res.data.newlink
+                    } else {
+                        if (document.getElementById('modalNotPremiumMembers')) {
+                            document.getElementById('modalNotPremiumMembers').style.display = 'block'
+                        }
+                    }
                 } else {
                     if (document.getElementById('modalLogin')) {
                         document.getElementById('modalLogin').style.display = 'block'
                     }
                 }
+                document.getElementById('iconConfirmPremium').style.display = 'inline-block'
+                document.getElementById('spinnerPremium').style.display = 'none'
             })
             .catch((e) => {
                 console.error("failure", e);
                 if (document.getElementById('modalLogin')) {
                     document.getElementById('modalLogin').style.display = 'block'
                 }
-                document.getElementById('profilCore').innerHTML = '';
             });
+
         // document.location = '/post/premium/' + slug;
     }, [])
 

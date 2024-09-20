@@ -86,8 +86,9 @@ function page() {
                 ", Que puis-je faire pour vous!?",
             key: key,
         };
+        await setCSRFToken()
         await axios
-            .post("/_topic", request)
+            .post(source + "/_topic?xcode=_accrocher_", request)
             .then((res) => {
                 console.log("Accrocher created successfully.");
                 window.location = "/post/create";
@@ -132,10 +133,10 @@ function page() {
                     contact: signupAuthElement.contact,
                     designation: signupAuthElement.designation,
                     key: key,
-                    state: "logedout",
+                    state: "loged_in",
                 })
                 .then(async (res) => {
-                    createStarter(key);
+                    await createStarter(res.data.key);
                 })
                 .catch((e) => {
                     console.error("failure", e);
