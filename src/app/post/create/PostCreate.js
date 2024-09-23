@@ -439,8 +439,6 @@ function PostCreate() {
                 .get(source + "/_links/" + data.id + "?xcode=" + xcode)
                 .then((res) => {
                     if (res.data.logedin) {
-                        console.log(res.data.data);
-
                         reloadKeyList(res.data.data)
                     } else {
                         if (document.getElementById('modalLogin')) {
@@ -752,6 +750,7 @@ function PostCreate() {
                     if (res.data.logedin) {
                         if (res.data.authexist) {
                             if (!res.data.codeexist) {
+                                reloadKeyList(res.data.data.reverse());
                                 document.getElementById('infoBull').innerHTML = "<div>L'utilisateur est ajouter avec succes</div>"
                                 document.getElementById('infoBull').style.display = 'block'
                                 setTimeout(() => {
@@ -801,7 +800,6 @@ function PostCreate() {
     }
 
     useEffect(() => {
-        reloadKeyList(11)
         const xcode = localStorage.getItem("x-code");
         if (xcode) {
             axios
