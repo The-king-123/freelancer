@@ -8,15 +8,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 
-export default function Premium() {
+export default function Premium(props) {
 
 
-    const [posts, setposts] = useState([])
+    const [posts, setposts] = useState(null)
 
     useEffect(() => {
 
         axios
-            .get(source + "/_post/default?c=default")
+            .get(source + "/_post/" + props.user + "?c=premium")
             .then((res) => {
                 setposts(res.data.data)
             })
@@ -30,7 +30,7 @@ export default function Premium() {
     return (
         <div>
             <div>
-                {posts.length > 0 &&
+                {posts && posts.length > 0 &&
                     posts.map((post, key) => (
                         <Link href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '50%', display: 'inline-block' }}>
                             <div className="w3-overflow w3-round w3-pointer w3-white">
@@ -38,20 +38,19 @@ export default function Premium() {
                                     className="w3-light-grey w3-big w3-small w3-flex-row w3-flex-center-v"
                                     title={parse(post.title)}
                                 >
-                                    <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding:8 }}>{parse(post.title)}</div>
-                                    {post.category == 'premium' &&
-                                        <div
-                                            className="w3-yellow w3-circle"
-                                            style={{ width: 26, height: 26, marginRight: 4 }}
-                                        >
-                                            <div className="w3-block w3-height w3-flex w3-flex-center">
-                                                <FontAwesomeIcon
-                                                    icon={faCrown}
-                                                    style={{ height: 12, width: 12 }}
-                                                />
-                                            </div>
+                                    <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>{parse(post.title)}</div>
+                                    <div
+                                        title="Premium"
+                                        className="w3-yellow w3-circle"
+                                        style={{ width: 26, height: 26, marginRight: 4 }}
+                                    >
+                                        <div className="w3-block w3-height w3-flex w3-flex-center">
+                                            <FontAwesomeIcon
+                                                icon={faCrown}
+                                                style={{ height: 12, width: 12 }}
+                                            />
                                         </div>
-                                    }
+                                    </div>
                                 </div>
 
                                 <div
@@ -115,7 +114,7 @@ export default function Premium() {
                     ))}
             </div>
 
-            {posts.length <= 0 && (
+            {posts && posts.length <= 0 && (
                 <div style={{ paddingInline: 8 }}>
                     <div
                         className="w3-border w3-flex-row w3-flex-center-v w3-round w3-block w3-medium w3-big"

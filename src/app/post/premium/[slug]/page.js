@@ -8,11 +8,40 @@ var slug = ''
 
 export default async function page({ params }) {
 
-  const xcode  = localStorage.getItem('x-code')
   slug = params.slug
 
   try {
-    return <Home core={<Premium content={post} />} />
+
+    const post = await axios
+      .get(source + "/_links?link=" + params.slug)
+      .then((res) => {
+        if (res.data.linkexist && res.data.unused) {
+          return res.data.data[0]
+        }else{
+          if (res.data.linkexist) {
+            return {state : 'linkused', owner : res.data.owner}
+          } else {
+            return {state : 'linknotexiste'}
+          }
+          
+        }
+      })
+      .catch((e) => {
+        console.error("failure", e);
+      });
+    if (!post) {
+      notFound();
+    }
+    if (post.state != 'linkused' && post.state != 'linknotexiste') {
+      return <Home core={<Premium content={post} />} />
+    } else {
+      if (post.state == 'linkused') {
+        return <Home core={<Premium content={false} owner={post.owner} />} />
+      } else {
+        return <Home core={<Premium content={false} owner={false} />} />
+      }
+      
+    }
   } catch (error) {
     console.error(`Error rendering page for slug ${params.slug}:`, error);
     return (
@@ -25,17 +54,17 @@ export default async function page({ params }) {
 }
 
 
-export async function metadata() {
+// export async function metadata() {
 
-  const response = await axios.get(`${source}/_links/${slug}/edit`);
+//   const response = await axios.get(`${source}/_links?link=${slug}`);
 
-  if (response.data.linkexist && response.data.unused) {
-    const post = response.data.data[0];
-    const meta = {
-      title: post.title + " - " + app_name,
-      description: JSON.parse(post.info).description.replace(/<\/?[^>]+(>|$)/g, ""),
-    };
-    return meta
-  }
+//   if (response.data.linkexist && response.data.unused) {
+//     const post = response.data.data[0];
+//     const meta = {
+//       title: post.title + " - " + app_name,
+//       description: JSON.parse(post.info).description.replace(/<\/?[^>]+(>|$)/g, ""),
+//     };
+//     return meta
+//   }
 
-};
+// };

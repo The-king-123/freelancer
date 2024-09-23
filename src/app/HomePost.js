@@ -16,10 +16,10 @@ export default function PostContent({ posts }) {
   const [showThisPost, setshowThisPost] = useState();
 
   const createPost = () => {
-    if (window.innerWidth>992) {
+    if (window.innerWidth > 992) {
       document.getElementById('createPostOnDesktop').style.display = 'block';
       document.getElementById('openPostListeButton').style.display = 'none';
-    }else{
+    } else {
       window.location = '/post/create'
     }
   }
@@ -80,34 +80,19 @@ export default function PostContent({ posts }) {
                   title={parse(post.title)}
                 >
                   <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>{parse(post.title)}</div>
-                  {post.category == 'premium' &&
-                    <div
-                      title="Premium"
-                      className="w3-yellow w3-circle"
-                      style={{ width: 24, height: 24, marginRight: 4 }}
-                    >
-                      <div className="w3-block w3-height w3-flex w3-flex-center">
-                        <FontAwesomeIcon
-                          icon={faCrown}
-                          style={{ height: 12, width: 12 }}
-                        />
-                      </div>
+
+                  <div
+                    title="Free"
+                    className="w3-green w3-circle"
+                    style={{ width: 24, height: 24, marginRight: 4 }}
+                  >
+                    <div className="w3-block w3-height w3-flex w3-flex-center">
+                      <FontAwesomeIcon
+                        icon={faTags}
+                        style={{ height: 12, width: 12 }}
+                      />
                     </div>
-                  }
-                  {post.category != 'premium' &&
-                    <div
-                      title="Free"
-                      className="w3-green w3-circle"
-                      style={{ width: 24, height: 24, marginRight: 4 }}
-                    >
-                      <div className="w3-block w3-height w3-flex w3-flex-center">
-                        <FontAwesomeIcon
-                          icon={faTags}
-                          style={{ height: 12, width: 12 }}
-                        />
-                      </div>
-                    </div>
-                  }
+                  </div>
                 </div>
 
                 <div

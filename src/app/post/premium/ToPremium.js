@@ -1,6 +1,6 @@
 'use client'
 import { console_source as source } from '@/app/data';
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect } from 'react'
@@ -12,14 +12,43 @@ function ToPremium(props) {
     useEffect(() => {
         const xcode = localStorage.getItem('x-code')
         axios
-            .get(source + "/_links/" + props.slug + "?xcode=" + xcode + "/edit")
+            .get(source + "/_links/" + props.slug + "/edit" + "?xcode=" + xcode)
             .then((res) => {
+                console.log(res.data);
+
                 if (res.data.logedin) {
                     if (res.data.linkexist) {
-                            window.location = '/post/premium/' + res.data.newlink
+                        window.location = '/post/premium/' + res.data.link
                     } else {
                         if (document.getElementById('modalNotPremiumMembers')) {
                             document.getElementById('modalNotPremiumMembers').style.display = 'block'
+                            if (res.data.contact.includes('whatsapp')) {
+                                const contact = JSON.parse(res.data.contact)
+                                if (contact.messenger.length <= 3) {
+                                    document.getElementById('cardNotPremiumText').innerText = "Pour accéder à ce contenu, veuillez nous contacter."
+                                    document.getElementById('buttonContactText').innerText = 'Appeler le numero'
+                                    document.getElementById('buttonContact').addEventListener('click', () => {
+                                        window.open('tel:' + res.data.telephone, '_blank')
+                                    })
+                                } else {
+                                    document.getElementById('buttonContact').addEventListener('click', () => {
+                                        window.open(contact.messenger, '_blank')
+                                    })
+                                }
+                            } else {
+                                document.getElementById('cardNotPremiumText').innerText = "Pour accéder à ce contenu, veuillez nous contacter."
+                                document.getElementById('buttonContactText').innerText = 'Appeler le numero'
+                                document.getElementById('buttonContact').addEventListener('click', () => {
+                                    window.open('tel:' + res.data.contact, '_blank')
+                                })
+                            }
+                            document.getElementById('closeButtonContactOwner').addEventListener('click', () => {
+                                if (window.history.length > 0) {
+                                    window.history.back()
+                                } else {
+                                    window.location = '/user/' + res.data.owner
+                                }
+                            })
                         }
                     }
                 } else {
@@ -27,14 +56,11 @@ function ToPremium(props) {
                         document.getElementById('modalLogin').style.display = 'block'
                     }
                 }
-                document.getElementById('iconConfirmPremium').style.display = 'inline-block'
-                document.getElementById('spinnerPremium').style.display = 'none'
             })
             .catch((e) => {
                 console.error("failure", e);
             });
 
-        // document.location = '/post/premium/' + slug;
     }, [])
 
     return (
@@ -60,7 +86,7 @@ function ToPremium(props) {
                         style={{ paddingBlock: 0, paddingInline: 8 }}
                     >
                         <div
-                            onClick={() => document.getElementById('modalNotPremiumMembers').style.display = 'none'}
+                            id='closeButtonContactOwner'
                             className="w3-pointer w3-right w3-flex w3-flex-center"
                             style={{ width: 32, height: 32 }}
                         >
@@ -73,18 +99,17 @@ function ToPremium(props) {
                     </div>
                     <div className="w3-block w3-flex-column w3-flex-center">
                         <div className="w3-block">
-                            <div style={{ padding: 24 }}>
-                                Vous n'êtes pas éligible pour accéder à ce contenu.
+                            <div style={{ padding: 24 }} id='cardNotPremiumText'>
+                                Pour accéder à ce contenu, veuillez nous contacter sur messenger.
                             </div>
                             <div className="w3-center w3-white w3-flex w3-flex-center">
                                 <div className="w3-margin">
                                     <button
-                                        disabled={false}
-                                        onClick={() => window.history.back()}
-                                        className="transition w3-medium w3-text-yellow w3-block w3-button w3-round-xxlarge w3-black"
+                                        id='buttonContact'
+                                        className="transition w3-medium w3-text-yellow w3-button w3-round-xxlarge w3-black"
                                     >
-                                        Revenir sur la page precedente ?
-
+                                        <span id='buttonContactText'>Aller vers messenger</span>
+                                        <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />
                                     </button>
                                 </div>
                             </div>

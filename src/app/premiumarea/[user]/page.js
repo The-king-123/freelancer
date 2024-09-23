@@ -1,11 +1,11 @@
 import Home from "@/app/Home/page";
 import {app_name, console_source as source} from "@/app/data";
-import PremiumArea from "./PremiumArea";
+import PremiumArea from "../PremiumArea";
 
-export default async function page() {
+export default async function page({params}) {
 
   try {
-    return <Home core={<PremiumArea user={'default'} />} />;
+    return <Home core={<PremiumArea user={params.user} />} />;
   } catch (error) {
     console.error('Error rendering forum for default user ', error);
     return (

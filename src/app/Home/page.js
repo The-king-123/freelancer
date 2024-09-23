@@ -711,6 +711,19 @@ export default function Home(props) {
     }
   };
 
+  const userPremiumArea = () => {
+    var user = localStorage.getItem("user");
+    if (user) {
+      if (user == "160471339156947" || user == "undefined") {
+        window.location = "/premiumarea";
+      } else {
+        window.location = "/premiumarea/" + user;
+      }
+    } else {
+      window.location = "/premiumarea";
+    }
+  }
+
   const emailRegister = (element) => {
     signinAuthElement.email = element.target.value;
   };
@@ -1645,8 +1658,8 @@ export default function Home(props) {
           </div>
         </div>
 
-        <Link
-          href={'/premiumarea'}
+        <div
+          onClick={userPremiumArea}
           className="w3-flex-1"
           style={{ width: 36, height: 36 }}
         >
@@ -1660,7 +1673,7 @@ export default function Home(props) {
               height={20}
             />
           </div>
-        </Link>
+        </div>
 
         <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
           <div

@@ -61,8 +61,8 @@ function Profile() {
       userInfo.messenger.length < 15 &&
       userInfo.messenger.length > 0
     ) {
-      document.getElementById("whatsapp_alert").className = "w3-show";
-      document.getElementById("whatsapp_alert").className =
+      document.getElementById("messenger_alert").className = "w3-show";
+      document.getElementById("messenger_alert").className =
         "w3-text-red w3-small";
     } else if (userInfo.password.length < 8) {
       document.getElementById("password_alert").className = "w3-show";
@@ -72,6 +72,10 @@ function Profile() {
       document.getElementById("spinnerSave").style.display =
         "inline-block";
 
+      userInfo.whatsapp = userInfo.whatsapp ? userInfo.whatsapp : '_'
+      userInfo.messenger = userInfo.messenger ? userInfo.messenger : '_'
+      userInfo.telephone = userInfo.telephone ? userInfo.telephone : '_'
+
       const xcode = localStorage.getItem('x-code')
       await setCSRFToken()
       await axios
@@ -80,25 +84,19 @@ function Profile() {
           if (res.data.saved) {
             document.getElementById("user_password").value = "";
             userInfo.password = "";
-            document.getElementById("spinnerSave").style.display =
-              "none";
-            document.getElementById("info_text").className =
-              "w3-hide";
-            document.getElementById("saved_text").className =
-              "w3-xlarge w3-big w3-animate-top";
+            document.getElementById("spinnerSave").style.display = "none";
+            document.getElementById("info_text").className = "w3-hide";
+            document.getElementById("saved_text").className = "w3-xlarge w3-big w3-animate-top";
             setTimeout(() => {
-              document.getElementById("info_text").className =
-                "w3-xlarge w3-big w3-animate-top";
-              document.getElementById("saved_text").className =
-                "w3-hide";
+              document.getElementById("info_text").className = "w3-xlarge w3-big w3-animate-top";
+              document.getElementById("saved_text").className = "w3-hide";
             }, 3000);
+
+            document.getElementById('password_alert').className = 'w3-hide'
           } else if (!res.data.password) {
-            document.getElementById("password_alert").className =
-              "w3-show";
-            document.getElementById("password_alert").className =
-              "w3-text-red w3-small";
-            document.getElementById("spinnerSave").style.display =
-              "none";
+            document.getElementById("password_alert").className = "w3-show";
+            document.getElementById("password_alert").className = "w3-text-red w3-small";
+            document.getElementById("spinnerSave").style.display = "none";
           } else {
             alert(
               "Une erreur s'est produite. Veuillez réessayer ultérieurement."
@@ -142,11 +140,11 @@ function Profile() {
             userInfo.fullname;
           document.getElementById("email").value = userInfo.email;
           document.getElementById("number").value =
-            userInfo.telephone;
+            userInfo.telephone.length > 3 ? userInfo.telephone : '';
           document.getElementById("whatsapp").value =
-            userInfo.whatsapp;
+            userInfo.whatsapp.length > 3 ? userInfo.whatsapp : '';
           document.getElementById("messenger").value =
-            userInfo.messenger;
+            userInfo.messenger.length > 3 ? userInfo.messenger : '';
           document.getElementById("designation").value =
             userInfo.designation;
 
@@ -445,7 +443,7 @@ function Profile() {
               required
             />
           </div>
-          
+
           <div
             id='designationWrapper'
             style={{ marginTop: 8 }}
@@ -506,7 +504,10 @@ function Profile() {
         </div>
         <div style={{ paddingBlock: 16 }}>
           <input
-            onChange={(e) => userInfo.password = e.target.value}
+            onChange={(e) => {
+              userInfo.password = e.target.value
+              document.getElementById('password_alert').className = 'w3-hide'
+            }}
             type="password"
             className="input w3-white w3-round-xxlarge w3-block w3-text-grey w3-medium"
             placeholder="Entrer votre mot de passe"
