@@ -753,27 +753,35 @@ function PostCreate() {
                         if (res.data.authexist) {
                             if (!res.data.codeexist) {
                                 document.getElementById('infoBull').innerHTML = "<div>L'utilisateur est ajouter avec succes</div>"
-                                
+                                document.getElementById('infoBull').style.display = 'block'
+                                setTimeout(() => {
+                                    document.getElementById('infoBull').style.display = 'none'
+                                }, 3000);
                             } else {
                                 document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Le code pour cet utilisateur exist deja.</div>"
+                                document.getElementById('infoBull').style.display = 'block'
                                 setTimeout(() => {
                                     document.getElementById('infoBull').style.display = 'none'
                                 }, 3000);
                             }
                         } else {
                             document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Cet utilisateur n'est inscrit sur la plateforme.</div>"
-                           
+                            document.getElementById('infoBull').style.display = 'block'
                             setTimeout(() => {
                                 document.getElementById('infoBull').style.display = 'none'
                             }, 3000);
                         }
-                    } 
+                    }
                 })
                 .catch((e) => {
                     console.error("failure", e);
                 });
         } else {
-            alert("Entrer une adresse mail ou une clé de référence valide.")
+            document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Veuillez entrer un e-mail ou clé de reference valide.</div>"
+            document.getElementById('infoBull').style.display = 'block'
+            setTimeout(() => {
+                document.getElementById('infoBull').style.display = 'none'
+            }, 3000);
         }
 
     }
@@ -1064,7 +1072,7 @@ function PostCreate() {
     }, []);
 
     return (
-        <div id="postCore" style={{position: 'relative' }}>
+        <div id="postCore" style={{ position: 'relative' }}>
             <div
                 className="w3-medium w3-big w3-flex-row w3-flex-center-v"
                 style={{ padding: 8 }}
@@ -1080,7 +1088,10 @@ function PostCreate() {
                 <div>
                     <div
                         id="premiumCodeManager"
-                        onClick={() => document.getElementById("modalKeyListe").style.display = 'block'}
+                        onClick={() => {
+                            document.getElementById('createPostCore').style.display = 'none'
+                            document.getElementById("modalKeyListe").style.display = 'block'
+                        }}
                         className="w3-black w3-circle w3-flex w3-flex-center"
                         style={{ width: 32, height: 32, display: 'none' }}
                         title="Gérer votre code premium."
@@ -1511,7 +1522,10 @@ function PostCreate() {
                     style={{ maxWidth: 420, top: 32 }}
                 >
                     <div className="w3-flex-row w3-flex-center-v">
-                        <div onClick={() => document.getElementById('modalKeyListe').style.display = 'none'} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+                        <div onClick={() => {
+                            document.getElementById('createPostCore').style.display = 'block'
+                            document.getElementById('modalKeyListe').style.display = 'none'
+                        }} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
                             <FontAwesomeIcon icon={faArrowLeft} />
                         </div>
                         <div className="w3-flex-1"></div>

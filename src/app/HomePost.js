@@ -1,5 +1,5 @@
 'use client'
-import { faArrowLeft, faCrown, faPause, faPlay, faRefresh, faTag, faTags, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faCrown, faGift, faPause, faPlay, faRefresh, faTag, faTags, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import parse from "html-react-parser";
@@ -73,7 +73,7 @@ export default function PostContent({ posts }) {
         </div>
         {posts.length > 0 &&
           posts.map((post, key) => (
-            <Link href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '50%', display: 'inline-block' }}>
+            <Link className="postCard" href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
               <div className="w3-overflow w3-round w3-pointer w3-white">
                 <div
                   className="w3-light-grey w3-big w3-small w3-flex-row w3-flex-center-v"
@@ -82,13 +82,13 @@ export default function PostContent({ posts }) {
                   <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>{parse(post.title)}</div>
 
                   <div
-                    title="Free"
+                    title="Gratuit"
                     className="w3-green w3-circle"
                     style={{ width: 24, height: 24, marginRight: 4 }}
                   >
                     <div className="w3-block w3-height w3-flex w3-flex-center">
                       <FontAwesomeIcon
-                        icon={faTags}
+                        icon={faGift}
                         style={{ height: 12, width: 12 }}
                       />
                     </div>

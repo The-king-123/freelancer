@@ -1,112 +1,138 @@
-html,.w3-noscrollbar {
-    scroll-behavior: smooth;
-  }
-  /* Hide scrollbar for Chrome, Safari and Opera */
-html::-webkit-scrollbar,.w3-noscrollbar::-webkit-scrollbar {
-    display: none;
+html,
+.w3-noscrollbar {
+  scroll-behavior: smooth;
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+html::-webkit-scrollbar,
+.w3-noscrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* Hide scrollbar for IE, Edge, and Firefox */
-html,.w3-noscrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+html,
+.w3-noscrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .topicbar:hover .topicdelete {
-    opacity: 1 !important;
+  opacity: 1 !important;
 }
 
-.chat-black{
-    color: #FFEA00;
-    background-color: #111;
+.chat-black {
+  color: #ffea00;
+  background-color: #111;
 }
 
-.chat-yellow{
-    background-color: #FFEA00;
-    color: #111;
+.chat-yellow {
+  background-color: #ffea00;
+  color: #111;
 }
 
-.clignote{
-        animation-duration: .8s;
-        animation-name: clignoter;
-        animation-iteration-count: infinite;
-        transition: none;
+.clignote {
+  animation-duration: 0.8s;
+  animation-name: clignoter;
+  animation-iteration-count: infinite;
+  transition: none;
 }
-     
+
 @keyframes clignoter {
-    0%   { opacity:1; }
-    40%   {opacity:0; }
-    100% { opacity:1; }
+  0% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-.media{
-    max-width: 320px;
+.media {
+  max-width: 320px;
 }
-.input{
-    padding-left: 16px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-
+.input {
+  padding-left: 16px;
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
-.input-icon{
-    width: 28px;
-    height: 28px;
-}
-
-#iconCloseMenu{
-    display: none;
-}
-.black-semitransparant { 
-    background-color: #0000009d;
+.input-icon {
+  width: 28px;
+  height: 28px;
 }
 
-@media (max-width:992px){
-    #chatChoice{
-        padding-left:0!important;
-        padding-right:0!important;
-        transition:padding-left .4s
-    }
-    #iconCloseMenu{
-        display: block;
-    }
-    .mobileHeight{
-        height:calc(100vh - 52px);
-    }
-    .mobileHeightPanel{
-        height:calc(100vh - 68px);
-    }
+#iconCloseMenu {
+  display: none;
 }
-.post-image{
+.black-semitransparant {
+  background-color: #0000009d;
+}
+
+@media (max-width: 992px) {
+  #chatChoice {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    transition: padding-left 0.4s;
+  }
+  #iconCloseMenu {
     display: block;
-    width: 100%;
-    height: 'auto !important';
+  }
+  .mobileHeight {
+    height: calc(100vh - 52px);
+  }
+  .mobileHeightPanel {
+    height: calc(100vh - 68px);
+  }
+}
+.post-image {
+  display: block;
+  width: 100%;
+  height: "auto !important";
 }
 
-#overlay{
-    background-color: #0000009d;
-    display: none;
-    transition: 1s;
+#overlay {
+  background-color: #0000009d;
+  display: none;
+  transition: 1s;
 }
 a[href] {
-    text-decoration: none;
+  text-decoration: none;
 }
-.rotate-90{
-    transform: rotate(-90deg);
+.rotate-90 {
+  transform: rotate(-90deg);
 }
-.rotate90{
-    transform: rotate(90deg);
+.rotate90 {
+  transform: rotate(90deg);
 }
-.rotate180{
-    transform: rotate(180deg);
+.rotate180 {
+  transform: rotate(180deg);
 }
-.white-opacity{
-    background-color: #ffffffc2;
+.white-opacity {
+  background-color: #ffffffc2;
 }
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 input[type="number"] {
-    -moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
+
+@media (max-width: 580px) {
+  .postCard {
+    width: 50% !important;
+  }
+  #coreContainerMain {
+    max-width: 480px !important;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1166px) {
+    .postCard {
+      width: 50% !important;
+    }
+    #coreContainerMain {
+      max-width: 480px !important;
+    }
+  }

@@ -1125,6 +1125,26 @@ export default function Home(props) {
             className="w3-block w3-flex w3-flex-column"
             style={{ paddingBlock: 8, zIndex: 9999 }}
           >
+            <div style={{ height: 40, marginBottom: 4 }}>
+              <div
+                className="w3-dropdown-click w3-hover-light-grey"
+              >
+                <div
+                  id="settingWrapper"
+                  onClick={userPremiumArea}
+                  className="dropButton w3-flex-row w3-flex-center-v w3-round w3-black w3-text-yellow"
+                  style={{ height: 40, paddingInline: 16, marginBlock: 4 }}
+                >
+                  <FontAwesomeIcon
+                    icon={faCrown}
+                    width={20}
+                    height={20}
+                  />
+                  <div className="w3-margin-left w3-medium">Contenu payant</div>
+                </div>
+
+              </div>
+            </div>
 
             <Link
               onClick={() => localStorage.setItem("user", "160471339156947")}
@@ -1295,8 +1315,9 @@ export default function Home(props) {
         style={{ marginLeft: 250, marginRight: 320, padding: 8, position: 'relative' }}
       >
         <div
+          id="coreContainerMain"
           className="w3-container"
-          style={{ padding: 0, maxWidth: 480, margin: "auto" }}
+          style={{ padding: 0, maxWidth: 620, margin: "auto" }} // >1086:33.33% 620, <1086:50% 480
         >
           <div className="w3-text-white w3-hide-large" style={{ height: 54 }}>
             freelancer.mg
@@ -1557,6 +1578,21 @@ export default function Home(props) {
                   icon={faRobot}
                 />
                 Gérez votre chatbot
+              </Link>
+
+              <Link className="w3-bar-item w3-button" href={'/post/create'}>
+                <FontAwesomeIcon
+                  className="w3-margin-right"
+                  icon={faImages}
+                />
+                Gérez votre post
+              </Link>
+              <Link className="w3-bar-item w3-button" href={'/forum/create'}>
+                <FontAwesomeIcon
+                  className="w3-margin-right"
+                  icon={faPager}
+                />
+                Gérez votre forum
               </Link>
               {/* <Link className="w3-bar-item w3-button" href={'/settings'}>
                 <FontAwesomeIcon

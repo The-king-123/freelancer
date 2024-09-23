@@ -1,5 +1,5 @@
 'use client'
-import { faCrown, faPlay, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
+import { faCrown, faDollar, faDollarSign, faPlay, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import parse from "html-react-parser";
@@ -32,7 +32,7 @@ export default function Premium(props) {
             <div>
                 {posts && posts.length > 0 &&
                     posts.map((post, key) => (
-                        <Link href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '50%', display: 'inline-block' }}>
+                        <Link className="postCard" href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
                             <div className="w3-overflow w3-round w3-pointer w3-white">
                                 <div
                                     className="w3-light-grey w3-big w3-small w3-flex-row w3-flex-center-v"
@@ -46,7 +46,7 @@ export default function Premium(props) {
                                     >
                                         <div className="w3-block w3-height w3-flex w3-flex-center">
                                             <FontAwesomeIcon
-                                                icon={faCrown}
+                                                icon={faDollar}
                                                 style={{ height: 12, width: 12 }}
                                             />
                                         </div>
