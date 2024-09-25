@@ -125,7 +125,7 @@ export default function PostContent({ posts }) {
                   )} */}
                   {post.type == "image/audio" && (
                     <div
-                      className="w3-white w3-circle w3-display-middle"
+                      className="w3-white w3-circle w3-display-middle w3-card"
                       style={{ width: 40, height: 40 }}
                     >
                       <div className="w3-block w3-height w3-flex w3-flex-center">
@@ -138,7 +138,7 @@ export default function PostContent({ posts }) {
                   )}
                   {(post.type == "video" || post.type == "image/video") && (
                     <div
-                      className="w3-white w3-circle w3-display-middle"
+                      className="w3-white w3-circle w3-display-middle w3-card"
                       style={{ width: 40, height: 40 }}
                     >
                       <div className="w3-block w3-height w3-flex w3-flex-center">
@@ -167,126 +167,6 @@ export default function PostContent({ posts }) {
         </div>
       )}
 
-      {
-        posts.length > 0 &&
-        <>
-          {/* modal single post */}
-          <div
-            id="modalSinglePost"
-            className="w3-white w3-modal w3-noscrollbar"
-            style={{ paddingInline: 8, position: 'absolute', height: 'calc(100vh - 120px)' }}
-          >
-            <audio id="audioBox" className="w3-hide"></audio>
-            <div
-              className="w3-light-grey w3-noscrollbar w3-round-large w3-content w3-overflow w3-height"
-              style={{ minHeight: 320, maxWidth: 486, padding: 0 }}
-            >
-              {/* Button control */}
-              <div className="w3-top" style={{ paddingTop: 64, paddingLeft: 16 }}>
-                <div
-                  onClick={() => {
-                    if (audioBox) {
-                      audioBox.chaine.pause();
-                    }
-                    document.getElementById("modalSinglePost").style.display = "none";
-                    document.getElementById("homePostCore").style.display = "block";
-                  }}
-                  className="w3-white w3-card w3-round w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
-                  style={{ width: 32, height: 32 }}
-                >
-                  <FontAwesomeIcon
-                    icon={faArrowLeft}
-                    style={{ width: 16, height: 16 }}
-                  />
-                </div>
-              </div>
-
-              <div
-                id="audioControl"
-                className="w3-bottom w3-flex-row w3-flex"
-                style={{ padding: 16, bottom: 52 }}
-              >
-                <div
-                  onClick={() => {
-                    audioBox.chaine.currentTime = 0;
-                  }}
-                  className="w3-white w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
-                  style={{ width: 32, height: 32, marginRight: 12 }}
-                >
-                  <FontAwesomeIcon
-                    icon={faRefresh}
-                    style={{ width: 14, height: 14 }}
-                  />
-                </div>
-                <div
-                  onClick={() => {
-                    if (
-                      document.getElementById("iconPause").style.display == "none"
-                    ) {
-                      audioBox.chaine.play();
-                      document.getElementById("iconPlay").style.display = "none";
-                      document.getElementById("iconPause").style.display =
-                        "inline-block";
-                    } else {
-                      audioBox.chaine.pause();
-                      document.getElementById("iconPlay").style.display =
-                        "inline-block";
-                      document.getElementById("iconPause").style.display = "none";
-                    }
-                  }}
-                  className="w3-white w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
-                  style={{ width: 32, height: 32 }}
-                >
-                  <FontAwesomeIcon
-                    id="iconPlay"
-                    icon={faPlay}
-                    style={{ width: 14, height: 14, marginLeft: 2 }}
-                  />
-                  <FontAwesomeIcon
-                    id="iconPause"
-                    icon={faPause}
-                    style={{ width: 14, height: 14, display: "none" }}
-                  />
-                </div>
-              </div>
-
-              {/* End button control */}
-              <div className="w3-height w3-overflow-scroll w3-noscrollbar">
-                <div className="w3-height w3-black">
-                  <div className="w3-red w3-height w3-black">
-                    <Image
-                      unoptimized
-                      loading="lazy"
-                      width={100}
-                      height={320}
-                      alt="post image"
-                      style={{
-                        objectFit: "contain",
-                        objectPosition: "center",
-                      }}
-                      src={imagePostModal}
-                      className="w3-overflow w3-black post-image w3-height"
-                    />
-                  </div>
-                </div>
-                <div style={{ padding: 16 }}>
-                  <div>
-                    <div className="w3-large w3-big">
-                      {showThisPost != null ? showThisPost.title : ""}
-                    </div>
-                    <div className="w3-medium">
-                      {showThisPost != null
-                        ? parse(JSON.parse(showThisPost.info).description)
-                        : ""}
-                    </div>
-                    <div style={{ height: 32 }}></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      }
     </div>
   );
 }

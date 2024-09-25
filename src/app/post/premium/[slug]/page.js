@@ -13,7 +13,7 @@ export default async function page({ params }) {
   try {
 
     const post = await axios
-      .get(source + "/_links?link=" + params.slug)
+      .get(source + "/_links?xcode=ghest&link=" + params.slug)
       .then((res) => {
         if (res.data.linkexist && res.data.unused) {
           return res.data.data[0]
@@ -36,9 +36,9 @@ export default async function page({ params }) {
       return <Home core={<Premium content={post} />} />
     } else {
       if (post.state == 'linkused') {
-        return <Home core={<Premium content={false} owner={post.owner} />} />
+        return <Home core={<Premium content={false} slug={params.slug} owner={post.owner} />} />
       } else {
-        return <Home core={<Premium content={false} owner={false} />} />
+        return <Home core={<Premium content={false} slug={params.slug} owner={false} />} />
       }
       
     }

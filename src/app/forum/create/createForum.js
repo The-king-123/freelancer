@@ -15,7 +15,7 @@ import {
 import Image from "next/image";
 import slugify from "slugify";
 
-function createForum() {
+function createForum(props) {
   axios.defaults.withCredentials = true;
 
   const [inputImage, setinputImage] = useState(null)
@@ -343,6 +343,10 @@ function createForum() {
   }
 
   useEffect(() => {
+
+    if (!props.fromHome) {
+      document.getElementById('modalForumListe').style.display = 'block'
+    }
 
     const xcode = localStorage.getItem("x-code");
     if (xcode) {

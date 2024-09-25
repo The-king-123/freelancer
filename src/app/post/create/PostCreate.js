@@ -29,7 +29,7 @@ import {
 import Image from "next/image";
 import slugify from "slugify";
 
-function PostCreate() {
+function PostCreate(props) {
 
     axios.defaults.withCredentials = true;
     const [inputImage, setinputImage] = useState(null)
@@ -800,6 +800,12 @@ function PostCreate() {
     }
 
     useEffect(() => {
+
+
+        if (!props.fromHome) {
+            document.getElementById('modalPostListe').style.display = 'block'
+        }
+
         const xcode = localStorage.getItem("x-code");
         if (xcode) {
             axios

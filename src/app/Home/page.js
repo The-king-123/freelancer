@@ -9,13 +9,16 @@ import {
   faBars,
   faBell,
   faChevronCircleUp,
+  faCode,
   faCrown,
   faDoorOpen,
   faGear,
+  faHammer,
   faHome,
   faICursor,
   faImages,
   faKey,
+  faListDots,
   faNewspaper,
   faPager,
   faPaperPlane,
@@ -1130,9 +1133,8 @@ export default function Home(props) {
                 className="w3-dropdown-click w3-hover-light-grey"
               >
                 <div
-                  id="settingWrapper"
                   onClick={userPremiumArea}
-                  className="dropButton w3-flex-row w3-flex-center-v w3-round w3-black w3-text-yellow"
+                  className="w3-flex-row w3-flex-center-v w3-round w3-black w3-text-yellow"
                   style={{ height: 40, paddingInline: 16, marginBlock: 4 }}
                 >
                   <FontAwesomeIcon
@@ -1173,7 +1175,7 @@ export default function Home(props) {
               <div className="w3-margin-left w3-medium">Forums</div>
             </div>
 
-            <Link
+            {/* <Link
               className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
               style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
               href={"/post/create"}
@@ -1184,9 +1186,9 @@ export default function Home(props) {
                 height={20}
               />
               <div className="w3-margin-left w3-medium">Gérer votre post</div>
-            </Link>
+            </Link> */}
 
-            <Link
+            {/* <Link
               className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
               style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
               href={"/forum/create"}
@@ -1197,7 +1199,7 @@ export default function Home(props) {
                 height={20}
               />
               <div className="w3-margin-left w3-medium">Gérer votre forum</div>
-            </Link>
+            </Link> */}
 
             <Link
               className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
@@ -1209,7 +1211,33 @@ export default function Home(props) {
                 width={20}
                 height={20}
               />
-              <div className="w3-margin-left w3-medium">Talents</div>
+              <div className="w3-margin-left w3-medium">Membres</div>
+            </Link>
+
+            <Link
+              className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+              style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+              href={"/user/336302677822455"}
+            >
+              <FontAwesomeIcon
+                icon={faCode}
+                width={20}
+                height={20}
+              />
+              <div className="w3-margin-left w3-medium">Dev web</div>
+            </Link>
+
+            <Link
+              className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+              style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+              href={"/recrutement"}
+            >
+              <FontAwesomeIcon
+                icon={faHammer}
+                width={20}
+                height={20}
+              />
+              <div className="w3-margin-left w3-medium">Recrutement</div>
             </Link>
 
             <div style={{ height: 40 }}>
@@ -1897,19 +1925,37 @@ export default function Home(props) {
             className="w3-container w3-light-grey"
             style={{ paddingBlock: 0, padding: 16 }}
           >
-            <div
-              onClick={() => document.getElementById('createPostOnDesktop').style.display = 'none'}
-              className="w3-pointer w3-flex w3-flex-center w3-black w3-circle"
-              style={{ width: 32, height: 32, }}
-            >
-              <FontAwesomeIcon
-                icon={faArrowLeft}
-                style={{ width: 16, height: 16 }}
-              />
+
+
+            <div className="w3-flex-row w3-flex-center-v">
+              <div className="w3-flex-1">
+                <div
+                  onClick={() => document.getElementById('createPostOnDesktop').style.display = 'none'}
+                  className="w3-pointer w3-flex w3-flex-center w3-black w3-circle"
+                  style={{ width: 32, height: 32, }}
+                >
+                  <FontAwesomeIcon
+                    icon={faArrowLeft}
+                    style={{ width: 16, height: 16 }}
+                  />
+                </div>
+              </div>
+              <div>
+                <Link
+                  href={'/post/create'}
+                  className="w3-black w3-circle w3-flex w3-flex-center"
+                  style={{ width: 32, height: 32 }}
+                >
+                  <FontAwesomeIcon
+                    icon={faListDots}
+                    style={{ width: 16, height: 16 }}
+                  />
+                </Link>
+              </div>
             </div>
           </div>
           <div className="w3-block w3-noscrollbar w3-overflow-scroll" style={{ paddingInline: 8, paddingTop: 8, height: 450 }}>
-            <CreatePost />
+            <CreatePost fromHome={true} />
           </div>
         </div>
       </div>
@@ -1932,19 +1978,35 @@ export default function Home(props) {
             className="w3-container w3-light-grey"
             style={{ paddingBlock: 0, padding: 16 }}
           >
-            <div
-              onClick={() => document.getElementById('createForumOnDesktop').style.display = 'none'}
-              className="w3-pointer w3-flex w3-flex-center w3-black w3-circle"
-              style={{ width: 32, height: 32, }}
-            >
-              <FontAwesomeIcon
-                icon={faArrowLeft}
-                style={{ width: 16, height: 16 }}
-              />
+            <div className="w3-flex-row w3-flex-center-v">
+              <div className="w3-flex-1">
+                <div
+                  onClick={() => document.getElementById('createForumOnDesktop').style.display = 'none'}
+                  className="w3-pointer w3-flex w3-flex-center w3-black w3-circle"
+                  style={{ width: 32, height: 32, }}
+                >
+                  <FontAwesomeIcon
+                    icon={faArrowLeft}
+                    style={{ width: 16, height: 16 }}
+                  />
+                </div>
+              </div>
+              <div>
+                <Link
+                  href={'/forum/create'}
+                  className="w3-black w3-circle w3-flex w3-flex-center"
+                  style={{ width: 32, height: 32 }}
+                >
+                  <FontAwesomeIcon
+                    icon={faListDots}
+                    style={{ width: 16, height: 16 }}
+                  />
+                </Link>
+              </div>
             </div>
           </div>
           <div className="w3-block w3-noscrollbar w3-overflow-scroll" style={{ paddingInline: 8, paddingTop: 8, height: 450 }}>
-            <CreateForum />
+            <CreateForum fromHome={true} />
           </div>
         </div>
       </div>

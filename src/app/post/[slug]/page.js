@@ -10,13 +10,13 @@ var slug = ''
 export default async function page({ params }) {
 
   slug = params.slug
-
   try {
+    
     const post = await axios
       .get(source + "/_post/" + params.slug + "/edit")
       .then((res) => {
         if (!res.data.premium) {
-          return res.data.data[0]
+          return {data:res.data.data[0], features:res.data.features}
         } else {
           return 'premium'
         }

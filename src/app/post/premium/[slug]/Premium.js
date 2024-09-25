@@ -11,26 +11,12 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import { console_source as source } from "@/app/data";
+import axios from "axios";
 
-export default function Premium({ content, owner }) {
+export default function Premium({ content, owner, slug }) {
 
   const [audioBox, setaudioBox] = useState({ chaine: null });
-
-
-  var singlePostInfo = ''
-  if (content) {
-    singlePostInfo = {
-      category: content.category,
-      description: JSON.parse(content.info).description,
-      slug: content.slug,
-      title: content.title,
-      type: content.type,
-      link: content.link,
-      updated_at: content.updated_at,
-      created_at: content.created_at,
-      videoUrl: JSON.parse(content.info).videoUrl ? JSON.parse(content.info).videoUrl : content.link,
-    };
-  }
+  const [singlePostInfo, setsinglePostInfo] = useState(null)
 
   const getUrl = (embed) => {
     const start = embed.indexOf('src="') + 5;
@@ -46,14 +32,78 @@ export default function Premium({ content, owner }) {
     return result;
   };
 
-  useEffect(() => {
-    if (!content) {
-      if (owner) {
-        window.location = '/premiumarea/'+owner
-      } else {
-        window.location = '/'
+  const displayContent = (contentAuthority) => {
+    setsinglePostInfo({
+      category: contentAuthority.category,
+      description: JSON.parse(contentAuthority.info).description,
+      slug: contentAuthority.slug,
+      title: contentAuthority.title,
+      type: contentAuthority.type,
+      link: contentAuthority.link,
+      updated_at: contentAuthority.updated_at,
+      created_at: contentAuthority.created_at,
+      videoUrl: JSON.parse(contentAuthority.info).videoUrl ? JSON.parse(contentAuthority.info).videoUrl : contentAuthority.link,
+    });
+
+    audioBox.chaine = document.getElementById("audioBox");
+    audioBox.chaine.src = source + "/audios.php?zlonk=1733&zlink=" + contentAuthority.link;
+    audioBox.chaine.load();
+    audioBox.chaine.addEventListener("ended", () => {
+      document.getElementById("iconPlay").style.display = "inline-block";
+      document.getElementById("iconPause").style.display = "none";
+    });
+
+    if (document.getElementById("postImageMedia")) {
+      document.getElementById("postImageMedia").style.transition = "1s";
+      document.getElementById("postImageMedia").style.height = "auto";
+    }
+
+    document.getElementById('backButton').addEventListener('click', () => {
+      if (window.history.length > 0) {
+        window.history.back();
       }
+    })
+  }
+
+  useEffect(() => {
+
+    if (!content) {
+      const xcode = localStorage.getItem('x-code')
+      axios
+        .get(source + "/_links?link=" + slug + "&xcode=" + xcode)
+        .then((res) => {
+
+          if (res.data.linkexist && res.data.unused) {
+
+            displayContent(res.data.data[0])
+
+
+          } else {
+            if (owner) {
+              window.location = '/premiumarea/' + owner
+            } else {
+              window.location = '/'
+            }
+          }
+        })
+        .catch((e) => {
+          console.error("failure", e);
+        });
+
     } else {
+
+      setsinglePostInfo({
+        category: content.category,
+        description: JSON.parse(content.info).description,
+        slug: content.slug,
+        title: content.title,
+        type: content.type,
+        link: content.link,
+        updated_at: content.updated_at,
+        created_at: content.created_at,
+        videoUrl: JSON.parse(content.info).videoUrl ? JSON.parse(content.info).videoUrl : content.link,
+      });
+
       audioBox.chaine = document.getElementById("audioBox");
       audioBox.chaine.src = source + "/audios.php?zlonk=1733&zlink=" + content.link;
       audioBox.chaine.load();
@@ -76,131 +126,133 @@ export default function Premium({ content, owner }) {
     }
   }, []);
 
-  if (content) {
+  return (
 
-    return (
-      <div>
-        <h3 className="w3-wide w3-flex-row w3-flex-center-v w3-large">
-          <div id="backButton" className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large" style={{ paddingInline: 4 }}>
-            <FontAwesomeIcon
-              icon={faArrowLeft}
-              style={{ width: 24 }}
-            />
-          </div>
+    singlePostInfo &&
 
-          <audio id="audioBox" className="w3-hide"></audio>
-          {content.type == "image/audio" && (
-            <div id="audioControl" className="w3-margin-left w3-flex-row w3-flex">
-              <div
-                onClick={() => {
-                  audioBox.chaine.currentTime = 0;
-                }}
-                className="w3-white w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
-                style={{ width: 32, height: 32, marginRight: 12 }}
-              >
-                <FontAwesomeIcon
-                  icon={faRefresh}
-                  style={{ width: 14, height: 14 }}
-                />
-              </div>
-              <div
-                onClick={() => {
-                  if (
-                    document.getElementById("iconPause").style.display == "none"
-                  ) {
-                    audioBox.chaine.play();
-                    document.getElementById("iconPlay").style.display = "none";
-                    document.getElementById("iconPause").style.display =
-                      "inline-block";
-                  } else {
-                    audioBox.chaine.pause();
-                    document.getElementById("iconPlay").style.display =
-                      "inline-block";
-                    document.getElementById("iconPause").style.display = "none";
-                  }
-                }}
-                className="w3-white w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
-                style={{ width: 32, height: 32 }}
-              >
-                <FontAwesomeIcon
-                  id="iconPlay"
-                  icon={faPlay}
-                  style={{ width: 14, height: 14, marginLeft: 2 }}
-                />
-                <FontAwesomeIcon
-                  id="iconPause"
-                  icon={faPause}
-                  style={{ width: 14, height: 14, display: "none" }}
-                />
-              </div>
+    <div>
+      <h3 className="w3-wide w3-flex-row w3-flex-center-v w3-large">
+        <div id="backButton" className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large" style={{ paddingInline: 4 }}>
+          <FontAwesomeIcon
+            icon={faArrowLeft}
+            style={{ width: 24 }}
+          />
+        </div>
+
+        <audio id="audioBox" className="w3-hide"></audio>
+
+        {singlePostInfo.type == "image/audio" && (
+          <div id="audioControl" className="w3-margin-left w3-flex-row w3-flex">
+            <div
+              onClick={() => {
+                audioBox.chaine.currentTime = 0;
+              }}
+              className="w3-white w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
+              style={{ width: 32, height: 32, marginRight: 12 }}
+            >
+              <FontAwesomeIcon
+                icon={faRefresh}
+                style={{ width: 14, height: 14 }}
+              />
             </div>
-          )}
-        </h3>
-        <div className="w3-container singlePostFlex" style={{ padding: 8 }}>
-          <div
-            id="chatCoreWrapper"
-            className="w3-overflow-scroll w3-noscrollbar"
-            style={{
-              maxWidth: 520,
-              marginInline: "auto",
-            }}
-          >
-            <div className="w3-overflow w3-light-grey w3-round-large">
-              {(singlePostInfo.type == "image" ||
-                singlePostInfo.type == "image/audio") && (
-                  <Image
-                    id="postImageMedia"
-                    alt={singlePostInfo.title}
-                    unoptimized
-                    loading="lazy"
-                    height={420}
-                    width={520}
-                    src={
-                      source +
-                      "/images.php?w=720&h=720&zlonk=2733&zlink=" +
-                      singlePostInfo.link
-                    }
-                    style={{
-                      objectPosition: "center",
-                      objectFit: "cover",
-                    }}
-                    className="w3-light-grey post-image"
-                  />
-                )}
-              {!singlePostInfo.videoUrl.includes('<iframe') && (singlePostInfo.type == "image/video" || singlePostInfo.type == "video") && (
-                <video
+            <div
+              onClick={() => {
+                if (
+                  document.getElementById("iconPause").style.display == "none"
+                ) {
+                  audioBox.chaine.play();
+                  document.getElementById("iconPlay").style.display = "none";
+                  document.getElementById("iconPause").style.display =
+                    "inline-block";
+                } else {
+                  audioBox.chaine.pause();
+                  document.getElementById("iconPlay").style.display =
+                    "inline-block";
+                  document.getElementById("iconPause").style.display = "none";
+                }
+              }}
+              className="w3-white w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
+              style={{ width: 32, height: 32 }}
+            >
+              <FontAwesomeIcon
+                id="iconPlay"
+                icon={faPlay}
+                style={{ width: 14, height: 14, marginLeft: 2 }}
+              />
+              <FontAwesomeIcon
+                id="iconPause"
+                icon={faPause}
+                style={{ width: 14, height: 14, display: "none" }}
+              />
+            </div>
+          </div>
+        )}
+      </h3>
+      <div className="w3-container singlePostFlex" style={{ padding: 8 }}>
+        <div
+          id="chatCoreWrapper"
+          className="w3-overflow-scroll w3-noscrollbar"
+          style={{
+            maxWidth: 520,
+            marginInline: "auto",
+          }}
+        >
+          <div className="w3-overflow w3-light-grey w3-round-large">
+            {(singlePostInfo.type == "image" ||
+              singlePostInfo.type == "image/audio") && (
+                <Image
+                  id="postImageMedia"
+                  alt={singlePostInfo.title}
+                  unoptimized
+                  loading="lazy"
+                  height={420}
+                  width={520}
+                  src={
+                    source +
+                    "/images.php?w=720&h=720&zlonk=2733&zlink=" +
+                    singlePostInfo.link
+                  }
                   style={{
                     objectPosition: "center",
+                    objectFit: "cover",
                   }}
-                  className="w3-overflow w3-block w3-black"
-                  controls
-                >
-                  <source
-                    src={singlePostInfo.videoUrl}
-                    type="video/mp4"
-                  />
-                  Your browser does not support the video tag.
-                </video>
+                  className="w3-light-grey post-image"
+                />
               )}
-              {singlePostInfo.videoUrl.includes('<iframe') && singlePostInfo.videoUrl.includes('src=') && (singlePostInfo.type == "image/video" || singlePostInfo.type == "video") &&
-                <iframe
-                  id={"videoPosts"}
-                  className="w3-block" //videoPosts
-                  height="420"
-                  src={getUrl(singlePostInfo.videoUrl)}
-                  title={getTitle(singlePostInfo.videoUrl)}
-                  frameBorder={0}
-                  allowFullScreen
-                ></iframe>
-              }
-            </div>
-            <div className="w3-large w3-big" style={{ marginTop: 8 }}>
-              {parse(singlePostInfo.title)}
-            </div>
-            <div>{parse(singlePostInfo.description)}</div>
+            {!singlePostInfo.videoUrl.includes('<iframe') && (singlePostInfo.type == "image/video" || singlePostInfo.type == "video") && (
+              <video
+                style={{
+                  objectPosition: "center",
+                }}
+                className="w3-overflow w3-block w3-black"
+                controls
+              >
+                <source
+                  src={singlePostInfo.videoUrl}
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
+            )}
+            {singlePostInfo.videoUrl.includes('<iframe') && singlePostInfo.videoUrl.includes('src=') && (singlePostInfo.type == "image/video" || singlePostInfo.type == "video") &&
+              <iframe
+                id={"videoPosts"}
+                className="w3-block" //videoPosts
+                height="420"
+                src={getUrl(singlePostInfo.videoUrl)}
+                title={getTitle(singlePostInfo.videoUrl)}
+                frameBorder={0}
+                allowFullScreen
+              ></iframe>
+            }
           </div>
+          <div className="w3-large w3-big" style={{ marginTop: 8 }}>
+            {parse(singlePostInfo.title)}
+          </div>
+          <div>{parse(singlePostInfo.description)}</div>
         </div>
       </div>
-    );
-  }
+    </div>
+
+  );
 }

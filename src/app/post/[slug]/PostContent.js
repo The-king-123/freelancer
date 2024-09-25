@@ -11,8 +11,10 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import { console_source as source } from "@/app/data";
+import Link from "next/link";
 
 export default function PostContent({ content }) {
+
 
   const [audioBox, setaudioBox] = useState({ chaine: null });
   const [stepper, setstepper] = useState({
@@ -23,134 +25,37 @@ export default function PostContent({ content }) {
   });
 
   const singlePostInfo = {
-    category: content.category,
-    description: JSON.parse(content.info).description,
-    slug: content.slug,
-    title: content.title,
-    type: content.type,
-    link: content.link,
-    updated_at: content.updated_at,
-    created_at: content.created_at,
-    videoUrl: JSON.parse(content.info).videoUrl ? JSON.parse(content.info).videoUrl : content.link,
+    category: content.data.category,
+    description: JSON.parse(content.data.info).description,
+    slug: content.data.slug,
+    title: content.data.title,
+    type: content.data.type,
+    link: content.data.link,
+    updated_at: content.data.updated_at,
+    created_at: content.data.created_at,
+    videoUrl: JSON.parse(content.data.info).videoUrl ? JSON.parse(content.data.info).videoUrl : content.data.link,
   };
 
-  // const typer = (text) => {
-  //   if (stepper.fielTester == null) {
-  //     stepper.fielTester = setInterval(() => {
-  //       if (document.getElementById("typingField")) {
-  //         clearInterval(stepper.fielTester);
-  //         stepper.fielTester = null;
+  const moneyMaker = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
 
-  //         if (text.length > 0) {
-  //           document.getElementById("typingField").innerHTML = "";
+  const extractDetails = (moduleTitle, title) => {
+    let cleanTitle = moduleTitle.replace(title, "").trim();
+    let parts = cleanTitle.split('|').map(part => part.trim());
 
-  //           const semiPlainText = text
-  //             .replace(/<br\s*\/?>|\n/g, "~")
-  //             .replace(/<\/li>/g, "^")
-  //             .replace(/<\/p>/g, "`");
-  //           const plainText = semiPlainText.replace(/<[^>]*>/g, "");
-  //           const convertedPlainText = plainText.split("");
+    let firstPart = parts[0];
+    let secondPart = parts[1];
+    let lastPart = parts[parts.length - 1];
 
-  //           var charCounter = 0;
-  //           var lineCounter = 0;
-  //           var paragrapheCounter = 0;
-  //           var listeCounter = 0;
+    let middlePart = parts.slice(2, parts.length - 1).join(' ').replace(/\s+/g, ' ').trim();
 
-  //           stepper.intervalTyper = setInterval(() => {
-  //             let testingChar = convertedPlainText[charCounter];
+    parts = [secondPart, middlePart, lastPart];
+    parts[0] = parts[0].replace(/ /g, '');
+    parts[2] = parts[2].replace(/[^\d]/g, '');
 
-  //             if (["~", "^", "`"].includes(convertedPlainText[charCounter])) {
-  //               var lineCounterSemiPlainText = 0;
-  //               var paragrapheCounterSemiPlainText = 0;
-  //               var listeCounterSemiPlainText = 0;
-
-  //               for (let i = 0; i < semiPlainText.length; i++) {
-  //                 let currentChar = semiPlainText[i];
-  //                 // Current character in the loop
-
-  //                 // Perform actions based on character and counter comparisons
-  //                 if (
-  //                   testingChar === "^" &&
-  //                   currentChar === "^" &&
-  //                   listeCounterSemiPlainText === listeCounter
-  //                 ) {
-  //                   document.getElementById("typingField").innerHTML =
-  //                     semiPlainText
-  //                       .substring(0, i)
-  //                       .replace(/\^/g, "</li>")
-  //                       .replace(/`/g, "</p>")
-  //                       .replace(/~/g, "<br/>") + "</li>";
-  //                 }
-  //                 if (
-  //                   testingChar === "~" &&
-  //                   currentChar === "~" &&
-  //                   lineCounterSemiPlainText === lineCounter
-  //                 ) {
-  //                   document.getElementById("typingField").innerHTML =
-  //                     semiPlainText
-  //                       .substring(0, i)
-  //                       .replace(/\^/g, "</li>")
-  //                       .replace(/`/g, "</p>")
-  //                       .replace(/~/g, "<br/>") + "<br/>";
-  //                 }
-  //                 if (
-  //                   testingChar === "`" &&
-  //                   currentChar === "`" &&
-  //                   paragrapheCounterSemiPlainText === paragrapheCounter
-  //                 ) {
-  //                   document.getElementById("typingField").innerHTML =
-  //                     semiPlainText
-  //                       .substring(0, i)
-  //                       .replace(/\^/g, "</li>")
-  //                       .replace(/`/g, "</p>")
-  //                       .replace(/~/g, "<br/>") + "</p>";
-  //                 }
-
-  //                 // Increment counters based on the character
-  //                 if (testingChar == "~" && currentChar == "~") {
-  //                   lineCounterSemiPlainText++;
-  //                 }
-  //                 if (testingChar == "`" && currentChar == "`") {
-  //                   paragrapheCounterSemiPlainText++;
-  //                 }
-  //                 if (testingChar == "^" && currentChar == "^") {
-  //                   listeCounterSemiPlainText++;
-  //                 }
-  //               }
-
-  //               if (convertedPlainText[charCounter] == "~") {
-  //                 lineCounter++;
-  //               }
-  //               if (convertedPlainText[charCounter] == "^") {
-  //                 listeCounter++;
-  //               }
-  //               if (convertedPlainText[charCounter] == "`") {
-  //                 paragrapheCounter++;
-  //               }
-  //             } else {
-  //               document.getElementById("typingField").innerHTML =
-  //                 document.getElementById("typingField").innerHTML +
-  //                 testingChar;
-  //             }
-
-  //             if (charCounter == plainText.length - 1) {
-  //               clearInterval(stepper.intervalTyper);
-  //               document.getElementById("typingField").innerHTML = text;
-  //             }
-  //             const chatElement = document.getElementById("chatCoreWrapper");
-  //             if (chatElement.scrollHeight > stepper.scrollHeight) {
-  //               chatElement.scrollTop = chatElement.scrollHeight;
-  //               stepper.scrollHeight = chatElement.scrollHeight;
-  //             }
-
-  //             charCounter++;
-  //             //
-  //           }, 30);
-  //         }
-  //       }
-  //     }, 10);
-  //   }
-  // };
+    return parts
+  }
 
   const getUrl = (embed) => {
     const start = embed.indexOf('src="') + 5;
@@ -167,9 +72,10 @@ export default function PostContent({ content }) {
   };
 
   useEffect(() => {
+
     audioBox.chaine = document.getElementById("audioBox");
     audioBox.chaine.src =
-      source + "/audios.php?zlonk=1733&zlink=" + content.link;
+      source + "/audios.php?zlonk=1733&zlink=" + content.data.link;
     audioBox.chaine.load();
     audioBox.chaine.addEventListener("ended", () => {
       document.getElementById("iconPlay").style.display = "inline-block";
@@ -199,7 +105,7 @@ export default function PostContent({ content }) {
         </div>
 
         <audio id="audioBox" className="w3-hide"></audio>
-        {content.type == "image/audio" && (
+        {content.data.type == "image/audio" && (
           <div id="audioControl" className="w3-margin-left w3-flex-row w3-flex">
             <div
               onClick={() => {
@@ -294,20 +200,55 @@ export default function PostContent({ content }) {
             )}
             {singlePostInfo.videoUrl.includes('<iframe') && singlePostInfo.videoUrl.includes('src=') && (singlePostInfo.type == "image/video" || singlePostInfo.type == "video") &&
               <iframe
-              id={"videoPosts"}
-              className="w3-block" //videoPosts
-              height="420"
-              src={getUrl(singlePostInfo.videoUrl)}
-              title={getTitle(singlePostInfo.videoUrl)}
-              frameBorder={0}
-              allowFullScreen
-            ></iframe>
+                id={"videoPosts"}
+                className="w3-block" //videoPosts
+                height="420"
+                src={getUrl(singlePostInfo.videoUrl)}
+                title={getTitle(singlePostInfo.videoUrl)}
+                frameBorder={0}
+                allowFullScreen
+              ></iframe>
             }
           </div>
           <div className="w3-large w3-big" style={{ marginTop: 8 }}>
             {parse(singlePostInfo.title)}
           </div>
           <div>{parse(singlePostInfo.description)}</div>
+          <div className="w3-margin-top">
+            {
+              content.features.map((feature, key) => (
+                <div key={key} style={{ paddingBlock: 8 }}>
+                  <Link href={'/post/' + feature.slug} className="w3-pointer w3-light-grey w3-round w3-flex-row w3-flex-center-v " style={{ padding: 8 }}>
+                    <Image
+                      alt={feature.title}
+                      unoptimized
+                      loading="lazy"
+                      height={64}
+                      width={64}
+                      src={
+                        source +
+                        "/images.php?w=720&h=720&zlonk=2733&zlink=" +
+                        feature.link
+                      }
+                      style={{
+                        objectPosition: "center",
+                        objectFit: "cover",
+                      }}
+                      className="w3-white w3-round"
+                    />
+                    <div className="w3-flex-1 w3-overflow w3-nowrap" style={{ paddingInline: 16 }}>
+                      <div className="w3-big w3-medium ">{extractDetails(feature.title)[1]}</div>
+                      <div className="w3-tiny w3-text-grey">Module {extractDetails(feature.title)[0]}</div>
+                    </div>
+                    <div style={{ minWidth: 96, textAlign: "right", marginInline: 8 }}>
+                      {moneyMaker(extractDetails(feature.title)[2])} Ar
+                    </div>
+                  </Link>
+                </div>
+              ))
+            }
+
+          </div>
         </div>
       </div>
     </div>

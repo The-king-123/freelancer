@@ -116,7 +116,7 @@ function Profile() {
       .get(source + "/_auth?xcode=" + xcode)
       .then((res) => {
         if (res.data.logedin) {
-          console.log(res.data.user);
+
           userInfo.email = res.data.user.email;
           userInfo.fullname = res.data.user.fullname;
           userInfo.id = res.data.user.id;

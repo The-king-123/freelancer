@@ -83,7 +83,7 @@ export default function Premium(props) {
                                     )} */}
                                     {post.type == "image/audio" && (
                                         <div
-                                            className="w3-white w3-circle w3-display-middle"
+                                            className="w3-white w3-circle w3-display-middle w3-card"
                                             style={{ width: 40, height: 40 }}
                                         >
                                             <div className="w3-block w3-height w3-flex w3-flex-center">
@@ -96,7 +96,7 @@ export default function Premium(props) {
                                     )}
                                     {(post.type == "video" || post.type == "image/video") && (
                                         <div
-                                            className="w3-white w3-circle w3-display-middle"
+                                            className="w3-white w3-circle w3-display-middle w3-card"
                                             style={{ width: 40, height: 40 }}
                                         >
                                             <div className="w3-block w3-height w3-flex w3-flex-center">
