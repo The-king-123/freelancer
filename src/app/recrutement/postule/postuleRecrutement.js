@@ -46,22 +46,22 @@ function postuleRecrutement(props) {
   const [recrutementListe, setrecrutementListe] = useState('')
 
   const [recrutementInfos, setrecrutementInfos] = useState({
-    id:null,
+    id: null,
     content: "",
     image: null,
-    cv:null,
-    link:'',
-    dactylot : false,
+    cv: null,
+    link: '',
+    dactylot: false,
     adresse: "",
     contact: "",
     fullname: "",
     psalarial: "",
     jobTitle: '',
     slug: '',
-    niveauLangue : {
-      fr:'',
-      en:'',
-      autre:'',
+    niveauLangue: {
+      fr: '',
+      en: '',
+      autre: '',
     }
   });
 
@@ -136,9 +136,9 @@ function postuleRecrutement(props) {
 
     recrutementInfos.content = document.getElementById('recrutementContent').innerHTML;
 
-    
-    if (recrutementInfos.image && 
-      recrutementInfos.cv && 
+
+    if (recrutementInfos.image ||
+      recrutementInfos.cv &&
       recrutementInfos.jobTitle.length > 0 &&
       recrutementInfos.content.length > 0 &&
       recrutementInfos.fullname.length > 0 &&
@@ -154,26 +154,24 @@ function postuleRecrutement(props) {
         document.getElementById("recrutementDraftSpinner").style.display = "inline-block";
       }
 
-    console.log(recrutementInfos);
-    
+      console.log(recrutementInfos);
+
       var data;
       // if (recrutementInfos.image) {
-        data = recrutementInfos.image;
-        data.append("cv", recrutementInfos.cv);
+      data = recrutementInfos.image ? recrutementInfos.image : recrutementInfos.cv;
+      data.append("title", recrutementInfos.jobTitle);
+      data.append("slug", recrutementInfos.slug);
+      data.append("content", recrutementInfos.content);
+      data.append("adresse", recrutementInfos.adresse);
+      data.append("contact", recrutementInfos.contact);
+      data.append("fullname", recrutementInfos.fullname);
+      data.append("niveauLangue", JSON.stringify(recrutementInfos.niveauLangue));
+      data.append("dactylot", recrutementInfos.dactylot);
+      data.append("psalarial", recrutementInfos.psalarial);
 
-        data.append("title", recrutementInfos.jobTitle);
-        data.append("slug", recrutementInfos.slug);
-        data.append("content", recrutementInfos.content);
-        data.append("adresse", recrutementInfos.adresse);
-        data.append("contact", recrutementInfos.contact);
-        data.append("fullname", recrutementInfos.fullname);
-        data.append("niveauLangue", JSON.stringify(recrutementInfos.niveauLangue) );
-        data.append("dactylot", recrutementInfos.dactylot);
-        data.append("psalarial", recrutementInfos.psalarial);
-
-        if (recrutementInfos.id) {
-          data.append("id", recrutementInfos.id)
-        }
+      if (recrutementInfos.id) {
+        data.append("id", recrutementInfos.id)
+      }
 
       // } else {
       //   data = {
@@ -424,7 +422,11 @@ function postuleRecrutement(props) {
       reader.readAsDataURL(file);
 
       const formData = new FormData();
-      formData.append("image", file);
+      if (recrutementInfos.cv) {
+        recrutementInfos.image.append("image", file);
+      } else {
+        formData.append("image", file);
+      }
 
       reader.onload = (readerEvent) => {
         var content = readerEvent.target.result;
@@ -433,7 +435,9 @@ function postuleRecrutement(props) {
         document.getElementById("showImageWrapper").style.display = "block";
         document.getElementById("inputImage").style.display = "none";
 
-        recrutementInfos.image = formData;
+        if (!recrutementInfos.cv) {
+          recrutementInfos.image = formData;
+        }
       };
     };
     setinputImage(imageSelector)
@@ -441,7 +445,7 @@ function postuleRecrutement(props) {
     // Upload CV
     var cvSelector = document.createElement("input");
     cvSelector.type = "file";
-    cvSelector.accept = "file/*";
+    cvSelector.accept = "image/*";
 
     cvSelector.onchange = (e) => {
       const file = e.target.files[0];
@@ -450,16 +454,20 @@ function postuleRecrutement(props) {
       reader.readAsDataURL(file);
 
       const formData = new FormData();
-      formData.append("image", file);
-
+      if (recrutementInfos.image) {
+        recrutementInfos.image.append("cv", file);
+      } else {
+        formData.append("cv", file);
+      }
       reader.onload = (readerEvent) => {
         var content = readerEvent.target.result;
 
         document.getElementById("showCV").src = content;
         document.getElementById("showCVWrapper").style.display = "block";
         document.getElementById("inputCV").style.display = "none";
-
-        recrutementInfos.cv = formData;
+        if (!recrutementInfos.image) {
+          recrutementInfos.cv = formData;
+        }
       };
     };
     setinputCV(cvSelector)
@@ -479,7 +487,7 @@ function postuleRecrutement(props) {
           />{" "}
           Créer un recrutement
         </div>
-        <div id="openRecrutementListeButton">
+        {/* <div id="openRecrutementListeButton">
           <div
             onClick={() => document.getElementById('modalRecrutementListe').style.display = 'block'}
             className="w3-light-grey w3-circle w3-flex w3-flex-center"
@@ -490,7 +498,7 @@ function postuleRecrutement(props) {
               style={{ width: 16, height: 16 }}
             />
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div style={{ padding: 8 }}>
@@ -574,7 +582,7 @@ function postuleRecrutement(props) {
             5 sur 6 = C2 (Maîtrise)
           </option>
         </select>
-        <input onChange={(e)=>recrutementInfos.dactylot = e.target.value} type="checkbox" id="dactylo" name="dactylo" value={true} className="w3-margin-right" />
+        <input onChange={(e) => recrutementInfos.dactylot = e.target.value} type="checkbox" id="dactylo" name="dactylo" value={true} className="w3-margin-right" />
         <label for="dactylo">Je sais taper sans regarder le clavier</label>
         <div
           id="recrutementContent"
@@ -597,7 +605,7 @@ function postuleRecrutement(props) {
             ¬ Importer votre photo de CIN
           </div>
 
-          <div style={{ padding: 0, marginTop: 16 }}>
+          <div style={{ padding: 0 }}>
             <div
               className="w3-display-container"
               id="showImageWrapper"

@@ -1230,7 +1230,7 @@ export default function Home(props) {
             <Link
               className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
               style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-              href={"/recrutement"}
+              href={"/recrutement/postule"}
             >
               <FontAwesomeIcon
                 icon={faHammer}
