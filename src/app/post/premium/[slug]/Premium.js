@@ -32,6 +32,27 @@ export default function Premium({ content, owner, slug }) {
     return result;
   };
 
+  const moneyMaker = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  const extractDetails = (moduleTitle, title) => {
+    let cleanTitle = moduleTitle.replace(title, "").trim();
+    let parts = cleanTitle.split('|').map(part => part.trim());
+
+    if (parts >= 3) {
+      let secondPart = parts[1];
+      let lastPart = parts[parts.length - 1];
+
+      let middlePart = parts.slice(2, parts.length - 1).join(' ').replace(/\s+/g, ' ').trim();
+
+      parts = [secondPart, middlePart, lastPart];
+      parts[0] = parts[0].replace(/ /g, '');
+      parts[2] = parts[2].replace(/[^\d]/g, '');
+    }
+
+    return parts
+  }
   const displayContent = (contentAuthority) => {
     setsinglePostInfo({
       category: contentAuthority.category,
@@ -257,9 +278,22 @@ export default function Premium({ content, owner, slug }) {
               ></iframe>
             }
           </div>
-          <div className="w3-large w3-big" style={{ marginTop: 8 }}>
-            {parse(singlePostInfo.title)}
-          </div>
+          {
+            extractDetails(singlePostInfo.title).length >= 3 &&
+            <div style={{marginTop:8}}>
+              <div className="w3-medium w3-text-grey">{extractDetails(singlePostInfo.title)[0]} - Module {extractDetails(singlePostInfo.title)[1]} :</div>
+              <div className="w3-large w3-big">
+                {extractDetails(singlePostInfo.title)[2]}
+              </div>
+            </div>
+          }
+
+          {
+            extractDetails(singlePostInfo.title).length < 3 &&
+            <div className="w3-large w3-big" style={{ marginTop: 8 }}>
+              {parse(singlePostInfo.title)}
+            </div>
+          }
           <div>{parse(singlePostInfo.description)}</div>
         </div>
       </div>

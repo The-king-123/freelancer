@@ -136,3 +136,29 @@ input[type="number"] {
       max-width: 480px !important;
     }
   }
+
+
+  /* // marquee text  */
+
+  .marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.marquee span {
+    display: inline-block;
+    /* animation: marquee 12s linear infinite; 10s de défilement + 2s de pause */
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0); /* Le texte commence en dehors de la vue, à droite */
+    }
+    25% {
+        transform: translateX(0); /* Le texte défile jusqu'à disparaître à gauche */
+    }
+    100% {
+        transform: translateX(-100%); /* Pause pendant 20% du temps (2s sur 12s) */
+    }
+}

@@ -13,12 +13,48 @@ export default function Premium(props) {
 
     const [posts, setposts] = useState(null)
 
+    const moneyMaker = (number) => {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    const extractDetails = (moduleTitle, title) => {
+        let cleanTitle = moduleTitle.replace(title, "").trim();
+        let parts = cleanTitle.split('|').map(part => part.trim());
+
+        if (parts >= 3) {
+            let secondPart = parts[1];
+            let lastPart = parts[parts.length - 1];
+
+            let middlePart = parts.slice(2, parts.length - 1).join(' ').replace(/\s+/g, ' ').trim();
+
+            parts = [secondPart, middlePart, lastPart];
+            parts[0] = parts[0].replace(/ /g, '');
+            parts[2] = parts[2].replace(/[^\d]/g, '');
+        }
+
+        return parts
+    }
+
+    // animation: marquee 12s linear infinite;
+
+    const makeMarqueeText = () => {
+        const marquees = document.getElementsByClassName('marquee');
+
+        for (let i = 0; i < marquees.length; i++) {
+            const marquee = marquees[i].querySelector('span');
+            marquee.style.animation = 'marquee '+(marquee.innerText.length/4.5)+'s linear infinite'
+        }
+    }
+
     useEffect(() => {
 
         axios
             .get(source + "/_post/" + props.user + "?c=premium")
             .then((res) => {
                 setposts(res.data.data)
+                setTimeout(() => {
+                    makeMarqueeText();
+                }, 200);
             })
             .catch((e) => {
                 console.error("failure", e);
@@ -38,7 +74,32 @@ export default function Premium(props) {
                                     className="w3-light-grey w3-big w3-small w3-flex-row w3-flex-center-v"
                                     title={parse(post.title)}
                                 >
-                                    <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>{parse(post.title)}</div>
+                                    <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>
+                                        {
+                                            extractDetails(post.title).length >= 3 &&
+                                            <div class="marquee">
+                                                <span>
+                                                    {extractDetails(post.title)[0]} -
+                                                    Module {extractDetails(post.title)[1]} :&nbsp;
+                                                    {extractDetails(post.title)[2]}
+                                                    &nbsp;({moneyMaker(extractDetails(post.title)[3])} Ar)
+                                                </span>
+                                            </div>
+                                        }
+                                        {
+                                            extractDetails(post.title).length < 3 &&
+                                            post.title.length > 36 &&
+
+                                            <div class="marquee">
+                                                <span>{parse(post.title)}</span>
+                                            </div>
+                                        }
+                                        {
+                                            extractDetails(post.title).length < 3 &&
+                                            post.title.length < 36 &&
+                                            <span>{parse(post.title)}</span>
+                                        }
+                                    </div>
                                     <div
                                         title="Premium"
                                         className="w3-yellow w3-circle"
