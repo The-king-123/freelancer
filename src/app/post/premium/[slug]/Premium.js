@@ -58,11 +58,14 @@ export default function Premium({ content, owner, slug }) {
       document.getElementById("postImageMedia").style.height = "auto";
     }
 
-    document.getElementById('backButton').addEventListener('click', () => {
-      if (window.history.length > 0) {
-        window.history.back();
-      }
-    })
+    if (document.getElementById('backButton')) {
+      document.getElementById('backButton').addEventListener('click', () => {
+        if (window.history.length > 0) {
+          window.history.back();
+        }
+      })
+
+    }
   }
 
   useEffect(() => {
@@ -80,7 +83,12 @@ export default function Premium({ content, owner, slug }) {
 
           } else {
             if (owner) {
-              window.location = '/premiumarea/' + owner
+              if (owner == '160471339156947') {
+                window.location = '/premiumarea'
+              } else {
+                window.location = '/premiumarea/' + owner
+              }
+
             } else {
               window.location = '/'
             }
@@ -117,11 +125,14 @@ export default function Premium({ content, owner, slug }) {
         document.getElementById("postImageMedia").style.height = "auto";
       }
 
-      document.getElementById('backButton').addEventListener('click', () => {
-        if (window.history.length > 0) {
-          window.history.back();
-        }
-      })
+      if (document.getElementById('backButton')) {
+        document.getElementById('backButton').addEventListener('click', () => {
+          if (window.history.length > 0) {
+            window.history.back();
+          }
+        })
+
+      }
 
     }
   }, []);

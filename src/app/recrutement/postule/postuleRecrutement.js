@@ -56,7 +56,7 @@ function postuleRecrutement(props) {
     contact: "",
     fullname: "",
     psalarial: "",
-    joTitle: '',
+    jobTitle: '',
     slug: '',
     niveauLangue : {
       fr:'',
@@ -129,22 +129,23 @@ function postuleRecrutement(props) {
 
   const save = async (state) => {
 
-    const xcode = localStorage.getItem("x-code");
+    // const xcode = localStorage.getItem("x-code");
 
     recrutementInfos.state = state;
     recrutementInfos.slug = slugify(recrutementInfos.fullname, { lower: true });
 
     recrutementInfos.content = document.getElementById('recrutementContent').innerHTML;
 
+    
     if (recrutementInfos.image && 
       recrutementInfos.cv && 
-      recrutementInfos.joTitle.length > 0 &&
+      recrutementInfos.jobTitle.length > 0 &&
       recrutementInfos.content.length > 0 &&
       recrutementInfos.fullname.length > 0 &&
       recrutementInfos.adresse.length > 0 &&
       recrutementInfos.psalarial.length > 0 &&
       recrutementInfos.contact.length > 0 &&
-      recrutementInfos.niveauLangue.length > 0) {
+      recrutementInfos.niveauLangue.fr.length > 0) {
 
       if (state == 'public') {
         document.getElementById("recrutementPublicSpinner").style.display = "inline-block";
@@ -153,18 +154,20 @@ function postuleRecrutement(props) {
         document.getElementById("recrutementDraftSpinner").style.display = "inline-block";
       }
 
+    console.log(recrutementInfos);
+    
       var data;
-      if (recrutementInfos.image) {
+      // if (recrutementInfos.image) {
         data = recrutementInfos.image;
         data.append("cv", recrutementInfos.cv);
 
-        data.append("title", recrutementInfos.joTitle);
+        data.append("title", recrutementInfos.jobTitle);
         data.append("slug", recrutementInfos.slug);
         data.append("content", recrutementInfos.content);
         data.append("adresse", recrutementInfos.adresse);
         data.append("contact", recrutementInfos.contact);
         data.append("fullname", recrutementInfos.fullname);
-        data.append("niveauLangue", recrutementInfos.niveauLangue);
+        data.append("niveauLangue", JSON.stringify(recrutementInfos.niveauLangue) );
         data.append("dactylot", recrutementInfos.dactylot);
         data.append("psalarial", recrutementInfos.psalarial);
 
@@ -172,20 +175,20 @@ function postuleRecrutement(props) {
           data.append("id", recrutementInfos.id)
         }
 
-      } else {
-        data = {
-          title: recrutementInfos.joTitle,
-          content: recrutementInfos.content,
-          adresse: recrutementInfos.adresse,
-          slug: recrutementInfos.slug,
-          contact: recrutementInfos.contact,
-          psalarial: recrutementInfos.psalarial,
-          contact: recrutementInfos.contact,
-          fullname: recrutementInfos.fullname,
-          niveauLangue: recrutementInfos.niveauLangue,
-          dactylot: recrutementInfos.dactylot,
-        };
-      }
+      // } else {
+      //   data = {
+      //     title: recrutementInfos.jobTitle,
+      //     content: recrutementInfos.content,
+      //     adresse: recrutementInfos.adresse,
+      //     slug: recrutementInfos.slug,
+      //     contact: recrutementInfos.contact,
+      //     psalarial: recrutementInfos.psalarial,
+      //     contact: recrutementInfos.contact,
+      //     fullname: recrutementInfos.fullname,
+      //     niveauLangue: JSON.stringify(recrutementInfos.niveauLangue) ,
+      //     dactylot: recrutementInfos.dactylot,
+      //   };
+      // }
 
       try {
         await setCSRFToken();
@@ -235,7 +238,7 @@ function postuleRecrutement(props) {
             });
         } else {
           await axios
-            .post(source + "/_recrutement?xcode=" + xcode, data)
+            .post(source + "/_recrutement", data)
             .then((res) => {
               if (res.data.logedin) {
                 if (state == 'public') {
@@ -492,7 +495,7 @@ function postuleRecrutement(props) {
 
       <div style={{ padding: 8 }}>
         <select
-          onChange={(e) => recrutementInfos.joTitle = e}
+          onChange={(e) => recrutementInfos.jobTitle = e.target.value}
           id="designation"
           className="input w3-block  w3-light-grey w3-round w3-block w3-text-black w3-medium  w3-border-0 w3-margin-bottom"
           style={{ paddingBlock: 8 }}
@@ -544,7 +547,7 @@ function postuleRecrutement(props) {
           placeholder="Prétention salariale"
         />
         <select
-          onChange={(e) => recrutementInfos.niveauLangue.fr = e}
+          onChange={(e) => recrutementInfos.niveauLangue.fr = e.target.value}
           className="input w3-block  w3-light-grey w3-round w3-block w3-text-black w3-medium  w3-border-0 w3-margin-bottom"
           style={{ paddingBlock: 8 }}
           defaultValue={'default'}
