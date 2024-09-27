@@ -141,7 +141,7 @@ function postuleRecrutement(props) {
     recrutementInfos.content = document.getElementById('recrutementContent').innerHTML;
 
     console.log(recrutementInfos);
-    
+
 
     if ((recrutementInfos.image || recrutementInfos.cv) &&
       recrutementInfos.jobTitle.length >= 3 &&
@@ -468,20 +468,21 @@ function postuleRecrutement(props) {
   }, []);
 
   return (
-    <div id="recrutementCore" style={{ position: 'relative' }}>
-      <div
-        className="w3-medium w3-big w3-flex-row w3-flex-center-v"
-        style={{ padding: 8 }}
-      >
-        <div className="w3-flex-row w3-flex-center-v w3-flex-1">
-          <FontAwesomeIcon
-            className="w3-margin-right"
-            icon={faPager}
-            style={{ width: 24, height: 24 }}
-          />{" "}
-          Créer un recrutement
-        </div>
-        {/* <div id="openRecrutementListeButton">
+    <div style={{ position: 'relative' }}>
+      <div id="recrutementCore">
+        <div
+          className="w3-medium w3-big w3-flex-row w3-flex-center-v"
+          style={{ padding: 8 }}
+        >
+          <div className="w3-flex-row w3-flex-center-v w3-flex-1">
+            <FontAwesomeIcon
+              className="w3-margin-right"
+              icon={faPager}
+              style={{ width: 24, height: 24 }}
+            />{" "}
+            Créer un recrutement
+          </div>
+          {/* <div id="openRecrutementListeButton">
           <div
             onClick={() => document.getElementById('modalRecrutementListe').style.display = 'block'}
             className="w3-light-grey w3-circle w3-flex w3-flex-center"
@@ -493,208 +494,208 @@ function postuleRecrutement(props) {
             />
           </div>
         </div> */}
-      </div>
+        </div>
 
-      <div style={{ padding: 8 }}>
-        <select
-          onChange={(e) => recrutementInfos.jobTitle = e.target.value}
-          className="w3-block  w3-light-grey w3-round w3-block w3-text-black w3-medium  w3-border-0 w3-margin-bottom"
-          style={{ paddingBlock: 10,paddingInline:5 }}
-          defaultValue={'default'}
-        >
-          <option value={'default'} disabled={true}>
-            Postuler pour le poste de :
-          </option>
-          {
-            jobListe.map((job, key) => (
-              <option key={key} value={job}>
-                {job}
-              </option>
-
-            ))
-          }
-        </select>
-        <input
-          id="recrutementTitle"
-          onChange={(e) => (recrutementInfos.fullname = e.target.value)}
-          className="w3-input w3-border-0 w3-light-grey w3-round w3-margin-bottom"
-          type="text"
-          maxLength={200}
-          placeholder="Nom et prenom"
-        />
-
-        <input
-          id="recrutementTitle"
-          onChange={(e) => (recrutementInfos.contact = e.target.value)}
-          className="w3-input w3-border-0 w3-light-grey w3-round w3-margin-bottom"
-          type="text"
-          maxLength={200}
-          placeholder="Contact"
-        />
-        <input
-          id="recrutementTitle"
-          onChange={(e) => (recrutementInfos.adresse = e.target.value)}
-          className="w3-input w3-border-0 w3-light-grey w3-round w3-margin-bottom"
-          type="text"
-          maxLength={200}
-          placeholder="Adresse"
-        />
-        <input
-          id="recrutementTitle"
-          onChange={(e) => (recrutementInfos.psalarial = e.target.value)}
-          className="w3-input w3-border-0 w3-light-grey w3-round w3-margin-bottom"
-          type="text"
-          maxLength={200}
-          placeholder="Prétention salariale"
-        />
-        <select
-          onChange={(e) => recrutementInfos.niveauLangue.fr = e.target.value}
-          className="w3-block  w3-light-grey w3-round w3-block w3-text-black w3-medium  w3-border-0 w3-margin-bottom"
-          style={{ paddingBlock: 10,paddingInline:5 }}
-          defaultValue={'default'}
-        >
-          <option value={'default'} disabled={true}>
-            Votre niveau de Français :
-          </option>
-          <option value={1}>
-            1 sur 6 = A1 (Débutant)
-          </option>
-          <option value={2}>
-            2 sur 6 = A2 (Intermédiaire)
-          </option>
-          <option value={3}>
-            3 sur 6 = B1 (Pré-intermédiaire)
-          </option>
-          <option value={4}>
-            4 sur 6 = B2 (Intermédiaire avancé)
-          </option>
-          <option value={5}>
-            5 sur 6 = C1 (Avancé)
-          </option>
-          <option value={5}>
-            5 sur 6 = C2 (Maîtrise)
-          </option>
-        </select>
-        <input onChange={(e) => recrutementInfos.dactylot = e.target.value} type="checkbox" id="dactylo" name="dactylo" value={true} className="w3-margin-right" />
-        <label for="dactylo">Je sais taper sans regarder le clavier</label>
-        <div
-          id="recrutementContent"
-          contentEditable={true}
-          className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
-          style={{
-            height: 160,
-            minWidth: "100%",
-            marginTop: 16,
-          }}
-        >Parlez-nous de vos compétences et de vos expériences :</div>
-        <div className="w3-container" style={{ padding: 0 }}>
-          <div
-            id="inputImage"
-            onClick={() => inputImage.click()}
-            className="w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center-v"
-            style={{ height: 40, marginTop: 16, paddingInline: 24 }}
+        <div style={{ padding: 8 }}>
+          <select
+            onChange={(e) => recrutementInfos.jobTitle = e.target.value}
+            className="w3-block  w3-light-grey w3-round w3-block w3-text-black w3-medium  w3-border-0 w3-margin-bottom"
+            style={{ paddingBlock: 10, paddingInline: 5 }}
+            defaultValue={'default'}
           >
-            <FontAwesomeIcon className="w3-margin-right" icon={faImage} style={{ width: 16, height: 16 }} />
-            ¬ Importer votre photo de CIN
-          </div>
+            <option value={'default'} disabled={true}>
+              Postuler pour le poste de :
+            </option>
+            {
+              jobListe.map((job, key) => (
+                <option key={key} value={job}>
+                  {job}
+                </option>
 
-          <div style={{ padding: 0 }}>
+              ))
+            }
+          </select>
+          <input
+            id="recrutementTitle"
+            onChange={(e) => (recrutementInfos.fullname = e.target.value)}
+            className="w3-input w3-border-0 w3-light-grey w3-round w3-margin-bottom"
+            type="text"
+            maxLength={200}
+            placeholder="Nom et prenom"
+          />
+
+          <input
+            id="recrutementTitle"
+            onChange={(e) => (recrutementInfos.contact = e.target.value)}
+            className="w3-input w3-border-0 w3-light-grey w3-round w3-margin-bottom"
+            type="text"
+            maxLength={200}
+            placeholder="Contact"
+          />
+          <input
+            id="recrutementTitle"
+            onChange={(e) => (recrutementInfos.adresse = e.target.value)}
+            className="w3-input w3-border-0 w3-light-grey w3-round w3-margin-bottom"
+            type="text"
+            maxLength={200}
+            placeholder="Adresse"
+          />
+          <input
+            id="recrutementTitle"
+            onChange={(e) => (recrutementInfos.psalarial = e.target.value)}
+            className="w3-input w3-border-0 w3-light-grey w3-round w3-margin-bottom"
+            type="text"
+            maxLength={200}
+            placeholder="Prétention salariale"
+          />
+          <select
+            onChange={(e) => recrutementInfos.niveauLangue.fr = e.target.value}
+            className="w3-block  w3-light-grey w3-round w3-block w3-text-black w3-medium  w3-border-0 w3-margin-bottom"
+            style={{ paddingBlock: 10, paddingInline: 5 }}
+            defaultValue={'default'}
+          >
+            <option value={'default'} disabled={true}>
+              Votre niveau de Français :
+            </option>
+            <option value={1}>
+              1 sur 6 = A1 (Débutant)
+            </option>
+            <option value={2}>
+              2 sur 6 = A2 (Intermédiaire)
+            </option>
+            <option value={3}>
+              3 sur 6 = B1 (Pré-intermédiaire)
+            </option>
+            <option value={4}>
+              4 sur 6 = B2 (Intermédiaire avancé)
+            </option>
+            <option value={5}>
+              5 sur 6 = C1 (Avancé)
+            </option>
+            <option value={5}>
+              5 sur 6 = C2 (Maîtrise)
+            </option>
+          </select>
+          <input onChange={(e) => recrutementInfos.dactylot = e.target.value} type="checkbox" id="dactylo" name="dactylo" value={true} className="w3-margin-right" />
+          <label for="dactylo">Je sais taper sans regarder le clavier</label>
+          <div
+            id="recrutementContent"
+            contentEditable={true}
+            className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
+            style={{
+              height: 160,
+              minWidth: "100%",
+              marginTop: 16,
+            }}
+          >Parlez-nous de vos compétences et de vos expériences :</div>
+          <div className="w3-container" style={{ padding: 0 }}>
             <div
-              className="w3-display-container"
-              id="showImageWrapper"
-              style={{ display: "none", height: 120, width: 200,marginTop:16 }}
+              id="inputImage"
+              onClick={() => inputImage.click()}
+              className="w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center-v"
+              style={{ height: 40, marginTop: 16, paddingInline: 24 }}
             >
-              <Image
-                id="showImage"
-                src={''}
-                className="w3-display-middle w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
-                height={120}
-                width={200}
-                style={{
-                  objectFit: "cover",
-                  objectPosition: "center",
-                }}
-              />
-              <div className="w3-display-topright" style={{ padding: 4 }}>
-                <div
-                  onClick={cancelImageInsertion}
-                  className="w3-circle w3-card w3-white w3-flex w3-flex-center"
-                  style={{ width: 24, height: 24 }}
-                >
-                  <FontAwesomeIcon
-                    icon={faTimes}
-                    style={{ width: 16, height: 16 }}
-                  />
+              <FontAwesomeIcon className="w3-margin-right" icon={faImage} style={{ width: 16, height: 16 }} />
+              ¬ Importer votre photo de CIN
+            </div>
+
+            <div style={{ padding: 0 }}>
+              <div
+                className="w3-display-container"
+                id="showImageWrapper"
+                style={{ display: "none", height: 120, width: 200, marginTop: 16 }}
+              >
+                <Image
+                  id="showImage"
+                  src={''}
+                  className="w3-display-middle w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
+                  height={120}
+                  width={200}
+                  style={{
+                    objectFit: "cover",
+                    objectPosition: "center",
+                  }}
+                />
+                <div className="w3-display-topright" style={{ padding: 4 }}>
+                  <div
+                    onClick={cancelImageInsertion}
+                    className="w3-circle w3-card w3-white w3-flex w3-flex-center"
+                    style={{ width: 24, height: 24 }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faTimes}
+                      style={{ width: 16, height: 16 }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="w3-container" style={{ padding: 0 }}>
-          <div
-            id="inputCV"
-            onClick={() => inputCV.click()}
-            className="w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center-v"
-            style={{ height: 40, marginTop: 16, paddingInline: 24 }}
-          >
-            <FontAwesomeIcon className="w3-margin-right" icon={faPaperclip} style={{ width: 16, height: 16 }} />
-            ¬ Importer votre CV
-          </div>
-
-          <div style={{ padding: 0, marginTop: 16 }}>
+          <div className="w3-container" style={{ padding: 0 }}>
             <div
-              className="w3-display-container"
-              id="showCVWrapper"
-              style={{ display: "none", height: 200, width: 140 }}
+              id="inputCV"
+              onClick={() => inputCV.click()}
+              className="w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center-v"
+              style={{ height: 40, marginTop: 16, paddingInline: 24 }}
             >
-              <Image
-                id="showCV"
-                src={''}
-                className="w3-display-middle w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
-                height={200}
-                width={140}
-                style={{
-                  objectFit: "cover",
-                  objectPosition: "center",
-                }}
-              />
-              <div className="w3-display-topright" style={{ padding: 4 }}>
-                <div
-                  onClick={cancelCVInsertion}
-                  className="w3-circle w3-card w3-white w3-flex w3-flex-center"
-                  style={{ width: 24, height: 24 }}
-                >
-                  <FontAwesomeIcon
-                    icon={faTimes}
-                    style={{ width: 16, height: 16 }}
-                  />
+              <FontAwesomeIcon className="w3-margin-right" icon={faPaperclip} style={{ width: 16, height: 16 }} />
+              ¬ Importer votre CV
+            </div>
+
+            <div style={{ padding: 0, marginTop: 16 }}>
+              <div
+                className="w3-display-container"
+                id="showCVWrapper"
+                style={{ display: "none", height: 200, width: 140 }}
+              >
+                <Image
+                  id="showCV"
+                  src={''}
+                  className="w3-display-middle w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
+                  height={200}
+                  width={140}
+                  style={{
+                    objectFit: "cover",
+                    objectPosition: "center",
+                  }}
+                />
+                <div className="w3-display-topright" style={{ padding: 4 }}>
+                  <div
+                    onClick={cancelCVInsertion}
+                    className="w3-circle w3-card w3-white w3-flex w3-flex-center"
+                    style={{ width: 24, height: 24 }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faTimes}
+                      style={{ width: 16, height: 16 }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        {/* //pdf reader */}
-        {/* <PdfReader /> */}
-        <div style={{ marginTop: 24 }}>
-          <button
-            onClick={() => save("public")}
-            className="w3-button w3-black w3-round-xxlarge w3-block w3-flex w3-flex-center"
-          >
-            Postuler votre condidature{" "}
-            <FontAwesomeIcon
-              id="recrutementPublicIcon"
-              className="w3-margin-left"
-              icon={faArrowRight}
-              style={{ width: 16, height: 16 }}
-            />
-            <FontAwesomeIcon
-              id="recrutementPublicSpinner"
-              className="w3-spin w3-margin-left"
-              icon={faSpinner}
-              style={{ width: 16, height: 16, display: "none" }}
-            />
-          </button>
-          {/* <button
+          {/* //pdf reader */}
+          {/* <PdfReader /> */}
+          <div style={{ marginTop: 24 }}>
+            <button
+              onClick={() => save("public")}
+              className="w3-button w3-black w3-round-xxlarge w3-block w3-flex w3-flex-center"
+            >
+              Postuler votre condidature{" "}
+              <FontAwesomeIcon
+                id="recrutementPublicIcon"
+                className="w3-margin-left"
+                icon={faArrowRight}
+                style={{ width: 16, height: 16 }}
+              />
+              <FontAwesomeIcon
+                id="recrutementPublicSpinner"
+                className="w3-spin w3-margin-left"
+                icon={faSpinner}
+                style={{ width: 16, height: 16, display: "none" }}
+              />
+            </button>
+            {/* <button
             onClick={() => save("draft")}
             className="w3-button w3-hover-black w3-border w3-border-black w3-round-xxlarge w3-block w3-flex w3-flex-center"
             style={{ marginTop: 16 }}
@@ -715,6 +716,7 @@ function postuleRecrutement(props) {
           >
             Supprimer le recrutement
           </button> */}
+          </div>
         </div>
       </div>
 
