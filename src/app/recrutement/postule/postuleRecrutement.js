@@ -65,6 +65,10 @@ function postuleRecrutement(props) {
     }
   });
 
+  const emptyForme = () => {
+
+  }
+
   async function setCSRFToken() {
     try {
       // Fetch CSRF token from the server
@@ -137,14 +141,13 @@ function postuleRecrutement(props) {
     recrutementInfos.content = document.getElementById('recrutementContent').innerHTML;
 
 
-    if (recrutementInfos.image ||
-      recrutementInfos.cv &&
-      recrutementInfos.jobTitle.length > 0 &&
-      recrutementInfos.content.length > 0 &&
-      recrutementInfos.fullname.length > 0 &&
-      recrutementInfos.adresse.length > 0 &&
-      recrutementInfos.psalarial.length > 0 &&
-      recrutementInfos.contact.length > 0 &&
+    if ((recrutementInfos.image || recrutementInfos.cv) &&
+      recrutementInfos.jobTitle.length > 3 &&
+      recrutementInfos.content.length > 3 &&
+      recrutementInfos.fullname.length > 3 &&
+      recrutementInfos.adresse.length > 3 &&
+      recrutementInfos.psalarial.length > 3 &&
+      recrutementInfos.contact.length > 3 &&
       recrutementInfos.niveauLangue.fr.length > 0) {
 
       if (state == 'public') {
@@ -238,31 +241,19 @@ function postuleRecrutement(props) {
           await axios
             .post(source + "/_recrutement", data)
             .then((res) => {
-              if (res.data.logedin) {
-                if (state == 'public') {
-                  document.getElementById("recrutementPublicSpinner").style.display = "none";
-                  document.getElementById("recrutementPublicIcon").style.display = "inline-block";
-                } else if (state == 'draft') {
-                  document.getElementById("recrutementDraftSpinner").style.display = "none";
+              if (state == 'public') {
+                document.getElementById("recrutementPublicSpinner").style.display = "none";
+                document.getElementById("recrutementPublicIcon").style.display = "inline-block";
+              } else if (state == 'draft') {
+                document.getElementById("recrutementDraftSpinner").style.display = "none";
 
-                }
-                reloadRecrutements(res.data.data.reverse());
-                document.getElementById('modalRecrutementListe').style.display = 'block'
-                document.getElementById('recrutementTitle').value = ''
-                document.getElementById('recrutementContent').innerHTML = 'Que pensez-vous ?'
-                cancelImageInsertion()
-              } else {
-                if (document.getElementById('modalLogin')) {
-                  document.getElementById('modalLogin').style.display = 'block'
-                }
-                if (state == 'public') {
-                  document.getElementById("recrutementPublicSpinner").style.display = "none";
-                  document.getElementById("recrutementPublicIcon").style.display = "inline-block";
-                } else if (state == 'draft') {
-                  document.getElementById("recrutementDraftSpinner").style.display = "none";
-                }
               }
-
+              emptyForme()
+              document.getElementById('modalStateRecrutement').style.display = 'block';
+              setTimeout(() => {
+                document.getElementById('modalStateRecrutement').style.display = 'none';
+                window.location.reload()
+              }, 3000);
             })
             .catch((e) => {
               if (state == 'public') {
@@ -755,33 +746,15 @@ function postuleRecrutement(props) {
       {/* end modal recrutement liste */}
 
       {/* modal option */}
-      <div id="modalOptionRecrutement" className="white-opacity w3-modal w3-round" style={{ position: 'absolute', height: 'calc(100vh - 16px)' }}>
+      <div id="modalStateRecrutement" className="white-opacity w3-modal w3-round" style={{ position: 'absolute', height: 'calc(100vh - 16px)' }}>
         <div
           className="w3-modal-content w3-card-4 w3-animate-top w3-round w3-overflow"
           style={{ width: 320, marginTop: '20vh', paddingBlock: 8 }}
         >
-          <div className="w3-flex-row w3-flex-center-v w3-padding">
-            <button
-              onClick={closeModalOptionRecrutement}
-              style={{ paddingInline: 16, paddingBlock: 8 }}
-              className="w3-round-xxlarge w3-border-0 w3-black w3-margin-right"
-            >
-              <FontAwesomeIcon icon={faArrowLeft} />
-            </button>
-            <button
-              onClick={afficher}
-              style={{ paddingInline: 16, paddingBlock: 8 }}
-              className="w3-round-xxlarge w3-black w3-border-0 w3-margin-right w3-flex-1"
-            >
-              Afficher
-            </button>
-            <button
-              onClick={() => supprimer(1)}
-              style={{ paddingInline: 16, paddingBlock: 8 }}
-              className="w3-round-xxlarge w3-border-0 w3-red w3-flex-1"
-            >
-              Supprimer
-            </button>
+          <div className="w3-padding">
+            <div>
+              Bravo ! Votre candidature a bien été postée avec succès...
+            </div>
           </div>
         </div>
       </div>

@@ -15,7 +15,19 @@ function page() {
     axios
       .get(source + "/_recrutement?xcode=" + xcode)
       .then((res) => {
-        console.log(res.data.data);
+        if (res.data.logedin) {
+          if (res.data.authorized) {
+            console.log(res.data.data);
+
+            setrecrutements(res.data.data);
+          } else {
+            window.location = '/'
+          }
+        } else {
+          if (document.getElementById('modalLogin')) {
+            document.getElementById('modalLogin').style.display = 'block'
+          }
+        }
       })
       .catch((e) => {
         console.error("failure", e);
