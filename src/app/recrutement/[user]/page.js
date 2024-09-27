@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import RecrutementView from "./RecrutementView";
 
 function page({ params }) {
-    const [recrutement, setrecrutement] = useState([])
+    const [recrutement, setrecrutement] = useState(null)
     useEffect(() => {
         const xcode = localStorage.getItem('x-code')
 
@@ -15,7 +15,7 @@ function page({ params }) {
             .then((res) => {
                 if (res.data.logedin) {
                     if (res.data.authorized) {
-                        console.log(res.data.data);
+                        setrecrutement(res.data.data[0]);
                     } else {
                         window.location = '/'
                     }
@@ -30,7 +30,7 @@ function page({ params }) {
             });
     }, [])
     return (
-        <Home core={<RecrutementView />} />
+        <Home core={<RecrutementView view={recrutement}/>} />
     )
 }
 

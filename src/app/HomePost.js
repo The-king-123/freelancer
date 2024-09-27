@@ -108,7 +108,7 @@ export default function PostContent({ posts }) {
                     width={260}
                     src={
                       source +
-                      "/images.php?w=260&h2600&zlonk=2733&zlink=" +
+                      "/images.php?w=260&h=260&zlonk=2733&zlink=" +
                       post.link
                     }
                     style={{
