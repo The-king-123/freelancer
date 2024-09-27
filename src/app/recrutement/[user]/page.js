@@ -6,10 +6,8 @@ import { useEffect, useState } from "react";
 import RecrutementView from "./RecrutementView";
 
 function page({ params }) {
-
+    const [recrutement, setrecrutement] = useState([])
     useEffect(() => {
-
-        const [recrutement, setrecrutement] = useState([])
         const xcode = localStorage.getItem('x-code')
 
         axios
