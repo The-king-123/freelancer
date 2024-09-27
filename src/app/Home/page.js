@@ -28,10 +28,13 @@ import {
   faPlus,
   faRefresh,
   faRobot,
+  faSearch,
   faShieldAlt,
   faSpinner,
   faTimesCircle,
   faUser,
+  faUserMd,
+  faUserPlus,
   faUsers,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
@@ -1233,7 +1236,7 @@ export default function Home(props) {
               href={"/recrutement/postule"}
             >
               <FontAwesomeIcon
-                icon={faHammer}
+                icon={faUserPlus}
                 width={20}
                 height={20}
               />
