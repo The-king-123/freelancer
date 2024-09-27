@@ -140,14 +140,16 @@ function postuleRecrutement(props) {
 
     recrutementInfos.content = document.getElementById('recrutementContent').innerHTML;
 
+    console.log(recrutementInfos);
+    
 
     if ((recrutementInfos.image || recrutementInfos.cv) &&
-      recrutementInfos.jobTitle.length > 3 &&
-      recrutementInfos.content.length > 3 &&
-      recrutementInfos.fullname.length > 3 &&
-      recrutementInfos.adresse.length > 3 &&
-      recrutementInfos.psalarial.length > 3 &&
-      recrutementInfos.contact.length > 3 &&
+      recrutementInfos.jobTitle.length >= 3 &&
+      recrutementInfos.content.length >= 3 &&
+      recrutementInfos.fullname.length >= 3 &&
+      recrutementInfos.adresse.length >= 3 &&
+      recrutementInfos.psalarial.length >= 3 &&
+      recrutementInfos.contact.length >= 3 &&
       recrutementInfos.niveauLangue.fr.length > 0) {
 
       if (state == 'public') {
@@ -495,9 +497,8 @@ function postuleRecrutement(props) {
       <div style={{ padding: 8 }}>
         <select
           onChange={(e) => recrutementInfos.jobTitle = e.target.value}
-          id="designation"
-          className="input w3-block  w3-light-grey w3-round w3-block w3-text-black w3-medium  w3-border-0 w3-margin-bottom"
-          style={{ paddingBlock: 8 }}
+          className="w3-block  w3-light-grey w3-round w3-block w3-text-black w3-medium  w3-border-0 w3-margin-bottom"
+          style={{ paddingBlock: 10,paddingInline:5 }}
           defaultValue={'default'}
         >
           <option value={'default'} disabled={true}>
@@ -547,8 +548,8 @@ function postuleRecrutement(props) {
         />
         <select
           onChange={(e) => recrutementInfos.niveauLangue.fr = e.target.value}
-          className="input w3-block  w3-light-grey w3-round w3-block w3-text-black w3-medium  w3-border-0 w3-margin-bottom"
-          style={{ paddingBlock: 8 }}
+          className="w3-block  w3-light-grey w3-round w3-block w3-text-black w3-medium  w3-border-0 w3-margin-bottom"
+          style={{ paddingBlock: 10,paddingInline:5 }}
           defaultValue={'default'}
         >
           <option value={'default'} disabled={true}>
@@ -600,7 +601,7 @@ function postuleRecrutement(props) {
             <div
               className="w3-display-container"
               id="showImageWrapper"
-              style={{ display: "none", height: 120, width: 200 }}
+              style={{ display: "none", height: 120, width: 200,marginTop:16 }}
             >
               <Image
                 id="showImage"
