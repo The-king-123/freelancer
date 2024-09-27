@@ -140,9 +140,6 @@ function postuleRecrutement(props) {
 
     recrutementInfos.content = document.getElementById('recrutementContent').innerHTML;
 
-    console.log(recrutementInfos);
-
-
     if ((recrutementInfos.image || recrutementInfos.cv) &&
       recrutementInfos.jobTitle.length >= 3 &&
       recrutementInfos.content.length >= 3 &&
@@ -158,8 +155,6 @@ function postuleRecrutement(props) {
       } else if (state == 'draft') {
         document.getElementById("recrutementDraftSpinner").style.display = "inline-block";
       }
-
-      console.log(recrutementInfos);
 
       var data;
       // if (recrutementInfos.image) {
