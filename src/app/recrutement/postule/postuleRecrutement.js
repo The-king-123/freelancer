@@ -567,7 +567,7 @@ function postuleRecrutement(props) {
             <option value={5}>
               5 sur 6 = C1 (Avancé)
             </option>
-            <option value={5}>
+            <option value={6}>
               5 sur 6 = C2 (Maîtrise)
             </option>
           </select>

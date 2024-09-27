@@ -20,14 +20,21 @@ function RecrutementView(props) {
 
                 <div>
 
-                    <div>{props.view.fullname}</div>
-                    <div>{props.view.title}</div>
-                    <div>{props.view.adress}</div>
-                    <div>{props.view.contact}</div>
-                    <div>{props.view.psalarial}</div>
-                    <div>{props.view.nlangue}</div>
-                    <div>{props.view.dactylot}</div>
-                    <div>{parse(props.view.content)}</div>
+                    <div className="w3-large w3-big">{props.view.fullname}</div>
+                    <div className="w3-text-grey">{props.view.title}</div>
+                    <div className="w3-border-bottom" style={{paddingBlock:4}}>
+                        <div>{props.view.adress}</div>
+                        <div>{props.view.contact}</div>
+                    </div>
+                    <div className="w3-border-bottom" style={{paddingBlock:4}}>
+                        <div>{props.view.psalarial}</div>
+                        <div>Niveau de langue : {JSON.parse(props.view.nlangue).fr}</div>
+                        <div>{props.view.dactylot && 'Je sais taper sans regarder le clavier'}</div>
+                    </div>
+                    <div style={{paddingBlock:4}}>
+                        <div>{parse(props.view.content)}</div>
+                    </div>
+
                     <Image
                         alt={props.view.title}
                         unoptimized
@@ -46,7 +53,7 @@ function RecrutementView(props) {
                         }}
                         className="w3-light-grey post-image"
                     />
-            
+
                     <div>{props.view.cin}</div>
                     <div>{props.view.cv}</div>
                     <div>{dateMaker(props.view.updated_at)}</div>
