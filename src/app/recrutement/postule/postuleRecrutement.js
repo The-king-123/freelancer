@@ -752,6 +752,7 @@ function postuleRecrutement(props) {
       {/* modal option */}
       <div id="modalStateRecrutement" className="white-opacity w3-modal w3-round" style={{ position: 'absolute', height: 'calc(100vh - 16px)' }}>
         <div
+          onClick={e => e.target.style.display = 'none'}
           className="w3-modal-content w3-card-4 w3-animate-top w3-round w3-overflow"
           style={{ width: 320, marginTop: '20vh', paddingBlock: 8 }}
         >
