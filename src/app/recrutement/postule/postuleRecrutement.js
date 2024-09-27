@@ -251,6 +251,7 @@ function postuleRecrutement(props) {
 
               }
               emptyForme()
+              document.getElementById('recrutementCore').style.display = 'none'
               document.getElementById('modalStateRecrutement').style.display = 'block';
               setTimeout(() => {
                 document.getElementById('modalStateRecrutement').style.display = 'none';
