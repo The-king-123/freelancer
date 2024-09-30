@@ -182,6 +182,30 @@ function ChatbotCreate() {
         }
     }
 
+    const saveStarter = async () => {
+
+        document.getElementById('chatbotSaveStarterSaveIcon').style.display = 'none'
+        document.getElementById('chatbotSaveStarterSpinnerIcon').style.display = 'inline-block'
+
+        const request = {
+            info: document.getElementById('chatbotStarter').innerHTML,
+        }
+
+        const xcode = localStorage.getItem("x-code");
+        await setCSRFToken()
+        await axios
+            .patch(source + "/_accrocher/id?xcode=" + xcode, request)
+            .then((res) => {
+                document.getElementById('chatbotSaveStarterSaveIcon').style.display = 'inline-block'
+                document.getElementById('chatbotSaveStarterSpinnerIcon').style.display = 'none'
+            })
+            .catch((e) => {
+                document.getElementById('chatbotSaveStarterSaveIcon').style.display = 'inline-block'
+                document.getElementById('chatbotSaveStarterSpinnerIcon').style.display = 'none'
+                console.error("failure", e);
+            });
+    }
+
     useEffect(() => {
 
         const xcode = localStorage.getItem("x-code");
@@ -190,7 +214,7 @@ function ChatbotCreate() {
             axios
                 .get(source + "/_accrocher?xcode=" + xcode)
                 .then((res) => {
-                    console.log(res.data.data);
+                    document.getElementById('chatbotStarter').innerHTML = res.data.data[0].info
                 })
                 .catch((e) => {
                     console.error("failure", e);
@@ -244,13 +268,34 @@ function ChatbotCreate() {
                             height: 160,
                             minWidth: "100%",
                             marginBottom: 20,
+                            paddingRight: 48
                         }}
-                    >Que pensez-vous?</div>
+                    ></div>
+                    <div onClick={saveStarter} style={{ width: 32, height: 32, margin: 8 }} className='w3-pointer w3-flex w3-flex-center w3-display-topright w3-circle w3-black'>
+                        <FontAwesomeIcon id='chatbotSaveStarterSaveIcon' icon={faSave} />
+                        <FontAwesomeIcon id='chatbotSaveStarterSpinnerIcon' icon={faSpinner} className='w3-spin' style={{ display: 'none' }} />
+                    </div>
+                </div>
+
+                {/* // info premium */}
+                <div style={{ position: 'relative' }}>
+                    <div
+                        id="chatbotStarter"
+                        contentEditable={true}
+                        className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
+                        style={{
+                            height: 160,
+                            minWidth: "100%",
+                            marginBottom: 20,
+                            paddingRight: 48
+                        }}
+                    ></div>
                     <div style={{ width: 32, height: 32, margin: 8 }} className='w3-pointer w3-flex w3-flex-center w3-display-topright w3-circle w3-black'>
                         <FontAwesomeIcon id='chatbotSaveStarterSaveIcon' icon={faSave} />
                         <FontAwesomeIcon id='chatbotSaveStarterSpinnerIcon' icon={faSpinner} className='w3-spin' style={{ display: 'none' }} />
                     </div>
                 </div>
+
                 <div className="w3-container" style={{ padding: 0 }}>
                     <div className="w3-right" style={{ width: '35%' }}>
                         <div
