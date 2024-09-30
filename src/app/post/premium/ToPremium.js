@@ -25,7 +25,7 @@ function ToPremium(props) {
                             if (res.data.contact.includes('whatsapp')) {
                                 const contact = JSON.parse(res.data.contact)
                                 if (contact.messenger.length <= 3) {
-                                    document.getElementById('cardNotPremiumText').innerText = "Pour accéder à ce contenu, veuillez nous contacter."
+                                    document.getElementById('cardNotPremiumText').innerText = res.data.foraccess
                                     document.getElementById('buttonContactText').innerText = 'Appeler le numero'
                                     document.getElementById('buttonContact').addEventListener('click', () => {
                                         window.open('tel:' + res.data.telephone, '_blank')
@@ -36,7 +36,7 @@ function ToPremium(props) {
                                     })
                                 }
                             } else {
-                                document.getElementById('cardNotPremiumText').innerText = "Pour accéder à ce contenu, veuillez nous contacter."
+                                document.getElementById('cardNotPremiumText').innerText = res.data.foraccess
                                 document.getElementById('buttonContactText').innerText = 'Appeler le numero'
                                 document.getElementById('buttonContact').addEventListener('click', () => {
                                     window.open('tel:' + res.data.contact, '_blank')

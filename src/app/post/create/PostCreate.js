@@ -53,6 +53,7 @@ function PostCreate(props) {
         info: {
             description: "",
             videoUrl: "_",
+            premiumAccess:'',
         },
         media: null,
         state: "",
@@ -164,6 +165,8 @@ function PostCreate(props) {
         postInfo.slug = slugify(postInfo.title, { lower: true });
 
         postInfo.info.description = document.getElementById('postContent').innerHTML
+        postInfo.info.premiumAccess = document.getElementById('premiumAccess').innerHTML
+
         const videoState = postInfo.type == 'image/video' ? (postInfo.info.videoUrl.length > 3 ? true : false) : true
 
         if (postInfo.title.length > 0 && postInfo.info.description.length > 0 && postInfo.category && postInfo.type != 'video' && postInfo.type != 'text' && videoState) {
@@ -1137,7 +1140,14 @@ function PostCreate(props) {
                     <div className="w3-right" style={{ paddingRight: 16, width: '65%' }}>
                         <select
                             id="postCategory"
-                            onChange={(e) => postInfo.category = e.target.value}
+                            onChange={(e) => {
+                                if (e.target.value == 'premium') {
+                                    document.getElementById('premiumAccessWrapper').style.display = 'block';
+                                }else{
+                                    document.getElementById('premiumAccessWrapper').style.display = 'none';
+                                }
+                                postInfo.category = e.target.value
+                            }}
                             className="w3-light-grey w3-input w3-border-0 w3-block w3-nowrap w3-overflow w3-round"
                             style={{ paddingBlock: 8 }}
                             defaultValue={null}
@@ -1378,6 +1388,24 @@ function PostCreate(props) {
                         </div>
 
                     </div>
+                </div>
+
+                {/* // info premium */}
+                <div id="premiumAccessWrapper" style={{ marginTop: 16,display:'none' }}>
+                    <div className="w3-small w3-text-grey w3-margin-top" style={{ marginBottom: 4 }}>
+                        ¬ Comment fait-on pour accéder à ce contenu ?
+                    </div>
+                    <div
+                        id="premiumAccess"
+                        contentEditable={true}
+                        className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
+                        style={{
+                            height: 160,
+                            minWidth: "100%",
+                            marginBottom: 20,
+                            paddingRight: 48
+                        }}
+                    >Pour accéder a ce contenu:</div>
                 </div>
 
                 <hr />

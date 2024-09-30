@@ -15,6 +15,7 @@ function ChatbotCreate() {
             description: '',
         }
     })
+    
     const [topics, setTopics] = useState('')
 
     const createTopic = () => {
@@ -272,25 +273,6 @@ function ChatbotCreate() {
                         }}
                     ></div>
                     <div onClick={saveStarter} style={{ width: 32, height: 32, margin: 8 }} className='w3-pointer w3-flex w3-flex-center w3-display-topright w3-circle w3-black'>
-                        <FontAwesomeIcon id='chatbotSaveStarterSaveIcon' icon={faSave} />
-                        <FontAwesomeIcon id='chatbotSaveStarterSpinnerIcon' icon={faSpinner} className='w3-spin' style={{ display: 'none' }} />
-                    </div>
-                </div>
-
-                {/* // info premium */}
-                <div style={{ position: 'relative' }}>
-                    <div
-                        id="chatbotStarter"
-                        contentEditable={true}
-                        className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
-                        style={{
-                            height: 160,
-                            minWidth: "100%",
-                            marginBottom: 20,
-                            paddingRight: 48
-                        }}
-                    ></div>
-                    <div style={{ width: 32, height: 32, margin: 8 }} className='w3-pointer w3-flex w3-flex-center w3-display-topright w3-circle w3-black'>
                         <FontAwesomeIcon id='chatbotSaveStarterSaveIcon' icon={faSave} />
                         <FontAwesomeIcon id='chatbotSaveStarterSpinnerIcon' icon={faSpinner} className='w3-spin' style={{ display: 'none' }} />
                     </div>
