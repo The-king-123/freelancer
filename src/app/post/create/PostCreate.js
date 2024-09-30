@@ -436,6 +436,7 @@ function PostCreate(props) {
         if (data.category == 'premium') {
             displayKeyListArea()
             document.getElementById('premiumCodeManager').style.display = 'flex'
+            document.getElementById('premiumAccess').style.display = 'block'
             const xcode = localStorage.getItem('x-code')
             await setCSRFToken();
             await axios
