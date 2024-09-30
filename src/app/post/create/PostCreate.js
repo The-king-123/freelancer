@@ -437,6 +437,9 @@ function PostCreate(props) {
             displayKeyListArea()
             document.getElementById('premiumCodeManager').style.display = 'flex'
             document.getElementById('premiumAccessWrapper').style.display = 'block'
+
+            document.getElementById('premiumAccess').innerHTML = JSON.parse(data.info).premiumAccess ? JSON.parse(data.info).premiumAccess : "Pour accéder à ce contenu, veuillez nous contacter."
+
             const xcode = localStorage.getItem('x-code')
             await setCSRFToken();
             await axios
