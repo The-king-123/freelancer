@@ -1,5 +1,5 @@
 'use client'
-import { faBookmark, faPlus, faRobot, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faBookmark, faPlus, faRobot, faSave, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
 import { console_source as source } from '../data'
@@ -188,6 +188,15 @@ function ChatbotCreate() {
 
         if (xcode) {
             axios
+                .get(source + "/_accrocher?xcode=" + xcode)
+                .then((res) => {
+                    console.log(res.data.data);
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                });
+
+            axios
                 .get(source + "/_topic?xcode=" + xcode)
                 .then((res) => {
                     if (res.data.logedin) {
@@ -210,7 +219,7 @@ function ChatbotCreate() {
     }, [])
 
     return (
-        <div id="chatbotCore" style={{ display: 'none',position:'relative' }}>
+        <div id="chatbotCore" style={{ display: 'none', position: 'relative' }}>
             <div
                 className="w3-medium w3-big w3-flex-row w3-flex-center-v"
                 style={{ padding: 8 }}
@@ -226,6 +235,22 @@ function ChatbotCreate() {
             </div>
 
             <div style={{ padding: 8 }}>
+                <div style={{ position: 'relative' }}>
+                    <div
+                        id="chatbotStarter"
+                        contentEditable={true}
+                        className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
+                        style={{
+                            height: 160,
+                            minWidth: "100%",
+                            marginBottom: 20,
+                        }}
+                    >Que pensez-vous?</div>
+                    <div style={{ width: 32, height: 32, margin: 8 }} className='w3-pointer w3-flex w3-flex-center w3-display-topright w3-circle w3-black'>
+                        <FontAwesomeIcon id='chatbotSaveStarterSaveIcon' icon={faSave} />
+                        <FontAwesomeIcon id='chatbotSaveStarterSpinnerIcon' icon={faSpinner} className='w3-spin' style={{ display: 'none' }} />
+                    </div>
+                </div>
                 <div className="w3-container" style={{ padding: 0 }}>
                     <div className="w3-right" style={{ width: '35%' }}>
                         <div
@@ -254,7 +279,7 @@ function ChatbotCreate() {
 
             </div>
             {/* modal show topic */}
-            <div id="modalShowTopic" className="w3-modal w3-round white-opacity" style={{position:'absolute',height:'calc(100vh - 16px)'}}>
+            <div id="modalShowTopic" className="w3-modal w3-round white-opacity" style={{ position: 'absolute', height: 'calc(100vh - 16px)' }}>
                 <div
                     className="w3-modal-content w3-card w3-round w3-overflow"
                     style={{ maxWidth: 420, top: '15%' }}

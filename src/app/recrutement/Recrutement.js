@@ -18,7 +18,6 @@ function Recrutement(props) {
                     <div key={key} className='w3-half' style={{padding:8}}>
                         <Link
                             href={"/recrutement/" + recrutement.slug}
-                            style={{ padding: 8 }}
                         >
                             <div
                                 className="w3-light-grey w3-round"
@@ -39,8 +38,8 @@ function Recrutement(props) {
                                     <div>
                                         {recrutement.contact}
                                     </div>
-                                    <div>
-                                        {dateMaker(recrutement.updated_at)}
+                                    <div className='w3-small w3-text-grey'>
+                                        Postulée le {dateMaker(recrutement.updated_at)}
                                     </div>
                                 </div>
                                 <div className='w3-round w3-white' style={{ marginTop: 16, paddingInline: 16, paddingBlock: 8 }} >
