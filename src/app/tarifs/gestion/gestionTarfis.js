@@ -36,7 +36,7 @@ function gestionTarfis() {
         name: '',
         tarif: '',
         access: null,
-        rang: '_',
+        rang: '0',
         info: '_',
     })
     const access = { text: '' }
@@ -60,7 +60,7 @@ function gestionTarfis() {
 
     const reloadTarifs = (tarifs) => {
 
-        tarifsData.splice(tarifsData.length-1)
+        tarifsData.splice(tarifsData.length - 1)
 
         tarifs.forEach(element => {
             tarifsData.push(element)
@@ -71,12 +71,12 @@ function gestionTarfis() {
             glitchTarif = tarifs.map((tarif, key) => (
                 <div key={key} className='w3-half' style={{ padding: 8 }}>
                     <div className='w3-light-grey w3-round'>
-                        <div className={'w3-round w3-text-white ' + (tarifs.length <= 3 ? colors[key + 1] : colors[key])} style={{ paddingBlock: 16, paddingInline: 20 }}>
+                        <div className={'w3-round w3-text-white ' + (tarifs.length <= 3 ? colors[key + 1] : colors[key])} style={{ paddingBlock: 12, paddingInline: 20 }}>
                             <div className='w3-big w3-medium w3-flex-row w3-flex-center-v'>
-                                <div className='w3-flex-1'>{tarif.name}</div>
-                                <div><FontAwesomeIcon onClick={()=>upRang(tarif)} icon={faArrowCircleUp} /> </div>
+                                <div className='w3-flex-1 w3-pointer' onClick={() => editTarif(tarif)}>{tarif.name}</div>
+                                <div className=''><FontAwesomeIcon className='w3-large w3-pointer' style={{ marginRight: -8 }} onClick={() => upRang(tarif)} icon={faArrowCircleUp} /> </div>
                             </div>
-                            <div className='w3-medium w3-big'>
+                            <div className='w3-medium w3-big w3-pointer' onClick={() => editTarif(tarif)}>
                                 {tarif.tarif}
                             </div>
                         </div>
@@ -140,6 +140,7 @@ function gestionTarfis() {
 
     const upRang = (data) => {
         console.log(tarifsData);
+
 
     }
 
