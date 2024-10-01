@@ -122,15 +122,29 @@ function gestionTarfis() {
         setdisplayTarifs(glitchTarif)
     }
 
+    const emptyForme = () => {
+        document.getElementById('tarifName').value = ''
+        document.getElementById('tarifCore').value = ''
+        document.getElementById('addAccessInput').value = ''
+
+        tarifInfo.name = ''
+        tarifInfo.tarif = ''
+        tarifInfo.rang = 0,
+            tarifInfo.access = null
+        accesses.splice(0, accesses.length)
+        access.text = ''
+
+    }
+
     const saveTarif = async () => {
         if (tarifInfo.name.length > 3 && tarifInfo.tarif.length > 3 && accesses.length > 0) {
 
-            if (tarifsData.length>0) {
-                tarifInfo.rang = tarifsData.sort((a, b) => a.rang - b.rang).reverse()[0].rang*1 + 1
-            }else{
+            if (tarifsData.length > 0) {
+                tarifInfo.rang = tarifsData.sort((a, b) => a.rang - b.rang).reverse()[0].rang * 1 + 1
+            } else {
                 tarifInfo.rang = 0
-            }            
-            
+            }
+
             document.getElementById('tarifPublicSpinner').style.display = 'inline-block'
             document.getElementById('tarifPublicIcon').style.display = 'none'
             tarifInfo.access = JSON.stringify(accesses)
@@ -140,6 +154,7 @@ function gestionTarfis() {
                 .post(source + "/_tarifs?xcode=" + xcode, tarifInfo)
                 .then((res) => {
                     if (res.data.logedin) {
+                        emptyForme()
                         reloadTarifs(res.data.data)
                     } else {
                         if (document.getElementById('modalLogin')) {
@@ -161,11 +176,80 @@ function gestionTarfis() {
         }
     }
 
-    const upRang = (data) => {
-        tarifsData.sort((a, b) => a.rang - b.rang).reverse()[0] == data.rang
-        if (tarifsData.sort((a, b) => a.rang - b.rang).reverse()[0] > data.rang) {
-            console.log();
-            
+    const upRang = async (data) => {
+
+        const filteredTarifs = tarifsData.sort((a, b) => a.rang - b.rang).reverse()
+
+        if (filteredTarifs[0].rang * 1 > data.rang * 1) {
+
+            var targetData
+            for (let i = 0; i < filteredTarifs.length; i++) {
+                if (filteredTarifs[i].id == data.id) {
+                    targetData = filteredTarifs[i - 1]
+                }
+            };
+
+            const request = {
+                name: data.name,
+                tarif: data.tarif,
+                access: data.access,
+                rang: data.rang * 1 + 1,
+                info: '_',
+            }
+            const targetRequest = {
+                name: targetData.name,
+                tarif: targetData.tarif,
+                access: targetData.access,
+                rang: data.rang*1,
+                info: '_',
+            }
+
+            const xcode = localStorage.getItem('x-code')
+            await setCSRFToken()
+            await axios
+                .patch(source + "/_tarifs/" + data.id + "?xcode=" + xcode, request)
+                .then(async (res) => {
+                    if (res.data.logedin) {
+
+                        await setCSRFToken()
+                        await axios
+                            .patch(source + "/_tarifs/" + targetData.id + "?xcode=" + xcode, targetRequest)
+                            .then((res) => {
+                                if (res.data.logedin) {
+                                    reloadTarifs(res.data.data)
+                                } else {
+                                    if (document.getElementById('modalLogin')) {
+                                        document.getElementById('modalLogin').style.display = 'block'
+                                    }
+                                }
+                                // document.getElementById('tarifPublicSpinner').style.display = 'none'
+                                // document.getElementById('tarifPublicIcon').style.display = 'inline-block'
+                            })
+                            .catch((e) => {
+                                console.error("failure", e);
+                                if (document.getElementById('modalLogin')) {
+                                    document.getElementById('modalLogin').style.display = 'block'
+                                }
+                                document.getElementById('tarifPublicSpinner').style.display = 'none'
+                                document.getElementById('tarifPublicIcon').style.display = 'inline-block'
+                            });
+                    } else {
+                        if (document.getElementById('modalLogin')) {
+                            document.getElementById('modalLogin').style.display = 'block'
+                        }
+                    }
+                    document.getElementById('tarifPublicSpinner').style.display = 'none'
+                    document.getElementById('tarifPublicIcon').style.display = 'inline-block'
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                    if (document.getElementById('modalLogin')) {
+                        document.getElementById('modalLogin').style.display = 'block'
+                    }
+
+                    document.getElementById('tarifPublicSpinner').style.display = 'none'
+                    document.getElementById('tarifPublicIcon').style.display = 'inline-block'
+                });
         }
 
     }
