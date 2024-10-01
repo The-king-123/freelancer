@@ -36,7 +36,7 @@ function gestionTarfis() {
         name: '',
         tarif: '',
         access: null,
-        rang: '0',
+        rang: 0,
         info: '_',
     })
     const access = { text: '' }
