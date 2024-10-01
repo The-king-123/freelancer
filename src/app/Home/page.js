@@ -16,9 +16,11 @@ import {
   faHammer,
   faHome,
   faICursor,
+  faIdBadge,
   faImages,
   faKey,
   faListDots,
+  faMoneyBill1,
   faNewspaper,
   faPager,
   faPaperPlane,
@@ -33,6 +35,7 @@ import {
   faSpinner,
   faTimesCircle,
   faUser,
+  faUserCircle,
   faUserMd,
   faUserPlus,
   faUsers,
@@ -53,6 +56,20 @@ import CreateForum from '../forum/create/createForum'
 export default function Home(props) {
   axios.defaults.withCredentials = true;
 
+  const admCr = [
+    {
+      title: 'Multiuser registre',
+      link: '/multiuserregistre',
+      icon: <FontAwesomeIcon className="w3-margin-right" icon={faUserCircle} />
+    },
+    {
+      title: 'Récrutement Manager',
+      link: '/recrutement',
+      icon: <FontAwesomeIcon className="w3-margin-right" icon={faUserPlus} />
+    }
+  ]
+
+  const [adminCore, setadminCore] = useState('')
   const [fullPath, setfullPath] = useState({ path: "" });
   const [imagePDP, setimagePDP] = useState(null);
   const [contact, setcontact] = useState({
@@ -970,7 +987,19 @@ export default function Home(props) {
         .get(source + "/_auth?xcode=" + xcode)
         .then((res) => {
           if (res.data.logedin) {
-            document.getElementById('userPDP').style.backgroundImage = "url(" + source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.user.key + ")"
+            document.getElementById('userPDP').style.backgroundImage = "url(" + source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.user.key + ")";
+            if (res.data.user.designation == 'Admin') {
+              const glitchCr = admCr.map((adm, key) => (
+                <Link
+                  href={adm.link}
+                  className="w3-bar-item w3-button"
+                >
+                  {adm.icon}
+                  {adm.title}
+                </Link>
+              ))
+              setadminCore(glitchCr)
+            }
           }
         })
         .catch((e) => {
@@ -1243,6 +1272,19 @@ export default function Home(props) {
               <div className="w3-margin-left w3-medium">Recrutement</div>
             </Link>
 
+            <Link
+              className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+              style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+              href={"/tarif"}
+            >
+              <FontAwesomeIcon
+                icon={faMoneyBill1}
+                width={20}
+                height={20}
+              />
+              <div className="w3-margin-left w3-medium">Tarifs</div>
+            </Link>
+
             <div style={{ height: 40 }}>
               <div
                 className="w3-dropdown-click w3-hover-light-grey"
@@ -1295,7 +1337,17 @@ export default function Home(props) {
                         />
                         Sécurité
                       </Link>
-                      {/* {adminCore} */}
+                      <Link
+                        href={'/tarif'}
+                        className="w3-bar-item w3-button"
+                      >
+                        <FontAwesomeIcon
+                          className="w3-margin-right"
+                          icon={faMoneyBill1}
+                        />
+                        Gestion de Tarifs
+                      </Link>
+                      {adminCore}
                       <div
                         onClick={logout}
                         className="w3-bar-item w3-button"
@@ -1642,7 +1694,17 @@ export default function Home(props) {
                 />
                 Sécurité
               </Link>
-              {/* {adminCore} */}
+              <Link
+                href={'/tarif'}
+                className="w3-bar-item w3-button"
+              >
+                <FontAwesomeIcon
+                  className="w3-margin-right"
+                  icon={faMoneyBill1}
+                />
+                Gestion de Tarifs
+              </Link>
+              {adminCore}
               <div
                 onClick={logout}
                 className="w3-bar-item w3-button"
