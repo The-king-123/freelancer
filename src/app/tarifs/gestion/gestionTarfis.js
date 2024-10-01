@@ -1,6 +1,6 @@
 'use client'
 import { console_source as source } from '@/app/data';
-import { faArrowCircleUp, faArrowRight, faCheckCircle, faMoneyBill1, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faArrowCircleUp, faArrowRight, faCheckCircle, faEdit, faMoneyBill1, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
@@ -58,29 +58,45 @@ function gestionTarfis() {
         setaccesses(list)
     }
 
+    const opeAccordionTarif = (key) => {
+        if (document.getElementById('accordionTarif' + key).style.display == 'none') {
+            document.getElementById('accordionTarif' + key).style.display = 'block'
+        } else {
+            document.getElementById('accordionTarif' + key).style.display = 'none'
+        }
+    }
+
     const reloadTarifs = (tarifs) => {
 
-        tarifsData.splice(tarifsData.length - 1)
+        const filteredTarifs = tarifs.sort((a, b) => a.rang - b.rang).reverse()
 
-        tarifs.forEach(element => {
+        tarifsData.splice(0, tarifsData.length)
+
+        filteredTarifs.forEach(element => {
             tarifsData.push(element)
         });
 
         var glitchTarif
-        if (tarifs.length > 0) {
-            glitchTarif = tarifs.map((tarif, key) => (
+        if (filteredTarifs.length > 0) {
+            glitchTarif = filteredTarifs.map((tarif, key) => (
                 <div key={key} className='w3-half' style={{ padding: 8 }}>
+                    <div>
+                        <div style={{ width: 20, height: 20, borderRadius: '10px 10px 10px 4px', marginBottom: 2 }} className={"w3-flex w3-flex-center w3-text-white w3-circle " + (tarifs.length <= 3 ? colors[key + 1] : colors[key])}>
+                            {key + 1}
+                        </div>
+                    </div>
                     <div className='w3-light-grey w3-round'>
                         <div className={'w3-round w3-text-white ' + (tarifs.length <= 3 ? colors[key + 1] : colors[key])} style={{ paddingBlock: 12, paddingInline: 20 }}>
                             <div className='w3-big w3-medium w3-flex-row w3-flex-center-v'>
-                                <div className='w3-flex-1 w3-pointer' onClick={() => editTarif(tarif)}>{tarif.name}</div>
-                                <div className=''><FontAwesomeIcon className='w3-large w3-pointer' style={{ marginRight: -8 }} onClick={() => upRang(tarif)} icon={faArrowCircleUp} /> </div>
+                                <div className='w3-flex-1 w3-pointer' onClick={() => opeAccordionTarif(key)}>{tarif.name}</div>
+                                <div><FontAwesomeIcon className='w3-large w3-pointer' style={{ marginRight: 8 }} onClick={() => editTarif(tarif)} icon={faEdit} /> </div>
+                                <div><FontAwesomeIcon className='w3-large w3-pointer' style={{ marginRight: -8 }} onClick={() => upRang(tarif)} icon={faArrowCircleUp} /> </div>
                             </div>
-                            <div className='w3-medium w3-big w3-pointer' onClick={() => editTarif(tarif)}>
+                            <div className='w3-medium w3-big w3-pointer' onClick={() => opeAccordionTarif(key)}>
                                 {tarif.tarif}
                             </div>
                         </div>
-                        <div style={{ padding: 16 }}>
+                        <div id={'accordionTarif' + key} className='accordionTarif' style={{ padding: 16, display: 'none' }}>
                             {
                                 JSON.parse(tarif.access).map((acc, k) => (
                                     <div key={k} className={'w3-flex-row w3-flex-center-v ' + ((k >= JSON.parse(tarif.access).length - 1) ? '' : 'w3-border-bottom ')} style={{ paddingBlock: 10 }}>
@@ -108,6 +124,13 @@ function gestionTarfis() {
 
     const saveTarif = async () => {
         if (tarifInfo.name.length > 3 && tarifInfo.tarif.length > 3 && accesses.length > 0) {
+
+            if (tarifsData.length>0) {
+                tarifInfo.rang = tarifsData.sort((a, b) => a.rang - b.rang).reverse()[0].rang*1 + 1
+            }else{
+                tarifInfo.rang = 0
+            }            
+            
             document.getElementById('tarifPublicSpinner').style.display = 'inline-block'
             document.getElementById('tarifPublicIcon').style.display = 'none'
             tarifInfo.access = JSON.stringify(accesses)
@@ -139,8 +162,11 @@ function gestionTarfis() {
     }
 
     const upRang = (data) => {
-        console.log(tarifsData);
-
+        tarifsData.sort((a, b) => a.rang - b.rang).reverse()[0] == data.rang
+        if (tarifsData.sort((a, b) => a.rang - b.rang).reverse()[0] > data.rang) {
+            console.log();
+            
+        }
 
     }
 
