@@ -3,6 +3,7 @@ import { console_source as source } from '@/app/data';
 import { faArrowRight, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
+import Link from 'next/link';
 import React, { useEffect } from 'react'
 
 function ToPremium(props) {
@@ -25,7 +26,6 @@ function ToPremium(props) {
                             if (res.data.contact.includes('whatsapp')) {
                                 const contact = JSON.parse(res.data.contact)
                                 if (contact.messenger.length <= 3) {
-                                    document.getElementById('cardNotPremiumText').innerText = res.data.foraccess
                                     document.getElementById('buttonContactText').innerText = 'Appeler le numero'
                                     document.getElementById('buttonContact').addEventListener('click', () => {
                                         window.open('tel:' + res.data.telephone, '_blank')
@@ -36,7 +36,6 @@ function ToPremium(props) {
                                     })
                                 }
                             } else {
-                                document.getElementById('cardNotPremiumText').innerText = res.data.foraccess
                                 document.getElementById('buttonContactText').innerText = 'Appeler le numero'
                                 document.getElementById('buttonContact').addEventListener('click', () => {
                                     window.open('tel:' + res.data.contact, '_blank')
@@ -100,17 +99,17 @@ function ToPremium(props) {
                     <div className="w3-block w3-flex-column w3-flex-center">
                         <div className="w3-block">
                             <div style={{ padding: 24 }} id='cardNotPremiumText'>
-                                Pour accéder à ce contenu, veuillez nous contacter sur messenger.
+                                Pour accéder à ce contenu, veuillez consulter nos tarifs.
                             </div>
                             <div className="w3-center w3-white w3-flex w3-flex-center">
                                 <div className="w3-margin">
-                                    <button
-                                        id='buttonContact'
+                                    <Link
+                                        href={'/tarifs'}
                                         className="transition w3-medium w3-text-yellow w3-button w3-round-xxlarge w3-black"
                                     >
                                         <span id='buttonContactText'>Aller vers messenger</span>
                                         <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
