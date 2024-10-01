@@ -20,7 +20,14 @@ function gestionTarfis() {
             console.error('CSRF token fetch failed:', error);
         }
     }
-
+    const colors = [
+        'w3-green',
+        'w3-blue',
+        'w3-amber',
+        'w3-red',
+        'w3-pink',
+        'w3-purple',
+    ]
     const [displayTarifs, setdisplayTarifs] = useState('')
     const [accesses, setaccesses] = useState([])
     const [tarifInfo, settarifInfo] = useState({
@@ -50,7 +57,7 @@ function gestionTarfis() {
         setaccesses(list)
     }
 
-    const reloadTarifs = async (tarifs) => {
+    const reloadTarifs = (tarifs) => {
 
         var glitchTarif
         if (tarifs.length > 0) {
@@ -61,14 +68,14 @@ function gestionTarfis() {
                             <div className='w3-big w3-medium'>
                                 {tarif.name}
                             </div>
-                            <div className='w3-xlarge w3-big'>
+                            <div className='w3-medium w3-big'>
                                 {tarif.tarif}
                             </div>
                         </div>
                         <div style={{ padding: 16 }}>
                             {
-                                tarif.access.map((acc, k) => (
-                                    <div key={k} className={'w3-flex-row w3-flex-center-v ' + ((k >= tarif.access.length - 1) ? '' : 'w3-border-bottom ')} style={{ paddingBlock: 10 }}>
+                                JSON.parse(tarif.access).map((acc, k) => (
+                                    <div key={k} className={'w3-flex-row w3-flex-center-v ' + ((k >= JSON.parse(tarif.access).length - 1) ? '' : 'w3-border-bottom ')} style={{ paddingBlock: 10 }}>
                                         <FontAwesomeIcon className='w3-text-green' icon={faCheckCircle} style={{ marginRight: 6 }} /> {acc}
                                     </div>
                                 ))
@@ -108,8 +115,8 @@ function gestionTarfis() {
                             document.getElementById('modalLogin').style.display = 'block'
                         }
                     }
-                    document.getElementById('tarifPublicSpinner').style.display = 'inline-block'
-                    document.getElementById('tarifPublicIcon').style.display = 'none'
+                    document.getElementById('tarifPublicSpinner').style.display = 'none'
+                    document.getElementById('tarifPublicIcon').style.display = 'inline-block'
                 })
                 .catch((e) => {
                     console.error("failure", e);
@@ -117,8 +124,8 @@ function gestionTarfis() {
                         document.getElementById('modalLogin').style.display = 'block'
                     }
 
-                    document.getElementById('tarifPublicSpinner').style.display = 'inline-block'
-                    document.getElementById('tarifPublicIcon').style.display = 'none'
+                    document.getElementById('tarifPublicSpinner').style.display = 'none'
+                    document.getElementById('tarifPublicIcon').style.display = 'inline-block'
                 });
         }
     }
@@ -144,9 +151,6 @@ function gestionTarfis() {
             })
             .catch((e) => {
                 console.error("failure", e);
-                if (document.getElementById('modalLogin')) {
-                    document.getElementById('modalLogin').style.display = 'block'
-                }
             });
 
     }, [])
@@ -247,7 +251,7 @@ function gestionTarfis() {
                     </button>
                 </div>
             </div>
-            <div>
+            <div className='w3-container' style={{padding:0}}>
                 {displayTarifs}
             </div>
         </div>
