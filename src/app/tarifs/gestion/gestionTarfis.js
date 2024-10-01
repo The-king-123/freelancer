@@ -134,13 +134,17 @@ function gestionTarfis() {
         accesses.splice(0, accesses.length)
         access.text = ''
 
+        document.getElementById('deleteButton').style.display = 'none'
+
     }
 
     const saveTarif = async () => {
         if (tarifInfo.name.length > 3 && tarifInfo.tarif.length > 3 && accesses.length > 0) {
 
             if (tarifsData.length > 0) {
-                tarifInfo.rang = tarifsData.sort((a, b) => a.rang - b.rang).reverse()[0].rang * 1 + 1
+                if (!tarifInfo.id) {
+                    tarifInfo.rang = tarifsData.sort((a, b) => a.rang - b.rang).reverse()[0].rang * 1 + 1
+                }
             } else {
                 tarifInfo.rang = 0
             }
@@ -149,6 +153,59 @@ function gestionTarfis() {
             document.getElementById('tarifPublicIcon').style.display = 'none'
             tarifInfo.access = JSON.stringify(accesses)
             const xcode = localStorage.getItem('x-code')
+            if (tarifInfo.id) {
+                await setCSRFToken()
+                await axios
+                    .patch(source + "/_tarifs/"+tarifInfo.id+"?xcode=" + xcode, tarifInfo)
+                    .then((res) => {
+                        if (res.data.logedin) {
+                            emptyForme()
+                            reloadTarifs(res.data.data)
+                        } else {
+                            if (document.getElementById('modalLogin')) {
+                                document.getElementById('modalLogin').style.display = 'block'
+                            }
+                        }
+                        document.getElementById('tarifPublicSpinner').style.display = 'none'
+                        document.getElementById('tarifPublicIcon').style.display = 'inline-block'
+                    })
+                    .catch((e) => {
+                        console.error("failure", e);
+                        if (document.getElementById('modalLogin')) {
+                            document.getElementById('modalLogin').style.display = 'block'
+                        }
+
+                        document.getElementById('tarifPublicSpinner').style.display = 'none'
+                        document.getElementById('tarifPublicIcon').style.display = 'inline-block'
+                    });
+
+            } else {
+                await setCSRFToken()
+                await axios
+                    .post(source + "/_tarifs?xcode=" + xcode, tarifInfo)
+                    .then((res) => {
+                        if (res.data.logedin) {
+                            emptyForme()
+                            reloadTarifs(res.data.data)
+                        } else {
+                            if (document.getElementById('modalLogin')) {
+                                document.getElementById('modalLogin').style.display = 'block'
+                            }
+                        }
+                        document.getElementById('tarifPublicSpinner').style.display = 'none'
+                        document.getElementById('tarifPublicIcon').style.display = 'inline-block'
+                    })
+                    .catch((e) => {
+                        console.error("failure", e);
+                        if (document.getElementById('modalLogin')) {
+                            document.getElementById('modalLogin').style.display = 'block'
+                        }
+
+                        document.getElementById('tarifPublicSpinner').style.display = 'none'
+                        document.getElementById('tarifPublicIcon').style.display = 'inline-block'
+                    });
+
+            }
             await setCSRFToken()
             await axios
                 .post(source + "/_tarifs?xcode=" + xcode, tarifInfo)
@@ -200,7 +257,7 @@ function gestionTarfis() {
                 name: targetData.name,
                 tarif: targetData.tarif,
                 access: targetData.access,
-                rang: data.rang*1,
+                rang: data.rang * 1,
                 info: '_',
             }
 
@@ -255,6 +312,20 @@ function gestionTarfis() {
     }
 
     const editTarif = (data) => {
+        tarifInfo.id = data.id
+        tarifInfo.name = data.name
+        tarifInfo.tarif = data.tarif
+        tarifInfo.access = null
+        tarifInfo.rang = data.rang * 1
+
+        document.getElementById('tarifName').value = data.name
+        document.getElementById('tarifCore').value = data.tarif
+        document.getElementById('addAccessInput').value = ''
+
+        access.text = ''
+        setaccesses(JSON.parse(data.access))
+
+        document.getElementById('deleteButton').style.display = 'block'
 
     }
 
