@@ -1338,7 +1338,7 @@ export default function Home(props) {
                         Sécurité
                       </Link>
                       <Link
-                        href={'/tarif'}
+                        href={'/tarifs/gestion'}
                         className="w3-bar-item w3-button"
                       >
                         <FontAwesomeIcon
