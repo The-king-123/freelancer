@@ -275,6 +275,7 @@ function gestionTarfis() {
                     if (document.getElementById('modalLogin')) {
                         document.getElementById('modalLogin').style.display = 'block'
                     }
+                    document.getElementById('tarifMainCore').style.display = 'none'
                 }
             })
             .catch((e) => {
@@ -285,7 +286,7 @@ function gestionTarfis() {
 
 
     return (
-        <div>
+        <div id='tarifMainCore'>
             <div
                 className="w3-medium w3-big w3-flex-row w3-flex-center-v"
                 style={{ padding: 8 }}
