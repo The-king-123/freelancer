@@ -1,6 +1,6 @@
 'use client'
 import { console_source as source } from '@/app/data';
-import { faArrowRight, faCheckCircle, faMoneyBill1, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faArrowCircleUp, faArrowRight, faCheckCircle, faMoneyBill1, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
@@ -28,6 +28,7 @@ function gestionTarfis() {
         'w3-pink',
         'w3-purple',
     ]
+    const [tarifsData, settarifsData] = useState([])
     const [displayTarifs, setdisplayTarifs] = useState('')
     const [accesses, setaccesses] = useState([])
     const [tarifInfo, settarifInfo] = useState({
@@ -59,14 +60,21 @@ function gestionTarfis() {
 
     const reloadTarifs = (tarifs) => {
 
+        tarifsData.splice(tarifsData.length-1)
+
+        tarifs.forEach(element => {
+            tarifsData.push(element)
+        });
+
         var glitchTarif
         if (tarifs.length > 0) {
             glitchTarif = tarifs.map((tarif, key) => (
                 <div key={key} className='w3-half' style={{ padding: 8 }}>
                     <div className='w3-light-grey w3-round'>
                         <div className={'w3-round w3-text-white ' + (tarifs.length <= 3 ? colors[key + 1] : colors[key])} style={{ paddingBlock: 16, paddingInline: 20 }}>
-                            <div className='w3-big w3-medium'>
-                                {tarif.name}
+                            <div className='w3-big w3-medium w3-flex-row w3-flex-center-v'>
+                                <div className='w3-flex-1'>{tarif.name}</div>
+                                <div><FontAwesomeIcon onClick={()=>upRang(tarif)} icon={faArrowCircleUp} /> </div>
                             </div>
                             <div className='w3-medium w3-big'>
                                 {tarif.tarif}
@@ -128,6 +136,15 @@ function gestionTarfis() {
                     document.getElementById('tarifPublicIcon').style.display = 'inline-block'
                 });
         }
+    }
+
+    const upRang = (data) => {
+        console.log(tarifsData);
+
+    }
+
+    const editTarif = (data) => {
+
     }
 
     const supprimer = () => {
@@ -251,7 +268,7 @@ function gestionTarfis() {
                     </button>
                 </div>
             </div>
-            <div className='w3-container' style={{padding:0}}>
+            <div className='w3-container' style={{ padding: 0 }}>
                 {displayTarifs}
             </div>
         </div>
