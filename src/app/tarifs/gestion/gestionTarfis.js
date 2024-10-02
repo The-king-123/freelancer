@@ -1,6 +1,6 @@
 'use client'
 import { console_source as source } from '@/app/data';
-import { faArrowCircleUp, faArrowRight, faCheckCircle, faEdit, faMoneyBill1, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faArrowCircleUp, faArrowRight, faCheckCircle, faEdit, faEraser, faMoneyBill1, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
@@ -39,7 +39,7 @@ function gestionTarfis() {
         rang: 0,
         info: '_',
     })
-    const access = { text: '' }
+    const access = { text: '', blocker: false }
 
     const addToAccess = (e) => {
         if (e.key == 'Enter') {
@@ -79,7 +79,7 @@ function gestionTarfis() {
         var glitchTarif
         if (filteredTarifs.length > 0) {
             glitchTarif = filteredTarifs.map((tarif, key) => (
-                <div key={key} className='w3-half' style={{ padding: 8 }}>
+                <div id={'thisTarif' + key} key={key} className='w3-half' style={{ padding: 8 }}>
                     <div>
                         <div style={{ width: 20, height: 20, borderRadius: '10px 10px 10px 4px', marginBottom: 2 }} className={"w3-flex w3-flex-center w3-text-white w3-circle " + (tarifs.length <= 3 ? colors[key + 1] : colors[key])}>
                             {key + 1}
@@ -90,7 +90,7 @@ function gestionTarfis() {
                             <div className='w3-big w3-medium w3-flex-row w3-flex-center-v'>
                                 <div className='w3-flex-1 w3-pointer' onClick={() => opeAccordionTarif(key)}>{tarif.name}</div>
                                 <div><FontAwesomeIcon className='w3-large w3-pointer' style={{ marginRight: 8 }} onClick={() => editTarif(tarif)} icon={faEdit} /> </div>
-                                <div><FontAwesomeIcon className='w3-large w3-pointer' style={{ marginRight: -8 }} onClick={() => upRang(tarif)} icon={faArrowCircleUp} /> </div>
+                                <div><FontAwesomeIcon className='w3-large w3-pointer' style={{ marginRight: -8 }} onClick={() => upRang(tarif, key)} icon={faArrowCircleUp} /> </div>
                             </div>
                             <div className='w3-medium w3-big w3-pointer' onClick={() => opeAccordionTarif(key)}>
                                 {tarif.tarif}
@@ -127,15 +127,16 @@ function gestionTarfis() {
         document.getElementById('tarifCore').value = ''
         document.getElementById('addAccessInput').value = ''
 
+        tarifInfo.info = "_"
+        tarifInfo.id = null
         tarifInfo.name = ''
         tarifInfo.tarif = ''
-        tarifInfo.rang = 0,
-            tarifInfo.access = null
-        accesses.splice(0, accesses.length)
+        tarifInfo.rang = 0
+        tarifInfo.access = null
         access.text = ''
 
         document.getElementById('deleteButton').style.display = 'none'
-
+        setaccesses([])
     }
 
     const saveTarif = async () => {
@@ -156,7 +157,7 @@ function gestionTarfis() {
             if (tarifInfo.id) {
                 await setCSRFToken()
                 await axios
-                    .patch(source + "/_tarifs/"+tarifInfo.id+"?xcode=" + xcode, tarifInfo)
+                    .patch(source + "/_tarifs/" + tarifInfo.id + "?xcode=" + xcode, tarifInfo)
                     .then((res) => {
                         if (res.data.logedin) {
                             emptyForme()
@@ -171,9 +172,6 @@ function gestionTarfis() {
                     })
                     .catch((e) => {
                         console.error("failure", e);
-                        if (document.getElementById('modalLogin')) {
-                            document.getElementById('modalLogin').style.display = 'block'
-                        }
 
                         document.getElementById('tarifPublicSpinner').style.display = 'none'
                         document.getElementById('tarifPublicIcon').style.display = 'inline-block'
@@ -233,11 +231,14 @@ function gestionTarfis() {
         }
     }
 
-    const upRang = async (data) => {
+    const upRang = async (data, key) => {
 
         const filteredTarifs = tarifsData.sort((a, b) => a.rang - b.rang).reverse()
 
-        if (filteredTarifs[0].rang * 1 > data.rang * 1) {
+        if (filteredTarifs[0].rang * 1 > data.rang * 1 && !access.blocker) {
+
+            access.blocker = true
+            document.getElementById('thisTarif' + key).className = 'w3-half w3-animate-fading'
 
             var targetData
             for (let i = 0; i < filteredTarifs.length; i++) {
@@ -279,8 +280,8 @@ function gestionTarfis() {
                                         document.getElementById('modalLogin').style.display = 'block'
                                     }
                                 }
-                                // document.getElementById('tarifPublicSpinner').style.display = 'none'
-                                // document.getElementById('tarifPublicIcon').style.display = 'inline-block'
+                                access.blocker = false
+                                document.getElementById('thisTarif' + key).className = 'w3-half'
                             })
                             .catch((e) => {
                                 console.error("failure", e);
@@ -329,8 +330,59 @@ function gestionTarfis() {
 
     }
 
-    const supprimer = () => {
+    const deleteHandler = async () => {
 
+        const xcode = localStorage.getItem("x-code");
+        document.getElementById("confirmSpinner").style.display = "inline-block";
+        await setCSRFToken();
+        await axios
+            .delete(source + "/_tarifs/" + tarifInfo.id + '?xcode=' + xcode)
+            .then((res) => {
+                if (res.data.logedin) {
+                    cancelHandler()
+                    emptyForme()
+                    reloadTarifs(res.data.data)
+                } else {
+                    if (document.getElementById('modalLogin')) {
+                        document.getElementById('modalLogin').style.display = 'block'
+                    }
+                    document.getElementById("confirmSpinner").style.display = "none";
+                    document.getElementById("modalWarning").style.display = "none";
+                }
+
+            })
+            .catch((e) => {
+                console.error("failure", e);
+            });
+    };
+
+    const cancelHandler = async () => {
+        document.getElementById("confirmSpinner").style.display = "none";
+        document.getElementById("modalWarning").style.display = "none";
+        document
+            .getElementById("confirmWarning")
+            .removeEventListener("click", deleteHandler);
+        document
+            .getElementById("cancelWarning")
+            .removeEventListener("click", cancelHandler);
+    };
+
+    const supprimer = async () => {
+        if (tarifInfo.id) {
+            document.getElementById("modalWarning").style.display = "block";
+            document.getElementById("textWarning").innerText = "Voulez vous vraiment supprimer ce Tarif ...";
+
+            document
+                .getElementById("confirmWarning")
+                .addEventListener("click", deleteHandler);
+            document
+                .getElementById("cancelWarning")
+                .addEventListener("click", cancelHandler);
+        } else {
+            document.getElementById('modalShowTopic').style.display = 'none';
+            document.getElementById('topicTitle').value = '';
+            document.getElementById('topicContent').innerHTML = '';
+        }
     }
 
     useEffect(() => {
@@ -421,6 +473,11 @@ function gestionTarfis() {
                             marginBottom: 16
                         }}
                     />
+                </div>
+                <div className='w3-container' style={{ padding: 0 }}>
+                    <div onClick={emptyForme} className='w3-right w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center' style={{ width: 26, height: 26 }}>
+                        <FontAwesomeIcon icon={faEraser} />
+                    </div>
                 </div>
                 <div style={{ marginTop: 24, padding: 8 }}>
                     <button

@@ -734,6 +734,19 @@ export default function Home(props) {
     }
   };
 
+  const userTarifs = () => {
+    var user = localStorage.getItem("user");
+    if (user) {
+      if (user == "160471339156947" || user == "undefined") {
+        window.location = "/tarifs";
+      } else {
+        window.location = "/tarifs/" + user;
+      }
+    } else {
+      window.location = "/tarifs";
+    }
+  };
+
   const userPremiumArea = () => {
     var user = localStorage.getItem("user");
     if (user) {
@@ -1272,10 +1285,10 @@ export default function Home(props) {
               <div className="w3-margin-left w3-medium">Recrutement</div>
             </Link>
 
-            <Link
-              className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+            <div
+              className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round w3-pointer"
               style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-              href={"/tarif"}
+              onClick={userTarifs}
             >
               <FontAwesomeIcon
                 icon={faMoneyBill1}
@@ -1283,7 +1296,7 @@ export default function Home(props) {
                 height={20}
               />
               <div className="w3-margin-left w3-medium">Tarifs</div>
-            </Link>
+            </div>
 
             <div style={{ height: 40 }}>
               <div
