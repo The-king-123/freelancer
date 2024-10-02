@@ -23,24 +23,10 @@ function ToPremium(props) {
                     } else {
                         if (document.getElementById('modalNotPremiumMembers')) {
                             document.getElementById('modalNotPremiumMembers').style.display = 'block'
-                            if (res.data.contact.includes('whatsapp')) {
-                                const contact = JSON.parse(res.data.contact)
-                                if (contact.messenger.length <= 3) {
-                                    document.getElementById('buttonContactText').innerText = 'Appeler le numero'
-                                    document.getElementById('buttonContact').addEventListener('click', () => {
-                                        window.open('tel:' + res.data.telephone, '_blank')
-                                    })
-                                } else {
-                                    document.getElementById('buttonContact').addEventListener('click', () => {
-                                        window.open(contact.messenger, '_blank')
-                                    })
-                                }
-                            } else {
-                                document.getElementById('buttonContactText').innerText = 'Appeler le numero'
-                                document.getElementById('buttonContact').addEventListener('click', () => {
-                                    window.open('tel:' + res.data.contact, '_blank')
-                                })
-                            }
+
+                            document.getElementById('versMonTarifs').addEventListener('click', () => {
+                                window.location = '/tarifs/' + res.data.owner
+                            })
                             document.getElementById('closeButtonContactOwner').addEventListener('click', () => {
                                 if (window.history.length > 0) {
                                     window.history.back()
@@ -99,17 +85,17 @@ function ToPremium(props) {
                     <div className="w3-block w3-flex-column w3-flex-center">
                         <div className="w3-block">
                             <div style={{ padding: 24 }} id='cardNotPremiumText'>
-                                Pour accéder à ce contenu, veuillez consulter nos tarifs.
+                            Ce contenu est payant. Pour y accéder, il est nécessaire de souscrire à une offre.
                             </div>
                             <div className="w3-center w3-white w3-flex w3-flex-center">
-                                <div className="w3-margin">
-                                    <Link
-                                        href={'/tarifs'}
-                                        className="transition w3-medium w3-text-yellow w3-button w3-round-xxlarge w3-black"
+                                <div className="w3-margin w3-block" style={{paddingInline:16}}>
+                                    <div
+                                        id='versMonTarifs'
+                                        className="transition w3-medium w3-text-yellow w3-button w3-block w3-round-xxlarge w3-black"
                                     >
-                                        <span id='buttonContactText'>Aller vers messenger</span>
+                                        <span id='buttonContactText'>Nos Tarifs</span>
                                         <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />
-                                    </Link>
+                                    </div>
                                 </div>
                             </div>
                         </div>

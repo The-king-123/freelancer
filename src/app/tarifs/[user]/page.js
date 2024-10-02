@@ -8,7 +8,7 @@ export default async function page({ params }) {
 
   try {
     const tarifs = await axios
-      .get(source + "/_forum/" + params.user)
+      .get(source + "/_tarifs/" + params.user)
       .then((res) => {
         return res.data.data;
       })
@@ -18,7 +18,7 @@ export default async function page({ params }) {
     if (!tarifs) {
       notFound();
     }
-    return <Home user={params.user} core={<Tarifs tarifs={tarifs} />} />;
+    return <Home user={params.user} core={<Tarifs tarif={tarifs} />} />;
   } catch (error) {
     console.error(`Error rendering tarif for user ${params.user}:`, error);
     return (

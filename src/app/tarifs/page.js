@@ -10,21 +10,6 @@ export default async function page({ params }) {
 
     try {
 
-        // const post = await axios
-        //     .get(source + "/_post/" + params.slug + "/edit")
-        //     .then((res) => {
-        //         if (!res.data.premium) {
-        //             return { data: res.data.data[0], features: res.data.features }
-        //         } else {
-        //             return 'premium'
-        //         }
-        //     })
-        //     .catch((e) => {
-        //         console.error("failure", e);
-        //     });
-        // if (!post) {
-        //     notFound();
-        // }
         return <Home core={<Tarifs />} />
 
     } catch (error) {
