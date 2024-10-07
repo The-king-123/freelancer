@@ -242,7 +242,7 @@ function Gestion() {
                         });
                 } else {
                     await axios
-                        .post(source + "/_store", data)
+                        .post(source + "/_store?xcode=" + xcode, data)
                         .then((res) => {
                             if (res.data.saved) {
                                 document.getElementById("productPublicSpinner").style.display = "none";
