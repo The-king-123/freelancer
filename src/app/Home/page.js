@@ -33,6 +33,7 @@ import {
   faSearch,
   faShieldAlt,
   faSpinner,
+  faStore,
   faTimesCircle,
   faUser,
   faUserCircle,
@@ -1205,6 +1206,19 @@ export default function Home(props) {
                 height={20}
               />
               <div className="w3-margin-left w3-medium">Accueil</div>
+            </Link>
+
+            <Link
+              className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+              style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+              href={"/store/all"}
+            >
+              <FontAwesomeIcon
+                icon={faStore}
+                width={20}
+                height={20}
+              />
+              <div className="w3-margin-left w3-medium">Boutique</div>
             </Link>
 
             <div
