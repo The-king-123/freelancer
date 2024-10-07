@@ -49,7 +49,7 @@ function Gestion() {
         id: null,
         name: "",
         description: "",
-        category: null,
+        category: 'default',
         type: 'free',
         image: null,
         fichier: false,
@@ -499,9 +499,9 @@ function Gestion() {
                                 onChange={(e) => postInfo.category = e.target.value}
                                 className="w3-light-grey w3-input w3-border-0 w3-block w3-nowrap w3-overflow w3-round"
                                 style={{ paddingBlock: 8 }}
-                                defaultValue={null}
+                                defaultValue={"default"}
                             >
-                                <option value={null}>Sélectionner une catégorie</option>
+                                <option value={'default'}>Sélectionner une catégorie</option>
                                 {/* {
                                     selectCategoryList.map((category, key) => (
                                         <option key={key} value={category.id}>{category.name}</option>
