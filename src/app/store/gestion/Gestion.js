@@ -161,7 +161,7 @@ function Gestion() {
         const xcode = localStorage.getItem("x-code");
 
         productInfos.slug = slugify(productInfos.name, { lower: true });
-
+        
         if (productInfos.image &&
             productInfos.fichier &&
             productInfos.name.length >= 3 &&
@@ -371,7 +371,7 @@ function Gestion() {
     const cancelFichierInsertion = () => {
         productInfos.fichier = false;
 
-        productInfos.image = productInfos.image.filter(item => item !== "fichier");
+        productInfos.image.delete("fichier");
 
         document.getElementById("showFichierWrapper").style.display = "none";
         document.getElementById("inputFichier").style.display = "flex";
