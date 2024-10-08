@@ -161,7 +161,7 @@ function Gestion() {
         const xcode = localStorage.getItem("x-code");
 
         productInfos.slug = slugify(productInfos.name, { lower: true });
-        
+
         if (productInfos.image &&
             productInfos.fichier &&
             productInfos.name.length >= 3 &&
@@ -208,7 +208,7 @@ function Gestion() {
                                     document.getElementById("productPublicSpinner").style.display = "none";
                                     document.getElementById("productPublicIcon").style.display = "inline-block";
                                     document.getElementById('productCore').style.display = 'none'
-    
+
                                     document.getElementById('modalStateProductText').innerText = "Bravo ! Votre produit a bien été mis à jour avec succès..."
                                     document.getElementById('modalStateProduct').style.display = 'block';
                                     setTimeout(() => {
@@ -255,7 +255,7 @@ function Gestion() {
                                 } else {
                                     document.getElementById('modalStateProductText').innerText = "Bravo ! Votre produit a bien été publié avec succès..."
                                 }
-                                
+
                                 document.getElementById('modalStateProduct').style.display = 'block';
                                 setTimeout(() => {
                                     document.getElementById('modalStateProduct').style.display = 'none';
@@ -390,7 +390,7 @@ function Gestion() {
     useEffect(() => {
 
         const xcode = localStorage.getItem("x-code");
-        if (xcode) {
+        if (xcode && xcode != 'null') {
             axios
                 .get(`${source}/_product?xcode=${xcode}`)
                 .then((res) => {
@@ -403,6 +403,22 @@ function Gestion() {
                     console.error("failure", e);
                 });
         }
+
+        axios
+            .get(source + "/_auth?xcode=" + xcode)
+            .then((res) => {
+                if (!res.data.logedin) {
+
+                    if (document.getElementById('modalLogin')) {
+                        document.getElementById('modalLogin').style.display = 'block'
+                        document.getElementById('productCore').style.display = 'none';
+                    }
+                }
+            })
+            .catch((e) => {
+                console.error("failure", e);
+
+            });
 
         // Upload Image
         var imageSelector = document.createElement("input");
