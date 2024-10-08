@@ -179,6 +179,7 @@ function Gestion() {
                 data.append("category", productInfos.category);
                 data.append("description", productInfos.description);
                 data.append("name", productInfos.name);
+                data.append("slug", productInfos.slug);
                 data.append("info", productInfos.info);
 
                 if (productInfos.id) {
@@ -190,6 +191,7 @@ function Gestion() {
                     name: productInfos.name,
                     type: productInfos.type,
                     category: productInfos.category,
+                    slug: productInfos.slug,
                     description: productInfos.description,
                     info: productInfos.info,
                 };
