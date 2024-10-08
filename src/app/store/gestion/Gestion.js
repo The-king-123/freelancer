@@ -371,6 +371,8 @@ function Gestion() {
     const cancelFichierInsertion = () => {
         productInfos.fichier = false;
 
+        productInfos.image = productInfos.image.filter(item => item !== "fichier");
+
         document.getElementById("showFichierWrapper").style.display = "none";
         document.getElementById("inputFichier").style.display = "flex";
         document.getElementById('cancelImageInsertion').style.display = 'inline-block'
@@ -440,7 +442,6 @@ function Gestion() {
             const reader = new FileReader();
             reader.readAsDataURL(file);
 
-            const formData = new FormData();
             productInfos.image.append("fichier", file);
 
             document.getElementById('cancelImageInsertion').style.display = 'none'
