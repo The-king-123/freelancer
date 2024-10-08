@@ -55,7 +55,7 @@ function Gestion() {
         fichier: false,
         link: '',
         slug: '',
-        info: ''
+        info: '_'
     });
 
     const openModalCategory = () => {
