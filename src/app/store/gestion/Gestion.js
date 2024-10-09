@@ -7,6 +7,7 @@ import {
     faArrowLeft,
     faArrowRight,
     faImage,
+    faKey,
     faListDots,
     faPager,
     faPaperclip,
@@ -24,6 +25,7 @@ function Gestion() {
     const [categoryListe, setcategoryListe] = useState('')
     const [inputImage, setinputImage] = useState(null)
     const [inputFichier, setinputFichier] = useState(null)
+    const [keyListe, setkeyListe] = useState('')
     const [selectCategoryList, setselectCategoryList] = useState([])
     const categoryInfo = {
         name: null,
@@ -73,6 +75,65 @@ function Gestion() {
         document.getElementById("modalCategory").style.display = "none";
     };
 
+    const displayAddNewKeyArea = () => {
+        document.getElementById('newKeyArea').style.display = 'block';
+        document.getElementById('keyListArea').style.display = 'none';
+        document.getElementById('afficheNewKeyArea').style.display = 'none';
+        document.getElementById('afficheKeyListArea').style.display = 'flex';
+    }
+
+    const displayKeyListArea = () => {
+        document.getElementById('newKeyArea').style.display = 'none';
+        document.getElementById('keyListArea').style.display = 'block';
+        document.getElementById('afficheNewKeyArea').style.display = 'flex';
+        document.getElementById('afficheKeyListArea').style.display = 'none';
+    }
+
+    const addKeyToUser = async () => {
+        if (isValidEmail(codeInfo.email) || isNumericSequence(codeInfo.email)) {
+            const xcode = localStorage.getItem('x-code')
+            await setCSRFToken();
+            await axios
+                .post(source + "/_links?xcode=" + xcode, codeInfo)
+                .then((res) => {
+                    if (res.data.logedin) {
+                        if (res.data.authexist) {
+                            if (!res.data.codeexist) {
+                                reloadKeyList(res.data.data.reverse());
+                                document.getElementById('infoBull').innerHTML = "<div>L'utilisateur est ajouter avec succes</div>"
+                                document.getElementById('infoBull').style.display = 'block'
+                                setTimeout(() => {
+                                    document.getElementById('infoBull').style.display = 'none'
+                                }, 3000);
+                            } else {
+                                document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Le code pour cet utilisateur exist deja.</div>"
+                                document.getElementById('infoBull').style.display = 'block'
+                                setTimeout(() => {
+                                    document.getElementById('infoBull').style.display = 'none'
+                                }, 3000);
+                            }
+                        } else {
+                            document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Cet utilisateur n'est inscrit sur la plateforme.</div>"
+                            document.getElementById('infoBull').style.display = 'block'
+                            setTimeout(() => {
+                                document.getElementById('infoBull').style.display = 'none'
+                            }, 3000);
+                        }
+                    }
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                });
+        } else {
+            document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Veuillez entrer un e-mail ou clé de reference valide.</div>"
+            document.getElementById('infoBull').style.display = 'block'
+            setTimeout(() => {
+                document.getElementById('infoBull').style.display = 'none'
+            }, 3000);
+        }
+
+    }
+    
     const saveCategory = async () => {
         const xcode = localStorage.getItem('x-code')
         const request = {
@@ -530,6 +591,23 @@ function Gestion() {
                         />{" "}
                         Créer un product
                     </div>
+                    <div>
+                    <div
+                        id="premiumCodeManager"
+                        onClick={() => {
+                            // document.getElementById('createProductCore').style.display = 'none'
+                            document.getElementById("modalKeyListe").style.display = 'block'
+                        }}
+                        className="w3-black w3-circle w3-flex w3-flex-center"
+                        style={{ width: 32, height: 32, display: 'none' }}
+                        title="Gérer votre code premium."
+                    >
+                        <FontAwesomeIcon
+                            icon={faKey}
+                            style={{ width: 16, height: 16 }}
+                        />
+                    </div>
+                </div>
                     <div id="openProductListeButton">
                         <div
                             onClick={() => document.getElementById('modalProductListe').style.display = 'block'}
@@ -797,6 +875,69 @@ function Gestion() {
                 </div>
             </div>
             {/* end modal warning */}
+
+            {/* modal key liste */}
+            <div id="modalKeyListe" className="w3-modal w3-round white-opacity" style={{ position: 'absolute', height: 'calc(100vh - 16px)' }}>
+                <div
+                    className="w3-modal-content w3-card w3-round w3-overflow"
+                    style={{ maxWidth: 420, top: 32 }}
+                >
+                    <div className="w3-flex-row w3-flex-center-v">
+                        <div onClick={() => {
+                            document.getElementById('createPostCore').style.display = 'block'
+                            document.getElementById('modalKeyListe').style.display = 'none'
+                        }} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+                            <FontAwesomeIcon icon={faArrowLeft} />
+                        </div>
+                        <div className="w3-flex-1"></div>
+                        <div>
+                            <div id="afficheNewKeyArea" title="Ajouter un nouveau code utilisateur" onClick={displayAddNewKeyArea} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+                                <FontAwesomeIcon icon={faPlus} />
+                            </div>
+                            <div id="afficheKeyListArea" title="Afficher la liste code utilisateur" onClick={displayKeyListArea} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16, display: 'none' }}>
+                                <FontAwesomeIcon icon={faListDots} />
+                            </div>
+                        </div>
+                    </div>
+                    <div id="newKeyArea" style={{ display: 'none', paddingBottom: 24 }}>
+                        <div className="w3-flex-row w3-flex-center-v" style={{ paddingInline: 16, paddingBlock: 24 }}>
+                            <input
+                                id="categoryTitle"
+                                onChange={(e) => codeInfo.email = e.target.value}
+                                className="w3-border-0 w3-input w3-border w3-round"
+                                placeholder="E-mail ou clé de reference"
+                                type="text"
+                            />
+                            <button
+                                onClick={addKeyToUser}
+                                className="w3-button w3-margin-left w3-round w3-white w3-black w3-flex w3-flex-center"
+                                style={{ height: 40 }}
+                                title="Generer un code d'acces."
+                            >
+                                <FontAwesomeIcon icon={faKey} />
+                            </button>
+                        </div>
+                        <div id="infoBull" style={{ marginBottom: 8, paddingInline: 16, display: 'none' }}>L'utilisateur est ajouter avec succes</div>
+                    </div>
+                    <div id="keyListArea">
+                        <div style={{ paddingInline: 16, paddingBlock: 16 }}>
+                            <input
+                                id="searchInput"
+                                className="input w3-border-0 w3-input w3-border w3-round-xxlarge"
+                                placeholder="Chercher un key"
+                                type="text"
+                            />
+                        </div>
+
+                        <div style={{ height: '50vh', paddingInline: 12, marginBottom: 16 }} className="w3-overflow-scroll w3-noscrollbar">
+                            {
+                                keyListe
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* end modal key liste */}
         </div>
     );
 }
