@@ -1052,7 +1052,7 @@ export default function Home(props) {
 
       if (!props.core) {
         axios
-          .get(source + "/_post/default?c=default")
+          .get(source + "/_post/default?c=all")
           .then((res) => {
             setcore(<HomePost posts={res.data.data} />);
             setTimeout(() => {

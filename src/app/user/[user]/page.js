@@ -12,7 +12,7 @@ export default async function page({ params }) {
   
   try {
     const post = await axios
-      .get(source + "/_post/" + params.user + "?c=default")
+      .get(source + "/_post/" + params.user + "?c=all")
       .then((res) => {
         return res.data.data;
       })

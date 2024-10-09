@@ -14,15 +14,8 @@ export default function PostContent({ posts }) {
     source + "/images.php?w=720&h=720&zlonk=3733&zlink=160471339156947"
   );
   const [showThisPost, setshowThisPost] = useState();
+  const [displayPost, setdisplayPost] = useState('')
 
-  const createPost = () => {
-    if (window.innerWidth > 992) {
-      document.getElementById('createPostOnDesktop').style.display = 'block';
-      document.getElementById('openPostListeButton').style.display = 'none';
-    } else {
-      window.location = '/post/create'
-    }
-  }
   // const showSinglePost = (post) => {
   //   setshowThisPost(post);
   //   setimagePostModal(
@@ -46,6 +39,172 @@ export default function PostContent({ posts }) {
   //   }, 100);
   // };
 
+  const moneyMaker = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  const extractDetails = (moduleTitle, title) => {
+    let cleanTitle = moduleTitle.replace(title, "").trim();
+    let parts = cleanTitle.split('|').map(part => part.trim());
+
+    if (parts >= 3) {
+      let secondPart = parts[1];
+      let lastPart = parts[parts.length - 1];
+
+      let middlePart = parts.slice(2, parts.length - 1).join(' ').replace(/\s+/g, ' ').trim();
+
+      parts = [secondPart, middlePart, lastPart];
+      parts[0] = parts[0].replace(/ /g, '');
+      parts[2] = parts[2].replace(/[^\d]/g, '');
+    }
+
+    return parts
+  }
+
+  // animation: marquee 12s linear infinite;
+
+  const makeMarqueeText = () => {
+    const marquees = document.getElementsByClassName('marquee');
+
+    for (let i = 0; i < marquees.length; i++) {
+      const marquee = marquees[i].querySelector('span');
+      marquee.style.animation = 'marquee ' + (marquee.innerText.length / 4.5) + 's linear infinite'
+    }
+  }
+
+  const loadPost = (type) => {
+    const glitchPost = posts.map((post, key) => (
+      (type=='premium' ? post.category == type : post.category != 'premium') &&
+      <Link className="postCard" href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
+        <div className="w3-overflow w3-round w3-pointer w3-white">
+          <div
+            className="w3-light-grey w3-big w3-small w3-flex-row w3-flex-center-v"
+            title={parse(post.title)}
+          >
+            {post.category != 'premium' &&
+              <>
+                <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>{parse(post.title)}</div>
+                <div
+                  title="Gratuit"
+                  className="w3-green w3-circle"
+                  style={{ width: 24, height: 24, marginRight: 4 }}
+                >
+                  <div className="w3-block w3-height w3-flex w3-flex-center">
+                    <FontAwesomeIcon
+                      icon={faGift}
+                      style={{ height: 12, width: 12 }}
+                    />
+                  </div>
+                </div>
+              </>
+            }
+            {post.category == 'premium' &&
+              <>
+                <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>
+                  {
+                    extractDetails(post.title).length >= 3 &&
+                    <div class="marquee">
+                      <span>
+                        {extractDetails(post.title)[0]} -
+                        Module {extractDetails(post.title)[1]} :&nbsp;
+                        {extractDetails(post.title)[2]}
+                        &nbsp;({moneyMaker(extractDetails(post.title)[3])} Ar)
+                      </span>
+                    </div>
+                  }
+                  {
+                    extractDetails(post.title).length < 3 &&
+                    post.title.length > 36 &&
+
+                    <div class="marquee">
+                      <span>{parse(post.title)}</span>
+                    </div>
+                  }
+                  {
+                    extractDetails(post.title).length < 3 &&
+                    post.title.length < 36 &&
+                    <span>{parse(post.title)}</span>
+                  }
+                </div>
+                <div
+                  title="Premium"
+                  className="w3-yellow w3-circle"
+                  style={{ width: 26, height: 26, marginRight: 4 }}
+                >
+                  <div className="w3-block w3-height w3-flex w3-flex-center">
+                    <FontAwesomeIcon
+                      icon={faDollarSign}
+                      style={{ height: 12, width: 12 }}
+                    />
+                  </div>
+                </div>
+              </>
+            }
+
+          </div>
+
+          <div
+            className="postMedia w3-display-container w3-light-grey post-image"
+            style={{ zIndex: 2 }}
+          >
+            <Image
+              alt={"image" + key}
+              unoptimized
+              loading="lazy"
+              onContextMenu={(e) => e.preventDefault()}
+              height={260}
+              width={260}
+              src={
+                source +
+                "/images.php?w=260&h=260&zlonk=2733&zlink=" +
+                post.link
+              }
+              style={{
+                objectPosition: "center",
+                objectFit: "cover",
+                zIndex: 1,
+                height: '65vw',
+                maxHeight: 260
+              }}
+              className="w3-overflow w3-light-grey post-image"
+            />
+            {/* {(post.type == "image/audio" || post.type == "video" || post.type == "image/video") && (
+                <div className="w3-black w3-opacity-max w3-block w3-height w3-padding w3-display-middle"></div>
+              )} */}
+            {post.type == "image/audio" && (
+              <div
+                className="w3-white w3-circle w3-display-middle w3-card"
+                style={{ width: 40, height: 40 }}
+              >
+                <div className="w3-block w3-height w3-flex w3-flex-center">
+                  <FontAwesomeIcon
+                    icon={faVolumeHigh}
+                    style={{ height: 18, width: 18 }}
+                  />
+                </div>
+              </div>
+            )}
+            {(post.type == "video" || post.type == "image/video") && (
+              <div
+                className="w3-white w3-circle w3-display-middle w3-card"
+                style={{ width: 40, height: 40 }}
+              >
+                <div className="w3-block w3-height w3-flex w3-flex-center">
+                  <FontAwesomeIcon
+                    icon={faPlay}
+                    style={{ height: 18, width: 18, marginLeft: 4 }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+        </div>
+      </Link>
+    ))
+    setdisplayPost(glitchPost)
+  }
+
   useEffect(() => {
 
     if (document.getElementById("audioBox")) {
@@ -56,6 +215,8 @@ export default function PostContent({ posts }) {
       });
     }
 
+    makeMarqueeText();
+
     // switch animatin
 
     const btn3_ctn = document.querySelector(".btn3_container");
@@ -65,21 +226,24 @@ export default function PostContent({ posts }) {
     const premiumIcon = document.querySelector("#premiumSwitch");
 
     btn3_ctn.addEventListener("click", () => {
-      console.log(premiumIcon.style.display);
-      
+
       if (premiumIcon.style.display == 'none') {
         freeIcon.style.display = 'none'
         premiumIcon.style.display = 'flex'
         main.className = "active3 w3-pointer"
+
+        loadPost('premium')
       } else {
         freeIcon.style.display = 'flex'
         premiumIcon.style.display = 'none'
         main.className = "main w3-pointer"
+        loadPost('free')
       }
 
     });
 
     // end switch animation
+    loadPost('free')
 
   }, [])
 
@@ -110,89 +274,7 @@ export default function PostContent({ posts }) {
           </div>
         </div>
         {/* ///-------------------- */}
-        {posts.length > 0 &&
-          posts.map((post, key) => (
-            <Link className="postCard" href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
-              <div className="w3-overflow w3-round w3-pointer w3-white">
-                <div
-                  className="w3-light-grey w3-big w3-small w3-flex-row w3-flex-center-v"
-                  title={parse(post.title)}
-                >
-                  <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>{parse(post.title)}</div>
-
-                  <div
-                    title="Gratuit"
-                    className="w3-green w3-circle"
-                    style={{ width: 24, height: 24, marginRight: 4 }}
-                  >
-                    <div className="w3-block w3-height w3-flex w3-flex-center">
-                      <FontAwesomeIcon
-                        icon={faGift}
-                        style={{ height: 12, width: 12 }}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  className="postMedia w3-display-container w3-light-grey post-image"
-                  style={{ zIndex: 2 }}
-                >
-                  <Image
-                    alt={"image" + key}
-                    unoptimized
-                    loading="lazy"
-                    onContextMenu={(e) => e.preventDefault()}
-                    height={260}
-                    width={260}
-                    src={
-                      source +
-                      "/images.php?w=260&h=260&zlonk=2733&zlink=" +
-                      post.link
-                    }
-                    style={{
-                      objectPosition: "center",
-                      objectFit: "cover",
-                      zIndex: 1,
-                      height: '65vw',
-                      maxHeight: 260
-                    }}
-                    className="w3-overflow w3-light-grey post-image"
-                  />
-                  {/* {(post.type == "image/audio" || post.type == "video" || post.type == "image/video") && (
-                    <div className="w3-black w3-opacity-max w3-block w3-height w3-padding w3-display-middle"></div>
-                  )} */}
-                  {post.type == "image/audio" && (
-                    <div
-                      className="w3-white w3-circle w3-display-middle w3-card"
-                      style={{ width: 40, height: 40 }}
-                    >
-                      <div className="w3-block w3-height w3-flex w3-flex-center">
-                        <FontAwesomeIcon
-                          icon={faVolumeHigh}
-                          style={{ height: 18, width: 18 }}
-                        />
-                      </div>
-                    </div>
-                  )}
-                  {(post.type == "video" || post.type == "image/video") && (
-                    <div
-                      className="w3-white w3-circle w3-display-middle w3-card"
-                      style={{ width: 40, height: 40 }}
-                    >
-                      <div className="w3-block w3-height w3-flex w3-flex-center">
-                        <FontAwesomeIcon
-                          icon={faPlay}
-                          style={{ height: 18, width: 18, marginLeft: 4 }}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-              </div>
-            </Link>
-          ))}
+        {displayPost}
       </div>
 
       {posts.length <= 0 && (
