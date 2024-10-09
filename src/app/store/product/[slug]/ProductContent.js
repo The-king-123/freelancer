@@ -26,6 +26,7 @@ export default function ProductContent({ content }) {
   });
 
   const singleStoreInfo = {
+    id:content.data.id,
     category: content.data.category,
     description: content.data.description,
     slug: content.data.slug,
@@ -34,13 +35,11 @@ export default function ProductContent({ content }) {
     link: content.data.link,
     updated_at: content.data.updated_at,
     created_at: content.data.created_at,
-    fichier: content.data.fichier,
   };
 
-  const download = (file) => {
-    console.log(file);
+  const download = (id) => {
+    console.log(id);
     
-    window.open(source+'/download.php?zlink='+file,'_blank')
   }
   useEffect(() => {
 
@@ -110,7 +109,7 @@ export default function ProductContent({ content }) {
           </div>
           <div>{parse(singleStoreInfo.description)}</div>
           <div>
-            <div onClick={()=>download(singleStoreInfo.fichier)} className="w3-button w3-round-xxlarge w3-black w3-flex-row w3-flex-center w3-margin-top">
+            <div onClick={()=>download(singleStoreInfo.id)} className="w3-button w3-round-xxlarge w3-black w3-flex-row w3-flex-center w3-margin-top">
               <FontAwesomeIcon icon={faDownload} className="w3-margin-right" /> Download
             </div>
           </div>
