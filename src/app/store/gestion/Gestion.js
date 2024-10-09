@@ -133,7 +133,7 @@ function Gestion() {
         }
 
     }
-    
+
     const saveCategory = async () => {
         const xcode = localStorage.getItem('x-code')
         const request = {
@@ -158,6 +158,53 @@ function Gestion() {
             });
     };
 
+    const deleteCategory = async (id) => {
+        document.getElementById("modalWarning").style.display = "block";
+        document.getElementById("textWarning").innerText = "Voulez vous vraiment supprimer cette categorie avec ses elements ...";
+
+        const xcode = localStorage.getItem('x-code');
+        const deleteHandler = async () => {
+            document.getElementById("confirmSpinner").style.display = "inline-block";
+            await axios
+                .delete(source + "/_category/" + id + "?xcode=" + xcode)
+                .then((res) => {
+                    document.getElementById("confirmSpinner").style.display =
+                        "none";
+                    document.getElementById("modalWarning").style.display =
+                        "none";
+
+                    document
+                        .getElementById("confirmWarning")
+                        .removeEventListener("click", deleteHandler);
+                    document
+                        .getElementById("cancelWarning")
+                        .removeEventListener("click", cancelHandler);
+
+                    reloadCategory(res.data.data.reverse());
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                });
+        };
+        const cancelHandler = () => {
+            document.getElementById("modalWarning").style.display = "none";
+
+            document
+                .getElementById("confirmWarning")
+                .removeEventListener("click", deleteHandler);
+            document
+                .getElementById("cancelWarning")
+                .removeEventListener("click", cancelHandler);
+        };
+
+        document
+            .getElementById("confirmWarning")
+            .addEventListener("click", deleteHandler);
+        document
+            .getElementById("cancelWarning")
+            .addEventListener("click", cancelHandler);
+    };
+    
     const reloadCategory = (data) => {
         setselectCategoryList(data)
         const glitchCategory = data.map((element, key) => (

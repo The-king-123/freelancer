@@ -450,12 +450,6 @@ export default function Home(props) {
 
   const showUser = async (data, key) => {
 
-    console.log('-------------------');
-
-    console.log(data);
-    console.log(key);
-
-
     closeAllPanel();
     var users = data;
     var userInfos = null;
@@ -498,6 +492,11 @@ export default function Home(props) {
           messenger: null,
         });
       }
+    } else {
+      document.getElementsByClassName("userNameTitle")[0].innerText =
+        "FREELANCER";
+      document.getElementsByClassName("userNameTitle")[1].innerText =
+        "FREELANCER";
     }
 
     setimagePDP(
@@ -1174,7 +1173,7 @@ export default function Home(props) {
             className="w3-block w3-flex w3-flex-column"
             style={{ paddingBlock: 8, zIndex: 9999 }}
           >
-            <div style={{ height: 40, marginBottom: 4 }}>
+            {/* <div style={{ height: 40, marginBottom: 4 }}>
               <div
                 className="w3-dropdown-click w3-hover-light-grey"
               >
@@ -1192,7 +1191,7 @@ export default function Home(props) {
                 </div>
 
               </div>
-            </div>
+            </div> */}
 
             <Link
               onClick={() => localStorage.setItem("user", "160471339156947")}
@@ -1205,7 +1204,7 @@ export default function Home(props) {
                 width={20}
                 height={20}
               />
-              <div className="w3-margin-left w3-medium">Accueil</div>
+              <div className="w3-margin-left w3-medium">Travail en ligne</div>
             </Link>
 
             <Link
@@ -1270,7 +1269,7 @@ export default function Home(props) {
                 width={20}
                 height={20}
               />
-              <div className="w3-margin-left w3-medium">Membres</div>
+              <div className="w3-margin-left w3-medium">Catégorie</div>
             </Link>
 
             <Link

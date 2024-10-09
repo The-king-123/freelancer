@@ -1,5 +1,5 @@
 'use client'
-import { faArrowLeft, faCrown, faGift, faPause, faPlay, faRefresh, faTag, faTags, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faCrown, faDollarSign, faGift, faPause, faPlay, faRefresh, faTag, faTags, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import parse from "html-react-parser";
@@ -56,12 +56,37 @@ export default function PostContent({ posts }) {
       });
     }
 
+    // switch animatin
+
+    const btn3_ctn = document.querySelector(".btn3_container");
+    const main = document.querySelector(".main");
+
+    const freeIcon = document.querySelector("#freeSwitch");
+    const premiumIcon = document.querySelector("#premiumSwitch");
+
+    btn3_ctn.addEventListener("click", () => {
+      console.log(premiumIcon.style.display);
+      
+      if (premiumIcon.style.display == 'none') {
+        freeIcon.style.display = 'none'
+        premiumIcon.style.display = 'flex'
+        main.className = "active3 w3-pointer"
+      } else {
+        freeIcon.style.display = 'flex'
+        premiumIcon.style.display = 'none'
+        main.className = "main w3-pointer"
+      }
+
+    });
+
+    // end switch animation
+
   }, [])
 
   return (
     <div style={{ position: 'relative' }}>
       <div id="homePostCore">
-        <div style={{ padding: 8 }}>
+        {/* <div style={{ padding: 8 }}>
           <div onClick={createPost} className="w3-flex-row w3-flex-center-v w3-light-grey w3-round" style={{ padding: 16 }}>
             <div id="userPDP" className="w3-circle w3-overflow w3-white w3-margin-right" style={{ width: 42, height: 42, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
             <input
@@ -70,7 +95,21 @@ export default function PostContent({ posts }) {
               placeholder="Qu'est-ce que vous pensez!?"
             />
           </div>
+        </div> */}
+        {/* ///-------------------- */}
+        <div>
+          <div className="btn3_container">
+            <span className="main w3-pointer">
+              <div id="freeSwitch" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
+                <FontAwesomeIcon icon={faGift} />
+              </div>
+              <div id="premiumSwitch" className="btn w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36, display: 'none' }}>
+                <FontAwesomeIcon icon={faDollarSign} />
+              </div>
+            </span>
+          </div>
         </div>
+        {/* ///-------------------- */}
         {posts.length > 0 &&
           posts.map((post, key) => (
             <Link className="postCard" href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
