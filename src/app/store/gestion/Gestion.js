@@ -13,6 +13,7 @@ import {
     faPlus,
     faSpinner,
     faTimes,
+    faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import slugify from "slugify";
@@ -23,6 +24,7 @@ function Gestion() {
     const [categoryListe, setcategoryListe] = useState('')
     const [inputImage, setinputImage] = useState(null)
     const [inputFichier, setinputFichier] = useState(null)
+    const [selectCategoryList, setselectCategoryList] = useState([])
     const categoryInfo = {
         name: null,
         type: "product",
@@ -45,6 +47,7 @@ function Gestion() {
         },
     });
     const [productListe, setproductListe] = useState('')
+
     const [productInfos, setproductInfos] = useState({
         id: null,
         name: "",
@@ -92,6 +95,28 @@ function Gestion() {
             .catch((e) => {
                 console.error("failure", e);
             });
+    };
+
+    const reloadCategory = (data) => {
+        setselectCategoryList(data)
+        const glitchCategory = data.map((element, key) => (
+            <div key={key} className="w3-flex-row w3-light-grey w3-round w3-overflow w3-flex-center-v" style={{ marginBlock: 4 }}>
+                <div
+                    className="w3-nowrap w3-hover-grey w3-flex-1 w3-overflow"
+                    style={{ paddingInline: 8 }}
+                >
+                    {element.name}
+                </div>
+                <div
+                    onClick={() => deleteCategory(element.id)}
+                    className="w3-red w3-button w3-flex-center topicdelete"
+                >
+                    <FontAwesomeIcon className="w3-medium" icon={faTrash} />
+                </div>
+            </div>
+        ));
+        document.getElementById("categoryTitle").value = "";
+        setcategoryListe(glitchCategory);
     };
 
     async function setCSRFToken() {
@@ -368,6 +393,7 @@ function Gestion() {
         document.getElementById("inputFichier").style.opacity = "0.5";
 
     }
+
     const cancelFichierInsertion = () => {
         productInfos.fichier = false;
 
@@ -377,6 +403,7 @@ function Gestion() {
         document.getElementById("inputFichier").style.display = "flex";
         document.getElementById('cancelImageInsertion').style.display = 'inline-block'
     }
+
     const closeModalOptionProduct = () => {
         document.getElementById('modalOptionProduct').style.display = 'none'
         withcmInfo.id = null;
@@ -403,6 +430,21 @@ function Gestion() {
                     console.error("failure", e);
                 });
         }
+
+        axios
+            .get(`${source}/_category/product?xcode=${xcode}`)
+            .then((res) => {
+                if (res.data.logedin) {
+                    reloadCategory(res.data.data.reverse())
+                } else {
+                    if (document.getElementById('modalLogin')) {
+                        document.getElementById('modalLogin').style.display = 'block'
+                    }
+                }
+            })
+            .catch((e) => {
+                console.error("failure", e);
+            });
 
         axios
             .get(source + "/_auth?xcode=" + xcode)
@@ -515,17 +557,17 @@ function Gestion() {
                         <div className="w3-right" style={{ paddingRight: 16, width: '65%' }}>
                             <select
                                 id="postCategory"
-                                onChange={(e) => postInfo.category = e.target.value}
+                                onChange={(e) => productInfos.category = e.target.value}
                                 className="w3-light-grey w3-input w3-border-0 w3-block w3-nowrap w3-overflow w3-round"
                                 style={{ paddingBlock: 8 }}
                                 defaultValue={"default"}
                             >
                                 <option value={'default'}>Sélectionner une catégorie</option>
-                                {/* {
+                                {
                                     selectCategoryList.map((category, key) => (
                                         <option key={key} value={category.id}>{category.name}</option>
                                     ))
-                                } */}
+                                }
                             </select>
                         </div>
                     </div>

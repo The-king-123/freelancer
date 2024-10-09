@@ -3,9 +3,6 @@
 import {
   faArrowLeft,
   faDownload,
-  faPause,
-  faPlay,
-  faRefresh,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
@@ -41,6 +38,7 @@ export default function ProductContent({ content }) {
     console.log(id);
     
   }
+
   useEffect(() => {
 
     audioBox.chaine = document.getElementById("audioBox");
