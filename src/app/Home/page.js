@@ -1155,7 +1155,7 @@ export default function Home(props) {
                   </div>
                 </span>
               </div>
-              <div className="w3-text-green" style={{marginTop:-54, zIndex:1}}>
+              <div id="premiumfreeText" className="w3-text-green" style={{marginTop:-54, zIndex:1}}>
                 Gratuit
               </div>
             </div>
