@@ -1654,12 +1654,12 @@ export default function Home(props) {
           <div className="w3-pointer w3-flex-row">
             {/* ///-------------------- */}
             <div>
-              <div className="btn3_container">
-                <span className="main w3-pointer">
-                  <div id="freeSwitch" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
+              <div className="btn3_container1">
+                <span className="main1 w3-pointer">
+                  <div id="freeSwitch1" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
                     <FontAwesomeIcon icon={faGift} />
                   </div>
-                  <div id="premiumSwitch" className="btn w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36, display: 'none' }}>
+                  <div id="premiumSwitch1" className="btn w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36, display: 'none' }}>
                     <FontAwesomeIcon icon={faDollarSign} />
                   </div>
                 </span>
