@@ -218,6 +218,7 @@ export default function PostContent({ posts }) {
       });
     }
 
+    const premiumfreeText = document.querySelector("#premiumfreeText");
     const btn3_ctn = document.querySelector(".btn3_container");
     const main = document.querySelector(".main");
 
@@ -241,7 +242,7 @@ export default function PostContent({ posts }) {
 
     });
 
-    const premiumfreeText = document.querySelector("#premiumfreeText");
+    const premiumfreeText1 = document.querySelector("#premiumfreeText1");
     const btn3_ctn1 = document.querySelector(".btn3_container1");
     const main1 = document.querySelector(".main1");
 
