@@ -1653,8 +1653,8 @@ export default function Home(props) {
         <div className="w3-flex-1">
           <div className="w3-pointer w3-flex-row">
             {/* ///-------------------- */}
-            <div>
-              <div className="btn3_container1">
+            <div className="w3-flex-column">
+              <div className="btn3_container1" style={{ marginInline: 'auto' }}>
                 <span className="main1 w3-pointer">
                   <div id="freeSwitch1" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
                     <FontAwesomeIcon icon={faGift} />
@@ -1663,6 +1663,9 @@ export default function Home(props) {
                     <FontAwesomeIcon icon={faDollarSign} />
                   </div>
                 </span>
+              </div>
+              <div id="premiumfreeText1" className="w3-text-green" style={{marginTop:-62, zIndex:1,paddingBlock:8}}>
+                Gratuit
               </div>
             </div>
             {/* ///-------------------- */}
