@@ -1139,13 +1139,13 @@ export default function Home(props) {
         }}
         id="sidebarMenu"
       >
-        <div className="w3-container w3-display-container w3-padding-16">
+        <div className="w3-container w3-display-container">
           <div
             className="w3-pointer w3-center w3-flex-row w3-flex-center w3-large"
           >
             {/* ///-------------------- */}
-            <div>
-              <div className="btn3_container">
+            <div className="w3-flex-column">
+              <div className="btn3_container" style={{ marginInline: 'auto' }}>
                 <span className="main w3-pointer">
                   <div id="freeSwitch" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
                     <FontAwesomeIcon icon={faGift} />
@@ -1155,12 +1155,15 @@ export default function Home(props) {
                   </div>
                 </span>
               </div>
+              <div className="w3-text-green" style={{marginTop:-54, zIndex:1}}>
+                Gratuit
+              </div>
             </div>
             {/* ///-------------------- */}
           </div>
         </div>
         <div
-          className="w3-padding-32 w3-large w3-text-grey"
+          className="w3-large w3-text-grey"
           style={{ paddingInline: 16 }}
         >
           {/* menu desktop */}
