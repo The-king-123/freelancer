@@ -1155,7 +1155,7 @@ export default function Home(props) {
                   </div>
                 </span>
               </div>
-              <div id="premiumfreeText" className="w3-text-green" style={{marginTop:-62, zIndex:1,paddingBlock:8}}>
+              <div id="premiumfreeText" className="w3-text-green" style={{marginTop:-60, zIndex:1,paddingBlock:8, fontSize: '16px'}}>
                 Gratuit
               </div>
             </div>
@@ -1664,7 +1664,7 @@ export default function Home(props) {
                   </div>
                 </span>
               </div>
-              <div id="premiumfreeText1" className="w3-text-green" style={{marginTop:-62, zIndex:1,paddingBlock:8}}>
+              <div id="premiumfreeText1" className="w3-text-green w3-small" style={{marginTop:-62, zIndex:1,paddingBlock:8, fontSize: '16px'}}>
                 Gratuit
               </div>
             </div>

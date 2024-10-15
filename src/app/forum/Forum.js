@@ -234,7 +234,7 @@ export default function Forum(props) {
               {
                 forum.response.length > 3 &&
                 <Link href={'/forum/preview/' + forum.slug} className="w3-small w3-text-grey" style={{ marginTop: 8 }}>
-                  <u>Voire tout les commentaires</u>
+                  <u>Voir tous les commentaires</u>
                 </Link>
               }
               <div className={"w3-white w3-round-xxlarge w3-overflow w3-flex-row " + (forum.response.length > 0 ? 'w3-margin-top' : '')}>

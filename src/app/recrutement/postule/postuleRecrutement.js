@@ -676,7 +676,7 @@ function postuleRecrutement(props) {
               onClick={() => save("public")}
               className="w3-button w3-black w3-round-xxlarge w3-block w3-flex w3-flex-center"
             >
-              Postuler votre condidature{" "}
+              Postulez votre candidature{" "}
               <FontAwesomeIcon
                 id="recrutementPublicIcon"
                 className="w3-margin-left"
