@@ -1155,7 +1155,7 @@ export default function Home(props) {
                   </div>
                 </span>
               </div>
-              <div id="premiumfreeText" className="w3-text-green" style={{marginTop:-60, zIndex:1,paddingBlock:8, fontSize: '16px'}}>
+              <div id="premiumfreeText" className="w3-text-green" style={{ marginTop: -60, zIndex: 1, paddingBlock: 8, fontSize: '16px' }}>
                 Gratuit
               </div>
             </div>
@@ -1652,23 +1652,7 @@ export default function Home(props) {
       >
         <div className="w3-flex-1">
           <div className="w3-pointer w3-flex-row">
-            {/* ///-------------------- */}
-            <div className="w3-flex-column">
-              <div className="btn3_container1" style={{ marginInline: 'auto' }}>
-                <span className="main1 w3-pointer">
-                  <div id="freeSwitch1" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
-                    <FontAwesomeIcon icon={faGift} />
-                  </div>
-                  <div id="premiumSwitch1" className="btn w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36, display: 'none' }}>
-                    <FontAwesomeIcon icon={faDollarSign} />
-                  </div>
-                </span>
-              </div>
-              <div id="premiumfreeText1" className="w3-text-green w3-small" style={{marginTop:-62, zIndex:1,paddingBlock:8, fontSize: '16px'}}>
-                Gratuit
-              </div>
-            </div>
-            {/* ///-------------------- */}
+            {/* Header text here */}
           </div>
         </div>
 
@@ -1787,25 +1771,7 @@ export default function Home(props) {
         style={{ paddingBlock: 8, zIndex: 9999 }}
       >
 
-        <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
-          <Link
-            className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
-            style={{ width: 36, height: 36, marginInline: "auto" }}
-            onClick={() => {
-              localStorage.removeItem("user");
-              if (fullPath.path.length > 0) {
-                stopAllIntervalAndTimeout();
-              }
-            }}
-            href={"/"}
-          >
-            <FontAwesomeIcon
-              icon={faHome}
-              width={20}
-              height={20}
-            />
-          </Link>
-        </div>
+
 
         <Link
           href={'/talent'}
@@ -1839,6 +1805,52 @@ export default function Home(props) {
               height={20}
             />
           </div>
+        </div>
+
+        <div
+          className="w3-flex-1"
+          style={{ width: 36, height: 36 }}
+        >
+          <div
+            id="contentChanger"
+            className="w3-flex w3-flex-center w3-overflow w3-green w3-round"
+            style={{ width: 36, height: 36, marginInline: "auto" }}
+          >
+            <FontAwesomeIcon
+              id="freeContentIcon"
+              icon={faGift}
+              width={20}
+              height={20}
+            />
+            <FontAwesomeIcon
+              id="premiumContentIcon"
+              className="w3-text-black"
+              icon={faDollarSign}
+              width={20}
+              height={20}
+              style={{display:'none'}}
+            />
+          </div>
+        </div>
+
+        <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
+          <Link
+            className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
+            style={{ width: 36, height: 36, marginInline: "auto" }}
+            onClick={() => {
+              localStorage.removeItem("user");
+              if (fullPath.path.length > 0) {
+                stopAllIntervalAndTimeout();
+              }
+            }}
+            href={"/"}
+          >
+            <FontAwesomeIcon
+              icon={faHome}
+              width={20}
+              height={20}
+            />
+          </Link>
         </div>
 
         <div
