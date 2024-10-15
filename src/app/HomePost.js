@@ -225,7 +225,7 @@ export default function PostContent({ posts }) {
     const freeIcon = document.querySelector("#freeSwitch");
     const premiumIcon = document.querySelector("#premiumSwitch");
 
-    btn3_ctn.addEventListener("click", () => {
+    premiumfreeText.addEventListener("click", () => {
 
       if (premiumIcon.style.display == 'none') {
         freeIcon.style.display = 'none'
