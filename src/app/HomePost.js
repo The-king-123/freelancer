@@ -218,11 +218,11 @@ export default function PostContent({ posts }) {
       });
     }
 
-    const btn3_ctn = document.getElementsByClassName("btn3_container")[0];
-    const main = document.getElementsByClassName("main")[0];
+    const btn3_ctn = document.querySelector(".btn3_container");
+    const main = document.querySelector(".main")[0];
 
-    const freeIcon = document.getElementById("freeSwitch");
-    const premiumIcon = document.getElementById("premiumSwitch");
+    const freeIcon = document.querySelector("#freeSwitch");
+    const premiumIcon = document.querySelector("#premiumSwitch");
 
     btn3_ctn.addEventListener("click", () => {
 
@@ -236,6 +236,29 @@ export default function PostContent({ posts }) {
         freeIcon.style.display = 'flex'
         premiumIcon.style.display = 'none'
         main.className = "main w3-pointer"
+        loadPost('free')
+      }
+
+    });
+
+    const btn3_ctn1 = document.querySelector(".btn3_container1");
+    const main1 = document.querySelector(".main1")[0];
+
+    const freeIcon1 = document.querySelector("#freeSwitch1");
+    const premiumIcon1 = document.querySelector("#premiumSwitch1");
+
+    btn3_ctn1.addEventListener("click", () => {
+
+      if (premiumIcon1.style.display == 'none') {
+        freeIcon1.style.display = 'none'
+        premiumIcon1.style.display = 'flex'
+        main1.className = "active3 w3-pointer"
+
+        loadPost('premium')
+      } else {
+        freeIcon1.style.display = 'flex'
+        premiumIcon1.style.display = 'none'
+        main1.className = "main w3-pointer"
         loadPost('free')
       }
 
