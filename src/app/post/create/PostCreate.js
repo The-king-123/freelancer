@@ -827,7 +827,7 @@ function PostCreate(props) {
                 });
 
             axios
-                .get(`${source}/_category?xcode=${xcode}`)
+                .get(`${source}/_category/actuality?xcode=${xcode}`)
                 .then((res) => {
                     if (res.data.logedin) {
                         reloadCategory(res.data.data.reverse())

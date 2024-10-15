@@ -203,6 +203,9 @@ export default function PostContent({ posts }) {
       </Link>
     ))
     setdisplayPost(glitchPost)
+    setTimeout(() => {
+      makeMarqueeText();
+    }, 200);
   }
 
   useEffect(() => {
@@ -215,15 +218,11 @@ export default function PostContent({ posts }) {
       });
     }
 
-    makeMarqueeText();
+    const btn3_ctn = document.getElementsByClassName("btn3_container")[0];
+    const main = document.getElementsByClassName("main")[0];
 
-    // switch animatin
-
-    const btn3_ctn = document.querySelector(".btn3_container");
-    const main = document.querySelector(".main");
-
-    const freeIcon = document.querySelector("#freeSwitch");
-    const premiumIcon = document.querySelector("#premiumSwitch");
+    const freeIcon = document.getElementById("freeSwitch");
+    const premiumIcon = document.getElementById("premiumSwitch");
 
     btn3_ctn.addEventListener("click", () => {
 
@@ -260,20 +259,7 @@ export default function PostContent({ posts }) {
             />
           </div>
         </div> */}
-        {/* ///-------------------- */}
-        <div>
-          <div className="btn3_container">
-            <span className="main w3-pointer">
-              <div id="freeSwitch" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
-                <FontAwesomeIcon icon={faGift} />
-              </div>
-              <div id="premiumSwitch" className="btn w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36, display: 'none' }}>
-                <FontAwesomeIcon icon={faDollarSign} />
-              </div>
-            </span>
-          </div>
-        </div>
-        {/* ///-------------------- */}
+        
         {displayPost}
       </div>
 

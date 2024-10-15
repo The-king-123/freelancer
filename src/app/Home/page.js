@@ -8,11 +8,14 @@ import {
   faArrowLeft,
   faBars,
   faBell,
+  faCalculator,
   faChevronCircleUp,
   faCode,
   faCrown,
+  faDollarSign,
   faDoorOpen,
   faGear,
+  faGift,
   faHammer,
   faHome,
   faICursor,
@@ -458,18 +461,6 @@ export default function Home(props) {
     }
     if (userInfos) {
 
-      if (userInfos.designation == "Admin") {
-        document.getElementsByClassName("userNameTitle")[0].innerText =
-          "FREELANCER";
-        document.getElementsByClassName("userNameTitle")[1].innerText =
-          "FREELANCER";
-      } else {
-        document.getElementsByClassName("userNameTitle")[0].innerText =
-          userInfos.fullname;
-        document.getElementsByClassName("userNameTitle")[1].innerText =
-          userInfos.fullname;
-      }
-
       if (userInfos.contact.includes("whatsapp")) {
         setcontact({
           phone:
@@ -492,13 +483,7 @@ export default function Home(props) {
           messenger: null,
         });
       }
-    } else {
-      document.getElementsByClassName("userNameTitle")[0].innerText =
-        "FREELANCER";
-      document.getElementsByClassName("userNameTitle")[1].innerText =
-        "FREELANCER";
     }
-
     setimagePDP(
       source +
       "/images.php?w=100&h=100&zlonk=3733&zlink=" +
@@ -884,8 +869,6 @@ export default function Home(props) {
     }
 
     if (document.getElementById("coreMain")) {
-      document.getElementsByClassName("userNameTitle")[0].style.width = window.innerWidth > 520 ? '320px' : window.innerWidth - 80 + 'px'
-      document.getElementsByClassName("userNameTitle")[1].style.width = window.innerWidth > 520 ? '320px' : window.innerWidth - 80 + 'px'
 
       if (
         !localHosts.includes(location.hostname) &&
@@ -1158,10 +1141,22 @@ export default function Home(props) {
       >
         <div className="w3-container w3-display-container w3-padding-16">
           <div
-            onClick={Home}
             className="w3-pointer w3-center w3-flex-row w3-flex-center w3-large"
           >
-            <b className="userNameTitle w3-overflow w3-nowrap"><span className="w3-text-light-grey">|</span></b>
+            {/* ///-------------------- */}
+            <div>
+              <div className="btn3_container">
+                <span className="main w3-pointer">
+                  <div id="freeSwitch" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
+                    <FontAwesomeIcon icon={faGift} />
+                  </div>
+                  <div id="premiumSwitch" className="btn w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36, display: 'none' }}>
+                    <FontAwesomeIcon icon={faDollarSign} />
+                  </div>
+                </span>
+              </div>
+            </div>
+            {/* ///-------------------- */}
           </div>
         </div>
         <div
@@ -1310,6 +1305,20 @@ export default function Home(props) {
               />
               <div className="w3-margin-left w3-medium">Tarifs</div>
             </div>
+
+            <Link
+              className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+              style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+              href={"https://pos.freelancer.mg"}
+              target="_blank"
+            >
+              <FontAwesomeIcon
+                icon={faCalculator}
+                width={20}
+                height={20}
+              />
+              <div className="w3-margin-left w3-medium">POS</div>
+            </Link>
 
             <div style={{ height: 40 }}>
               <div
@@ -1639,8 +1648,21 @@ export default function Home(props) {
         style={{ paddingBlock: 8, paddingInline: 16, zIndex: 3 }}
       >
         <div className="w3-flex-1">
-          <div onClick={Home} className="w3-pointer w3-flex-row w3-large">
-            <b className="userNameTitle w3-overflow w3-nowrap"></b>
+          <div className="w3-pointer w3-flex-row">
+            {/* ///-------------------- */}
+            <div>
+              <div className="btn3_container">
+                <span className="main w3-pointer">
+                  <div id="freeSwitch" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
+                    <FontAwesomeIcon icon={faGift} />
+                  </div>
+                  <div id="premiumSwitch" className="btn w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36, display: 'none' }}>
+                    <FontAwesomeIcon icon={faDollarSign} />
+                  </div>
+                </span>
+              </div>
+            </div>
+            {/* ///-------------------- */}
           </div>
         </div>
 

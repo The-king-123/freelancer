@@ -204,7 +204,7 @@ function Gestion() {
             .getElementById("cancelWarning")
             .addEventListener("click", cancelHandler);
     };
-    
+
     const reloadCategory = (data) => {
         setselectCategoryList(data)
         const glitchCategory = data.map((element, key) => (
@@ -238,29 +238,55 @@ function Gestion() {
         }
     }
 
-    const showThisProduct = (data) => {
+    const showThisProduct = async (data) => {
 
-        if (data.response.length <= 0) {
-            productInfos.title = data.title
-            productInfos.content = data.content
-            productInfos.id = data.id
+        productInfos.name = data.name
+        productInfos.description = data.description
+        productInfos.id = data.id
+        productInfos.type = data.type
+        productInfos.fichier = true
+        productInfos.info = data.info
 
-            document.getElementById('productTitle').value = data.title
-            document.getElementById('productContent').innerHTML = data.content
+        document.getElementById('productName').value = data.name
+        document.getElementById('productDescription').value = data.description
 
-            if (data.type == 'image') {
-                document.getElementById("showImage").src = source + "/images.php?w=120&h=120&zlonk=4733&zlink=" + data.link;
-                document.getElementById("showImageWrapper").style.display = "block";
-                document.getElementById("inputImage").style.display = "none";
-            }
+        document.getElementById("showImage").src = source + "/images.php?w=200&h=200&zlonk=8733&zlink=" + data.link;;
+        document.getElementById("showImageWrapper").style.display = "block";
+        document.getElementById("inputImage").style.display = "none";
 
-            document.getElementById('deleteButton').style.display = 'block';
-            document.getElementById('modalProductListe').style.display = 'none';
+        document.getElementById(data.type + 'Radio').checked = true
+
+        document.getElementById("fileName").innerText = data.name;
+        document.getElementById("showFichierWrapper").style.display = "block";
+        document.getElementById("inputFichier").style.display = "none";
+
+        document.getElementById('cancelImageInsertion').style.display = 'none'
+
+        document.getElementById('deleteButton').style.display = 'block';
+        document.getElementById('modalProductListe').style.display = 'none';
+
+        if (data.type == 'premium') {
+            displayKeyListArea()
+            document.getElementById('premiumCodeManager').style.display = 'flex'
+
+            const xcode = localStorage.getItem('x-code')
+            await setCSRFToken();
+            await axios
+                .get(source + "/_links/" + data.id + "?xcode=" + xcode)
+                .then((res) => {
+                    if (res.data.logedin) {
+                        reloadKeyList(res.data.data)
+                    } else {
+                        if (document.getElementById('modalLogin')) {
+                            document.getElementById('modalLogin').style.display = 'block'
+                        }
+                    }
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                });
         } else {
-            document.getElementById('modalOptionProduct').style.display = 'block'
-            withcmInfo.id = data.id
-            withcmInfo.slug = data.slug
-            // window.location = '/product/preview/' + data.slug
+            document.getElementById('premiumCodeManager').style.display = 'none'
         }
 
     }
@@ -271,8 +297,8 @@ function Gestion() {
             glitchProduct = data.map((product, key) => (
                 <div key={key} style={{ padding: 4 }}>
                     <div onClick={() => showThisProduct(product)} className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
-                        <div>{product.title}</div>
-                        <div className="w3-small w3-text-grey">{product.state == 'public' ? 'Publique' : 'Brouillon'}{product.response.length > 0 ? " - " + product.response.length + " Commentaire" + (product.response.length == 1 ? '' : 's') : ''}</div>
+                        <div>{product.name}</div>
+                        <div className="w3-small w3-text-grey">{product.downloadcount} Downloads{product.type == 'premium' ? <span className="w3-text-yellow"> - Premium</span> : ''}</div>
                     </div>
                 </div>
             ))
@@ -295,8 +321,7 @@ function Gestion() {
 
         productInfos.slug = slugify(productInfos.name, { lower: true });
 
-        if (productInfos.image &&
-            productInfos.fichier &&
+        if (productInfos.fichier &&
             productInfos.name.length >= 3 &&
             productInfos.description.length >= 3 &&
             productInfos.type.length >= 3 &&
@@ -451,8 +476,8 @@ function Gestion() {
 
                             reloadProducts(res.data.data.reverse());
                             document.getElementById('modalProductListe').style.display = 'block'
-                            document.getElementById('productTitle').value = ''
-                            document.getElementById('productContent').innerHTML = 'Que pensez-vous ?'
+                            document.getElementById('productName').value = ''
+                            document.getElementById('productDescription').innerHTML = 'Que pensez-vous ?'
                             cancelImageInsertion()
                             document.getElementById('deleteButton').style.display = 'none';
                             if (cm > 0) {
@@ -505,8 +530,12 @@ function Gestion() {
     const cancelFichierInsertion = () => {
         productInfos.fichier = false;
 
-        productInfos.image.delete("fichier");
-
+        if (productInfos.image) {
+            productInfos.image.delete("fichier");
+        }else{
+            cancelImageInsertion()
+        }
+        
         document.getElementById("showFichierWrapper").style.display = "none";
         document.getElementById("inputFichier").style.display = "flex";
         document.getElementById('cancelImageInsertion').style.display = 'inline-block'
@@ -526,13 +555,12 @@ function Gestion() {
 
         const xcode = localStorage.getItem("x-code");
         if (xcode && xcode != 'null') {
+
             axios
-                .get(`${source}/_product?xcode=${xcode}`)
+                .get(`${source}/_store?xcode=${xcode}`)
                 .then((res) => {
-                    if (res.data.logedin) {
-                        document.getElementById('productCore').style.display = 'block';
-                        reloadProducts(res.data.data.reverse())
-                    }
+                    document.getElementById('productCore').style.display = 'block';
+                    reloadProducts(res.data.data.reverse())
                 })
                 .catch((e) => {
                     console.error("failure", e);
@@ -639,22 +667,22 @@ function Gestion() {
                         Créer un product
                     </div>
                     <div>
-                    <div
-                        id="premiumCodeManager"
-                        onClick={() => {
-                            // document.getElementById('createProductCore').style.display = 'none'
-                            document.getElementById("modalKeyListe").style.display = 'block'
-                        }}
-                        className="w3-black w3-circle w3-flex w3-flex-center"
-                        style={{ width: 32, height: 32, display: 'none' }}
-                        title="Gérer votre code premium."
-                    >
-                        <FontAwesomeIcon
-                            icon={faKey}
-                            style={{ width: 16, height: 16 }}
-                        />
+                        <div
+                            id="premiumCodeManager"
+                            onClick={() => {
+                                // document.getElementById('createProductCore').style.display = 'none'
+                                document.getElementById("modalKeyListe").style.display = 'block'
+                            }}
+                            className="w3-black w3-circle w3-flex w3-flex-center w3-margin-right"
+                            style={{ width: 32, height: 32, display: 'none' }}
+                            title="Gérer votre code premium."
+                        >
+                            <FontAwesomeIcon
+                                icon={faKey}
+                                style={{ width: 16, height: 16 }}
+                            />
+                        </div>
                     </div>
-                </div>
                     <div id="openProductListeButton">
                         <div
                             onClick={() => document.getElementById('modalProductListe').style.display = 'block'}
@@ -700,12 +728,12 @@ function Gestion() {
 
                 <div style={{ padding: 8 }}>
                     <label className="w3-margin-right">
-                        <input onChange={(e) => productInfos.type = e.target.value
+                        <input id="premiumRadio" onChange={(e) => productInfos.type = e.target.value
                         } type="radio" name="option" value="premium" style={{ marginRight: 8 }} />
                         Premium
                     </label>
                     <label>
-                        <input onChange={(e) => productInfos.type = e.target.value
+                        <input id="freeRadio" onChange={(e) => productInfos.type = e.target.value
                         } defaultChecked={true} type="radio" name="option" value="free" style={{ marginRight: 8 }} />
                         Free
                     </label>
@@ -714,6 +742,7 @@ function Gestion() {
                 <div style={{ padding: 8 }}>
 
                     <input
+                        id="productName"
                         onChange={(e) => (productInfos.name = e.target.value)}
                         className="w3-input w3-border-0 w3-light-grey w3-round w3-margin-bottom"
                         type="text"
@@ -722,6 +751,7 @@ function Gestion() {
                     />
 
                     <input
+                        id="productDescription"
                         onChange={(e) => (productInfos.description = e.target.value)}
                         className="w3-input w3-border-0 w3-light-grey w3-round w3-margin-bottom"
                         type="text"
@@ -830,21 +860,21 @@ function Gestion() {
                                 style={{ width: 16, height: 16, display: "none" }}
                             />
                         </button>
-                        {/* 
-          <button
-            id="deleteButton"
-            onClick={() => supprimer(0)}
-            className="w3-button w3-hover-red w3-border w3-border-red w3-text-red w3-round-xxlarge w3-block w3-flex w3-flex-center"
-            style={{ marginTop: 16, display: 'none' }}
-          >
-            Supprimer le product
-          </button> */}
+
+                        <button
+                            id="deleteButton"
+                            onClick={() => supprimer(0)}
+                            className="w3-button w3-hover-red w3-border w3-border-red w3-text-red w3-round-xxlarge w3-block w3-flex w3-flex-center"
+                            style={{ marginTop: 16, display: 'none' }}
+                        >
+                            Supprimer le product
+                        </button>
                     </div>
                 </div>
             </div>
 
             {/* modal product liste */}
-            <div id="modalProductListe" className="w3-modal w3-round white-opacity" style={{ position: 'absolute', height: 'calc(100vh - 16px)' }}>
+            <div id="modalProductListe" className="w3-modal w3-round white-opacity" style={{ position: 'absolute', display: 'block', height: 'calc(100vh - 16px)' }}>
                 <div
                     className="w3-modal-content w3-card w3-round w3-overflow"
                     style={{ maxWidth: 420, top: 32 }}
