@@ -252,13 +252,13 @@ export default function PostContent({ posts }) {
     contentChanger.addEventListener("click", () => {
 
       if (premiumContentIcon.style.display == 'none') {
-        premiumContentIcon.style.display = "flex"
+        premiumContentIcon.style.display = "block"
         freeContentIcon.style.display = 'none'
         contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-yellow w3-round"
         loadPost('premium')
       } else {
-        premiumContentIcon.style.display = "flex"
-        freeContentIcon.style.display = 'none'
+        premiumContentIcon.style.display = "none"
+        freeContentIcon.style.display = 'block'
         contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-green w3-round"
         loadPost('free')
       }
