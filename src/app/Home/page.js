@@ -1144,7 +1144,7 @@ export default function Home(props) {
             className="w3-pointer w3-center w3-flex-row w3-flex-center w3-large"
           >
             {/* ///-------------------- */}
-            {/* <div className="w3-flex-column"> */}
+            <div className="w3-flex-column">
               <div className="btn3_container" style={{ marginInline: 'auto' }}>
                 <span className="main w3-pointer">
                   <div id="freeSwitch" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
@@ -1155,10 +1155,10 @@ export default function Home(props) {
                   </div>
                 </span>
               </div>
-              {/* <div id="premiumfreeText" className="w3-text-green" style={{marginTop:-54, zIndex:1}}>
+              <div id="premiumfreeText" className="w3-text-green" style={{marginTop:-62, zIndex:1,paddingBlock:8}}>
                 Gratuit
-              </div> */}
-            {/* </div> */}
+              </div>
+            </div>
             {/* ///-------------------- */}
           </div>
         </div>

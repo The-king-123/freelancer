@@ -241,13 +241,14 @@ export default function PostContent({ posts }) {
 
     });
 
+    const premiumfreeText = document.querySelector("#premiumfreeText");
     const btn3_ctn1 = document.querySelector(".btn3_container1");
     const main1 = document.querySelector(".main1");
 
     const freeIcon1 = document.querySelector("#freeSwitch1");
     const premiumIcon1 = document.querySelector("#premiumSwitch1");
 
-    btn3_ctn1.addEventListener("click", () => {
+    premiumfreeText.addEventListener("click", () => {
 
       if (premiumIcon1.style.display == 'none') {
         freeIcon1.style.display = 'none'
