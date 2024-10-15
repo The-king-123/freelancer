@@ -74,7 +74,7 @@ export default function PostContent({ posts }) {
 
   const loadPost = (type) => {
     const glitchPost = posts.map((post, key) => (
-      (type=='premium' ? post.category == type : post.category != 'premium') &&
+      (type == 'premium' ? post.category == type : post.category != 'premium') &&
       <Link className="postCard" href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
         <div className="w3-overflow w3-round w3-pointer w3-white">
           <div
@@ -231,12 +231,15 @@ export default function PostContent({ posts }) {
         freeIcon.style.display = 'none'
         premiumIcon.style.display = 'flex'
         main.className = "active3 w3-pointer"
-
+        premiumfreeText.innerText = "Premium"
+        premiumfreeText.className = "w3-text-yellow"
         loadPost('premium')
       } else {
         freeIcon.style.display = 'flex'
         premiumIcon.style.display = 'none'
         main.className = "main w3-pointer"
+        premiumfreeText.innerText = "Gratuit"
+        premiumfreeText.className = "w3-text-green"
         loadPost('free')
       }
 
@@ -255,12 +258,15 @@ export default function PostContent({ posts }) {
         freeIcon1.style.display = 'none'
         premiumIcon1.style.display = 'flex'
         main1.className = "active3 w3-pointer"
-
+        premiumfreeText.innerText = "Premium"
+        premiumfreeText.className = "w3-text-yellow"
         loadPost('premium')
       } else {
         freeIcon1.style.display = 'flex'
         premiumIcon1.style.display = 'none'
         main1.className = "main w3-pointer"
+        premiumfreeText.innerText = "Gratuit"
+        premiumfreeText.className = "w3-text-green"
         loadPost('free')
       }
 
@@ -284,7 +290,7 @@ export default function PostContent({ posts }) {
             />
           </div>
         </div> */}
-        
+
         {displayPost}
       </div>
 
