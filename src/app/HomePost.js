@@ -197,12 +197,12 @@ export default function PostContent({ posts }) {
 
     if (document.getElementById("premiumfreeText")) {
       const premiumfreeText = document.getElementById("premiumfreeText");
-      const main = document.querySelector(".main");
-
-      const freeIcon = document.getElementById("freeSwitch");
-      const premiumIcon = document.getElementById("premiumSwitch");
 
       premiumfreeText.addEventListener("click", () => {
+
+        const main = document.querySelector(".main");
+        const freeIcon = document.getElementById("freeSwitch");
+        const premiumIcon = document.getElementById("premiumSwitch");
 
         if (premiumIcon.style.display == 'none') {
           freeIcon.style.display = 'none'
@@ -226,11 +226,13 @@ export default function PostContent({ posts }) {
 
     if (document.getElementById("contentChanger")) {
       const contentChanger = document.getElementById("contentChanger");
-      const premiumContentIcon = document.getElementById("premiumContentIcon");
-      const freeContentIcon = document.getElementById("freeCcontentIcon");
+
 
       contentChanger.addEventListener("click", () => {
 
+        const premiumContentIcon = document.getElementById("premiumContentIcon");
+        const freeContentIcon = document.getElementById("freeCcontentIcon");
+        
         if (premiumContentIcon.style.display == 'none') {
           premiumContentIcon.style.display = "block"
           freeContentIcon.style.display = 'none'
