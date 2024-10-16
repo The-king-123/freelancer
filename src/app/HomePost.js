@@ -227,12 +227,11 @@ export default function PostContent({ posts }) {
     if (document.getElementById("contentChanger")) {
       const contentChanger = document.getElementById("contentChanger");
 
-
       contentChanger.addEventListener("click", () => {
 
         const premiumContentIcon = document.getElementById("premiumContentIcon");
         const freeContentIcon = document.getElementById("freeCcontentIcon");
-        
+
         if (premiumContentIcon.style.display == 'none') {
           premiumContentIcon.style.display = "block"
           freeContentIcon.style.display = 'none'
