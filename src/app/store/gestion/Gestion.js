@@ -67,7 +67,7 @@ function Gestion() {
         email: '',
         id: ''
     });
-    
+
     const openModalCategory = () => {
         singleCategoryInfo.name = ''
         document.getElementById("categoryTitle").value = "";
@@ -94,6 +94,35 @@ function Gestion() {
         document.getElementById('afficheKeyListArea').style.display = 'none';
     }
 
+    const reloadKeyList = (data) => {
+        var glicthKeyList
+        if (data.length > 0) {
+            glicthKeyList = data.map((code, key) => (
+                <div key={key} style={{ padding: 4 }}>
+                    <div className="w3-light-grey w3-round w3-padding w3-flex-row w3-flex-center-v">
+                        <div className="w3-nowrap w3-overflow w3-flex-column w3-flex-1">
+                            <div>{code.fullname}</div>
+                            <div className="w3-small w3-text-grey">{code.email}</div>
+                        </div>
+                        <div onClick={() => deleteKey(code.id)} className="w3-margin-left ">
+                            <FontAwesomeIcon icon={faTrashAlt} className="w3-opacity-min w3-hover-text-red" />
+                        </div>
+                    </div>
+                </div>
+            ))
+        } else {
+            //
+            glicthKeyList = (<div style={{ padding: 8 }}>
+                <div className="w3-light-grey w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
+                    <div style={{ paddingInline: 16 }}>
+                        Ce post n'a aucune code pour le moment...
+                    </div>
+                </div>
+            </div>)
+        }
+        setkeyListe(glicthKeyList)
+    }
+    
     const addKeyToUser = async () => {
         if (isValidEmail(codeInfo.email)) {
             const xcode = localStorage.getItem('x-code');
