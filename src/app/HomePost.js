@@ -219,6 +219,7 @@ export default function PostContent({ posts }) {
         premiumfreeText.className = "w3-text-green"
         loadPost('free')
       }
+      contentChanger.click()
 
     });
 
@@ -239,6 +240,7 @@ export default function PostContent({ posts }) {
         freeContentIcon.style.display = 'block'
         loadPost('free')
       }
+      premiumfreeText.click()
 
     });
 
