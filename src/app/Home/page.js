@@ -1820,10 +1820,10 @@ export default function Home(props) {
               if (fullPath.path.length > 0) {
                 stopAllIntervalAndTimeout();
               }
-              if (location.pathname != '/') {
+
+              if (location.pathname.split('/')[1] != '' && location.pathname.split('/')[1] != 'user') {
                 document.location = '/'
-              }
-              
+              } 
             }}
           >
             <FontAwesomeIcon
@@ -1838,30 +1838,10 @@ export default function Home(props) {
               icon={faDollarSign}
               width={20}
               height={20}
-              style={{display:'none'}}
+              style={{ display: 'none' }}
             />
           </div>
         </div>
-
-        {/* <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
-          <Link
-            className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
-            style={{ width: 36, height: 36, marginInline: "auto" }}
-            onClick={() => {
-              localStorage.removeItem("user");
-              if (fullPath.path.length > 0) {
-                stopAllIntervalAndTimeout();
-              }
-            }}
-            href={"/"}
-          >
-            <FontAwesomeIcon
-              icon={faHome}
-              width={20}
-              height={20}
-            />
-          </Link>
-        </div> */}
 
         <div
           onClick={userPremiumArea}
