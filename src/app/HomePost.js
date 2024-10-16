@@ -195,7 +195,7 @@ export default function PostContent({ posts }) {
       });
     }
 
-    if (document.getElementById("#premiumfreeText")) {
+    if (document.getElementById("premiumfreeText")) {
       const premiumfreeText = document.querySelector("#premiumfreeText");
       const btn3_ctn = document.querySelector(".btn3_container");
       const main = document.querySelector(".main");
@@ -225,7 +225,7 @@ export default function PostContent({ posts }) {
 
     }
 
-    if (document.getElementById("#contentChanger")) {
+    if (document.getElementById("contentChanger")) {
       const contentChanger = document.getElementById("#contentChanger");
       const premiumContentIcon = document.getElementById("#premiumContentIcon");
       const freeContentIcon = document.getElementById("#freeCcontentIcon");
