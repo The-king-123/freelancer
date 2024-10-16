@@ -195,59 +195,52 @@ export default function PostContent({ posts }) {
       });
     }
 
-    if (document.getElementById("premiumfreeText")) {
+    const premiumfreeText = document.querySelector("#premiumfreeText");
+    const btn3_ctn = document.querySelector(".btn3_container");
+    const main = document.querySelector(".main");
 
-      document.getElementById("premiumfreeText").addEventListener("click", () => {
+    const freeIcon = document.querySelector("#freeSwitch");
+    const premiumIcon = document.querySelector("#premiumSwitch");
 
-        const premiumfreeText = document.getElementById("premiumfreeText");
-        const main = document.querySelector(".main");
-        const freeIcon = document.getElementById("freeSwitch");
-        const premiumIcon = document.getElementById("premiumSwitch");
+    premiumfreeText.addEventListener("click", () => {
 
-        if (premiumIcon.style.display == 'none') {
-          freeIcon.style.display = 'none'
-          premiumIcon.style.display = 'flex'
-          main.className = "active3 w3-pointer"
-          premiumfreeText.innerText = "Premium"
-          premiumfreeText.className = "w3-text-yellow"
-          loadPost('premium')
-        } else {
-          freeIcon.style.display = 'flex'
-          premiumIcon.style.display = 'none'
-          main.className = "main w3-pointer"
-          premiumfreeText.innerText = "Gratuit"
-          premiumfreeText.className = "w3-text-green"
-          loadPost('free')
-        }
+      if (premiumIcon.style.display == 'none') {
+        freeIcon.style.display = 'none'
+        premiumIcon.style.display = 'flex'
+        main.className = "active3 w3-pointer"
+        premiumfreeText.innerText = "Premium"
+        premiumfreeText.className = "w3-text-yellow"
+        loadPost('premium')
+      } else {
+        freeIcon.style.display = 'flex'
+        premiumIcon.style.display = 'none'
+        main.className = "main w3-pointer"
+        premiumfreeText.innerText = "Gratuit"
+        premiumfreeText.className = "w3-text-green"
+        loadPost('free')
+      }
 
-      });
+    });
 
-    }
+    const contentChanger = document.querySelector("#contentChanger");
+    const premiumContentIcon = document.querySelector("#premiumContentIcon");
+    const freeContentIcon = document.querySelector("#freeCcontentIcon");
 
-    if (document.getElementById("contentChanger")) {
+    contentChanger.addEventListener("click", () => {
 
-      console.log('Efa ato eee');
-      
-      document.getElementById("contentChanger").addEventListener("click", () => {
+      if (premiumContentIcon.style.display == 'none') {
+        premiumContentIcon.style.display = "block"
+        freeContentIcon.style.display = 'none'
+        contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-yellow w3-round"
+        loadPost('premium')
+      } else {
+        premiumContentIcon.style.display = "none"
+        freeContentIcon.style.display = 'block'
+        contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-green w3-round"
+        loadPost('free')
+      }
 
-        const contentChanger = document.getElementById("contentChanger");
-        const premiumContentIcon = document.getElementById("premiumContentIcon");
-        const freeContentIcon = document.getElementById("freeCcontentIcon");
-
-        if (premiumContentIcon.style.display == 'none') {
-          premiumContentIcon.style.display = "block"
-          freeContentIcon.style.display = 'none'
-          contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-yellow w3-round"
-          loadPost('premium')
-        } else {
-          premiumContentIcon.style.display = "none"
-          freeContentIcon.style.display = 'block'
-          contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-green w3-round"
-          loadPost('free')
-        }
-
-      });
-    }
+    });
 
     // end switch animation
     loadPost('free')
