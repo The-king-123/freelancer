@@ -268,7 +268,7 @@ function Gestion() {
             const xcode = localStorage.getItem('x-code')
             await setCSRFToken();
             await axios
-                .get(source + "/_links/" + data.id + "?xcode=" + xcode)
+                .get(source + "/_downloadcode/" + data.id + "?xcode=" + xcode)
                 .then((res) => {
                     if (res.data.logedin) {
                         reloadKeyList(res.data.data)
