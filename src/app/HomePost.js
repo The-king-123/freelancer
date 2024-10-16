@@ -303,7 +303,6 @@ export default function PostContent({ posts }) {
           </div>
         </div>
       )}
-
     </div>
   );
 }

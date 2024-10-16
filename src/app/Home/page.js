@@ -1815,6 +1815,16 @@ export default function Home(props) {
             id="contentChanger"
             className="w3-flex w3-flex-center w3-overflow w3-green w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
+            onClick={() => {
+              localStorage.removeItem("user");
+              if (fullPath.path.length > 0) {
+                stopAllIntervalAndTimeout();
+              }
+              if (location.pathname != '/') {
+                document.location = '/'
+              }
+              
+            }}
           >
             <FontAwesomeIcon
               id="freeContentIcon"
@@ -1833,7 +1843,7 @@ export default function Home(props) {
           </div>
         </div>
 
-        <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
+        {/* <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
           <Link
             className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
@@ -1851,7 +1861,7 @@ export default function Home(props) {
               height={20}
             />
           </Link>
-        </div>
+        </div> */}
 
         <div
           onClick={userPremiumArea}
