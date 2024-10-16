@@ -62,10 +62,12 @@ function Gestion() {
         slug: '',
         info: '_'
     });
-    const codeInfo = {
+
+    const [codeInfo, setcodeInfo] = useState({
         email: '',
         id: ''
-    }
+    });
+    
     const openModalCategory = () => {
         singleCategoryInfo.name = ''
         document.getElementById("categoryTitle").value = "";
@@ -232,6 +234,12 @@ function Gestion() {
         } catch (error) {
             console.error('CSRF token fetch failed:', error);
         }
+    }
+
+    const isValidEmail = (email) => {
+        // Regular expression for basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
     }
 
     const showThisProduct = async (data) => {
