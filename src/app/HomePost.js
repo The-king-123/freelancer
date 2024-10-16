@@ -196,12 +196,11 @@ export default function PostContent({ posts }) {
     }
 
     if (document.getElementById("premiumfreeText")) {
-      const premiumfreeText = document.querySelector("#premiumfreeText");
-      const btn3_ctn = document.querySelector(".btn3_container");
+      const premiumfreeText = document.getElementById("premiumfreeText");
       const main = document.querySelector(".main");
 
-      const freeIcon = document.querySelector("#freeSwitch");
-      const premiumIcon = document.querySelector("#premiumSwitch");
+      const freeIcon = document.getElementById("freeSwitch");
+      const premiumIcon = document.getElementById("premiumSwitch");
 
       premiumfreeText.addEventListener("click", () => {
 
@@ -226,9 +225,9 @@ export default function PostContent({ posts }) {
     }
 
     if (document.getElementById("contentChanger")) {
-      const contentChanger = document.getElementById("#contentChanger");
-      const premiumContentIcon = document.getElementById("#premiumContentIcon");
-      const freeContentIcon = document.getElementById("#freeCcontentIcon");
+      const contentChanger = document.getElementById("contentChanger");
+      const premiumContentIcon = document.getElementById("premiumContentIcon");
+      const freeContentIcon = document.getElementById("freeCcontentIcon");
 
       contentChanger.addEventListener("click", () => {
 
