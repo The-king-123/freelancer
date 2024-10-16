@@ -16,29 +16,6 @@ export default function PostContent({ posts }) {
   const [showThisPost, setshowThisPost] = useState();
   const [displayPost, setdisplayPost] = useState('')
 
-  // const showSinglePost = (post) => {
-  //   setshowThisPost(post);
-  //   setimagePostModal(
-  //     source + "/images.php?w=420&h=420&zlonk=2733&zlink=" + post.link
-  //   );
-  //   if (post.type == "image/audio" && audioBox.chaine) {
-  //     audioBox.chaine.src = source + "/audios.php?zlonk=1733&zlink=" + post.link;
-  //     audioBox.chaine.load();
-  //     audioBox.chaine.play();
-
-  //     document.getElementById("iconPlay").style.display = "none";
-  //     document.getElementById("iconPause").style.display = "inline-block";
-
-  //     document.getElementById("audioControl").style.display = "flex";
-  //   } else {
-  //     document.getElementById("audioControl").style.display = "none";
-  //   }
-  //   setTimeout(() => {
-  //     document.getElementById("modalSinglePost").style.display = "block";
-  //     document.getElementById("homePostCore").style.display = 'none'
-  //   }, 100);
-  // };
-
   const moneyMaker = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
@@ -218,52 +195,57 @@ export default function PostContent({ posts }) {
       });
     }
 
-    const premiumfreeText = document.querySelector("#premiumfreeText");
-    const btn3_ctn = document.querySelector(".btn3_container");
-    const main = document.querySelector(".main");
+    if (document.getElementById("#premiumfreeText")) {
+      const premiumfreeText = document.querySelector("#premiumfreeText");
+      const btn3_ctn = document.querySelector(".btn3_container");
+      const main = document.querySelector(".main");
 
-    const freeIcon = document.querySelector("#freeSwitch");
-    const premiumIcon = document.querySelector("#premiumSwitch");
+      const freeIcon = document.querySelector("#freeSwitch");
+      const premiumIcon = document.querySelector("#premiumSwitch");
 
-    premiumfreeText.addEventListener("click", () => {
+      premiumfreeText.addEventListener("click", () => {
 
-      if (premiumIcon.style.display == 'none') {
-        freeIcon.style.display = 'none'
-        premiumIcon.style.display = 'flex'
-        main.className = "active3 w3-pointer"
-        premiumfreeText.innerText = "Premium"
-        premiumfreeText.className = "w3-text-yellow"
-        loadPost('premium')
-      } else {
-        freeIcon.style.display = 'flex'
-        premiumIcon.style.display = 'none'
-        main.className = "main w3-pointer"
-        premiumfreeText.innerText = "Gratuit"
-        premiumfreeText.className = "w3-text-green"
-        loadPost('free')
-      }
+        if (premiumIcon.style.display == 'none') {
+          freeIcon.style.display = 'none'
+          premiumIcon.style.display = 'flex'
+          main.className = "active3 w3-pointer"
+          premiumfreeText.innerText = "Premium"
+          premiumfreeText.className = "w3-text-yellow"
+          loadPost('premium')
+        } else {
+          freeIcon.style.display = 'flex'
+          premiumIcon.style.display = 'none'
+          main.className = "main w3-pointer"
+          premiumfreeText.innerText = "Gratuit"
+          premiumfreeText.className = "w3-text-green"
+          loadPost('free')
+        }
 
-    });
+      });
 
-    const contentChanger = document.querySelector("#contentChanger");
-    const premiumContentIcon = document.querySelector("#premiumContentIcon");
-    const freeContentIcon = document.querySelector("#freeCcontentIcon");
+    }
 
-    contentChanger.addEventListener("click", () => {
+    if (document.getElementById("#contentChanger")) {
+      const contentChanger = document.getElementById("#contentChanger");
+      const premiumContentIcon = document.getElementById("#premiumContentIcon");
+      const freeContentIcon = document.getElementById("#freeCcontentIcon");
 
-      if (premiumContentIcon.style.display == 'none') {
-        premiumContentIcon.style.display = "block"
-        freeContentIcon.style.display = 'none'
-        contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-yellow w3-round"
-        loadPost('premium')
-      } else {
-        premiumContentIcon.style.display = "none"
-        freeContentIcon.style.display = 'block'
-        contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-green w3-round"
-        loadPost('free')
-      }
+      contentChanger.addEventListener("click", () => {
 
-    });
+        if (premiumContentIcon.style.display == 'none') {
+          premiumContentIcon.style.display = "block"
+          freeContentIcon.style.display = 'none'
+          contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-yellow w3-round"
+          loadPost('premium')
+        } else {
+          premiumContentIcon.style.display = "none"
+          freeContentIcon.style.display = 'block'
+          contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-green w3-round"
+          loadPost('free')
+        }
+
+      });
+    }
 
     // end switch animation
     loadPost('free')
