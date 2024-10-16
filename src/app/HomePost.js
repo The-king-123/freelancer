@@ -197,7 +197,6 @@ export default function PostContent({ posts }) {
 
     if (document.getElementById("premiumfreeText")) {
 
-
       document.getElementById("premiumfreeText").addEventListener("click", () => {
 
         const premiumfreeText = document.getElementById("premiumfreeText");
@@ -226,6 +225,8 @@ export default function PostContent({ posts }) {
     }
 
     if (document.getElementById("contentChanger")) {
+
+      console.log('Efa ato eee');
       
       document.getElementById("contentChanger").addEventListener("click", () => {
 
