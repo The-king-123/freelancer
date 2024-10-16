@@ -62,7 +62,10 @@ function Gestion() {
         slug: '',
         info: '_'
     });
-
+    const codeInfo = {
+        email: '',
+        id: ''
+    }
     const openModalCategory = () => {
         singleCategoryInfo.name = ''
         document.getElementById("categoryTitle").value = "";
@@ -90,35 +93,28 @@ function Gestion() {
     }
 
     const addKeyToUser = async () => {
-        if (isValidEmail(codeInfo.email) || isNumericSequence(codeInfo.email)) {
-            const xcode = localStorage.getItem('x-code')
+        if (isValidEmail(codeInfo.email)) {
+            const xcode = localStorage.getItem('x-code');
             await setCSRFToken();
             await axios
-                .post(source + "/_links?xcode=" + xcode, codeInfo)
+                .post(source + "/_downloadcode?xcode=" + xcode, codeInfo)
                 .then((res) => {
                     if (res.data.logedin) {
-                        if (res.data.authexist) {
-                            if (!res.data.codeexist) {
-                                reloadKeyList(res.data.data.reverse());
-                                document.getElementById('infoBull').innerHTML = "<div>L'utilisateur est ajouter avec succes</div>"
-                                document.getElementById('infoBull').style.display = 'block'
-                                setTimeout(() => {
-                                    document.getElementById('infoBull').style.display = 'none'
-                                }, 3000);
-                            } else {
-                                document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Le code pour cet utilisateur exist deja.</div>"
-                                document.getElementById('infoBull').style.display = 'block'
-                                setTimeout(() => {
-                                    document.getElementById('infoBull').style.display = 'none'
-                                }, 3000);
-                            }
+                        if (!res.data.codeexist) {
+                            reloadKeyList(res.data.data.reverse());
+                            document.getElementById('infoBull').innerHTML = "<div>L'utilisateur est ajouter avec succes</div>"
+                            document.getElementById('infoBull').style.display = 'block'
+                            setTimeout(() => {
+                                document.getElementById('infoBull').style.display = 'none'
+                            }, 3000);
                         } else {
-                            document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Cet utilisateur n'est inscrit sur la plateforme.</div>"
+                            document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Le code pour cet utilisateur exist deja.</div>"
                             document.getElementById('infoBull').style.display = 'block'
                             setTimeout(() => {
                                 document.getElementById('infoBull').style.display = 'none'
                             }, 3000);
                         }
+
                     }
                 })
                 .catch((e) => {
@@ -532,10 +528,10 @@ function Gestion() {
 
         if (productInfos.image) {
             productInfos.image.delete("fichier");
-        }else{
+        } else {
             cancelImageInsertion()
         }
-        
+
         document.getElementById("showFichierWrapper").style.display = "none";
         document.getElementById("inputFichier").style.display = "flex";
         document.getElementById('cancelImageInsertion').style.display = 'inline-block'
