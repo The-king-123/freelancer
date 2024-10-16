@@ -195,6 +195,12 @@ export default function PostContent({ posts }) {
       });
     }
     
+    // bottom menu button
+    const contentChanger = document.querySelector("#contentChanger");
+    const premiumContentIcon = document.querySelector("#premiumContentIcon");
+    const freeContentIcon = document.querySelector("#freeContentIcon");
+
+    // side menu button
     const premiumfreeText = document.querySelector("#premiumfreeText");
     const btn3_ctn = document.querySelector(".btn3_container");
     const main = document.querySelector(".main");
@@ -223,9 +229,6 @@ export default function PostContent({ posts }) {
 
     });
 
-    const contentChanger = document.querySelector("#contentChanger");
-    const premiumContentIcon = document.querySelector("#premiumContentIcon");
-    const freeContentIcon = document.querySelector("#freeContentIcon");
 
     contentChanger.addEventListener("click", () => {
 
