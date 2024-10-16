@@ -262,6 +262,7 @@ function Gestion() {
         document.getElementById('modalProductListe').style.display = 'none';
 
         if (data.type == 'premium') {
+            codeInfo.id = data.id
             displayKeyListArea()
             document.getElementById('premiumCodeManager').style.display = 'flex'
 
