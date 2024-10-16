@@ -209,7 +209,7 @@ export default function PostContent({ posts }) {
         premiumIcon.style.display = 'flex'
         main.className = "active3 w3-pointer"
         premiumfreeText.innerText = "Premium"
-        premiumfreeText.className = "w3-text-yellow"
+        premiumfreeText.className = "w3-text-black"
         loadPost('premium')
       } else {
         freeIcon.style.display = 'flex'
@@ -229,14 +229,14 @@ export default function PostContent({ posts }) {
     contentChanger.addEventListener("click", () => {
 
       if (premiumContentIcon.style.display == 'none') {
+        contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-yellow w3-round"
         premiumContentIcon.style.display = "block"
         freeContentIcon.style.display = 'none'
-        contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-yellow w3-round"
         loadPost('premium')
       } else {
+        contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-green w3-round"
         premiumContentIcon.style.display = "none"
         freeContentIcon.style.display = 'block'
-        contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-green w3-round"
         loadPost('free')
       }
 
