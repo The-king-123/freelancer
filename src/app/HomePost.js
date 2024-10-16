@@ -211,11 +211,17 @@ export default function PostContent({ posts }) {
     premiumfreeText.addEventListener("click", () => {
 
       if (premiumIcon.style.display == 'none') {
+
         freeIcon.style.display = 'none'
         premiumIcon.style.display = 'flex'
         main.className = "active3 w3-pointer"
         premiumfreeText.innerText = "Premium"
         premiumfreeText.className = "w3-text-black"
+
+        contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-yellow w3-round"
+        premiumContentIcon.style.display = "block"
+        freeContentIcon.style.display = 'none'
+
         loadPost('premium')
       } else {
         freeIcon.style.display = 'flex'
@@ -223,9 +229,13 @@ export default function PostContent({ posts }) {
         main.className = "main w3-pointer"
         premiumfreeText.innerText = "Gratuit"
         premiumfreeText.className = "w3-text-green"
+
+        contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-green w3-round"
+        premiumContentIcon.style.display = "none"
+        freeContentIcon.style.display = 'block'
+        
         loadPost('free')
       }
-      contentChanger.click()
 
     });
 
@@ -233,17 +243,31 @@ export default function PostContent({ posts }) {
     contentChanger.addEventListener("click", () => {
 
       if (premiumContentIcon.style.display == 'none') {
+
         contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-yellow w3-round"
         premiumContentIcon.style.display = "block"
         freeContentIcon.style.display = 'none'
+
+        freeIcon.style.display = 'none'
+        premiumIcon.style.display = 'flex'
+        main.className = "active3 w3-pointer"
+        premiumfreeText.innerText = "Premium"
+        premiumfreeText.className = "w3-text-black"
+
         loadPost('premium')
       } else {
+
+        freeIcon.style.display = 'flex'
+        premiumIcon.style.display = 'none'
+        main.className = "main w3-pointer"
+        premiumfreeText.innerText = "Gratuit"
+        premiumfreeText.className = "w3-text-green"
+
         contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-green w3-round"
         premiumContentIcon.style.display = "none"
         freeContentIcon.style.display = 'block'
         loadPost('free')
       }
-      premiumfreeText.click()
 
     });
 
