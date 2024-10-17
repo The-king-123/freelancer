@@ -282,7 +282,7 @@ export default function PostContent({ posts }) {
     });
 
     // end switch animation
-    loadPost('free')
+    loadPost('premium')
 
   }, [])
 
