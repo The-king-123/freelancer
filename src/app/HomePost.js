@@ -222,11 +222,11 @@ export default function PostContent({ posts }) {
 
         freeIcon1.style.display = 'none'
         premiumIcon1.style.display = 'flex'
-        main1.className = "active3 w3-pointer"
+        main1.className = "active31 w3-pointer"
         premiumfreeText1.innerText = "Gratuit"
         premiumfreeText1.className = "w3-text-green"
 
-        loadPost('premium')
+        loadPost('free')
       } else {
         freeIcon.style.display = 'flex'
         premiumIcon.style.display = 'none'
@@ -236,11 +236,11 @@ export default function PostContent({ posts }) {
 
         freeIcon1.style.display = 'flex'
         premiumIcon1.style.display = 'none'
-        main1.className = "main w3-pointer"
+        main1.className = "main1 w3-pointer"
         premiumfreeText1.innerText = "Premium"
         premiumfreeText1.className = "w3-text-black"
 
-        loadPost('free')
+        loadPost('premium')
       }
 
     });
@@ -258,11 +258,11 @@ export default function PostContent({ posts }) {
 
         freeIcon1.style.display = 'none'
         premiumIcon1.style.display = 'flex'
-        main1.className = "active3 w3-pointer"
+        main1.className = "active31 w3-pointer"
         premiumfreeText1.innerText = "Gratuit"
         premiumfreeText1.className = "w3-text-green"
 
-        loadPost('premium')
+        loadPost('free')
       } else {
         freeIcon.style.display = 'flex'
         premiumIcon.style.display = 'none'
@@ -272,11 +272,11 @@ export default function PostContent({ posts }) {
 
         freeIcon1.style.display = 'flex'
         premiumIcon1.style.display = 'none'
-        main1.className = "main w3-pointer"
+        main1.className = "main1 w3-pointer"
         premiumfreeText1.innerText = "Premium"
         premiumfreeText1.className = "w3-text-black"
 
-        loadPost('free')
+        loadPost('premium')
       }
 
     });
