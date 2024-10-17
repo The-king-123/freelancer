@@ -1754,7 +1754,11 @@ export default function Home(props) {
 
         {/* // switch free premium */}
         <div className="w3-flex-column">
-          <div className="btn3_container1 w3-light-grey" style={{ marginInline: 'auto' }}>
+          <div className="btn3_container1 w3-light-grey" onClick={() => {
+            if (location.pathname.split('/')[1] != '' && location.pathname.split('/')[1] != 'user') {
+              document.location = '/'
+            }
+          }} style={{ marginInline: 'auto' }}>
             <span className="main1 w3-pointer">
               <div id="freeSwitch1" className="btn1 w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28 }}>
                 <FontAwesomeIcon icon={faDollarSign} />
@@ -1764,7 +1768,7 @@ export default function Home(props) {
               </div>
             </span>
           </div>
-          <div id="premiumfreeText1" className="w3-text-black w3-small" style={{ marginTop: -34, zIndex: 1, paddingBlock: 8, fontSize: '16px', paddingInline:10, textAlign:'right' }}>
+          <div id="premiumfreeText1" className="w3-text-black w3-small" style={{ marginTop: -34, zIndex: 1, paddingBlock: 8, fontSize: '16px', paddingInline: 10, textAlign: 'right' }}>
             Premium
           </div>
         </div>
