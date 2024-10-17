@@ -216,13 +216,14 @@ export default function PostContent({ posts }) {
         premiumIcon.style.display = 'flex'
         main.className = "active3 w3-pointer"
         premiumfreeText.innerText = "Gratuit"
-        premiumfreeText.className = "w3-text-green w3-small"
+        premiumfreeText.className = "w3-text-green"
 
         freeIcon1.style.display = 'none'
         premiumIcon1.style.display = 'flex'
         main1.className = "active31 w3-pointer"
         premiumfreeText1.innerText = "Gratuit"
         premiumfreeText1.className = "w3-text-green w3-small"
+        premiumfreeText1.style.textAlign = 'left'
 
         loadPost('free')
       } else {
@@ -230,13 +231,14 @@ export default function PostContent({ posts }) {
         premiumIcon.style.display = 'none'
         main.className = "main w3-pointer"
         premiumfreeText.innerText = "Premium"
-        premiumfreeText.className = "w3-text-black w3-small"
+        premiumfreeText.className = "w3-text-black"
 
         freeIcon1.style.display = 'flex'
         premiumIcon1.style.display = 'none'
         main1.className = "main1 w3-pointer"
         premiumfreeText1.innerText = "Premium"
         premiumfreeText1.className = "w3-text-black w3-small"
+        premiumfreeText1.style.textAlign = 'right'
 
         loadPost('premium')
       }
@@ -258,7 +260,8 @@ export default function PostContent({ posts }) {
         premiumIcon1.style.display = 'flex'
         main1.className = "active31 w3-pointer"
         premiumfreeText1.innerText = "Gratuit"
-        premiumfreeText1.className = "w3-text-green"
+        premiumfreeText1.className = "w3-text-green w3-small"
+        premiumfreeText1.style.textAlign = 'left'
 
         loadPost('free')
       } else {
@@ -272,7 +275,8 @@ export default function PostContent({ posts }) {
         premiumIcon1.style.display = 'none'
         main1.className = "main1 w3-pointer"
         premiumfreeText1.innerText = "Premium"
-        premiumfreeText1.className = "w3-text-black"
+        premiumfreeText1.className = "w3-text-black w3-small"
+        premiumfreeText1.style.textAlign = 'right'
 
         loadPost('premium')
       }
