@@ -1147,16 +1147,16 @@ export default function Home(props) {
             <div className="w3-flex-column">
               <div className="btn3_container" style={{ marginInline: 'auto' }}>
                 <span className="main w3-pointer">
-                  <div id="freeSwitch" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
-                    <FontAwesomeIcon icon={faGift} />
-                  </div>
-                  <div id="premiumSwitch" className="btn w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36, display: 'none' }}>
+                  <div id="freeSwitch" className="btn w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
                     <FontAwesomeIcon icon={faDollarSign} />
+                  </div>
+                  <div id="premiumSwitch" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36, display: 'none' }}>
+                    <FontAwesomeIcon icon={faGift} />
                   </div>
                 </span>
               </div>
-              <div id="premiumfreeText" className="w3-text-green" style={{ marginTop: -60, zIndex: 1, paddingBlock: 8, fontSize: '16px' }}>
-                Gratuit
+              <div id="premiumfreeText" className="w3-text-black" style={{ marginTop: -60, zIndex: 1, paddingBlock: 8, fontSize: '16px' }}>
+                Premium
               </div>
             </div>
             {/* ///-------------------- */}
@@ -1171,26 +1171,6 @@ export default function Home(props) {
             className="w3-block w3-flex w3-flex-column"
             style={{ paddingBlock: 8, zIndex: 9999 }}
           >
-            {/* <div style={{ height: 40, marginBottom: 4 }}>
-              <div
-                className="w3-dropdown-click w3-hover-light-grey"
-              >
-                <div
-                  onClick={userPremiumArea}
-                  className="w3-flex-row w3-flex-center-v w3-round w3-black w3-text-yellow"
-                  style={{ height: 40, paddingInline: 16, marginBlock: 4 }}
-                >
-                  <FontAwesomeIcon
-                    icon={faCrown}
-                    width={20}
-                    height={20}
-                  />
-                  <div className="w3-margin-left w3-medium">Contenu payant</div>
-                </div>
-
-              </div>
-            </div> */}
-
             <Link
               onClick={() => localStorage.setItem("user", "160471339156947")}
               className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
@@ -1230,32 +1210,6 @@ export default function Home(props) {
               />
               <div className="w3-margin-left w3-medium">Forums</div>
             </div>
-
-            {/* <Link
-              className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
-              style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-              href={"/post/create"}
-            >
-              <FontAwesomeIcon
-                icon={faImages}
-                width={20}
-                height={20}
-              />
-              <div className="w3-margin-left w3-medium">Gérer votre post</div>
-            </Link> */}
-
-            {/* <Link
-              className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
-              style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-              href={"/forum/create"}
-            >
-              <FontAwesomeIcon
-                icon={faPager}
-                width={20}
-                height={20}
-              />
-              <div className="w3-margin-left w3-medium">Gérer votre forum</div>
-            </Link> */}
 
             <Link
               className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
@@ -1358,13 +1312,6 @@ export default function Home(props) {
                         />
                         Gérez votre chatbot
                       </Link>
-                      {/* <Link className="w3-bar-item w3-button" href={'/settings'}>
-                      <FontAwesomeIcon
-                        className="w3-margin-right"
-                        icon={faClock}
-                      />
-                      Paramètres
-                    </Link> */}
                       <Link
                         href={'/security'}
                         className="w3-bar-item w3-button"
@@ -1767,7 +1714,7 @@ export default function Home(props) {
 
       {/* // bottom menu */}
       <div
-        className="w3-bottom w3-block w3-card w3-white w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
+        className="w3-bottom w3-block w3-card w3-white3 w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
         style={{ paddingBlock: 8, zIndex: 9999 }}
       >
 
@@ -1805,41 +1752,23 @@ export default function Home(props) {
           </div>
         </div>
 
-        <div
-          className="w3-flex-1"
-          style={{ width: 36, height: 36 }}
-        >
-          <div
-            id="contentChanger"
-            className="w3-flex w3-flex-center w3-overflow w3-green w3-round"
-            style={{ width: 36, height: 36, marginInline: "auto" }}
-            onClick={() => {
-              localStorage.removeItem("user");
-              if (fullPath.path.length > 0) {
-                stopAllIntervalAndTimeout();
-              }
-
-              if (location.pathname.split('/')[1] != '' && location.pathname.split('/')[1] != 'user') {
-                document.location = '/'
-              } 
-            }}
-          >
-            <FontAwesomeIcon
-              id="freeContentIcon"
-              icon={faGift}
-              width={20}
-              height={20}
-            />
-            <FontAwesomeIcon
-              id="premiumContentIcon"
-              className="w3-text-black"
-              icon={faDollarSign}
-              width={20}
-              height={20}
-              style={{ display: 'none' }}
-            />
+        {/* // switch free premium */}
+        <div className="w3-flex-column">
+          <div className="btn3_container1 w3-light-grey" style={{ marginInline: 'auto' }}>
+            <span className="main1 w3-pointer">
+              <div id="freeSwitch1" className="btn1 w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28 }}>
+                <FontAwesomeIcon icon={faDollarSign} />
+              </div>
+              <div id="premiumSwitch1" className="btn1 w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28, display: 'none' }}>
+                <FontAwesomeIcon icon={faGift} />
+              </div>
+            </span>
+          </div>
+          <div id="premiumfreeText1" className="w3-text-black w3-small" style={{ marginTop: -34, zIndex: 1, paddingBlock: 8, fontSize: '16px', paddingInline:10, textAlign:'right' }}>
+            Premium
           </div>
         </div>
+        {/* // end switch free premium */}
 
         <Link
           href={'/store/all'}
@@ -1858,7 +1787,7 @@ export default function Home(props) {
           </div>
         </Link>
 
-        <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
+        {/* <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
           <div
             className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
@@ -1869,7 +1798,7 @@ export default function Home(props) {
               height={20}
             />
           </div>
-        </div>
+        </div> */}
 
         <div
           onClick={toggleChat}

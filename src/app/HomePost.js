@@ -38,8 +38,6 @@ export default function PostContent({ posts }) {
     return parts
   }
 
-  // animation: marquee 12s linear infinite;
-
   const makeMarqueeText = () => {
     const marquees = document.getElementsByClassName('marquee');
 
@@ -194,11 +192,7 @@ export default function PostContent({ posts }) {
         document.getElementById("iconPause").style.display = "none";
       });
     }
-    
-    // bottom menu button
-    const contentChanger = document.querySelector("#contentChanger");
-    const premiumContentIcon = document.querySelector("#premiumContentIcon");
-    const freeContentIcon = document.querySelector("#freeContentIcon");
+
 
     // side menu button
     const premiumfreeText = document.querySelector("#premiumfreeText");
@@ -208,6 +202,14 @@ export default function PostContent({ posts }) {
     const freeIcon = document.querySelector("#freeSwitch");
     const premiumIcon = document.querySelector("#premiumSwitch");
 
+    // bottom menu switch button
+    const premiumfreeText1 = document.querySelector("#premiumfreeText1");
+    const btn3_ctn1 = document.querySelector(".btn3_container1");
+    const main1 = document.querySelector(".main1");
+
+    const freeIcon1 = document.querySelector("#freeSwitch1");
+    const premiumIcon1 = document.querySelector("#premiumSwitch1");
+
     premiumfreeText.addEventListener("click", () => {
 
       if (premiumIcon.style.display == 'none') {
@@ -215,57 +217,65 @@ export default function PostContent({ posts }) {
         freeIcon.style.display = 'none'
         premiumIcon.style.display = 'flex'
         main.className = "active3 w3-pointer"
-        premiumfreeText.innerText = "Premium"
-        premiumfreeText.className = "w3-text-black"
+        premiumfreeText.innerText = "Gratuit"
+        premiumfreeText.className = "w3-text-green"
 
-        contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-yellow w3-round"
-        premiumContentIcon.style.display = "block"
-        freeContentIcon.style.display = 'none'
+        freeIcon1.style.display = 'none'
+        premiumIcon1.style.display = 'flex'
+        main1.className = "active3 w3-pointer"
+        premiumfreeText1.innerText = "Gratuit"
+        premiumfreeText1.className = "w3-text-green"
 
         loadPost('premium')
       } else {
         freeIcon.style.display = 'flex'
         premiumIcon.style.display = 'none'
         main.className = "main w3-pointer"
-        premiumfreeText.innerText = "Gratuit"
-        premiumfreeText.className = "w3-text-green"
+        premiumfreeText.innerText = "Premium"
+        premiumfreeText.className = "w3-text-black"
 
-        contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-green w3-round"
-        premiumContentIcon.style.display = "none"
-        freeContentIcon.style.display = 'block'
-        
+        freeIcon1.style.display = 'flex'
+        premiumIcon1.style.display = 'none'
+        main1.className = "main w3-pointer"
+        premiumfreeText1.innerText = "Premium"
+        premiumfreeText1.className = "w3-text-black"
+
         loadPost('free')
       }
 
     });
 
 
-    contentChanger.addEventListener("click", () => {
+    premiumfreeText1.addEventListener("click", () => {
 
-      if (premiumContentIcon.style.display == 'none') {
-
-        contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-yellow w3-round"
-        premiumContentIcon.style.display = "block"
-        freeContentIcon.style.display = 'none'
+      if (premiumIcon1.style.display == 'none') {
 
         freeIcon.style.display = 'none'
         premiumIcon.style.display = 'flex'
         main.className = "active3 w3-pointer"
-        premiumfreeText.innerText = "Premium"
-        premiumfreeText.className = "w3-text-black"
-
-        loadPost('premium')
-      } else {
-
-        freeIcon.style.display = 'flex'
-        premiumIcon.style.display = 'none'
-        main.className = "main w3-pointer"
         premiumfreeText.innerText = "Gratuit"
         premiumfreeText.className = "w3-text-green"
 
-        contentChanger.className = "w3-flex w3-flex-center w3-overflow w3-green w3-round"
-        premiumContentIcon.style.display = "none"
-        freeContentIcon.style.display = 'block'
+        freeIcon1.style.display = 'none'
+        premiumIcon1.style.display = 'flex'
+        main1.className = "active3 w3-pointer"
+        premiumfreeText1.innerText = "Gratuit"
+        premiumfreeText1.className = "w3-text-green"
+
+        loadPost('premium')
+      } else {
+        freeIcon.style.display = 'flex'
+        premiumIcon.style.display = 'none'
+        main.className = "main w3-pointer"
+        premiumfreeText.innerText = "Premium"
+        premiumfreeText.className = "w3-text-black"
+
+        freeIcon1.style.display = 'flex'
+        premiumIcon1.style.display = 'none'
+        main1.className = "main w3-pointer"
+        premiumfreeText1.innerText = "Premium"
+        premiumfreeText1.className = "w3-text-black"
+
         loadPost('free')
       }
 

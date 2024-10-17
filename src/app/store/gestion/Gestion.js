@@ -15,6 +15,7 @@ import {
     faSpinner,
     faTimes,
     faTrash,
+    faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import slugify from "slugify";
@@ -93,15 +94,62 @@ function Gestion() {
         document.getElementById('afficheNewKeyArea').style.display = 'flex';
         document.getElementById('afficheKeyListArea').style.display = 'none';
     }
+    const deleteKey = (id) => {
+        document.getElementById("modalWarning").style.display = "block";
+        document.getElementById("textWarning").innerText = "Voulez vous vraiment supprimer ce code d'acces ...";
 
+        const xcode = localStorage.getItem('x-code');
+        const deleteHandler = async () => {
+            document.getElementById("confirmSpinner").style.display = "inline-block";
+            await axios
+                .delete(source + "/_links/" + id + "?xcode=" + xcode)
+                .then((res) => {
+                    document.getElementById("confirmSpinner").style.display =
+                        "none";
+                    document.getElementById("modalWarning").style.display =
+                        "none";
+
+                    document
+                        .getElementById("confirmWarning")
+                        .removeEventListener("click", deleteHandler);
+                    document
+                        .getElementById("cancelWarning")
+                        .removeEventListener("click", cancelHandler);
+
+                    reloadKeyList(res.data.data.reverse());
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                });
+        };
+        const cancelHandler = () => {
+            document.getElementById("modalWarning").style.display = "none";
+
+            document
+                .getElementById("confirmWarning")
+                .removeEventListener("click", deleteHandler);
+            document
+                .getElementById("cancelWarning")
+                .removeEventListener("click", cancelHandler);
+        };
+
+        document
+            .getElementById("confirmWarning")
+            .addEventListener("click", deleteHandler);
+        document
+            .getElementById("cancelWarning")
+            .addEventListener("click", cancelHandler);
+    }
     const reloadKeyList = (data) => {
+        console.log(data);
+        
         var glicthKeyList
         if (data.length > 0) {
             glicthKeyList = data.map((code, key) => (
                 <div key={key} style={{ padding: 4 }}>
                     <div className="w3-light-grey w3-round w3-padding w3-flex-row w3-flex-center-v">
                         <div className="w3-nowrap w3-overflow w3-flex-column w3-flex-1">
-                            <div>{code.fullname}</div>
+                            <div>{code.code}</div>
                             <div className="w3-small w3-text-grey">{code.email}</div>
                         </div>
                         <div onClick={() => deleteKey(code.id)} className="w3-margin-left ">
@@ -122,7 +170,7 @@ function Gestion() {
         }
         setkeyListe(glicthKeyList)
     }
-    
+
     const addKeyToUser = async () => {
         if (isValidEmail(codeInfo.email)) {
             const xcode = localStorage.getItem('x-code');
@@ -309,7 +357,11 @@ function Gestion() {
                 .get(source + "/_downloadcode/" + data.id + "?xcode=" + xcode)
                 .then((res) => {
                     if (res.data.logedin) {
-                        reloadKeyList(res.data.data)
+                        if (res.data.authorized) {
+                            reloadKeyList(res.data.data.reverse())
+                        } else {
+                            document.location = '/'
+                        }
                     } else {
                         if (document.getElementById('modalLogin')) {
                             document.getElementById('modalLogin').style.display = 'block'
@@ -588,6 +640,29 @@ function Gestion() {
     useEffect(() => {
 
         const xcode = localStorage.getItem("x-code");
+
+        axios
+            .get(source + "/_auth?xcode=" + xcode)
+            .then((res) => {
+                if (res.data.logedin) {
+                    if (res.data.user.designation != 'Admin') {
+                        document.getElementById('productCore').innerHTML = null
+                        document.location = '/'
+                    } else {
+                        document.getElementById('productCore').style.display = 'block'
+                    }
+                } else {
+                    if (document.getElementById('modalLogin')) {
+                        document.getElementById('modalLogin').style.display = 'block'
+                        document.getElementById('productCore').style.display = 'none';
+                    }
+                }
+            })
+            .catch((e) => {
+                console.error("failure", e);
+
+            });
+
         if (xcode && xcode != 'null') {
 
             axios
@@ -616,21 +691,6 @@ function Gestion() {
                 console.error("failure", e);
             });
 
-        axios
-            .get(source + "/_auth?xcode=" + xcode)
-            .then((res) => {
-                if (!res.data.logedin) {
-
-                    if (document.getElementById('modalLogin')) {
-                        document.getElementById('modalLogin').style.display = 'block'
-                        document.getElementById('productCore').style.display = 'none';
-                    }
-                }
-            })
-            .catch((e) => {
-                console.error("failure", e);
-
-            });
 
         // Upload Image
         var imageSelector = document.createElement("input");
@@ -686,8 +746,8 @@ function Gestion() {
     }, []);
 
     return (
-        <div style={{ position: 'relative' }}>
-            <div id="productCore">
+        <div id="productCore" style={{ position: 'relative', display: 'none' }}>
+            <div>
                 <div
                     className="w3-medium w3-big w3-flex-row w3-flex-center-v"
                     style={{ padding: 8 }}
