@@ -196,7 +196,6 @@ export default function PostContent({ posts }) {
 
     // side menu button
     const premiumfreeText = document.querySelector("#premiumfreeText");
-    const btn3_ctn = document.querySelector(".btn3_container");
     const main = document.querySelector(".main");
 
     const freeIcon = document.querySelector("#freeSwitch");
@@ -204,7 +203,6 @@ export default function PostContent({ posts }) {
 
     // bottom menu switch button
     const premiumfreeText1 = document.querySelector("#premiumfreeText1");
-    const btn3_ctn1 = document.querySelector(".btn3_container1");
     const main1 = document.querySelector(".main1");
 
     const freeIcon1 = document.querySelector("#freeSwitch1");
@@ -218,13 +216,13 @@ export default function PostContent({ posts }) {
         premiumIcon.style.display = 'flex'
         main.className = "active3 w3-pointer"
         premiumfreeText.innerText = "Gratuit"
-        premiumfreeText.className = "w3-text-green"
+        premiumfreeText.className = "w3-text-green w3-small"
 
         freeIcon1.style.display = 'none'
         premiumIcon1.style.display = 'flex'
         main1.className = "active31 w3-pointer"
         premiumfreeText1.innerText = "Gratuit"
-        premiumfreeText1.className = "w3-text-green"
+        premiumfreeText1.className = "w3-text-green w3-small"
 
         loadPost('free')
       } else {
@@ -232,13 +230,13 @@ export default function PostContent({ posts }) {
         premiumIcon.style.display = 'none'
         main.className = "main w3-pointer"
         premiumfreeText.innerText = "Premium"
-        premiumfreeText.className = "w3-text-black"
+        premiumfreeText.className = "w3-text-black w3-small"
 
         freeIcon1.style.display = 'flex'
         premiumIcon1.style.display = 'none'
         main1.className = "main1 w3-pointer"
         premiumfreeText1.innerText = "Premium"
-        premiumfreeText1.className = "w3-text-black"
+        premiumfreeText1.className = "w3-text-black w3-small"
 
         loadPost('premium')
       }
