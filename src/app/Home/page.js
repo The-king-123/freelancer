@@ -1774,7 +1774,7 @@ export default function Home(props) {
               onClick={() => removePannelFirstPassed()}
               className="w3-dropdown-content w3-bar-block w3-card w3-round"
               style={{ right: -16, minWidth: 230, marginTop: 8, paddingBottom: 4, bottom: 42 }}
-            >
+            ><div className="dropButton"></div>
 
               <div
                 className="w3-bar-item w3-button"
