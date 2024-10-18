@@ -142,7 +142,7 @@ function Gestion() {
     }
     const reloadKeyList = (data) => {
         console.log(data);
-        
+
         var glicthKeyList
         if (data.length > 0) {
             glicthKeyList = data.map((code, key) => (
@@ -173,6 +173,8 @@ function Gestion() {
 
     const addKeyToUser = async () => {
         if (isValidEmail(codeInfo.email)) {
+            document.getElementById('addKeySpinner').style.display = 'inline-block'
+            document.getElementById('addKeyIcon').style.display = 'none'
             const xcode = localStorage.getItem('x-code');
             await setCSRFToken();
             await axios
@@ -183,6 +185,8 @@ function Gestion() {
                             reloadKeyList(res.data.data.reverse());
                             document.getElementById('infoBull').innerHTML = "<div>L'utilisateur est ajouter avec succes</div>"
                             document.getElementById('infoBull').style.display = 'block'
+                            document.getElementById('addKeySpinner').style.display = 'none'
+                            document.getElementById('addKeyIcon').style.display = 'inline-block'
                             setTimeout(() => {
                                 document.getElementById('infoBull').style.display = 'none'
                             }, 3000);
@@ -1085,7 +1089,8 @@ function Gestion() {
                                 style={{ height: 40 }}
                                 title="Generer un code d'acces."
                             >
-                                <FontAwesomeIcon icon={faKey} />
+                                <FontAwesomeIcon icon={faKey} id="addKeyIcon" />
+                                <FontAwesomeIcon style={{display:'none'}} className="w3-spin" icon={faSpinner} id="addKeySpinner" />
                             </button>
                         </div>
                         <div id="infoBull" style={{ marginBottom: 8, paddingInline: 16, display: 'none' }}>L'utilisateur est ajouter avec succes</div>
