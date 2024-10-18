@@ -193,6 +193,8 @@ function Gestion() {
                         } else {
                             document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Le code pour cet utilisateur exist deja.</div>"
                             document.getElementById('infoBull').style.display = 'block'
+                            document.getElementById('addKeySpinner').style.display = 'none'
+                            document.getElementById('addKeyIcon').style.display = 'inline-block'
                             setTimeout(() => {
                                 document.getElementById('infoBull').style.display = 'none'
                             }, 3000);
@@ -201,6 +203,12 @@ function Gestion() {
                     }
                 })
                 .catch((e) => {
+                    document.getElementById('infoBull').innerHTML = "<div class='w3-text-red w3-opacity'>Le code n'a pas été enregistré.</div>"
+                    document.getElementById('addKeySpinner').style.display = 'none'
+                    document.getElementById('addKeyIcon').style.display = 'inline-block'
+                    setTimeout(() => {
+                        document.getElementById('infoBull').style.display = 'none'
+                    }, 3000);
                     console.error("failure", e);
                 });
         } else {
@@ -1090,7 +1098,7 @@ function Gestion() {
                                 title="Generer un code d'acces."
                             >
                                 <FontAwesomeIcon icon={faKey} id="addKeyIcon" />
-                                <FontAwesomeIcon style={{display:'none'}} className="w3-spin" icon={faSpinner} id="addKeySpinner" />
+                                <FontAwesomeIcon style={{ display: 'none' }} className="w3-spin" icon={faSpinner} id="addKeySpinner" />
                             </button>
                         </div>
                         <div id="infoBull" style={{ marginBottom: 8, paddingInline: 16, display: 'none' }}>L'utilisateur est ajouter avec succes</div>
