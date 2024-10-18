@@ -562,7 +562,15 @@ function Gestion() {
                     .delete(source + "/_store/" + productInfos.id + '?xcode=' + xcode)
                     .then((res) => {
                         if (res.data.logedin) {
-                            window.reload()
+                            if (res.data.authorized) {
+                                window.reload()
+                            } else {
+                                if (document.getElementById('modalLogin')) {
+                                    document.getElementById('modalLogin').style.display = 'block'
+                                }
+                                document.getElementById("confirmSpinner").style.display = "none";
+                                document.getElementById("modalWarning").style.display = "none";
+                            }
                         } else {
                             if (document.getElementById('modalLogin')) {
                                 document.getElementById('modalLogin').style.display = 'block'
