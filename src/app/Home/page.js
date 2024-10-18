@@ -861,13 +861,16 @@ export default function Home(props) {
       });
   };
 
+  const removePannelFirstPassed = () => {
+    localStorage.setItem('firstPassed', true)
+    openDropdown("switchPannel")
+  }
+
   useEffect(() => {
 
-    if (localStorage.getItem('firstPassed')==null) {      
+    if (localStorage.getItem('firstPassed') == null) {
       openDropdown("switchPannel")
-      localStorage.setItem('firstPassed',true)
-    } 
-
+    }
 
     const localHosts = ["localhost", "127.0.0.1", "::1"];
     stopAllIntervalAndTimeout();
@@ -1119,7 +1122,7 @@ export default function Home(props) {
         window.removeEventListener("resize", updateHeight);
       };
     }
-   
+
 
   }, []);
 
@@ -1768,11 +1771,10 @@ export default function Home(props) {
 
             <div
               id="switchPannel"
-              onClick={(e) => openDropdown("switchPannel")}
+              onClick={(e) => removePannelFirstPassed()}
               className="w3-dropdown-content w3-bar-block w3-card w3-round"
               style={{ right: -16, minWidth: 220, marginTop: 8, paddingBottom: 4, bottom: 42 }}
             >
-
 
               <div
                 className="w3-bar-item w3-button"
