@@ -422,7 +422,7 @@ function Gestion() {
         if (productInfos.fichier &&
             productInfos.name.length >= 3 &&
             productInfos.description.length >= 3 &&
-            productInfos.category.length >= 3) {
+            productInfos.category.length > 0) {
 
             document.getElementById("productPublicSpinner").style.display = "inline-block";
             document.getElementById("productPublicIcon").style.display = "none";
