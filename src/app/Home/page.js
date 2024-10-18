@@ -1771,8 +1771,8 @@ export default function Home(props) {
 
             <div
               id="switchPannel"
-              onClick={(e) => removePannelFirstPassed()}
-              className="w3-dropdown-content w3-bar-block w3-card w3-round w3-show"
+              onClick={() => removePannelFirstPassed()}
+              className="w3-dropdown-content w3-bar-block w3-card w3-round"
               style={{ right: -16, minWidth: 230, marginTop: 8, paddingBottom: 4, bottom: 42 }}
             >
 
