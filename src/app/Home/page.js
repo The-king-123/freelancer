@@ -70,6 +70,11 @@ export default function Home(props) {
       title: 'Récrutement Manager',
       link: '/recrutement',
       icon: <FontAwesomeIcon className="w3-margin-right" icon={faUserPlus} />
+    },
+    {
+      title: 'Gestion des produits',
+      link: '/store/gestion',
+      icon: <FontAwesomeIcon className="w3-margin-right" icon={faStore} />
     }
   ]
 
