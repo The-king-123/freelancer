@@ -1772,15 +1772,15 @@ export default function Home(props) {
             <div
               id="switchPannel"
               onClick={(e) => removePannelFirstPassed()}
-              className="w3-dropdown-content w3-bar-block w3-card w3-round"
-              style={{ right: -16, minWidth: 220, marginTop: 8, paddingBottom: 4, bottom: 42 }}
+              className="w3-dropdown-content w3-bar-block w3-card w3-round w3-show"
+              style={{ right: -16, minWidth: 230, marginTop: 8, paddingBottom: 4, bottom: 42 }}
             >
 
               <div
                 className="w3-bar-item w3-button"
-                style={{ marginTop: 4 }}
+                style={{ marginTop: 4, fontSize:12.5 }}
               >
-                Cliquer ici pour inter-changer les contenu gratuit et premium
+                Cliquer sur le bouton ci-dessous pour intervertir les contenus gratuit et premium.
               </div>
               {/* / arrow marker / */}
               <div style={{ height: 2 }}>
