@@ -547,9 +547,9 @@ function Gestion() {
         }
     };
 
-    const supprimer = async (cm) => {
+    const supprimer = async () => {
         const xcode = localStorage.getItem("x-code");
-        if (productInfos.id || withcmInfo.id) {
+        if (productInfos.id) {
             document.getElementById("modalWarning").style.display = "block";
             document.getElementById("textWarning").innerText =
                 "Voulez vous vraiment supprimer ce Product ...";
@@ -559,7 +559,7 @@ function Gestion() {
                     "inline-block";
                 await setCSRFToken();
                 await axios
-                    .delete(source + "/_product/" + (cm <= 0 ? productInfos.id : withcmInfo.id) + '?xcode=' + xcode)
+                    .delete(source + "/_store/" + productInfos.id + '?xcode=' + xcode)
                     .then((res) => {
                         if (res.data.logedin) {
                             document.getElementById("confirmSpinner").style.display = "none";
@@ -578,9 +578,6 @@ function Gestion() {
                             document.getElementById('productDescription').innerHTML = 'Que pensez-vous ?'
                             cancelImageInsertion()
                             document.getElementById('deleteButton').style.display = 'none';
-                            if (cm > 0) {
-                                document.getElementById('modalOptionProduct').style.display = 'none';
-                            }
                         } else {
                             if (document.getElementById('modalLogin')) {
                                 document.getElementById('modalLogin').style.display = 'block'
@@ -969,7 +966,7 @@ function Gestion() {
 
                         <button
                             id="deleteButton"
-                            onClick={() => supprimer(0)}
+                            onClick={supprimer}
                             className="w3-button w3-hover-red w3-border w3-border-red w3-text-red w3-round-xxlarge w3-block w3-flex w3-flex-center"
                             style={{ marginTop: 16, display: 'none' }}
                         >

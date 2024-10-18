@@ -2,7 +2,10 @@
 
 import {
   faArrowLeft,
+  faArrowRight,
   faDownload,
+  faSpinner,
+  faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
@@ -23,20 +26,99 @@ export default function ProductContent({ content }) {
   });
 
   const singleStoreInfo = {
-    id:content.data.id,
+    id: content.data.id,
     category: content.data.category,
     description: content.data.description,
     slug: content.data.slug,
     name: content.data.name,
     type: content.data.type,
     link: content.data.link,
+    file: content.data.file,
     updated_at: content.data.updated_at,
     created_at: content.data.created_at,
   };
 
-  const download = (id) => {
-    console.log(id);
-    
+  const [code, setcode] = useState({ code: '' })
+
+  const download = async (id) => {
+
+    if (content.data.type == 'premium') {
+      document.getElementById('modalCodePremiumDownload').style.display = 'block'
+    } else {
+      document.getElementById('freeDownloadSpinner').style.display = 'inline-block'
+      document.getElementById('freeDownloadIcon').style.display = 'none'
+
+      await axios
+        .get(source + "/_downloadcode/" + singleStoreInfo.id + "/edit")
+        .then((res) => {
+          if (res.data.exist) {
+
+            const url = `${source}/download.php?zlink=${atob(res.data.file)}`;
+            const link = document.createElement('a');
+
+            link.href = url;
+            link.download = singleStoreInfo.name;
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            document.getElementById('freeDownloadSpinner').style.display = 'none'
+            document.getElementById('freeDownloadIcon').style.display = 'inline-block'
+
+          } else {
+
+          }
+        })
+        .catch((e) => {
+          document.getElementById('freeDownloadSpinner').style.display = 'none'
+          document.getElementById('freeDownloadIcon').style.display = 'inline-block'
+          console.error("failure", e);
+        });
+    }
+
+  }
+
+  const downloadPremiumFile = async () => {
+    if (code.code.length > 3) {
+
+      document.getElementById('premiumDownloadSpinner').style.display = 'inline-block'
+      document.getElementById('premiumDownloadIcon').style.display = 'none'
+
+      await axios
+        .patch(source + "/_downloadcode/" + singleStoreInfo.id, { code: encryptString(code.code) })
+        .then((res) => {
+          if (res.data.exist) {
+
+            const url = `${source}/download.php?zlink=${atob(res.data.file)}`;
+            const link = document.createElement('a');
+
+            link.href = url;
+            link.download = singleStoreInfo.name;
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            document.getElementById('premiumDownloadSpinner').style.display = 'none'
+            document.getElementById('premiumDownloadIcon').style.display = 'inline-block'
+
+          } else {
+
+          }
+        })
+        .catch((e) => {
+          document.getElementById('premiumDownloadSpinner').style.display = 'none'
+          document.getElementById('premiumDownloadIcon').style.display = 'inline-block'
+          console.error("failure", e);
+        });
+    }
+  }
+
+  // Simple Base64 encoding to simulate encryption
+  function encryptString(plainText) {
+    // Convert plain text to Base64 encoded string
+    return btoa(plainText);  // btoa() encodes the string to Base64
   }
 
   useEffect(() => {
@@ -107,8 +189,10 @@ export default function ProductContent({ content }) {
           </div>
           <div>{parse(singleStoreInfo.description)}</div>
           <div>
-            <div onClick={()=>download(singleStoreInfo.id)} className="w3-button w3-round-xxlarge w3-black w3-flex-row w3-flex-center w3-margin-top">
-              <FontAwesomeIcon icon={faDownload} className="w3-margin-right" /> Download
+            <div onClick={() => download(singleStoreInfo.id)} className={"w3-button w3-round-xxlarge w3-black w3-flex-row w3-flex-center w3-margin-top " + (singleStoreInfo.type == "premium" ? 'w3-text-yellow' : '')}>
+              <FontAwesomeIcon id="freeDownloadIcon" icon={faDownload} className="w3-margin-right" />
+              <FontAwesomeIcon id="freeDownloadSpinner" icon={faSpinner} className="w3-margin-right w3-spin" style={{display:'none'}} />
+              Download
             </div>
           </div>
           <div className="w3-big w3-margin-top">
@@ -148,6 +232,66 @@ export default function ProductContent({ content }) {
           </div>
         </div>
       </div>
+      <div>
+
+        {/* modal not registered */}
+        <div
+          id="modalCodePremiumDownload"
+          className="w3-modal w3-noscrollbar w3-show-"
+          style={{ padding: 24, zIndex: 999999 }}
+        >
+          <div
+            className="w3-white w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
+            style={{
+              minHeight: 240,
+              paddingBlock: 8,
+              paddingInline: 0,
+              maxWidth: 320,
+            }}
+          >
+            <div
+              className="w3-container"
+              style={{ paddingBlock: 0, paddingInline: 8 }}
+            >
+              <div
+                onClick={() => document.getElementById('modalCodePremiumDownload').style.display = 'none'}
+                className="w3-pointer w3-right w3-flex w3-flex-center"
+                style={{ width: 32, height: 32 }}
+              >
+                <FontAwesomeIcon
+                  className='w3-text-yellow w3-hover-text-black'
+                  icon={faTimesCircle}
+                  style={{ width: 20, height: 20 }}
+                />
+              </div>
+            </div>
+            <div className="w3-block w3-flex-column w3-flex-center">
+              <div className="w3-block">
+                <div style={{ padding: 24 }} id='cardNotPremiumText'>
+                  Ce contenu est payant. Pour y accéder, il est nécessaire d'entrer un code de téléchargement.
+                </div>
+                <div style={{ paddingInline: 24, paddingBlock: 8 }}>
+                  <input style={{ paddingInline: 16 }} onChange={(e) => code.code = e.target.value} className="w3-input w3-border-0 w3-light-grey w3-block w3-round-xxlarge" type="text" placeholder="Code de téléchargement" />
+                </div>
+                <div className="w3-center w3-white w3-flex w3-flex-center">
+                  <div className="w3-margin w3-block" style={{ paddingInline: 16 }}>
+                    <div
+                      onClick={downloadPremiumFile}
+                      className="transition w3-medium w3-text-yellow w3-button w3-block w3-round-xxlarge w3-black"
+                    >
+                      <span id='buttonContactText'>Confirmer</span>
+                      <FontAwesomeIcon id="premiumDownloadIcon" className='w3-margin-left' icon={faArrowRight} />
+                      <FontAwesomeIcon id="premiumDownloadSpinner" className='w3-margin-left w3-spin' icon={faSpinner} style={{ display: 'none' }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/*end modal logedin */}
+      </div>
+
     </div>
   );
 }

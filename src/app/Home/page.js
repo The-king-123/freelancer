@@ -998,18 +998,25 @@ export default function Home(props) {
         .get(source + "/_auth?xcode=" + xcode)
         .then((res) => {
           if (res.data.logedin) {
-            document.getElementById('userPDP').style.backgroundImage = "url(" + source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.user.key + ")";
+            if (document.getElementById('userPDP')) {
+              document.getElementById('userPDP').style.backgroundImage = "url(" + source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.user.key + ")";
+            }
+            
             if (res.data.user.designation == 'Admin') {
               const glitchCr = admCr.map((adm, key) => (
                 <Link
+                  key={key}
                   href={adm.link}
                   className="w3-bar-item w3-button"
                 >
-                  {adm.icon}
-                  {adm.title}
+                  {adm.icon}{adm.title}
                 </Link>
               ))
-              setadminCore(glitchCr)
+              setInterval(() => {
+                console.log('Kozay');
+                setadminCore(glitchCr);
+              }, 2000);
+
             }
           }
         })
@@ -1783,7 +1790,7 @@ export default function Home(props) {
 
               <div
                 className="w3-bar-item w3-button"
-                style={{ marginTop: 4, fontSize:12.5 }}
+                style={{ marginTop: 4, fontSize: 12.5 }}
               >
                 Cliquer sur le bouton ci-dessous pour intervertir les contenus gratuit et premium.
               </div>
