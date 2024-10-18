@@ -862,6 +862,13 @@ export default function Home(props) {
   };
 
   useEffect(() => {
+
+    if (localStorage.getItem('firstPassed')==null) {      
+      openDropdown("switchPannel")
+      localStorage.setItem('firstPassed',true)
+    } 
+
+
     const localHosts = ["localhost", "127.0.0.1", "::1"];
     stopAllIntervalAndTimeout();
     if (typeof window !== "undefined") {
@@ -1112,6 +1119,7 @@ export default function Home(props) {
         window.removeEventListener("resize", updateHeight);
       };
     }
+   
 
   }, []);
 
@@ -1599,7 +1607,7 @@ export default function Home(props) {
       >
         <div className="w3-flex-1">
           <div className="w3-pointer w3-flex-row">
-            {/* Header text here */}
+            {/* Header text here */} FREELANCER
           </div>
         </div>
 
@@ -1752,27 +1760,83 @@ export default function Home(props) {
           </div>
         </div>
 
-        {/* // switch free premium */}
-        <div className="w3-flex-column">
-          <div className="btn3_container1 w3-light-grey" onClick={() => {
-            if (location.pathname.split('/')[1] != '' && location.pathname.split('/')[1] != 'user') {
-              document.location = '/'
-            }
-          }} style={{ marginInline: 'auto' }}>
-            <span className="main1 w3-pointer">
-              <div id="freeSwitch1" className="btn1 w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28 }}>
-                <FontAwesomeIcon icon={faDollarSign} />
+        {/* // Switch free premium with inital panel */}
+        <div>
+          <div
+            className="w3-dropdown-click w3-hover-white"
+          >
+
+            <div
+              id="switchPannel"
+              onClick={(e) => openDropdown("switchPannel")}
+              className="w3-dropdown-content w3-bar-block w3-card w3-round"
+              style={{ right: -16, minWidth: 220, marginTop: 8, paddingBottom: 4, bottom: 42 }}
+            >
+
+
+              <div
+                className="w3-bar-item w3-button"
+                style={{ marginTop: 4 }}
+              >
+                Cliquer ici pour inter-changer les contenu gratuit et premium
               </div>
-              <div id="premiumSwitch1" className="btn1 w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28, display: 'none' }}>
-                <FontAwesomeIcon icon={faGift} />
+              {/* / arrow marker / */}
+              <div style={{ height: 2 }}>
+                <FontAwesomeIcon
+                  icon={faPlay}
+                  className="rotate90 w3-text-white w3-right"
+                  style={{ marginBottom: -12, marginRight: 54 }}
+                />
               </div>
-            </span>
-          </div>
-          <div id="premiumfreeText1" className="w3-text-black w3-small" style={{ marginTop: -34, zIndex: 1, paddingBlock: 8, fontSize: '16px', paddingInline: 10, textAlign: 'right' }}>
-            Premium
+              {/* / arrow marker / */}
+            </div>
+
+            <div
+              id="settingMobileWrapper"
+              className="w3-flex-column"
+            >
+              <div className="btn3_container1 w3-light-grey" onClick={() => {
+                if (location.pathname.split('/')[1] != '' && location.pathname.split('/')[1] != 'user') {
+                  document.location = '/'
+                }
+              }} style={{ marginInline: 'auto' }}>
+                <span className="main1 w3-pointer">
+                  <div id="freeSwitch1" className="btn1 w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28 }}>
+                    <FontAwesomeIcon icon={faDollarSign} />
+                  </div>
+                  <div id="premiumSwitch1" className="btn1 w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28, display: 'none' }}>
+                    <FontAwesomeIcon icon={faGift} />
+                  </div>
+                </span>
+              </div>
+              <div id="premiumfreeText1" onClick={() => {
+                if (location.pathname.split('/')[1] != '' && location.pathname.split('/')[1] != 'user') {
+                  stopAllIntervalAndTimeout();
+                  document.location = '/';
+                }
+              }} className="w3-text-black w3-small" style={{ marginTop: -34, zIndex: 1, paddingBlock: 8, fontSize: '16px', paddingInline: 10, textAlign: 'right' }}>
+                Premium
+              </div>
+            </div>
+
+            {/* <div
+              id="settingMobileWrapper"
+              onClick={(e) => openDropdown("switchPannel")}
+              className="dropButton w3-flex w3-flex-center w3-card w3-round w3-white"
+              style={{ width: 36, height: 36, marginInline: "auto" }}
+            >
+              <FontAwesomeIcon
+                icon={faBars}
+                width={20}
+                height={20}
+              />
+            </div> */}
+
+
+
           </div>
         </div>
-        {/* // end switch free premium */}
+        {/* // End Switch free premium with inital panel */}
 
         <Link
           href={'/store/all'}
