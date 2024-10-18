@@ -102,7 +102,7 @@ function Gestion() {
         const deleteHandler = async () => {
             document.getElementById("confirmSpinner").style.display = "inline-block";
             await axios
-                .delete(source + "/_links/" + id + "?xcode=" + xcode)
+                .delete(source + "/_downloadcode/" + id + "?xcode=" + xcode)
                 .then((res) => {
                     document.getElementById("confirmSpinner").style.display =
                         "none";
