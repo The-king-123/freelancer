@@ -422,7 +422,6 @@ function Gestion() {
         if (productInfos.fichier &&
             productInfos.name.length >= 3 &&
             productInfos.description.length >= 3 &&
-            productInfos.type.length >= 3 &&
             productInfos.category.length >= 3) {
 
             document.getElementById("productPublicSpinner").style.display = "inline-block";
