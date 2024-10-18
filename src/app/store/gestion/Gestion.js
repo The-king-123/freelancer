@@ -562,22 +562,7 @@ function Gestion() {
                     .delete(source + "/_store/" + productInfos.id + '?xcode=' + xcode)
                     .then((res) => {
                         if (res.data.logedin) {
-                            document.getElementById("confirmSpinner").style.display = "none";
-                            document.getElementById("modalWarning").style.display = "none";
-
-                            document
-                                .getElementById("confirmWarning")
-                                .removeEventListener("click", deleteHandler);
-                            document
-                                .getElementById("cancelWarning")
-                                .removeEventListener("click", cancelHandler);
-
-                            reloadProducts(res.data.data.reverse());
-                            document.getElementById('modalProductListe').style.display = 'block'
-                            document.getElementById('productName').value = ''
-                            document.getElementById('productDescription').innerHTML = 'Que pensez-vous ?'
-                            cancelImageInsertion()
-                            document.getElementById('deleteButton').style.display = 'none';
+                            window.reload()
                         } else {
                             if (document.getElementById('modalLogin')) {
                                 document.getElementById('modalLogin').style.display = 'block'
