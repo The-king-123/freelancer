@@ -412,7 +412,7 @@ function postuleRecrutement(props) {
 
       const formData = new FormData();
       if (recrutementInfos.cv) {
-        recrutementInfos.image.append("image", file);
+        recrutementInfos.cv.append("image", file);
       } else {
         formData.append("image", file);
       }

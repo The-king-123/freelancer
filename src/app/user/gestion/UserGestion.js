@@ -113,9 +113,9 @@ function UserGestion() {
             accessList.access.post = JSON.parse(user.authority).post
 
             accessList.access.post == 'ghest' && document.getElementById('certainPost').click()
-            accessList.access.post == 'master' && document.getElementById('ToutPost').click()
+            accessList.access.post == 'master' && document.getElementById('toutPost').click()
             accessList.access.store == 'ghest' && document.getElementById('certainStore').click()
-            accessList.access.store == 'master' && document.getElementById('ToutStore').click()
+            accessList.access.store == 'master' && document.getElementById('toutStore').click()
 
         }
 

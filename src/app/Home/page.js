@@ -1767,8 +1767,8 @@ export default function Home(props) {
           </div>
         </Link>
 
-        <div
-          onClick={userForum}
+        <Link
+          href={'/recrutement/postule'}
           className="w3-flex-1"
           style={{ width: 36, height: 36 }}
         >
@@ -1777,12 +1777,12 @@ export default function Home(props) {
             style={{ width: 36, height: 36, marginInline: "auto" }}
           >
             <FontAwesomeIcon
-              icon={faNewspaper}
+              icon={faUserPlus}
               width={20}
               height={20}
             />
           </div>
-        </div>
+        </Link>
 
         {/* // Switch free premium with inital panel */}
         <div>
