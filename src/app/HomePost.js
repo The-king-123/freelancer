@@ -139,7 +139,7 @@ export default function PostContent({ posts }) {
                 post.link
               }
               style={{
-                objectPosition:'center',
+                objectPosition: 'center',
                 objectFit: "cover",
                 zIndex: 1,
                 height: '65vw',
@@ -196,7 +196,6 @@ export default function PostContent({ posts }) {
         document.getElementById("iconPause").style.display = "none";
       });
     }
-
 
     // side menu button
     const premiumfreeText = document.querySelector("#premiumfreeText");
@@ -286,6 +285,47 @@ export default function PostContent({ posts }) {
       }
 
     });
+
+    const choiceListenerInterval = setInterval(() => {
+      if (document.getElementById("formationPayante")) {
+        document.getElementById("formationPayante").addEventListener('click', () => {
+          freeIcon.style.display = 'flex'
+          premiumIcon.style.display = 'none'
+          main.className = "main w3-pointer"
+          premiumfreeText.innerText = "Premium"
+          premiumfreeText.className = "w3-text-black"
+
+          freeIcon1.style.display = 'flex'
+          premiumIcon1.style.display = 'none'
+          main1.className = "main1 w3-pointer"
+          premiumfreeText1.innerText = "Premium"
+          premiumfreeText1.className = "w3-text-black w3-small"
+          premiumfreeText1.style.textAlign = 'right'
+
+          loadPost('premium')
+        })
+      }
+
+      if (document.getElementById("formationGratuite")) {
+        document.getElementById("formationGratuite").addEventListener('click', () => {
+          freeIcon.style.display = 'none'
+          premiumIcon.style.display = 'flex'
+          main.className = "active3 w3-pointer"
+          premiumfreeText.innerText = "Gratuit"
+          premiumfreeText.className = "w3-text-green"
+
+          freeIcon1.style.display = 'none'
+          premiumIcon1.style.display = 'flex'
+          main1.className = "active31 w3-pointer"
+          premiumfreeText1.innerText = "Gratuit"
+          premiumfreeText1.className = "w3-text-green w3-small"
+          premiumfreeText1.style.textAlign = 'left'
+
+          loadPost('free')
+        })
+        clearInterval(choiceListenerInterval)
+      }
+    }, 1000);
 
     // end switch animation
     loadPost('premium')

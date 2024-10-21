@@ -14,6 +14,7 @@ import {
   faCrown,
   faDollarSign,
   faDoorOpen,
+  faExclamationCircle,
   faGear,
   faGift,
   faHammer,
@@ -304,6 +305,24 @@ export default function Home(props) {
     }, 100);
   };
 
+  const choiceTitleExtractor = (title) => {
+    const str = title;
+    const regex = /(.*?)\s*\[(.*?)\]/;
+
+    // Check if the string contains brackets with text inside
+    if (/\[.*?\]/.test(str)) {
+      const match = str.match(regex);
+
+      if (match) {
+        const text = match[1]; // the text before the brackets
+        const code = match[2]; // the text inside the brackets
+        return { text, code, brackets: true }; // Return the extracted text, code, and brackets true
+      }
+    }
+
+    return { text: str, brackets: false }; // Return the full title and brackets false if no brackets found
+  }
+
   const reloadChoice = (type, data) => {
     var glitchTopic = "";
     if (data.length > 0) {
@@ -312,10 +331,16 @@ export default function Home(props) {
           <div
             key={key}
             onClick={() => thisChoice(topic, type)}
-            style={{ marginInline: 8, maxWidth: 320, marginBlock: 8, paddingBlock: 8 }}
-            className="w3-pointer chat-black w3-round"
+            style={{ marginInline: 8, maxWidth: 320, marginBlock: 8 }}
           >
-            {topic.name}
+            <div
+              id={choiceTitleExtractor(topic.name).brackets ? choiceTitleExtractor(topic.name).code : 'choiceTitle' + key}
+              style={{ paddingBlock: 8 }}
+              className="w3-pointer chat-black w3-round"
+            >
+              {choiceTitleExtractor(topic.name).text}
+            </div>
+
           </div>
         ) : (
           <div
@@ -1010,7 +1035,7 @@ export default function Home(props) {
             if (document.getElementById('userPDP')) {
               document.getElementById('userPDP').style.backgroundImage = "url(" + source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.user.key + ")";
             }
-            
+
             if (res.data.user.designation == 'Admin') {
               const glitchCr = admCr.map((adm, key) => (
                 <Link
@@ -1365,6 +1390,16 @@ export default function Home(props) {
                         Gestion de Tarifs
                       </Link>
                       {adminCore}
+                      <Link
+                        href={'/versioncontrole'}
+                        className="w3-bar-item w3-button"
+                      >
+                        <FontAwesomeIcon
+                          className="w3-margin-right"
+                          icon={faExclamationCircle}
+                        />
+                        À-propos
+                      </Link>
                       <div
                         onClick={logout}
                         className="w3-bar-item w3-button"
