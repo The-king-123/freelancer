@@ -140,6 +140,11 @@ function postuleRecrutement(props) {
 
     recrutementInfos.content = document.getElementById('recrutementContent').innerHTML;
 
+    if (recrutementInfos.jobTitle.length <= 0) {
+      document.getElementById('postulerPourLePoste').style.display = 'block'
+      document.getElementById('recrutementCore').scrollTo = 0
+    }
+
     if ((recrutementInfos.image || recrutementInfos.cv) &&
       recrutementInfos.jobTitle.length > 0 &&
       recrutementInfos.content.length > 0 &&
@@ -151,7 +156,6 @@ function postuleRecrutement(props) {
 
       if (state == 'public') {
         document.getElementById("recrutementPublicSpinner").style.display = "inline-block";
-        document.getElementById("recrutementPublicIcon").style.display = "none";
       } else if (state == 'draft') {
         document.getElementById("recrutementDraftSpinner").style.display = "inline-block";
       }
@@ -492,8 +496,12 @@ function postuleRecrutement(props) {
         </div>
 
         <div style={{ padding: 8 }}>
+          <div id="postulerPourLePoste" style={{ display: 'none' }} className="w3-text-red w3-opacity w3-small">Veillez selectionner un poste</div>
           <select
-            onChange={(e) => recrutementInfos.jobTitle = e.target.value}
+            onChange={(e) => {
+              recrutementInfos.jobTitle = e.target.value;
+              document.getElementById('postulerPourLePoste').style.display = 'none';
+            }}
             className="w3-block  w3-light-grey w3-round w3-block w3-text-black w3-medium  w3-border-0 w3-margin-bottom"
             style={{ paddingBlock: 10, paddingInline: 5 }}
             defaultValue={'default'}
