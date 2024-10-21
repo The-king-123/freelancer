@@ -1,5 +1,5 @@
 'use client'
-import { faArrowLeft, faCrown, faDollarSign, faGift, faPause, faPlay, faRefresh, faTag, faTags, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faCrown, faDollarSign, faGift, faPause, faPlay, faRefresh, faSpinner, faTag, faTags, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import parse from "html-react-parser";
@@ -14,7 +14,11 @@ export default function PostContent({ posts }) {
     source + "/images.php?w=720&h=720&zlonk=3733&zlink=160471339156947"
   );
   const [showThisPost, setshowThisPost] = useState();
-  const [displayPost, setdisplayPost] = useState('')
+  const [displayPost, setdisplayPost] = useState(
+    <div style={{ padding: 24 }} className='w3-center'>
+      <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
+    </div>
+  )
 
   const moneyMaker = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -127,19 +131,19 @@ export default function PostContent({ posts }) {
               unoptimized
               loading="lazy"
               onContextMenu={(e) => e.preventDefault()}
-              height={260}
-              width={260}
+              height={200}
+              width={200}
               src={
                 source +
                 "/images.php?w=260&h=260&zlonk=2733&zlink=" +
                 post.link
               }
               style={{
-                objectPosition: "center",
+                objectPosition:'center',
                 objectFit: "cover",
                 zIndex: 1,
                 height: '65vw',
-                maxHeight: 260
+                maxHeight: 200,
               }}
               className="w3-overflow w3-light-grey post-image"
             />

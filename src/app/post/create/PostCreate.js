@@ -35,7 +35,11 @@ function PostCreate(props) {
     const [inputImage, setinputImage] = useState(null)
     const [inputImageVideo, setinputImageVideo] = useState(null)
     const [inputAudio, setinputAudio] = useState(null)
-    const [categoryListe, setcategoryListe] = useState('')
+    const [categoryListe, setcategoryListe] = useState(
+        <div style={{ padding: 24 }} className='w3-center'>
+            <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
+        </div>
+    )
     const [selectCategoryList, setselectCategoryList] = useState([])
 
     const [codeInfo, setcodeInfo] = useState({
@@ -64,8 +68,16 @@ function PostCreate(props) {
         key: "",
     });
 
-    const [postListe, setpostListe] = useState('')
-    const [keyListe, setkeyListe] = useState('')
+    const [postListe, setpostListe] = useState(
+        <div style={{ padding: 24 }} className='w3-center'>
+            <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
+        </div>
+    )
+    const [keyListe, setkeyListe] = useState(
+        <div style={{ padding: 24 }} className='w3-center'>
+            <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
+        </div>
+    )
 
     async function setCSRFToken() {
         try {

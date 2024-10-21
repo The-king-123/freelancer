@@ -12,7 +12,11 @@ export default function Forum(props) {
 
   axios.defaults.withCredentials = true;
 
-  const [displayForum, setdisplayForum] = useState('')
+  const [displayForum, setdisplayForum] = useState(
+    <div style={{ padding: 24 }} className='w3-center'>
+      <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
+    </div>
+  )
 
   const [commentInfo, setcommentInfo] = useState({
     comment: '',
@@ -270,10 +274,10 @@ export default function Forum(props) {
   }
 
   const createForum = () => {
-    if (window.innerWidth>992) {
+    if (window.innerWidth > 992) {
       document.getElementById('createForumOnDesktop').style.display = 'block';
       document.getElementById('openForumListeButton').style.display = 'none';
-    }else{
+    } else {
       window.location = '/post/forum'
     }
   }
@@ -299,16 +303,16 @@ export default function Forum(props) {
 
   return (
     <div>
-    <div style={{ padding: 8 }}>
-      <div onClick={createForum} className="w3-flex-row w3-flex-center-v w3-light-grey w3-round w3-card" style={{ padding: 16 }}>
-        <div id="userPDP" className="w3-circle w3-overflow w3-white w3-margin-right" style={{ width: 42, height: 42, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
-        <input
-          className="w3-white w3-input w3-round-xxlarge w3-border-0 w3-flex-1"
-          style={{ height: 42, paddingInline: 16, }}
-          placeholder="Qu'est-ce que vous pensez!?"
-        />
+      <div style={{ padding: 8 }}>
+        <div onClick={createForum} className="w3-flex-row w3-flex-center-v w3-light-grey w3-round w3-card" style={{ padding: 16 }}>
+          <div id="userPDP" className="w3-circle w3-overflow w3-white w3-margin-right" style={{ width: 42, height: 42, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
+          <input
+            className="w3-white w3-input w3-round-xxlarge w3-border-0 w3-flex-1"
+            style={{ height: 42, paddingInline: 16, }}
+            placeholder="Qu'est-ce que vous pensez!?"
+          />
+        </div>
       </div>
-    </div>
       {displayForum}
     </div>
   );

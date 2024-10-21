@@ -4,13 +4,17 @@ import React, { useEffect, useState } from "react";
 import { console_source as source } from "../data";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDollarSign, faDownload, faGift, faSave } from "@fortawesome/free-solid-svg-icons";
+import { faDollarSign, faDownload, faGift, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import parse from "html-react-parser";
 import Image from "next/image";
 
 
 function Store() {
-  const [displayStore, setdisplayStore] = useState('')
+  const [displayStore, setdisplayStore] = useState(
+    <div style={{ padding: 24 }} className='w3-center'>
+      <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
+    </div>
+  )
 
   const reloadStore = (data) => {
     console.log('Here');
@@ -22,7 +26,7 @@ function Store() {
 
 
       glitchStore = data.map((product, key) => (
-        <Link key={key} href={'/store/product/' + product.slug} style={{ padding: 8, zIndex: 1, width: '50%', display: 'inline-block' }}>
+        <Link key={key} href={'/store/product/' + product.slug} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
           <div className="w3-overflow w3-round w3-pointer w3-white">
             <div
               className="w3-light-grey w3-big w3-small w3-flex-row w3-flex-center-v"
@@ -61,8 +65,8 @@ function Store() {
                 unoptimized
                 loading="lazy"
                 onContextMenu={(e) => e.preventDefault()}
-                height={180}
-                width={180}
+                height={100}
+                width={80}
                 src={
                   source +
                   "/images.php?w=260&h=260&zlonk=8733&zlink=" +
@@ -80,12 +84,12 @@ function Store() {
 
               <div
                 className="w3-white w3-circle w3-display-bottomright w3-card"
-                style={{ width: 36, height: 36, margin:8 }}
+                style={{ width: 32, height: 32, margin: 8 }}
               >
                 <div className="w3-block w3-height w3-flex w3-flex-center">
                   <FontAwesomeIcon
                     icon={faDownload}
-                    style={{ height: 18, width: 18 }}
+                    style={{ height: 16, width: 16 }}
                   />
                 </div>
               </div>

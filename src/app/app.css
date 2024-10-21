@@ -120,20 +120,14 @@ input[type="number"] {
 }
 
 @media (max-width: 580px) {
-  .postCard {
-    width: 50% !important;
-  }
-  #coreContainerMain {
-    max-width: 480px !important;
+  .post-image {
+    height: 140px !important;
   }
 }
 
 @media (min-width: 992px) and (max-width: 1166px) {
-    .postCard {
-      width: 50% !important;
-    }
-    #coreContainerMain {
-      max-width: 480px !important;
+    .post-image {
+      height: 140px !important;
     }
   }
 

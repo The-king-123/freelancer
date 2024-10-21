@@ -75,6 +75,11 @@ export default function Home(props) {
       title: 'Gestion des produits',
       link: '/store/gestion',
       icon: <FontAwesomeIcon className="w3-margin-right" icon={faStore} />
+    },
+    {
+      title: 'Gestion des membres',
+      link: '/user/gestion',
+      icon: <FontAwesomeIcon className="w3-margin-right" icon={faUsers} />
     }
   ]
 
@@ -98,7 +103,11 @@ export default function Home(props) {
   );
   const [displayChoice, setdisplayChoice] = useState("");
   const [chatData, setchatData] = useState([]);
-  const [core, setcore] = useState("");
+  const [core, setcore] = useState(
+    <div style={{ padding: 24 }} className='w3-center'>
+      <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
+    </div>
+  );
   const [designationData, setdesignationData] = useState([]);
   const [killer, setkiller] = useState({ starter: null });
   const [topicData, settopicData] = useState([]);

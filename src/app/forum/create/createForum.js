@@ -25,7 +25,11 @@ function createForum(props) {
     slug:'',
   })
 
-  const [forumListe, setforumListe] = useState('')
+  const [forumListe, setforumListe] = useState(
+    <div style={{ padding: 24 }} className='w3-center'>
+            <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
+        </div>
+  )
 
   const [forumInfos, setforumInfos] = useState({
     id: null,
