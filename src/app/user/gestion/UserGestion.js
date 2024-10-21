@@ -56,8 +56,10 @@ function UserGestion() {
                                 <div className='w3-white w3-circle' style={{ width: 16, height: 16, marginInline: 4 }}></div>
                             }
                             {
-                                user.authority == 'some' &&
-                                <div className='w3-amber w3-circle' style={{ width: 16, height: 16, marginInline: 4 }}></div>
+                                user.authority != 'ghest' ?
+                                    (JSON.parse(user.authority).post == 'master' && JSON.parse(user.authority).store == 'master' ?
+                                        <div className='w3-green w3-circle' style={{ width: 16, height: 16, marginInline: 4 }}></div> :
+                                        <div className='w3-amber w3-circle' style={{ width: 16, height: 16, marginInline: 4 }}></div>) : ''
                             }
                             {
                                 user.authority == 'full' &&
@@ -246,15 +248,15 @@ function UserGestion() {
                         icon={faKey}
                         className='w3-margin-right'
                     />
-                    Acces aux contenu premium
+                    Accès au contenu premium
                 </div>
 
                 <div style={{ marginTop: 16 }}>
                     <table id="choiceAccess" class="w3-table-all">
                         <thead>
                             <tr>
-                                <th>Formation (Post)</th>
-                                <th>Produits (Boutique)</th>
+                                <th>Post (Formation)</th>
+                                <th>Boutique (Produits)</th>
                             </tr>
                         </thead>
                         <tbody>
