@@ -5,7 +5,7 @@ import VersionControle from "./VersionControle";
 export default async function page() {
 
   try {
-    return <Home core={<VersionControle user={'default'} />} />;
+    return <Home core={<VersionControle />} />;
   } catch (error) {
     console.error('Error rendering forum for default user ', error);
     return (

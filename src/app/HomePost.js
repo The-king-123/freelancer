@@ -43,12 +43,18 @@ export default function PostContent({ posts }) {
   }
 
   const makeMarqueeText = () => {
-    const marquees = document.getElementsByClassName('marquee');
+    const intervalMarqueeText = setInterval(() => {
+      if (document.getElementsByClassName('marquee')) {
+        clearInterval(intervalMarqueeText)
+        const marquees = document.getElementsByClassName('marquee');
 
-    for (let i = 0; i < marquees.length; i++) {
-      const marquee = marquees[i].querySelector('span');
-      marquee.style.animation = 'marquee ' + (marquee.innerText.length / 4.5) + 's linear infinite'
-    }
+        for (let i = 0; i < marquees.length; i++) {
+          const marquee = marquees[i].querySelector('span');
+          marquee.style.animation = 'marquee ' + (marquee.innerText.length / 3) + 's linear infinite'
+        }
+      }
+    }, 1000);
+
   }
 
   const loadPost = (type) => {
@@ -62,7 +68,11 @@ export default function PostContent({ posts }) {
           >
             {post.category != 'premium' &&
               <>
-                <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>{parse(post.title)}</div>
+                <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>
+                  <div class="marquee">
+                    <span>{parse(post.title)}</span>
+                  </div>
+                </div>
                 <div
                   title="Gratuit"
                   className="w3-green w3-circle"
@@ -93,16 +103,9 @@ export default function PostContent({ posts }) {
                   }
                   {
                     extractDetails(post.title).length < 3 &&
-                    post.title.length > 36 &&
-
                     <div class="marquee">
                       <span>{parse(post.title)}</span>
                     </div>
-                  }
-                  {
-                    extractDetails(post.title).length < 3 &&
-                    post.title.length < 36 &&
-                    <span>{parse(post.title)}</span>
                   }
                 </div>
                 <div
@@ -182,9 +185,8 @@ export default function PostContent({ posts }) {
       </Link>
     ))
     setdisplayPost(glitchPost)
-    setTimeout(() => {
-      makeMarqueeText();
-    }, 200);
+    makeMarqueeText();
+
   }
 
   useEffect(() => {
