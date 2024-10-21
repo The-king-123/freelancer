@@ -141,12 +141,12 @@ function postuleRecrutement(props) {
     recrutementInfos.content = document.getElementById('recrutementContent').innerHTML;
 
     if ((recrutementInfos.image || recrutementInfos.cv) &&
-      recrutementInfos.jobTitle.length >= 3 &&
-      recrutementInfos.content.length >= 3 &&
-      recrutementInfos.fullname.length >= 3 &&
-      recrutementInfos.adresse.length >= 3 &&
-      recrutementInfos.psalarial.length >= 3 &&
-      recrutementInfos.contact.length >= 3 &&
+      recrutementInfos.jobTitle.length > 0 &&
+      recrutementInfos.content.length > 0 &&
+      recrutementInfos.fullname.length > 0 &&
+      recrutementInfos.adresse.length > 0 &&
+      recrutementInfos.psalarial.length > 0 &&
+      recrutementInfos.contact.length > 0 &&
       recrutementInfos.niveauLangue.fr.length > 0) {
 
       if (state == 'public') {
