@@ -13,8 +13,11 @@ function UserGestion() {
     const [search, setsearch] = useState({ keyword: '' })
     const [accessList, setaccessList] = useState({
         id: null,
-        store: 'ghest',
-        post: 'ghest'
+        access: {
+            store: 'ghest',
+            post: 'ghest'
+        }
+
     })
     const [displayUsers, setdisplayUsers] = useState(
         <div style={{ padding: 24 }} className='w3-center'>
@@ -97,20 +100,20 @@ function UserGestion() {
         accessList.id = user.id
 
         if (user.authority == 'ghest') {
-            accessList.store = 'ghest'
-            accessList.post = 'ghest'
+            accessList.access.store = 'ghest'
+            accessList.access.post = 'ghest'
 
             document.getElementById('certainPost').click()
             document.getElementById('certainStore').click()
 
         } else {
-            accessList.store = JSON.parse(user.authority).store
-            accessList.post = JSON.parse(user.authority).post
+            accessList.access.store = JSON.parse(user.authority).store
+            accessList.access.post = JSON.parse(user.authority).post
 
-            accessList.post=='ghest' && document.getElementById('certainPost').click()
-            accessList.post=='master' && document.getElementById('ToutPost').click()
-            accessList.store=='ghest' && document.getElementById('certainStore').click()
-            accessList.store=='master' && document.getElementById('ToutStore').click()
+            accessList.access.post == 'ghest' && document.getElementById('certainPost').click()
+            accessList.access.post == 'master' && document.getElementById('ToutPost').click()
+            accessList.access.store == 'ghest' && document.getElementById('certainStore').click()
+            accessList.access.store == 'master' && document.getElementById('ToutStore').click()
 
         }
 
@@ -139,15 +142,19 @@ function UserGestion() {
 
         var accessRequest
 
-        core == 'formation' ? accessList.post = access : false
-        core == 'store' ? accessList.store = access : false
+        core == 'formation' ? accessList.access.post = access : false
+        core == 'store' ? accessList.access.store = access : false
 
-        if (accessList.post == 'ghest' && accessList.store == 'ghest') {
+        if (accessList.access.post == 'ghest' && accessList.access.store == 'ghest') {
             accessRequest = {
+                id: accessList.id,
                 access: 'ghest'
             }
         } else {
-            accessRequest = { access: JSON.stringify(accessList) }
+            accessRequest = {
+                id: accessList.id,
+                access: JSON.stringify(accessList.access)
+            }
         }
 
         document.getElementById('choiceAccess').style.cursor = 'wait'
