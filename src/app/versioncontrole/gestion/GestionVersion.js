@@ -58,9 +58,9 @@ function GestionVersion() {
         .get(source + "/_accrocher/create")
         .then((res) => {
           if (res.data.data[0] != '_') {
-            document.getElementById('appAnnonce').innerHTML = JSON.parse(res.data.data[0]).annonce
-             document.getElementById('appAbout').innerHTML = JSON.parse(res.data.data[0]).about
-            document.getElementById('appSupport').innerHTML = JSON.parse(res.data.data[0]).support
+            document.getElementById('appAnnonce').innerHTML = JSON.parse(res.data.data[0].info).annonce
+             document.getElementById('appAbout').innerHTML = JSON.parse(res.data.data[0].info).about
+            document.getElementById('appSupport').innerHTML = JSON.parse(res.data.data[0].info).support
           }
           document.getElementById('chatbotStarter').innerHTML = res.data.data[0].info
         })
