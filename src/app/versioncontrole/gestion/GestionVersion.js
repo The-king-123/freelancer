@@ -57,7 +57,7 @@ function GestionVersion() {
       axios
         .get(source + "/_accrocher/create")
         .then((res) => {
-          if (res.data.data[0] != '_') {
+          if (res.data.data[0].info != '_') {
             document.getElementById('appAnnonce').innerHTML = JSON.parse(res.data.data[0].info).annonce
              document.getElementById('appAbout').innerHTML = JSON.parse(res.data.data[0].info).about
             document.getElementById('appSupport').innerHTML = JSON.parse(res.data.data[0].info).support
