@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
 import { console_source as source } from '@/app/data'
 import axios from 'axios'
+import Link from 'next/link'
 
 function VersionControle() {
 
@@ -18,7 +19,7 @@ function VersionControle() {
         .then((res) => {
           if (res.data.data[0].info != '_') {
             document.getElementById('appAnnonce').innerHTML = JSON.parse(res.data.data[0].info).annonce
-             document.getElementById('appAbout').innerHTML = JSON.parse(res.data.data[0].info).about
+            document.getElementById('appAbout').innerHTML = JSON.parse(res.data.data[0].info).about
             document.getElementById('appSupport').innerHTML = JSON.parse(res.data.data[0].info).support
 
             document.getElementById('versionCore').style.display = 'block'
@@ -36,7 +37,7 @@ function VersionControle() {
   }, [])
 
   return (
-    <div id="versionCore" style={{ position: 'relative', display:'none' }}>
+    <div id="versionCore" style={{ position: 'relative', display: 'none' }}>
       <div
         className="w3-medium w3-big w3-flex-row w3-flex-center-v"
         style={{ padding: 8 }}
@@ -92,6 +93,10 @@ function VersionControle() {
             }}
           ></div>
         </div>
+        <Link href={'https://developer.mg'} target='_blank' className='w3-flex-column w3-center w3-black w3-round' style={{padding:16}}>
+          <div className='w3-text-grey'>Powered by</div>
+          <div className='w3-big w3-text-white'>www.developer.mg</div>
+        </Link>
       </div>
     </div>
   )
