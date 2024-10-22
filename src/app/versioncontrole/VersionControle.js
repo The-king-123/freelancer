@@ -45,7 +45,7 @@ function VersionControle() {
         className="w3-medium w3-big w3-flex-row w3-flex-center-v"
         style={{ padding: 8 }}
       >
-        <div className="w3-flex-row w3-flex-center-v w3-flex-1" style={{marginTop:12}}>
+        <div className="w3-flex-row w3-flex-center-v w3-flex-1" style={{ marginTop: 12 }}>
           <FontAwesomeIcon
             className="w3-margin-right"
             icon={faExclamationCircle}
@@ -66,7 +66,7 @@ function VersionControle() {
             id="appAnnonce"
             style={{
               marginBottom: 20,
-              paddingLeft:32,
+              paddingLeft: 32,
             }}
             className='w3-text-grey'
           ></div>
@@ -81,7 +81,7 @@ function VersionControle() {
             id="appAbout"
             style={{
               marginBottom: 20,
-              paddingLeft:32,
+              paddingLeft: 32,
             }}
             className='w3-text-grey'
           ></div>
@@ -97,17 +97,17 @@ function VersionControle() {
             contentEditable={true}
             style={{
               marginBottom: 20,
-              paddingLeft:32,
+              paddingLeft: 32,
             }}
             className='w3-text-grey'
           ></div>
         </div>
-        <Link href={'https://developer.mg'} target='_blank' className='w3-flex-column w3-center w3-black w3-round' style={{padding:16}}>
+        <Link href={'https://developer.mg'} target='_blank' className='w3-flex-column w3-center w3-black w3-round' style={{ padding: 16 }}>
           <div className='w3-text-grey'>Powered by</div>
           <div className='w3-big w3-text-white'>www.developer.mg</div>
         </Link>
-        <div style={{paddingBlock:8}} className='w3-small w3-text-grey w3-center'>
-Copyright © {copyright}
+        <div style={{ paddingBlock: 8 }} className='w3-small w3-text-grey w3-center'>
+          Copyright © {copyright}
         </div>
       </div>
     </div>

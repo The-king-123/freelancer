@@ -22,10 +22,10 @@ function Tarifs({ tarif }) {
     const reloarTarifs = (data) => {
         var glitchTarif
         if (data.length > 0) {
-            glitchTarif = tarifs.map((tarif, key) => (
+            glitchTarif = data.map((tarif, key) => (
                 <div key={key} className='w3-half' style={{ padding: 8 }}>
                     <div className='w3-light-grey w3-round'>
-                        <div className={'w3-round w3-text-white ' + (tarifs.length <= 3 ? colors[key + 1] : colors[key])} style={{ paddingBlock: 16, paddingInline: 20 }}>
+                        <div className={'w3-round w3-text-white ' + (data.length <= 3 ? colors[key + 1] : colors[key])} style={{ paddingBlock: 16, paddingInline: 20 }}>
                             <div className='w3-big w3-medium'>
                                 {tarif.name}
                             </div>
@@ -63,6 +63,8 @@ function Tarifs({ tarif }) {
 
         if (!tarif) {
 
+
+
             axios
                 .get(source + "/_tarifs/default")
                 .then((res) => {
@@ -80,7 +82,7 @@ function Tarifs({ tarif }) {
     return (
         <div>
             <div className='w3-medium' style={{ padding: 8 }}>
-                <div className='w3-flex w3-flex-center w3-circle w3-black' style={{ width: 32, height: 32, marginBottom:16 }}>
+                <div className='w3-flex w3-flex-center w3-circle w3-black' style={{ width: 32, height: 32, marginBottom: 16 }}>
                     <FontAwesomeIcon icon={faMoneyBill1} className='w3-large w3-text-yellow' />
 
                 </div>
