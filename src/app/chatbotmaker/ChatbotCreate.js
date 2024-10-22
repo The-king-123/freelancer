@@ -2,7 +2,7 @@
 import { faBookmark, faPlus, faRobot, faSave, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
-import { console_source as source } from '../data'
+import { console_source as source } from '@/app/data'
 import axios from 'axios'
 
 function ChatbotCreate() {
@@ -195,7 +195,7 @@ function ChatbotCreate() {
         const xcode = localStorage.getItem("x-code");
         await setCSRFToken()
         await axios
-            .patch(source + "/_accrocher/id?xcode=" + xcode, request)
+            .patch(source + "/_accrocher/id?topic=accrocher&xcode=" + xcode, request)
             .then((res) => {
                 document.getElementById('chatbotSaveStarterSaveIcon').style.display = 'inline-block'
                 document.getElementById('chatbotSaveStarterSpinnerIcon').style.display = 'none'

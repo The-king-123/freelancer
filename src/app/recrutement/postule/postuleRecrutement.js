@@ -479,7 +479,7 @@ function postuleRecrutement(props) {
               icon={faPager}
               style={{ width: 24, height: 24 }}
             />{" "}
-            Créer un recrutement
+            Rejoignez-nous
           </div>
           {/* <div id="openRecrutementListeButton">
           <div
@@ -581,6 +581,9 @@ function postuleRecrutement(props) {
           </select>
           <input onChange={(e) => recrutementInfos.dactylot = e.target.value} type="checkbox" id="dactylo" name="dactylo" value={true} className="w3-margin-right" />
           <label for="dactylo">Je sais taper sans regarder le clavier</label>
+          <div className="w3-small w3-text-grey" style={{marginTop:16, marginBottom:-8}}>
+          ¬ Parlez-nous de vos expériences :
+          </div>
           <div
             id="recrutementContent"
             contentEditable={true}
@@ -590,7 +593,7 @@ function postuleRecrutement(props) {
               minWidth: "100%",
               marginTop: 16,
             }}
-          >Parlez-nous de vos compétences et de vos expériences :</div>
+          ></div>
           <div className="w3-container" style={{ padding: 0 }}>
             <div
               id="inputImage"
