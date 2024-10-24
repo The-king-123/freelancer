@@ -9,6 +9,7 @@ import {
   faBars,
   faBell,
   faCalculator,
+  faCheck,
   faChevronCircleUp,
   faCode,
   faCrown,
@@ -140,9 +141,11 @@ export default function Home(props) {
 
   const ActiveDarkMode = () => {
     if (document.getElementById('darkModeCheck')) {
-      document.getElementById('darkModeCheck').style.display == 'none' ?
-        document.getElementById('darkModeCheck').style.display = 'inline-block' :
-        document.getElementById('darkModeCheck').style.display = 'none';
+      if (document.getElementById('darkModeCheck').style.display == 'none') {
+        document.getElementById('darkModeCheck').style.display = 'inline-block'
+      } else {
+        document.getElementById('darkModeCheck').style.display = 'none'
+      }
     }
   }
 
@@ -1407,7 +1410,7 @@ export default function Home(props) {
                             />
                             Dark mode
                           </div>
-                          <FontAwesomeIcon id="darkModeCheck" style={{ display: 'none' }} />
+                          <FontAwesomeIcon icon={faCheck} id="darkModeCheck" style={{ display: 'none' }} />
                         </div>
                       </div>
 
