@@ -241,6 +241,7 @@ function Security() {
                                 Changer le mot de passe
 
                                 <FontAwesomeIcon
+                                    id='spinnerUpdate'
                                     style={{ display: "none" }}
                                     className='w3-spin w3-margin-left'
                                     icon={faSpinner}
