@@ -25,6 +25,7 @@ import {
   faKey,
   faListDots,
   faMoneyBill1,
+  faMoon,
   faNewspaper,
   faPager,
   faPaperPlane,
@@ -136,6 +137,14 @@ export default function Home(props) {
     designation: "",
     key: "",
   });
+
+  const ActiveDarkMode = () => {
+    if (document.getElementById('darkModeCheck')) {
+      document.getElementById('darkModeCheck').style.display == 'none' ?
+        document.getElementById('darkModeCheck').style.display = 'inline-block' :
+        document.getElementById('darkModeCheck').style.display = 'none';
+    }
+  }
 
   const reloadChat = (data) => {
     clearInterval(stepper.intervalTyper);
@@ -907,28 +916,32 @@ export default function Home(props) {
 
   useEffect(() => {
 
-    // const elementGrey = document.getElementsByClassName('w3-light-grey')
-    // const elementWhite = document.getElementsByClassName('w3-white')
-    // const borderWhite = document.getElementsByClassName('w3-border-white')
-    // for (let i = 0; i < elementGrey.length; i++) {
-    //   const element = elementGrey[i];
-    //   element.className = element.className.replace('w3-light-grey', 'w3-black')
-    // }
-    // for (let i = 0; i < elementWhite.length; i++) {
-    //   const element = elementWhite[i];
-    //   element.className = element.className.replace('w3-white', 'w3-dark-grey')
-    // }
-    // for (let i = 0; i < borderWhite.length; i++) {
-    //   const element = borderWhite[i];
-    //   element.className = element.className.replace('w3-border-white', 'w3-border-dark-grey')
-    // }
+    // theme changer
+
+    const elementGrey = document.getElementsByClassName('w3-light-grey').length
+    const elementWhite = document.getElementsByClassName('w3-white').length
+    const borderWhite = document.getElementsByClassName('w3-border-white').length
+    for (let i = 0; i < elementGrey; i++) {
+      const element = document.getElementsByClassName('w3-light-grey')[0];
+      element.className = element.className.replace('w3-light-grey', 'w3-black')
+    }
+    for (let i = 0; i < elementWhite; i++) {
+      const element = document.getElementsByClassName('w3-white')[0];
+      element.className = element.className.replace('w3-white', 'w3-dark-grey')
+    }
+    for (let i = 0; i < borderWhite; i++) {
+      const element = document.getElementsByClassName('w3-border-white')[0];
+      element.className = element.className.replace('w3-border-white', 'w3-border-dark-grey')
+    }
+
+    // end theme changer
 
     const firstPath = location.pathname.split('/')[1]
-    if (document.getElementById(firstPath+'Page')) {
-      document.getElementById(firstPath+'Page').className = document.getElementById(firstPath+'Page').className.replace('w3-light-grey','w3-yellow')
+    if (document.getElementById(firstPath + 'Page')) {
+      document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace('w3-light-grey', 'w3-yellow')
     }
-    
-    
+
+
 
     if (localStorage.getItem('firstPassed') == null) {
       openDropdown("switchPannel")
@@ -1365,7 +1378,7 @@ export default function Home(props) {
 
             <div style={{ height: 40 }}>
               <div
-                className="w3-dropdown-click w3-hover-light-grey"
+                className="w3-dropdown-click"
               >
 
                 <div
@@ -1384,6 +1397,20 @@ export default function Home(props) {
                     </div>
                     {/* / arrow marker / */}
                     <div className="w3-flex-1 w3-overflow w3-round" style={{ zIndex: 2 }}>
+
+                      <div onClick={()=>ActiveDarkMode()} className="w3-bar-item w3-button">
+                        <div className="w3-flex-row w3-flex-center-v">
+                          <div className="w3-flex-1">
+                            <FontAwesomeIcon
+                              className="w3-margin-right"
+                              icon={faMoon}
+                            />
+                            Dark mode
+                          </div>
+                          <FontAwesomeIcon id="darkModeCheck" style={{ display: 'none' }} />
+                        </div>
+                      </div>
+
                       <Link className="w3-bar-item w3-button" href={'/profile'}>
                         <FontAwesomeIcon
                           className="w3-margin-right"

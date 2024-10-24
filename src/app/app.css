@@ -240,3 +240,7 @@ input[type="number"] {
   text-shadow: #ffe710e6 0px 0px 10px !important;
   color: #ffe710e6 !important;
 }
+
+input[type="checkbox"] {
+  accent-color: black;
+}

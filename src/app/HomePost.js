@@ -59,12 +59,13 @@ export default function PostContent({ posts }) {
   }
 
   const loadPost = (type) => {
+    const themeDark = localStorage.getItem('theme') == 'dark' ? true : false
     const glitchPost = posts.map((post, key) => (
       (type == 'premium' ? post.category == type : post.category != 'premium') &&
       <Link className="postCard" href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
         <div className="w3-overflow w3-round w3-pointer w3-white">
           <div
-            className="w3-light-grey w3-big w3-small w3-flex-row w3-flex-center-v"
+            className={(themeDark ? "w3-black" : "w3-light-grey")+" w3-big w3-small w3-flex-row w3-flex-center-v"}
             title={parse(post.title)}
           >
             {post.category != 'premium' &&
@@ -222,7 +223,6 @@ export default function PostContent({ posts }) {
         premiumIcon.style.display = 'flex'
         main.className = "active3 w3-pointer"
         premiumfreeText.innerText = "Gratuit"
-        premiumfreeText.className = "w3-text-green"
 
         freeIcon1.style.display = 'none'
         premiumIcon1.style.display = 'flex'
@@ -237,7 +237,6 @@ export default function PostContent({ posts }) {
         premiumIcon.style.display = 'none'
         main.className = "main w3-pointer"
         premiumfreeText.innerText = "Premium"
-        premiumfreeText.className = "w3-text-black"
 
         freeIcon1.style.display = 'flex'
         premiumIcon1.style.display = 'none'
@@ -260,7 +259,6 @@ export default function PostContent({ posts }) {
         premiumIcon.style.display = 'flex'
         main.className = "active3 w3-pointer"
         premiumfreeText.innerText = "Gratuit"
-        premiumfreeText.className = "w3-text-green"
 
         freeIcon1.style.display = 'none'
         premiumIcon1.style.display = 'flex'
@@ -275,7 +273,6 @@ export default function PostContent({ posts }) {
         premiumIcon.style.display = 'none'
         main.className = "main w3-pointer"
         premiumfreeText.innerText = "Premium"
-        premiumfreeText.className = "w3-text-black"
 
         freeIcon1.style.display = 'flex'
         premiumIcon1.style.display = 'none'
@@ -296,13 +293,12 @@ export default function PostContent({ posts }) {
           premiumIcon.style.display = 'none'
           main.className = "main w3-pointer"
           premiumfreeText.innerText = "Premium"
-          premiumfreeText.className = "w3-text-black"
 
           freeIcon1.style.display = 'flex'
           premiumIcon1.style.display = 'none'
           main1.className = "main1 w3-pointer"
           premiumfreeText1.innerText = "Premium"
-          premiumfreeText1.className = "w3-text-black w3-small"
+          premiumfreeText1.className = "w3-small"
           premiumfreeText1.style.textAlign = 'right'
 
           loadPost('premium')
@@ -315,13 +311,12 @@ export default function PostContent({ posts }) {
           premiumIcon.style.display = 'flex'
           main.className = "active3 w3-pointer"
           premiumfreeText.innerText = "Gratuit"
-          premiumfreeText.className = "w3-text-green"
 
           freeIcon1.style.display = 'none'
           premiumIcon1.style.display = 'flex'
           main1.className = "active31 w3-pointer"
           premiumfreeText1.innerText = "Gratuit"
-          premiumfreeText1.className = "w3-text-green w3-small"
+          premiumfreeText1.className = "w3-small"
           premiumfreeText1.style.textAlign = 'left'
 
           loadPost('free')
