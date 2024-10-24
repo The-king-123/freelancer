@@ -907,21 +907,21 @@ export default function Home(props) {
 
   useEffect(() => {
 
-    const elementGrey = document.getElementsByClassName('w3-light-grey')
-    const elementWhite = document.getElementsByClassName('w3-white')
-    const borderWhite = document.getElementsByClassName('w3-border-white')
-    for (let i = 0; i < elementGrey.length; i++) {
-      const element = elementGrey[i];
-      element.className = element.className.replace('w3-light-grey', 'w3-black')
-    }
-    for (let i = 0; i < elementWhite.length; i++) {
-      const element = elementWhite[i];
-      element.className = element.className.replace('w3-white', 'w3-dark-grey')
-    }
-    for (let i = 0; i < borderWhite.length; i++) {
-      const element = borderWhite[i];
-      element.className = element.className.replace('w3-border-white', 'w3-border-dark-grey')
-    }
+    // const elementGrey = document.getElementsByClassName('w3-light-grey')
+    // const elementWhite = document.getElementsByClassName('w3-white')
+    // const borderWhite = document.getElementsByClassName('w3-border-white')
+    // for (let i = 0; i < elementGrey.length; i++) {
+    //   const element = elementGrey[i];
+    //   element.className = element.className.replace('w3-light-grey', 'w3-black')
+    // }
+    // for (let i = 0; i < elementWhite.length; i++) {
+    //   const element = elementWhite[i];
+    //   element.className = element.className.replace('w3-white', 'w3-dark-grey')
+    // }
+    // for (let i = 0; i < borderWhite.length; i++) {
+    //   const element = borderWhite[i];
+    //   element.className = element.className.replace('w3-border-white', 'w3-border-dark-grey')
+    // }
 
     const firstPath = location.pathname.split('/')[1]
     if (document.getElementById(firstPath+'Page')) {
