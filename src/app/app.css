@@ -208,7 +208,6 @@ input[type="number"] {
 .btn3_container1 {
   width: 96px;
   height: 34px;
-  background-color: black;
   display: flex;
   position: relative;
   border: 3px solid #111;
@@ -217,9 +216,7 @@ input[type="number"] {
 /* Style 3 */
 
 .btn3_container1 {
-  border-color: #f1f1f1;
   border-radius: 36px;
-  background-color: #fff;
 }
 
 .main1 {

@@ -17,14 +17,14 @@ function Store() {
   )
 
   const reloadStore = (data) => {
-
+    const themeDark = localStorage.getItem('theme') == 'dark' ? true : false
     var glitchStore
     if (data.length > 0) {
       glitchStore = data.map((product, key) => (
         <Link key={key} href={'/store/product/' + product.slug} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
           <div className="w3-overflow w3-round w3-pointer w3-white">
             <div
-              className="w3-light-grey w3-big w3-small w3-flex-row w3-flex-center-v"
+              className={(themeDark ? "w3-black" : "w3-light-grey")+" w3-big w3-small w3-flex-row w3-flex-center-v"}
               title={parse(product.name)}
             >
               <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>{parse(product.name)}</div>

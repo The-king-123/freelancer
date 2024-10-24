@@ -152,6 +152,7 @@ export default function Forum(props) {
 
   const reloadForums = (forums) => {
     const xuser = localStorage.getItem('x-user');
+    const themeDark = localStorage.getItem('theme') == 'dark' ? true : false
     var glitchForum = ''
     if (forums.length > 0) {
       glitchForum = forums.map((forum, key) => (
@@ -163,11 +164,11 @@ export default function Forum(props) {
           >
             Lien copié...
           </div>
-          <div className="w3-flex-column w3-overflow w3-card w3-round w3-white">
+          <div className={"w3-flex-column w3-overflow w3-card w3-round "+ (themeDark ? 'w3-dark-grey' : 'w3-white')}>
             <Link
               href={'/forum/preview/' + forum.slug}
               data={"https://freelancer.mg/forum/" + forum.slug}
-              className="forumTitle w3-nowrap w3-overflow w3-light-grey w3-big w3-pointer"
+              className={"forumTitle w3-nowrap w3-overflow w3-big w3-pointer " + (themeDark ? 'w3-black' : 'w3-light-grey')}
               style={{ paddingBlock: 8, paddingInline: 16 }}
               title="Ouvrir le forum"
             >
@@ -207,13 +208,13 @@ export default function Forum(props) {
                     objectFit: "cover",
                     zIndex: 1,
                   }}
-                  className="w3-overflow w3-light-grey forum-image"
+                  className={"w3-overflow forum-image w3-block " + (themeDark ? 'w3-black' : 'w3-light-grey')}
                 />
               </Link>
             )}
             <div
               style={{ padding: 16 }}
-              className="w3-light-grey"
+              className={(themeDark ? 'w3-black' : 'w3-light-grey')}
             >
               <div>
                 <div id={"forumUserNewComent" + key}></div>
@@ -241,16 +242,16 @@ export default function Forum(props) {
                   <u>Voir tous les commentaires</u>
                 </Link>
               }
-              <div className={"w3-white w3-round-xxlarge w3-overflow w3-flex-row " + (forum.response.length > 0 ? 'w3-margin-top' : '')}>
+              <div className={"w3-round-xxlarge w3-overflow w3-flex-row " + (forum.response.length > 0 ? 'w3-margin-top ' : '') + (themeDark ? 'w3-dark-grey' : 'w3-white')}>
                 <input
                   type='text'
                   id={"inputForumComent" + key}
                   onChange={(e) => commentInfo.comment = e.target.value}
-                  className="input w3-input w3-border-0 w3-white w3-block w3-flex-1"
+                  className={"input w3-input w3-border-0 w3-block w3-flex-1 "+ (themeDark ? 'w3-dark-grey' : 'w3-white')}
                   style={{ borderBottomLeftRadius: 32, borderTopLeftRadius: 32 }}
                   placeholder="Laisser un commentaire"
                 />
-                <button onClick={() => comment(forum, key)} className="w3-bitton w3-border-0 w3-black w3-pointer" style={{ minWidth: 80 }}>
+                <button onClick={() => comment(forum, key)} className={"w3-bitton w3-border-0 w3-pointer"+ (themeDark ? 'w3-white' : 'w3-black')} style={{ minWidth: 80 }}>
                   <span id={"comentTextSpinner" + key}>Envoyer</span>
                   <FontAwesomeIcon id={"comentButtonSpinner" + key} icon={faSpinner} className="w3-spin" style={{ display: 'none' }} />
                 </button>

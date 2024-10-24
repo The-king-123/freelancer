@@ -29,14 +29,15 @@ function ChatbotCreate() {
     }
 
     const reloadTopics = (data) => {
+        const themeDark = localStorage.getItem('theme') == 'dark' ? true : false
         const glitchTopic = data.map((chatbot, key) => (
             <div key={key} style={{ paddingBlock: 4, marginBottom: -2 }}>
                 <div
-                    onClick={() => showTopic(chatbot)}
-                    className="w3-light-grey w3-round w3-flex-row w3-flex-center-v"
+                    onClick={() => showTopic(chatbot)} 
+                    className={"w3-round w3-flex-row w3-flex-center-v " +(themeDark ? "w3-black" : "w3-light-grey")}
                     style={{ padding: 8 }}
                 >
-                    <div className="w3-white w3-circle w3-flex w3-flex-center w3-margin-right" style={{ minWidth: 40, minHeight: 40, maxWidth: 40, maxHeight: 40, }}>
+                    <div className={"w3-circle w3-flex w3-flex-center w3-margin-right " + (themeDark ? "w3-dark-grey" : "w3-white")} style={{ minWidth: 40, minHeight: 40, maxWidth: 40, maxHeight: 40, }}>
                         <FontAwesomeIcon
                             icon={faBookmark}
                         />

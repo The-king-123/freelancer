@@ -140,11 +140,18 @@ export default function Home(props) {
   });
 
   const ActiveDarkMode = () => {
+
     if (document.getElementById('darkModeCheck')) {
       if (document.getElementById('darkModeCheck').style.display == 'none') {
-        document.getElementById('darkModeCheck').style.display = 'inline-block'
+        document.getElementById('darkModeCheckTop').style.display = 'inline-block';
+        document.getElementById('darkModeCheck').style.display = 'inline-block';
+        localStorage.setItem('theme', 'dark');
+        window.location.reload()
       } else {
-        document.getElementById('darkModeCheck').style.display = 'none'
+        document.getElementById('darkModeCheck').style.display = 'none';
+        document.getElementById('darkModeCheckTop').style.display = 'none';
+        localStorage.setItem('theme', 'light');
+        window.location.reload()
       }
     }
   }
@@ -163,7 +170,7 @@ export default function Home(props) {
             }}
             className="w3-button chat-yellow w3-hover-amber w3-round"
           >
-            {chat.choice}
+            {choiceTitleExtractor(chat.choice).text}
           </button>
         </div>
         <div className="w3-flex-row" style={{ paddingBlock: 16 }}>
@@ -656,11 +663,14 @@ export default function Home(props) {
   };
 
   const toggleChat = () => {
+
+    const themeDark = localStorage.getItem('theme') == 'dark' ? true : false
+
     if (document.getElementById("sidebarChat").style.display != "block") {
       closeAllPanel();
       document.getElementById("overlay").style.display = "block";
       document.getElementById("sidebarChat").className =
-        "mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top w3-animate-right";
+        "mobileHeightPanel panel w3-sidebar w3-bar-block w3-collapse w3-top w3-animate-right " + (themeDark ? "w3-black" : "w3-light-grey");
       document.getElementById("sidebarChat").style.display = "block";
     } else {
       document.getElementById("overlay").style.display = "none";
@@ -673,7 +683,7 @@ export default function Home(props) {
       closeAllPanel();
       document.getElementById("overlay").style.display = "block";
       document.getElementById("sidebarMenu").className =
-        "mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top w3-animate-left";
+        "mobileHeightPanel panel w3-sidebar w3-bar-block w3-collapse w3-top w3-animate-left " + (themeDark ? "w3-black" : "w3-light-grey");
       document.getElementById("sidebarMenu").style.display = "block";
     } else {
       document.getElementById("overlay").style.display = "none";
@@ -921,27 +931,34 @@ export default function Home(props) {
 
     // theme changer
 
-    // const elementGrey = document.getElementsByClassName('w3-light-grey').length
-    // const elementWhite = document.getElementsByClassName('w3-white').length
-    // const borderWhite = document.getElementsByClassName('w3-border-white').length
-    // for (let i = 0; i < elementGrey; i++) {
-    //   const element = document.getElementsByClassName('w3-light-grey')[0];
-    //   element.className = element.className.replace('w3-light-grey', 'w3-black')
-    // }
-    // for (let i = 0; i < elementWhite; i++) {
-    //   const element = document.getElementsByClassName('w3-white')[0];
-    //   element.className = element.className.replace('w3-white', 'w3-dark-grey')
-    // }
-    // for (let i = 0; i < borderWhite; i++) {
-    //   const element = document.getElementsByClassName('w3-border-white')[0];
-    //   element.className = element.className.replace('w3-border-white', 'w3-border-dark-grey')
-    // }
+    if (localStorage.getItem('theme') == 'dark') {
+
+      document.getElementById('darkModeCheck').style.display = 'inline-block'
+      document.getElementById('darkModeCheckTop').style.display = 'inline-block';
+
+      const elementGrey = document.getElementsByClassName('w3-light-grey').length
+      const elementWhite = document.getElementsByClassName('w3-white').length
+      const borderWhite = document.getElementsByClassName('w3-border-white').length
+      for (let i = 0; i < elementGrey; i++) {
+        const element = document.getElementsByClassName('w3-light-grey')[0];
+        element.className = element.className.replace('w3-light-grey', 'w3-black')
+      }
+      for (let i = 0; i < elementWhite; i++) {
+        const element = document.getElementsByClassName('w3-white')[0];
+        element.className = element.className.replace('w3-white', 'w3-dark-grey')
+      }
+      for (let i = 0; i < borderWhite; i++) {
+        const element = document.getElementsByClassName('w3-border-white')[0];
+        element.className = element.className.replace('w3-border-white', 'w3-border-dark-grey')
+      }
+    }
+
 
     // end theme changer
 
     const firstPath = location.pathname.split('/')[1]
     if (document.getElementById(firstPath + 'Page')) {
-      document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace('w3-light-grey', 'w3-yellow')
+      document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') == 'dark' ? 'w3-black' : 'w3-light-grey'), 'w3-yellow')
     }
 
 
@@ -1401,7 +1418,7 @@ export default function Home(props) {
                     {/* / arrow marker / */}
                     <div className="w3-flex-1 w3-overflow w3-round" style={{ zIndex: 2 }}>
 
-                      <div onClick={()=>ActiveDarkMode()} className="w3-bar-item w3-button">
+                      <div onClick={() => ActiveDarkMode()} className="w3-bar-item w3-button">
                         <div className="w3-flex-row w3-flex-center-v">
                           <div className="w3-flex-1">
                             <FontAwesomeIcon
@@ -1759,6 +1776,19 @@ export default function Home(props) {
                 />
               </div>
               {/* / arrow marker / */}
+              <div onClick={() => ActiveDarkMode()} className="w3-bar-item w3-button">
+                <div className="w3-flex-row w3-flex-center-v">
+                  <div className="w3-flex-1">
+                    <FontAwesomeIcon
+                      className="w3-margin-right"
+                      icon={faMoon}
+                    />
+                    Dark mode
+                  </div>
+                  <FontAwesomeIcon icon={faCheck} id="darkModeCheckTop" style={{ display: 'none' }} />
+                </div>
+              </div>
+
               <Link className="w3-bar-item w3-button" href={'/profile'}>
                 <FontAwesomeIcon
                   className="w3-margin-right"
@@ -1840,7 +1870,7 @@ export default function Home(props) {
 
       {/* // bottom menu */}
       <div
-        className="w3-bottom w3-block w3-card w3-white3 w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
+        className="w3-bottom w3-block w3-card w3-white w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
         style={{ paddingBlock: 8, zIndex: 9999 }}
       >
 
@@ -1914,16 +1944,16 @@ export default function Home(props) {
               id="settingMobileWrapper"
               className="w3-flex-column"
             >
-              <div className="btn3_container1 w3-light-grey" onClick={() => {
+              <div className="btn3_container1 w3-light-grey w3-border-white" onClick={() => {
                 if (location.pathname.split('/')[1] != '' && location.pathname.split('/')[1] != 'user') {
                   document.location = '/'
                 }
               }} style={{ marginInline: 'auto' }}>
                 <span className="main1 w3-pointer">
-                  <div id="freeSwitch1" className="btn1 w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28 }}>
+                  <div id="freeSwitch1" className="btn1 w3-yellow w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28 }}>
                     <FontAwesomeIcon icon={faDollarSign} />
                   </div>
-                  <div id="premiumSwitch1" className="btn1 w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28, display: 'none' }}>
+                  <div id="premiumSwitch1" className="btn1 w3-green w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28, display: 'none' }}>
                     <FontAwesomeIcon icon={faGift} />
                   </div>
                 </span>
@@ -1933,7 +1963,7 @@ export default function Home(props) {
                   stopAllIntervalAndTimeout();
                   document.location = '/';
                 }
-              }} className="w3-text-black w3-small" style={{ marginTop: -34, zIndex: 1, paddingBlock: 8, fontSize: '16px', paddingInline: 10, textAlign: 'right' }}>
+              }} className="w3-small" style={{ marginTop: -34, zIndex: 1, paddingBlock: 8, fontSize: '16px', paddingInline: 10, textAlign: 'right' }}>
                 Premium
               </div>
             </div>

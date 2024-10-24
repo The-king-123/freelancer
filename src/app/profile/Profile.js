@@ -36,7 +36,7 @@ function Profile() {
   }
 
   const updateUserinfo = async () => {
-    if (userInfo.fullname.length < 8) {
+    if (userInfo.fullname.length < 3) {
       document.getElementById("fn_alert").className =
         "w3-text-red w3-small";
     } else if (
