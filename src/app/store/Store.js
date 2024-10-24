@@ -17,14 +17,9 @@ function Store() {
   )
 
   const reloadStore = (data) => {
-    console.log('Here');
 
     var glitchStore
     if (data.length > 0) {
-      console.log('Exist');
-      console.log(data[0]);
-
-
       glitchStore = data.map((product, key) => (
         <Link key={key} href={'/store/product/' + product.slug} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
           <div className="w3-overflow w3-round w3-pointer w3-white">
@@ -121,6 +116,7 @@ function Store() {
 
       });
   }
+  
   useEffect(() => {
     //
     axios
