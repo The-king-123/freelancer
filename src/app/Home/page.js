@@ -918,21 +918,21 @@ export default function Home(props) {
 
     // theme changer
 
-    const elementGrey = document.getElementsByClassName('w3-light-grey').length
-    const elementWhite = document.getElementsByClassName('w3-white').length
-    const borderWhite = document.getElementsByClassName('w3-border-white').length
-    for (let i = 0; i < elementGrey; i++) {
-      const element = document.getElementsByClassName('w3-light-grey')[0];
-      element.className = element.className.replace('w3-light-grey', 'w3-black')
-    }
-    for (let i = 0; i < elementWhite; i++) {
-      const element = document.getElementsByClassName('w3-white')[0];
-      element.className = element.className.replace('w3-white', 'w3-dark-grey')
-    }
-    for (let i = 0; i < borderWhite; i++) {
-      const element = document.getElementsByClassName('w3-border-white')[0];
-      element.className = element.className.replace('w3-border-white', 'w3-border-dark-grey')
-    }
+    // const elementGrey = document.getElementsByClassName('w3-light-grey').length
+    // const elementWhite = document.getElementsByClassName('w3-white').length
+    // const borderWhite = document.getElementsByClassName('w3-border-white').length
+    // for (let i = 0; i < elementGrey; i++) {
+    //   const element = document.getElementsByClassName('w3-light-grey')[0];
+    //   element.className = element.className.replace('w3-light-grey', 'w3-black')
+    // }
+    // for (let i = 0; i < elementWhite; i++) {
+    //   const element = document.getElementsByClassName('w3-white')[0];
+    //   element.className = element.className.replace('w3-white', 'w3-dark-grey')
+    // }
+    // for (let i = 0; i < borderWhite; i++) {
+    //   const element = document.getElementsByClassName('w3-border-white')[0];
+    //   element.className = element.className.replace('w3-border-white', 'w3-border-dark-grey')
+    // }
 
     // end theme changer
 
