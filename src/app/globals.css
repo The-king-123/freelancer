@@ -1360,7 +1360,7 @@ a {
 .w3-dark-gray,
 .w3-hover-dark-gray:hover {
   color: #fff !important;
-  background-color: #616161 !important;
+  background-color: #222 !important;
 }
 .w3-pale-red,
 .w3-hover-pale-red:hover {
@@ -1604,7 +1604,7 @@ a {
 .w3-hover-border-dark-grey:hover,
 .w3-border-dark-gray,
 .w3-hover-border-dark-gray:hover {
-  border-color: #616161 !important;
+  border-color: #222 !important;
 }
 .w3-border-pale-red,
 .w3-hover-border-pale-red:hover {

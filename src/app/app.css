@@ -173,16 +173,12 @@ input[type="number"] {
   position: relative;
   border: 3px solid #111;
   margin-right: 20px;
-  box-shadow: -1px 3px 22px 0px rgba(0, 0, 0, 0.75);
 }
 
 /* Style 3 */
 
 .btn3_container {
-  border-color: #fff;
   border-radius: 36px;
-  background-color: #fff;
-  box-shadow: -1px 3px 22px 0px rgba(255, 255, 255, 0.75);
 }
 
 .main {
@@ -238,3 +234,9 @@ input[type="number"] {
   transform: translateX(62px) rotate(360deg);
 }
 /* en switvh animation */
+
+/* text glow menu */
+.glowText{
+  text-shadow: #ffe710e6 0px 0px 10px !important;
+  color: #ffe710e6 !important;
+}

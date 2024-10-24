@@ -907,6 +907,29 @@ export default function Home(props) {
 
   useEffect(() => {
 
+    const elementGrey = document.getElementsByClassName('w3-light-grey')
+    const elementWhite = document.getElementsByClassName('w3-white')
+    const borderWhite = document.getElementsByClassName('w3-border-white')
+    for (let i = 0; i < elementGrey.length; i++) {
+      const element = elementGrey[i];
+      element.className = element.className.replace('w3-light-grey', 'w3-black')
+    }
+    for (let i = 0; i < elementWhite.length; i++) {
+      const element = elementWhite[i];
+      element.className = element.className.replace('w3-white', 'w3-dark-grey')
+    }
+    for (let i = 0; i < borderWhite.length; i++) {
+      const element = borderWhite[i];
+      element.className = element.className.replace('w3-border-white', 'w3-border-dark-grey')
+    }
+
+    const firstPath = location.pathname.split('/')[1]
+    if (document.getElementById(firstPath+'Page')) {
+      document.getElementById(firstPath+'Page').className = document.getElementById(firstPath+'Page').className.replace('w3-light-grey','w3-yellow')
+    }
+    
+    
+
     if (localStorage.getItem('firstPassed') == null) {
       openDropdown("switchPannel")
     }
@@ -1175,7 +1198,7 @@ export default function Home(props) {
   return (
     <div
       id="coreMain"
-      className="container "
+      className="container w3-white"
       style={{ userSelect: "none", display: "none" }}
     >
       <div
@@ -1202,7 +1225,7 @@ export default function Home(props) {
           >
             {/* ///-------------------- */}
             <div className="w3-flex-column">
-              <div className="btn3_container" style={{ marginInline: 'auto' }}>
+              <div className="btn3_container w3-white w3-border-white" style={{ marginInline: 'auto' }}>
                 <span className="main w3-pointer">
                   <div id="freeSwitch" className="btn w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
                     <FontAwesomeIcon icon={faDollarSign} />
@@ -1212,7 +1235,7 @@ export default function Home(props) {
                   </div>
                 </span>
               </div>
-              <div id="premiumfreeText" className="w3-text-black" style={{ marginTop: -60, zIndex: 1, paddingBlock: 8, fontSize: '16px' }}>
+              <div id="premiumfreeText" style={{ marginTop: -60, zIndex: 1, paddingBlock: 8, fontSize: '16px' }}>
                 Premium
               </div>
             </div>
@@ -1243,6 +1266,7 @@ export default function Home(props) {
             </Link>
 
             <Link
+              id="storePage"
               className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
               style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
               href={"/store/all"}
@@ -1256,6 +1280,7 @@ export default function Home(props) {
             </Link>
 
             <div
+              id="forumPage"
               className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round w3-pointer"
               style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
               onClick={userForum}
@@ -1269,6 +1294,7 @@ export default function Home(props) {
             </div>
 
             <Link
+              id="talentPage"
               className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
               style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
               href={"/talent"}
@@ -1282,6 +1308,7 @@ export default function Home(props) {
             </Link>
 
             <Link
+              id="userPage"
               className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
               style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
               href={"/user/336302677822455"}
@@ -1295,6 +1322,7 @@ export default function Home(props) {
             </Link>
 
             <Link
+              id="recrutementPage"
               className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
               style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
               href={"/recrutement/postule"}
@@ -1308,6 +1336,7 @@ export default function Home(props) {
             </Link>
 
             <div
+              id="tarifsPage"
               className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round w3-pointer"
               style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
               onClick={userTarifs}
@@ -1519,7 +1548,7 @@ export default function Home(props) {
           <div style={{ marginInline: "auto" }}>
             <div>
               <div
-                className="w3-circle w3-light-grey w3-flex w3-flex-row w3-flex-center-v"
+                className="w3-light-grey w3-flex w3-flex-row w3-flex-center-v"
                 style={{ minWidth: 80, minHeight: 80 }}
               >
                 {imagePDP && (
@@ -1791,6 +1820,7 @@ export default function Home(props) {
           style={{ width: 36, height: 36 }}
         >
           <div
+            id="talentScreen"
             className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
           >
@@ -1808,6 +1838,7 @@ export default function Home(props) {
           style={{ width: 36, height: 36 }}
         >
           <div
+            id="recrutementScreen"
             className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
           >
@@ -1902,6 +1933,7 @@ export default function Home(props) {
           style={{ width: 36, height: 36 }}
         >
           <div
+            id="storeScreen"
             className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
           >
