@@ -1,23 +1,118 @@
+'use client'
 import { faCheck, faKey, faShieldAlt, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect } from 'react'
+import { console_source as source } from '../data';
 
 function Security() {
+
+    axios.defaults.withCredentials = true;
+
+    const updateAuthElement = {
+        email: "",
+        cpassword: "",
+        npassword: "",
+        rpassword: "",
+        type: "updatepassword",
+    };
+
+    const cpasswordRegister = (element) => {
+        updateAuthElement.cpassword = element.target.value;
+    };
+    const npasswordRegister = (element) => {
+        updateAuthElement.npassword = element.target.value;
+    };
+    const rpasswordRegister = (element) => {
+        updateAuthElement.rpassword = element.target.value;
+    };
+    const updatePassword = async () => {
+        if (updateAuthElement.npassword.length < 8) {
+            document.getElementById("npw_alert").className =
+                "w3-text-red w3-small";
+        } else if (updateAuthElement.rpassword != updateAuthElement.npassword) {
+            document.getElementById("npw_alert").className = "w3-hide";
+            document.getElementById("rpw_alert").className =
+                "w3-text-red w3-small";
+        } else {
+            document.getElementById("npw_alert").className = "w3-hide";
+            document.getElementById("rpw_alert").className = "w3-hide";
+            document.getElementById("spinnerUpdate").style.display =
+                "inline-block";
+
+            const xcode = localStorage.getItem('x-code')
+            await axios
+                .patch(source + "/_auth/updatepassword?xcode=" + xcode, updateAuthElement)
+                .then((res) => {
+                    if (res.data.updated) {
+                        document.getElementById("spinnerUpdate").style.display =
+                            "none";
+                        window.location.reload()
+                    } else if (res.data.cause == "notmutch") {
+                        document.getElementById("spinner").style.display =
+                            "none";
+                        document.getElementById("cpw_alert").className =
+                            "w3-text-red w3-small";
+                    }
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                });
+        }
+    };
+    async function setCSRFToken() {
+        try {
+            // Fetch CSRF token from the server
+            const response = await axios.get(source + '/csrf-token');
+            // Set CSRF token as a default header for all future requests
+            axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+        } catch (error) {
+            console.error('CSRF token fetch failed:', error);
+        }
+    }
+
+    useEffect(() => {
+
+        const xcode = localStorage.getItem('x-code');
+        axios
+            .get(source + "/_auth?xcode=" + xcode)
+            .then((res) => {
+                if (res.data.logedin) {
+                    updateAuthElement.email = res.data.user.email
+                    document.getElementById('securityCore').style.display = 'block';
+                } else {
+                    if (document.getElementById('modalLogin')) {
+                        document.getElementById('modalLogin').style.display = 'block'
+                    }
+                    document.getElementById('profilCore').innerHTML = '';
+
+                }
+            })
+            .catch((e) => {
+                console.error("failure", e);
+                if (document.getElementById('modalLogin')) {
+                    document.getElementById('modalLogin').style.display = 'block'
+                }
+                document.getElementById('profilCore').innerHTML = '';
+            });
+
+    }, [])
+
     return (
-        <div>
+        <div id='securityCore' style={{ display: 'none' }}>
             <div
                 style={{ padding: 8 }}
             >
 
                 <div style={{ paddingBlock: 24 }}>
                     <div id="pass_text" className="w3-hide">
-                        Password changed!
+                        Mot de passe modifié !
                     </div>
                     <div
                         id="auth_text"
                         className="w3-xlarge w3-big text-violet"
                     >
-                        Authentication setting
+                        Paramètre d'authentification
                     </div>
                     <div
                         className={
@@ -35,8 +130,7 @@ function Security() {
                 <form className="w3-block" id="cp_form">
                     <div style={{ paddingInline: 16 }}>
                         <div id="cpw_alert" className="w3-hide">
-                            Something went wrong, please verify
-                            your current password...
+                            Une erreur s'est produite, veuillez vérifier votre mot de passe actuel...
                         </div>
                     </div>
                     <div
@@ -44,10 +138,10 @@ function Security() {
                         style={{ paddingBlock: 0 }}
                     >
                         <input
-                            // onChange={(e) => cpasswordRegister(e)}
+                            onChange={(e) => cpasswordRegister(e)}
                             type="password"
                             className="w3-border-0 w3-input input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium"
-                            placeholder="Current password"
+                            placeholder="Mot de passe actuel"
                             id="cpassword"
                             name="user_cp"
                             required
@@ -72,8 +166,7 @@ function Security() {
                                     marginBottom: -16,
                                 }}
                             >
-                                New password can't be less than 8
-                                characters...
+                                Le nouveau mot de passe doit contenir au moins 8 caractères...
                             </div>
                         </div>
                     </div>
@@ -82,10 +175,10 @@ function Security() {
                         style={{ paddingBlock: 0 }}
                     >
                         <input
-                            // onChange={(e) => npasswordRegister(e)}
+                            onChange={(e) => npasswordRegister(e)}
                             type="password"
                             className="w3-border-0 w3-input input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium"
-                            placeholder="New Password"
+                            placeholder="Nouveau mot de passe"
                             id="npassword"
                             name="user_np"
                             required
@@ -112,7 +205,7 @@ function Security() {
                                     marginBottom: -16,
                                 }}
                             >
-                                Password don't match...
+                                Les deux mots de passe ne sont pas identiques...
                             </div>
                         </div>
                     </div>
@@ -121,10 +214,10 @@ function Security() {
                         style={{ paddingBlock: 0 }}
                     >
                         <input
-                            // onChange={(e) => rpasswordRegister(e)}
+                            onChange={(e) => rpasswordRegister(e)}
                             type="password"
                             className="w3-border-0 w3-input input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium"
-                            placeholder="Retape password"
+                            placeholder="Confirmer le nouveau mot de passe"
                             id="rpassword"
                             name="user_rp"
                             required
@@ -141,19 +234,17 @@ function Security() {
                     <div className="w3-center w3-white w3-flex w3-flex-center">
                         <div className="w3-margin">
                             <div
-                                // onClick={() => updatePassword()}
+                                style={{ paddingInline: 32 }}
+                                onClick={() => updatePassword()}
                                 className="transition w3-medium w3-button w3-round-xxlarge w3-text-white w3-black w3-margin-bottom"
                             >
-                                Change password
-                                <span
-                                    className="w3-spin-flash w3-margin-left"
+                                Changer le mot de passe
+
+                                <FontAwesomeIcon
                                     style={{ display: "none" }}
-                                    id="spinnerUpdate"
-                                >
-                                    <FontAwesomeIcon
-                                        icon={faSpinner}
-                                    />
-                                </span>
+                                    className='w3-spin w3-margin-left'
+                                    icon={faSpinner}
+                                />
                             </div>
                         </div>
                     </div>

@@ -36,6 +36,8 @@ function Profile() {
   }
 
   const updateUserinfo = async () => {
+    console.log(userInfo);
+    
     if (userInfo.fullname.length < 3) {
       document.getElementById("fn_alert").className =
         "w3-text-red w3-small";
@@ -51,15 +53,13 @@ function Profile() {
       document.getElementById("number_alert").className =
         "w3-text-red w3-small";
     } else if (
-      userInfo.whatsapp.length < 10 &&
-      userInfo.whatsapp.length > 0
+      userInfo.whatsapp.length < 10 && userInfo.whatsapp.length > 0 && userInfo.whatsapp != '_'
     ) {
       document.getElementById("whatsapp_alert").className = "w3-show";
       document.getElementById("whatsapp_alert").className =
         "w3-text-red w3-small";
     } else if (
-      userInfo.messenger.length < 15 &&
-      userInfo.messenger.length > 0
+      userInfo.messenger.length < 15 && userInfo.messenger.length > 0 && userInfo.messenger != '_'
     ) {
       document.getElementById("messenger_alert").className = "w3-show";
       document.getElementById("messenger_alert").className =
@@ -85,14 +85,16 @@ function Profile() {
             document.getElementById("user_password").value = "";
             userInfo.password = "";
             document.getElementById("spinnerSave").style.display = "none";
-            document.getElementById("info_text").className = "w3-hide";
+            document.getElementById("info_text").className = "w3-hide w3-small";
             document.getElementById("saved_text").className = "w3-xlarge w3-big w3-animate-top";
+            document.getElementById('notificationSuccess').style.display = 'block'
             setTimeout(() => {
               document.getElementById("info_text").className = "w3-xlarge w3-big w3-animate-top";
-              document.getElementById("saved_text").className = "w3-hide";
+              document.getElementById("saved_text").className = "w3-hide w3-small";
+              document.getElementById('notificationSuccess').style.display = 'none'
             }, 3000);
 
-            document.getElementById('password_alert').className = 'w3-hide'
+            document.getElementById('password_alert').className = 'w3-hide w3-small'
           } else if (!res.data.password) {
             document.getElementById("password_alert").className = "w3-show";
             document.getElementById("password_alert").className = "w3-text-red w3-small";
@@ -274,7 +276,7 @@ function Profile() {
           </div>
         </div>
         <div style={{ paddingBlock: 24 }}>
-          <div id="saved_text" className="w3-hide">
+          <div id="saved_text" className="w3-hide w3-small">
             Modification sauvegardées.
           </div>
           <div
@@ -301,11 +303,10 @@ function Profile() {
             <div style={{ paddingInline: 16 }}>
               <div
                 id="fn_alert"
-                className="w3-hide"
+                className="w3-hide w3-small"
                 style={{
                   marginLeft: 8,
-                  marginTop: -8,
-                  marginBottom: -16,
+                  marginBottom: -8,
                 }}
               >
                 Votre nom ne peut contenir que les
@@ -330,11 +331,10 @@ function Profile() {
             <div style={{ paddingInline: 16 }}>
               <div
                 id="email_alert"
-                className="w3-hide"
+                className="w3-hide w3-small"
                 style={{
                   marginLeft: 8,
-                  marginTop: -8,
-                  marginBottom: -16,
+                  marginBottom: -8,
                 }}
               >
                 Votre adresse e-mail est invalide.
@@ -359,11 +359,10 @@ function Profile() {
             <div style={{ paddingInline: 16 }}>
               <div
                 id="number_alert"
-                className="w3-hide"
+                className="w3-hide w3-small"
                 style={{
                   marginLeft: 8,
-                  marginTop: -8,
-                  marginBottom: -16,
+                  marginBottom: -8,
                 }}
               >
                 Le numéro de téléphone doit
@@ -389,11 +388,10 @@ function Profile() {
             <div style={{ paddingInline: 16 }}>
               <div
                 id="whatsapp_alert"
-                className="w3-hide"
+                className="w3-hide w3-small"
                 style={{
                   marginLeft: 8,
-                  marginTop: -8,
-                  marginBottom: -16,
+                  marginBottom: -8,
                 }}
               >
                 Le numéro Whatsapp doit comporter au
@@ -418,11 +416,10 @@ function Profile() {
             <div style={{ paddingInline: 16 }}>
               <div
                 id="messenger_alert"
-                className="w3-hide"
+                className="w3-hide w3-small"
                 style={{
                   marginLeft: 8,
-                  marginTop: -8,
-                  marginBottom: -16,
+                  marginBottom: -8,
                 }}
               >
                 Votre lien est trop court, veuillez
@@ -492,7 +489,7 @@ function Profile() {
       <div style={{ padding: 8 }}>
         <div
           id="password_alert"
-          className="w3-hide"
+          className="w3-hide w3-small"
           style={{
             marginLeft: 8,
             marginTop: -8,
@@ -506,15 +503,18 @@ function Profile() {
           <input
             onChange={(e) => {
               userInfo.password = e.target.value
-              document.getElementById('password_alert').className = 'w3-hide'
+              document.getElementById('password_alert').className = 'w3-hide w3-small'
             }}
             type="password"
-            className="input w3-white w3-round-xxlarge w3-block w3-text-grey w3-medium"
+            className="input w3-round-xxlarge w3-block w3-text-grey w3-medium w3-border-0"
             placeholder="Entrer votre mot de passe"
             id="user_password"
             name="password"
             required
           />
+        </div>
+        <div id='notificationSuccess' style={{display:"none"}} className=''>
+          Les modifications sont sauvegarder avec succès
         </div>
         <div
           onClick={updateUserinfo}
@@ -526,7 +526,7 @@ function Profile() {
             style={{ display: "none" }}
             id="spinnerSave"
           >
-            <FontAwesomeIcon icon={faSpinner} />
+            <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
           </span>
         </div>
       </div>
