@@ -177,7 +177,7 @@ function previewForum({ forum }) {
           {parse(forum.title)}
         </div>
         <div className='postCore'>
-          <div id='post0' style={{ marginBlock: 16 }} className='w3-overflow w3-nowrap-multiline'>
+          <div id='post0' style={{ marginBlock: 16 }}>
             {parse(forum.content)}
           </div>
         </div>
