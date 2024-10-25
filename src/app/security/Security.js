@@ -162,8 +162,7 @@ function Security() {
                                 className="w3-hide"
                                 style={{
                                     marginLeft: 8,
-                                    marginTop: -8,
-                                    marginBottom: -16,
+                                    marginBottom: -8,
                                 }}
                             >
                                 Le nouveau mot de passe doit contenir au moins 8 caractères...
@@ -201,8 +200,7 @@ function Security() {
                                 className="w3-hide"
                                 style={{
                                     marginLeft: 8,
-                                    marginTop: -8,
-                                    marginBottom: -16,
+                                    marginBottom: -8,
                                 }}
                             >
                                 Les deux mots de passe ne sont pas identiques...
