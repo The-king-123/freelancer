@@ -12,7 +12,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import parse from "html-react-parser";
 
-hjqsjdg qsjdghjqS
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,7 +52,6 @@ export default function RootLayout({ children }) {
   });
 
   const [height, setHeight] = useState(0);
-  const [displayDesignations, setdisplayDesignations] = useState("");
   const [displayChat, setdisplayChat] = useState(
     <div className="w3-flex w3-flex-center" style={{ padding: 24 }}>
       <span className="w3-spin">
@@ -63,11 +61,7 @@ export default function RootLayout({ children }) {
   );
   const [displayChoice, setdisplayChoice] = useState("");
   const [chatData, setchatData] = useState([]);
-  const [core, setcore] = useState(
-    <div style={{ padding: 24 }} className='w3-center'>
-      <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
-    </div>
-  );
+
   const [designationData, setdesignationData] = useState([]);
   const [killer, setkiller] = useState({ starter: null });
   const [topicData, settopicData] = useState([]);
@@ -468,6 +462,11 @@ export default function RootLayout({ children }) {
 
   const showUser = async (data, key) => {
 
+    console.log('hereweare');
+    console.log(data);
+
+
+
     closeAllPanel();
     var users = data;
     var userInfos = null;
@@ -541,58 +540,6 @@ export default function RootLayout({ children }) {
       });
   };
 
-  const reloadDesignation = (data) => {
-
-    data.forEach((user) => {
-      if (
-        !designationData.includes(user.designation) &&
-        user.designation != "Admin"
-      ) {
-        designationData.push(user.designation);
-      }
-    });
-
-    var glitchDesignations = "";
-    if (designationData.length > 0) {
-      glitchDesignations = designationData.map((designation, key) => (
-        <Link
-          onClick={() => {
-            if (
-              !fullPath.path.includes(
-                "/talent/" + slugify(designation, { lower: true })
-              )
-            ) {
-              stopAllIntervalAndTimeout();
-            }
-          }}
-          href={"/talent/" + slugify(designation, { lower: true })}
-          key={key}
-          className="w3-white w3-pointer w3-flex-row w3-flex-center-v w3-round w3-block"
-          style={{ marginBlock: 16, padding: 8 }}
-        >
-          <div
-            className="w3-medium w3-big w3-nowrap w3-overflow"
-            style={{ width: 196 }}
-          >
-            {designation}
-          </div>
-        </Link>
-      ));
-    } else {
-      glitchDesignations = (
-        <div>
-          <div
-            className="w3-text-black w3-border w3-flex-row w3-flex-center-v w3-round w3-block w3-medium w3-big"
-            style={{ marginBlock: 16, padding: 12 }}
-          >
-            You will find categories here...
-          </div>
-        </div>
-      );
-    }
-    setdisplayDesignations(glitchDesignations);
-  };
-
   const openDropdown = (ID, IDW) => {
     const allDropContent = document.getElementsByClassName('w3-dropdown-content')
     const dropButton = document.getElementsByClassName('dropButton')
@@ -635,19 +582,6 @@ export default function RootLayout({ children }) {
     }
   };
 
-  const toggleUsers = () => {
-    if (document.getElementById("sidebarMenu").style.display != "block") {
-      closeAllPanel();
-      document.getElementById("overlay").style.display = "block";
-      document.getElementById("sidebarMenu").className =
-        "mobileHeightPanel panel w3-sidebar w3-bar-block w3-collapse w3-top w3-animate-left " + (themeDark ? "w3-black" : "w3-light-grey");
-      document.getElementById("sidebarMenu").style.display = "block";
-    } else {
-      document.getElementById("overlay").style.display = "none";
-      document.getElementById("sidebarMenu").style.display = "none";
-    }
-  };
-
   const closeAllPanel = () => {
     const allPanel = document.getElementsByClassName("panel");
     for (let i = 0; i < allPanel.length; i++) {
@@ -665,19 +599,6 @@ export default function RootLayout({ children }) {
       .catch(function (err) {
         console.error("Could not copy text: ", err);
       });
-  };
-
-  const shareOnFacebook = (link) => {
-    const url = link;
-    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      url
-    )}`;
-
-    window.open(
-      facebookShareUrl,
-      "facebook-share-dialog",
-      "width=800,height=600"
-    );
   };
 
   const stopAllIntervalAndTimeout = () => {
@@ -711,25 +632,13 @@ export default function RootLayout({ children }) {
     }
   };
 
-  const Home = () => {
-    var user = localStorage.getItem("user");
-    if (user) {
-      if (user == "160471339156947") {
-        window.location = "/";
-      } else {
-        window.location = "/user/" + user;
-      }
-    } else {
-      window.location = "/";
-    }
-  };
-
   const userForum = () => {
     var user = localStorage.getItem("user");
     if (user) {
       if (user == "160471339156947" || user == "undefined") {
-        document.getElementById('freeLink').href = "/forum"
-        document.getElementById('freeLink').click()
+        const link = document.createElement('a');
+        link.href = '/forum';
+        link.click()
       } else {
         document.getElementById('freeLink').href = "/forum/" + user
         document.getElementById('freeLink').click()
@@ -926,7 +835,8 @@ export default function RootLayout({ children }) {
     if (typeof window !== "undefined") {
       fullPath.path = window.location.pathname;
     }
-    if (document.getElementById("coreMain")) {
+
+    if (document.getElementById("mainCore")) {
 
       if (
         !localHosts.includes(location.hostname) &&
@@ -935,10 +845,8 @@ export default function RootLayout({ children }) {
         location.href =
           "https://" + location.hostname + location.pathname + location.search;
       } else {
-        document.getElementById("coreMain").style.display = "block";
+        document.getElementById("mainCore").style.display = "block";
       }
-
-      var times = 0;
 
       setTimeout(() => {
 
@@ -978,20 +886,6 @@ export default function RootLayout({ children }) {
         })
       }
 
-      const postsTitle = document.getElementsByClassName("postTitle");
-      for (let i = 0; i < postsTitle.length; i++) {
-        postsTitle[i].addEventListener("click", () => {
-          const post = postsTitle[i].getAttribute("data");
-          copyToClipboard(post);
-          document.getElementById("flashInfo" + i).innerText =
-            "Le lien a été copié...";
-          document.getElementById("flashInfo" + i).style.display = "block";
-          setTimeout(() => {
-            document.getElementById("flashInfo" + i).style.display = "none";
-          }, 2000);
-        });
-      }
-
       const xcode = localStorage.getItem('x-code');
       axios
         .get(source + "/_auth?xcode=" + xcode)
@@ -1025,26 +919,17 @@ export default function RootLayout({ children }) {
       axios
         .get(source + "/_auth/users")
         .then((res) => {
-          reloadDesignation(res.data.data);
           if (document.getElementById('userPDP')) {
             document.getElementById('userPDP').style.backgroundImage = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.data
           }
-
+          console.log('hereweare3');
           var user = localStorage.getItem("user");
-          if (props.user) {
-            if (props.user == user) {
-              showUser(res.data.data, user);
-            } else {
-              localStorage.setItem("user", props.user);
-              showUser(res.data.data, props.user);
-            }
+
+          if (user) {
+            showUser(res.data.data, user == 'undefined' ? "160471339156947" : user);
           } else {
-            if (user) {
-              showUser(res.data.data, user == 'undefined' ? "160471339156947" : user);
-            } else {
-              localStorage.setItem("user", "160471339156947");
-              showUser(res.data.data, "160471339156947");
-            }
+            localStorage.setItem("user", "160471339156947");
+            showUser(res.data.data, "160471339156947");
           }
         })
         .catch((e) => {
@@ -1075,8 +960,8 @@ export default function RootLayout({ children }) {
       });
 
       setInterval(() => {
-        if (document.getElementById("coreMain")) {
-          document.getElementById("coreMain").style.userSelect = "none";
+        if (document.getElementById("mainCore")) {
+          document.getElementById("mainCore").style.userSelect = "none";
           if (window.innerWidth <= 993) {
             document.getElementsByClassName("mobileHeight")[0].style.height =
               window.innerHeight - 52 + "px !important";
@@ -1111,14 +996,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
+
+        <div
+          onClick={() => closeAllPanel()}
+          id="overlay"
+          style={{ width: "100vw", height: "100vh", zIndex: 4 }}
+          className="w3-display-middle w3-hide-large"
+        ></div>
         <div className="container w3-white">
-
-          <Link
-            id="freeLink"
-            style={{ style: 'none' }}
-            href={"/"}
-          >freeLink</Link>
-
+          <Link id="freeLink" style={{ display: 'none' }} href={"/forum"} >freeLink</Link>
           <nav
             className="mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
             style={{
@@ -1950,6 +1836,7 @@ export default function RootLayout({ children }) {
                 <div className="w3-center w3-flex w3-flex-center">
                   <span className="w3-padding-small w3-overflow w3-flex w3-flex-center">
                     <Image
+                      className="w3-round w3-overflow"
                       id="imagePDP"
                       unoptimized
                       loading="lazy"
@@ -1966,19 +1853,19 @@ export default function RootLayout({ children }) {
                       }
                     />
                   </span>
-                  <span className="w3-text-black w3-padding w3-large">
+                  <span className="w3-padding w3-large ">
                     Connexion
                   </span>
                 </div>
-                <div className="w3-block">
+                <div className="w3-block" style={{ marginTop: 32, paddingInline: 8 }}>
                   <div id="alert_connexion" className="w3-hide">
                     mail ou mot de passe incorrect...
                   </div>
-                  <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
+                  <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container">
                     <input
                       onChange={(e) => emailRegister(e)}
                       type="text"
-                      className="input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium"
+                      className="input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium w3-border-0"
                       placeholder="Adresse e-mail"
                       id="mail"
                       name="user_email"
@@ -1993,11 +1880,11 @@ export default function RootLayout({ children }) {
                       </span>
                     </div>
                   </div>
-                  <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container w3-margin">
+                  <div className="w3-padding w3-padding-bottom-0 w3-padding-top-0 w3-display-container">
                     <input
                       onChange={(e) => passwordRegister(e)}
                       type="password"
-                      className="input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium"
+                      className="input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium w3-border-0"
                       placeholder="Mot de passe"
                       id="password"
                       name="user_password"

@@ -187,7 +187,7 @@ function page() {
                             }
                         />
                     </span>
-                    <span className="w3-text-black w3-padding w3-large">
+                    <span className="w3-padding w3-large">
                         S'inscrire
                     </span>
                 </div>

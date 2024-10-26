@@ -24,80 +24,19 @@ import CreateForum from '../forum/create/createForum'
 export default function Home(props) {
   axios.defaults.withCredentials = true;
 
-  const admCr = [
-    {
-      title: 'Multiuser registre',
-      link: '/multiuserregistre',
-      icon: <FontAwesomeIcon className="w3-margin-right" icon={faUserCircle} />
-    },
-    {
-      title: 'Récrutement Manager',
-      link: '/recrutement',
-      icon: <FontAwesomeIcon className="w3-margin-right" icon={faUserPlus} />
-    },
-    {
-      title: 'Gestion des produits',
-      link: '/store/gestion',
-      icon: <FontAwesomeIcon className="w3-margin-right" icon={faStore} />
-    },
-    {
-      title: 'Gestion des membres',
-      link: '/user/gestion',
-      icon: <FontAwesomeIcon className="w3-margin-right" icon={faUsers} />
-    }
-  ]
-
-  const [adminCore, setadminCore] = useState('')
   const [fullPath, setfullPath] = useState({ path: "" });
-  const [imagePDP, setimagePDP] = useState(null);
-  const [contact, setcontact] = useState({
-    phone: null,
-    whatsapp: null,
-    messenger: null,
-  });
 
   const [height, setHeight] = useState(0);
-  const [displayDesignations, setdisplayDesignations] = useState("");
-  const [displayChat, setdisplayChat] = useState(
-    <div className="w3-flex w3-flex-center" style={{ padding: 24 }}>
-      <span className="w3-spin">
-        <FontAwesomeIcon icon={faSpinner} />
-      </span>
-    </div>
-  );
-  const [displayChoice, setdisplayChoice] = useState("");
-  const [chatData, setchatData] = useState([]);
+
   const [core, setcore] = useState(
     <div style={{ padding: 24 }} className='w3-center'>
       <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
     </div>
   );
-  const [designationData, setdesignationData] = useState([]);
-  const [killer, setkiller] = useState({ starter: null });
-  const [topicData, settopicData] = useState([]);
   const [stepper, setstepper] = useState({
     key: 0,
     scrollHeight: 0,
     intervalTyper: null,
-  });
-
-  const signinAuthElement = {
-    email: "",
-    password: "",
-    type: "login",
-  };
-
-  const [userInfo, setuserInfo] = useState({
-    id: null,
-    email: "",
-    newemail: "",
-    telephone: "",
-    whatsapp: "",
-    messenger: "",
-    fullname: "",
-    password: "",
-    designation: "",
-    key: "",
   });
 
 
@@ -120,19 +59,6 @@ export default function Home(props) {
       });
   };
 
-  const shareOnFacebook = (link) => {
-    const url = link;
-    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      url
-    )}`;
-
-    window.open(
-      facebookShareUrl,
-      "facebook-share-dialog",
-      "width=800,height=600"
-    );
-  };
-
   const stopAllIntervalAndTimeout = () => {
     var highestIntervalId = window.setInterval(() => { }, 1);
     for (var i = 0; i < highestIntervalId; i++) {
@@ -142,25 +68,6 @@ export default function Home(props) {
     var highestTimeoutId = window.setTimeout(() => { }, 1);
     for (var i = 0; i < highestTimeoutId; i++) {
       window.clearTimeout(i);
-    }
-  };
-
-  const expand = () => {
-    if (document.getElementById("chatChoice").clientHeight == 60) {
-      document.getElementById("chatChoice").style.overflow = "auto";
-      document.getElementById("chatChoice").style.transition = "1s";
-      document.getElementById("chatChoice").style.height =
-        window.innerHeight + "px";
-
-      document.getElementById("expandIcon").style.transition = "1s";
-      document.getElementById("expandIcon").style.transform = "rotate(180deg)";
-    } else {
-      document.getElementById("chatChoice").style.overflow = "hidden";
-      document.getElementById("chatChoice").style.transition = "0.4s";
-      document.getElementById("chatChoice").style.height = "60px";
-
-      document.getElementById("expandIcon").style.transition = "0.4s";
-      document.getElementById("expandIcon").style.transform = "rotate(0deg)";
     }
   };
 
@@ -189,17 +96,6 @@ export default function Home(props) {
     }
 
   };
-
-  async function setCSRFToken() {
-    try {
-      // Fetch CSRF token from the server
-      const response = await axios.get(source + "/csrf-token");
-      // Set CSRF token as a default header for all future requests
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.csrfToken;
-    } catch (error) {
-      console.error("CSRF token fetch failed:", error);
-    }
-  }
 
   useEffect(() => {
 
@@ -428,12 +324,6 @@ export default function Home(props) {
       id="coreMain"
       style={{ userSelect: "none", display: "none" }}
     >
-      <div
-        onClick={() => closeAllPanel()}
-        id="overlay"
-        style={{ width: "100vw", height: "100vh", zIndex: 4 }}
-        className="w3-display-middle w3-hide-large"
-      ></div>
 
       <main
         id="mainCore"
