@@ -221,6 +221,206 @@ export default function Home(props) {
       }, 3000);
     }
 
+    //----------------
+
+    const localHosts = ["localhost", "127.0.0.1", "::1"];
+    stopAllIntervalAndTimeout();
+    if (typeof window !== "undefined") {
+      fullPath.path = window.location.pathname;
+    }
+
+    if (document.getElementById("coreMain")) {
+
+      if (
+        !localHosts.includes(location.hostname) &&
+        location.protocol === "http:"
+      ) {
+        location.href =
+          "https://" + location.hostname + location.pathname + location.search;
+      } else {
+        document.getElementById("coreMain").style.display = "block";
+      }
+
+      var times = 0;
+
+      const videoPostInterval = setInterval(() => {
+        const videoPosts = document.getElementsByClassName("videoPosts");
+        if (videoPosts.length > 0) {
+          clearInterval(videoPostInterval);
+          for (let i = 0; i < videoPosts.length; i++) {
+            videoPosts[i].style.height =
+              (videoPosts[i].clientWidth * 16) / 9 + "px";
+          }
+        } else {
+          if (times >= 10) {
+            clearInterval(videoPostInterval);
+          } else {
+            times++;
+          }
+        }
+      }, 500);
+
+      setTimeout(() => {
+
+        const postCore = document.getElementsByClassName("postCore");
+        for (let i = 0; i < postCore.length; i++) {
+
+          postCore[i].addEventListener("click", () => {
+            if (document.getElementById("post" + i).className == "_expand_") {
+              document.getElementById("post" + i).className =
+                "w3-overflow w3-nowrap-multiline";
+            } else {
+              document.getElementById("post" + i).className = "_expand_";
+            }
+          });
+        }
+
+        const forumCore = document.getElementsByClassName("forumCore");
+        for (let i = 0; i < forumCore.length; i++) {
+          forumCore[i].addEventListener("click", () => {
+            if (document.getElementById("forum" + i).className == "_expand_") {
+              document.getElementById("forum" + i).className =
+                "w3-overflow w3-nowrap-multiline";
+            } else {
+              document.getElementById("forum" + i).className = "_expand_";
+            }
+          });
+        }
+
+        const forumComent = document.getElementsByClassName("forumComent");
+        for (let i = 0; i < forumComent.length; i++) {
+          forumComent[i].addEventListener("click", () => {
+            if (document.getElementById(forumComent[i].getAttribute("data")).className == "_expand_") {
+              document.getElementById(forumComent[i].getAttribute("data")).className =
+                "w3-overflow w3-nowrap-multiline";
+            } else {
+              document.getElementById(forumComent[i].getAttribute("data")).className = "_expand_";
+            }
+          });
+        }
+
+      }, 1000);
+
+      if (document.getElementById('lienInvalideButton')) {
+        document.getElementById('lienInvalideButton').addEventListener('click', () => {
+          if (window.history.length > 0) {
+            window.history.back()
+          } else {
+            window.location = '/'
+          }
+        })
+      }
+
+      const postsTitle = document.getElementsByClassName("postTitle");
+      for (let i = 0; i < postsTitle.length; i++) {
+        postsTitle[i].addEventListener("click", () => {
+          const post = postsTitle[i].getAttribute("data");
+          copyToClipboard(post);
+          document.getElementById("flashInfo" + i).innerText =
+            "Le lien a été copié...";
+          document.getElementById("flashInfo" + i).style.display = "block";
+          setTimeout(() => {
+            document.getElementById("flashInfo" + i).style.display = "none";
+          }, 2000);
+        });
+      }
+
+      const talentsList = document.getElementsByClassName("talentsList");
+      for (let i = 0; i < talentsList.length; i++) {
+        talentsList[i].addEventListener("click", () => {
+          stopAllIntervalAndTimeout();
+        });
+      }
+
+      const categoryUser = document.getElementsByClassName("categoryUser");
+      for (let i = 0; i < categoryUser.length; i++) {
+        categoryUser[i].addEventListener("click", () => {
+          stopAllIntervalAndTimeout();
+        });
+      }
+
+      if (!props.core) {
+        axios
+          .get(source + "/_post/default?c=all")
+          .then((res) => {
+            setcore(<HomePost posts={res.data.data} />);
+            setTimeout(() => {
+              const postCore = document.getElementsByClassName("postCore");
+              for (let i = 0; i < postCore.length; i++) {
+                postCore[i].addEventListener("click", () => {
+                  if (
+                    document.getElementById("post" + i).className == "_expand_"
+                  ) {
+                    document.getElementById("post" + i).className =
+                      "w3-overflow w3-nowrap-multiline";
+                  } else {
+                    document.getElementById("post" + i).className = "_expand_";
+                  }
+                });
+              }
+            }, 100);
+          })
+          .catch((e) => {
+            console.error("failure", e);
+          });
+      }
+
+      document.onkeyup = async (e) => {
+        if (e.key == "Enter") {
+          login();
+        }
+      };
+
+      window.addEventListener("scroll", function () {
+        // Calculate the scrollable height
+        const chatElement = document.getElementById("chatCoreWrapper");
+        const totalHeight = chatElement.scrollHeight;
+        const viewportHeight = chatElement.clientHeight;
+
+        // Determine the current scroll position
+        const currentScroll = chatElement.scrollTop;
+
+        // Check if the current scroll position is less than the maximum scrollable height minus the viewport height
+        if (currentScroll + viewportHeight < totalHeight) {
+          stepper.scrolling = true;
+        } else {
+          stepper.scrolling = false;
+        }
+      });
+
+      setInterval(() => {
+        if (document.getElementById("coreMain")) {
+          document.getElementById("coreMain").style.userSelect = "none";
+          if (window.innerWidth <= 993) {
+            document.getElementsByClassName("mobileHeight")[0].style.height =
+              window.innerHeight - 52 + "px !important";
+            const panels = document.getElementsByClassName("mobileHeightPanel");
+            for (let i = 0; i < panels.length; i++) {
+              panels[i].style.height = window.innerHeight - 68 + "px !important";
+            }
+          }
+        }
+
+      }, 500);
+
+      const updateHeight = () => {
+        setHeight(window.innerHeight - 80 - (window.innerWidth > 992 ? 0 : 20));
+      };
+
+      // Set the initial height
+      updateHeight();
+
+      // Update height on window resize
+      window.addEventListener("resize", updateHeight);
+
+      // Clean up the event listener on component unmount
+      return () => {
+        window.removeEventListener("resize", updateHeight);
+      };
+    }
+    //----------------
+
+
   }, []);
 
   return (

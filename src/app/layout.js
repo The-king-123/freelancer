@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import parse from "html-react-parser";
 
-hgjfj,fhjkgf
+hjqsjdg qsjdghjqS
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -728,12 +728,15 @@ export default function RootLayout({ children }) {
     var user = localStorage.getItem("user");
     if (user) {
       if (user == "160471339156947" || user == "undefined") {
-        window.location = "/forum";
+        document.getElementById('freeLink').href = "/forum"
+        document.getElementById('freeLink').click()
       } else {
-        window.location = "/forum/" + user;
+        document.getElementById('freeLink').href = "/forum/" + user
+        document.getElementById('freeLink').click()
       }
     } else {
-      window.location = "/forum";
+      document.getElementById('freeLink').href = "/forum"
+      document.getElementById('freeLink').click()
     }
   };
 
@@ -741,12 +744,15 @@ export default function RootLayout({ children }) {
     var user = localStorage.getItem("user");
     if (user) {
       if (user == "160471339156947" || user == "undefined") {
-        window.location = "/tarifs";
+        document.getElementById('freeLink').href = "/tarifs"
+        document.getElementById('freeLink').click()
       } else {
-        window.location = "/tarifs/" + user;
+        document.getElementById('freeLink').href = "/tarifs/" + user
+        document.getElementById('freeLink').click()
       }
     } else {
-      window.location = "/tarifs";
+      document.getElementById('freeLink').href = "/tarifs"
+      document.getElementById('freeLink').click()
     }
   };
 
@@ -910,26 +916,16 @@ export default function RootLayout({ children }) {
       }
     }
 
-
     // end theme changer
-
-    const firstPath = location.pathname.split('/')[1]
-    if (document.getElementById(firstPath + 'Page')) {
-      document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') == 'dark' ? 'w3-black' : 'w3-light-grey'), 'w3-yellow')
-    }
-
-
 
     if (localStorage.getItem('firstPassed') == null) {
       openDropdown("switchPannel")
     }
-
     const localHosts = ["localhost", "127.0.0.1", "::1"];
     stopAllIntervalAndTimeout();
     if (typeof window !== "undefined") {
       fullPath.path = window.location.pathname;
     }
-
     if (document.getElementById("coreMain")) {
 
       if (
@@ -944,38 +940,7 @@ export default function RootLayout({ children }) {
 
       var times = 0;
 
-      const videoPostInterval = setInterval(() => {
-        const videoPosts = document.getElementsByClassName("videoPosts");
-        if (videoPosts.length > 0) {
-          clearInterval(videoPostInterval);
-          for (let i = 0; i < videoPosts.length; i++) {
-            videoPosts[i].style.height =
-              (videoPosts[i].clientWidth * 16) / 9 + "px";
-          }
-        } else {
-          if (times >= 10) {
-            clearInterval(videoPostInterval);
-          } else {
-            times++;
-          }
-        }
-      }, 500);
-
       setTimeout(() => {
-
-        const postCore = document.getElementsByClassName("postCore");
-        for (let i = 0; i < postCore.length; i++) {
-          console.log('post core here');
-
-          postCore[i].addEventListener("click", () => {
-            if (document.getElementById("post" + i).className == "_expand_") {
-              document.getElementById("post" + i).className =
-                "w3-overflow w3-nowrap-multiline";
-            } else {
-              document.getElementById("post" + i).className = "_expand_";
-            }
-          });
-        }
 
         const forumCore = document.getElementsByClassName("forumCore");
         for (let i = 0; i < forumCore.length; i++) {
@@ -1027,19 +992,6 @@ export default function RootLayout({ children }) {
         });
       }
 
-      const talentsList = document.getElementsByClassName("talentsList");
-      for (let i = 0; i < talentsList.length; i++) {
-        talentsList[i].addEventListener("click", () => {
-          stopAllIntervalAndTimeout();
-        });
-      }
-
-      const categoryUser = document.getElementsByClassName("categoryUser");
-      for (let i = 0; i < categoryUser.length; i++) {
-        categoryUser[i].addEventListener("click", () => {
-          stopAllIntervalAndTimeout();
-        });
-      }
       const xcode = localStorage.getItem('x-code');
       axios
         .get(source + "/_auth?xcode=" + xcode)
@@ -1060,10 +1012,38 @@ export default function RootLayout({ children }) {
                 </Link>
               ))
               setInterval(() => {
-                console.log('Kozay');
                 setadminCore(glitchCr);
               }, 2000);
 
+            }
+          }
+        })
+        .catch((e) => {
+          console.error("failure", e);
+        });
+
+      axios
+        .get(source + "/_auth/users")
+        .then((res) => {
+          reloadDesignation(res.data.data);
+          if (document.getElementById('userPDP')) {
+            document.getElementById('userPDP').style.backgroundImage = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.data
+          }
+
+          var user = localStorage.getItem("user");
+          if (props.user) {
+            if (props.user == user) {
+              showUser(res.data.data, user);
+            } else {
+              localStorage.setItem("user", props.user);
+              showUser(res.data.data, props.user);
+            }
+          } else {
+            if (user) {
+              showUser(res.data.data, user == 'undefined' ? "160471339156947" : user);
+            } else {
+              localStorage.setItem("user", "160471339156947");
+              showUser(res.data.data, "160471339156947");
             }
           }
         })
@@ -1132,6 +1112,13 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <div className="container w3-white">
+
+          <Link
+            id="freeLink"
+            style={{ style: 'none' }}
+            href={"/"}
+          >freeLink</Link>
+
           <nav
             className="mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
             style={{
@@ -1176,8 +1163,9 @@ export default function RootLayout({ children }) {
                 style={{ paddingBlock: 8, zIndex: 9999 }}
               >
                 <Link
+                  id="Page"
                   onClick={() => localStorage.setItem("user", "160471339156947")}
-                  className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"/"}
                 >
@@ -1191,7 +1179,7 @@ export default function RootLayout({ children }) {
 
                 <Link
                   id="storePage"
-                  className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"/store/all"}
                 >
@@ -1205,7 +1193,7 @@ export default function RootLayout({ children }) {
 
                 <div
                   id="forumPage"
-                  className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round w3-pointer"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round w3-pointer"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   onClick={userForum}
                 >
@@ -1219,7 +1207,7 @@ export default function RootLayout({ children }) {
 
                 <Link
                   id="talentPage"
-                  className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"/talent"}
                 >
@@ -1233,7 +1221,7 @@ export default function RootLayout({ children }) {
 
                 <Link
                   id="userPage"
-                  className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"/user/336302677822455"}
                 >
@@ -1247,7 +1235,7 @@ export default function RootLayout({ children }) {
 
                 <Link
                   id="recrutementPage"
-                  className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"/recrutement/postule"}
                 >
@@ -1261,7 +1249,7 @@ export default function RootLayout({ children }) {
 
                 <div
                   id="tarifsPage"
-                  className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round w3-pointer"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round w3-pointer"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   onClick={userTarifs}
                 >
@@ -1274,7 +1262,7 @@ export default function RootLayout({ children }) {
                 </div>
 
                 <Link
-                  className="w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"https://pos.freelancer.mg"}
                   target="_blank"
