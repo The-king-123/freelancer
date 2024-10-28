@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import parse from "html-react-parser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import {
@@ -15,7 +14,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "cloudinary-video-player/cld-video-player.min.css";
 import Link from "next/link";
-import slugify from "slugify";
 import { console_source as source } from "@/app/data";
 import HomePost from "@/app/HomePost";
 import CreatePost from '../post/create/PostCreate'
@@ -39,15 +37,6 @@ export default function Home(props) {
     intervalTyper: null,
   });
 
-
-  const closeAllPanel = () => {
-    const allPanel = document.getElementsByClassName("panel");
-    for (let i = 0; i < allPanel.length; i++) {
-      allPanel[i].style.display = "none";
-    }
-    document.getElementById("overlay").style.display = "none";
-  };
-
   const copyToClipboard = (text) => {
     navigator.clipboard
       .writeText(text)
@@ -57,18 +46,6 @@ export default function Home(props) {
       .catch(function (err) {
         console.error("Could not copy text: ", err);
       });
-  };
-
-  const stopAllIntervalAndTimeout = () => {
-    var highestIntervalId = window.setInterval(() => { }, 1);
-    for (var i = 0; i < highestIntervalId; i++) {
-      window.clearInterval(i);
-    }
-
-    var highestTimeoutId = window.setTimeout(() => { }, 1);
-    for (var i = 0; i < highestTimeoutId; i++) {
-      window.clearTimeout(i);
-    }
   };
 
   const openDropdown = (ID, IDW) => {
@@ -120,22 +97,11 @@ export default function Home(props) {
     //----------------
 
     const localHosts = ["localhost", "127.0.0.1", "::1"];
-    stopAllIntervalAndTimeout();
     if (typeof window !== "undefined") {
       fullPath.path = window.location.pathname;
     }
 
     if (document.getElementById("coreMain")) {
-
-      if (
-        !localHosts.includes(location.hostname) &&
-        location.protocol === "http:"
-      ) {
-        location.href =
-          "https://" + location.hostname + location.pathname + location.search;
-      } else {
-        document.getElementById("coreMain").style.display = "block";
-      }
 
       var times = 0;
 
@@ -218,20 +184,6 @@ export default function Home(props) {
           setTimeout(() => {
             document.getElementById("flashInfo" + i).style.display = "none";
           }, 2000);
-        });
-      }
-
-      const talentsList = document.getElementsByClassName("talentsList");
-      for (let i = 0; i < talentsList.length; i++) {
-        talentsList[i].addEventListener("click", () => {
-          stopAllIntervalAndTimeout();
-        });
-      }
-
-      const categoryUser = document.getElementsByClassName("categoryUser");
-      for (let i = 0; i < categoryUser.length; i++) {
-        categoryUser[i].addEventListener("click", () => {
-          stopAllIntervalAndTimeout();
         });
       }
 
@@ -322,7 +274,7 @@ export default function Home(props) {
   return (
     <div
       id="coreMain"
-      style={{ userSelect: "none", display: "none" }}
+      style={{ userSelect: "none" }}
     >
 
       <main

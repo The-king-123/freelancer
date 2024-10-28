@@ -18,6 +18,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({ children }) {
 
   axios.defaults.withCredentials = true;
+  const [freeLink, setfreeLink] = useState(<Link id="freeLink" style={{ display: 'none' }} href={"/forum"} >freeLink</Link>)
 
   const admCr = [
     {
@@ -462,11 +463,6 @@ export default function RootLayout({ children }) {
 
   const showUser = async (data, key) => {
 
-    console.log('hereweare');
-    console.log(data);
-
-
-
     closeAllPanel();
     var users = data;
     var userInfos = null;
@@ -636,16 +632,21 @@ export default function RootLayout({ children }) {
     var user = localStorage.getItem("user");
     if (user) {
       if (user == "160471339156947" || user == "undefined") {
-        const link = document.createElement('a');
-        link.href = '/forum';
-        link.click()
+        setfreeLink(<Link id="freeLink" style={{ display: 'none' }} href={"/forum"} >freeLink</Link>)
+        setTimeout(() => {
+          document.getElementById('freeLink').click()
+        }, 100);
       } else {
-        document.getElementById('freeLink').href = "/forum/" + user
-        document.getElementById('freeLink').click()
+        setfreeLink(<Link id="freeLink" style={{ display: 'none' }} href={"/forum/" + user} >freeLink</Link>)
+        setTimeout(() => {
+          document.getElementById('freeLink').click()
+        }, 100);
       }
     } else {
-      document.getElementById('freeLink').href = "/forum"
-      document.getElementById('freeLink').click()
+      setfreeLink(<Link id="freeLink" style={{ display: 'none' }} href={"/forum"} >freeLink</Link>)
+      setTimeout(() => {
+        document.getElementById('freeLink').click()
+      }, 100);
     }
   };
 
@@ -653,15 +654,21 @@ export default function RootLayout({ children }) {
     var user = localStorage.getItem("user");
     if (user) {
       if (user == "160471339156947" || user == "undefined") {
-        document.getElementById('freeLink').href = "/tarifs"
-        document.getElementById('freeLink').click()
+        setfreeLink(<Link id="freeLink" style={{ display: 'none' }} href={"/tarifs"} >freeLink</Link>)
+        setTimeout(() => {
+          document.getElementById('freeLink').click()
+        }, 100);
       } else {
-        document.getElementById('freeLink').href = "/tarifs/" + user
-        document.getElementById('freeLink').click()
+        setfreeLink(<Link id="freeLink" style={{ display: 'none' }} href={"/tarifs/" + user} >freeLink</Link>)
+        setTimeout(() => {
+          document.getElementById('freeLink').click()
+        }, 100);
       }
     } else {
-      document.getElementById('freeLink').href = "/tarifs"
-      document.getElementById('freeLink').click()
+      setfreeLink(<Link id="freeLink" style={{ display: 'none' }} href={"/tarifs"} >freeLink</Link>)
+      setTimeout(() => {
+        document.getElementById('freeLink').click()
+      }, 100);
     }
   };
 
@@ -801,7 +808,6 @@ export default function RootLayout({ children }) {
 
   useEffect(() => {
 
-    // theme changer
 
     if (localStorage.getItem('theme') == 'dark') {
 
@@ -922,7 +928,6 @@ export default function RootLayout({ children }) {
           if (document.getElementById('userPDP')) {
             document.getElementById('userPDP').style.backgroundImage = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.data
           }
-          console.log('hereweare3');
           var user = localStorage.getItem("user");
 
           if (user) {
@@ -960,6 +965,11 @@ export default function RootLayout({ children }) {
       });
 
       setInterval(() => {
+
+        if (location.pathname.split('/')[1] == 'user') {
+          localStorage.setItem('user', location.pathname.split('/')[2])
+        }
+
         if (document.getElementById("mainCore")) {
           document.getElementById("mainCore").style.userSelect = "none";
           if (window.innerWidth <= 993) {
@@ -1004,7 +1014,7 @@ export default function RootLayout({ children }) {
           className="w3-display-middle w3-hide-large"
         ></div>
         <div className="container w3-white">
-          <Link id="freeLink" style={{ display: 'none' }} href={"/forum"} >freeLink</Link>
+          {freeLink}
           <nav
             className="mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
             style={{

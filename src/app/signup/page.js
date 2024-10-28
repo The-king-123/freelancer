@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { console_source as source } from "../data";
 import Image from "next/image";
+import Link from "next/link";
 
 function page() {
 
@@ -26,6 +27,7 @@ function page() {
         confirmed: false,
         designation: "acheteur",
         type: "signup",
+        clicked: false
     };
 
     const fullnameRegister = (element) => {
@@ -91,7 +93,7 @@ function page() {
             .post(source + "/_topic?xcode=_accrocher_", request)
             .then((res) => {
                 console.log("Accrocher created successfully.");
-                window.location = "/post/create";
+                document.getElementById('freeLinkProfile').click()
             })
             .catch((e) => {
                 console.error("failure", e);
@@ -115,13 +117,14 @@ function page() {
         }
     }
     const signup = async () => {
-        if (
+        if (!signupAuthElement.clicked &&
             signupAuthElement.fullname.length > 3 &&
             signupAuthElement.email.includes("@") &&
             signupAuthElement.contact.length > 8 &&
             signupAuthElement.confirmed &&
             signupAuthElement.password.length > 8
         ) {
+            signupAuthElement.clicked = true
             const key = generateRandomNumber(15);
             document.getElementById("spinner").style.display = "inline-block";
             await setCSRFToken()
@@ -136,7 +139,16 @@ function page() {
                     state: "loged_in",
                 })
                 .then(async (res) => {
-                    await createStarter(res.data.key);
+                    if (res.data.exist) {
+                        window.alert('Votre compte existe déjà, veuillez vous connecter.')
+                        document.getElementById('freeLinkProfile').click()
+                    } else {
+                        if (res.data.key) {
+                            await createStarter(res.data.key);
+                        } else {
+                            window.alert("Une erreur s'est produite, veuillez réessayer s'il vous plaît.")
+                        }
+                    }
                 })
                 .catch((e) => {
                     console.error("failure", e);
@@ -166,6 +178,7 @@ function page() {
     return (
         <div className="w3-100vh w3-block w3-light-grey" style={{ paddingTop: 42 }}>
 
+            <Link href={'/profile'} style={{ display: 'none' }} id="freeLinkProfile" ></Link>
             <div className="w3-card w3-round w3-overflow w3-white" style={{ maxWidth: 420, marginInline: 'auto' }}>
                 <div style={{ paddingBlock: 24 }} className="w3-center w3-flex w3-flex-center">
                     <span className="w3-padding-small w3-overflow w3-flex w3-flex-center">
@@ -199,7 +212,7 @@ function page() {
                         <input
                             onChange={(e) => fullnameRegister(e)}
                             type="text"
-                            className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium w3-border-0"
+                            className="input w3-light-grey w3-round-xxlarge w3-block w3-medium w3-border-0"
                             placeholder="Nom complet"
                             id="fullname"
                             name="user_fullname"
@@ -222,7 +235,7 @@ function page() {
                         <input
                             onChange={(e) => emailRegister(e)}
                             type="text"
-                            className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium  w3-border-0"
+                            className="input w3-light-grey w3-round-xxlarge w3-block w3-medium  w3-border-0"
                             placeholder="Adresse e-mail"
                             id="email"
                             name="user_email"
@@ -243,7 +256,7 @@ function page() {
                             type="number"
                             min={300000000}
                             max={399999999}
-                            className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium  w3-border-0"
+                            className="input w3-light-grey w3-round-xxlarge w3-block w3-medium  w3-border-0"
                             placeholder="Numéro de téléphone"
                             id="number"
                             name="user_number"
@@ -266,7 +279,7 @@ function page() {
                         <select
                             onChange={(e) => designationRegister(e)}
                             id="designation"
-                            className="input w3-block  w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium  w3-border-0"
+                            className="input w3-block  w3-light-grey w3-round-xxlarge w3-block w3-medium  w3-border-0"
                             style={{ paddingBlock: 8 }}
                         >
                             <option value="Acheteur">Acheteur</option>
@@ -312,7 +325,7 @@ function page() {
                         <input
                             onChange={(e) => passwordRegister(e)}
                             type="password"
-                            className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium  w3-border-0"
+                            className="input w3-light-grey w3-round-xxlarge w3-block w3-medium  w3-border-0"
                             placeholder="Mot de passe"
                             id="password"
                             name="user_password"
@@ -335,7 +348,7 @@ function page() {
                         <input
                             onChange={(e) => passwordconfirm(e)}
                             type="password"
-                            className="input w3-light-grey w3-round-xxlarge w3-block w3-text-black w3-medium  w3-border-0"
+                            className="input w3-light-grey w3-round-xxlarge w3-block w3-medium  w3-border-0"
                             placeholder="Confirmer"
                             id="confirm"
                             name="user_confirm"
