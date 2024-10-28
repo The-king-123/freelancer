@@ -806,14 +806,20 @@ export default function RootLayout({ children }) {
     openDropdown("switchPannel")
   }
 
-  const user = document.getElementsByClassName('userKey')
-  for (let i = 0; i < user.length; i++) {
-    const element = user[i];
-    element.addEventListener('click', () => {
-      const key = element.getAttribute("data-key");
-      console.log(dataUsers);
-      console.log(key);
-    })
+  const userKeyTaker = () => {
+    setInterval(() => {
+      const user = document.getElementsByClassName('userKey')
+      for (let i = 0; i < user.length; i++) {
+        const element = user[i];
+        element.addEventListener('click', () => {
+          const key = element.getAttribute("data-key");
+          stopAllIntervalAndTimeout()
+          showUser(dataUsers, key)
+          userKeyTaker()
+        })
+      }
+    }, 2000);
+
   }
 
   useEffect(() => {
@@ -865,17 +871,6 @@ export default function RootLayout({ children }) {
       }
 
       setTimeout(() => {
-
-        const user = document.getElementsByClassName('userKey')
-        for (let i = 0; i < user.length; i++) {
-          const element = user[i];
-          element.addEventListener('click', () => {
-            const key = element.getAttribute("data-key");
-            console.log(dataUsers);
-            console.log(key);
-          })
-        }
-
         const forumCore = document.getElementsByClassName("forumCore");
         for (let i = 0; i < forumCore.length; i++) {
           forumCore[i].addEventListener("click", () => {
@@ -987,8 +982,11 @@ export default function RootLayout({ children }) {
           stepper.scrolling = false;
         }
       });
-
+      
+      userKeyTaker()
       setInterval(() => {
+
+
 
         if (document.getElementById("mainCore")) {
           document.getElementById("mainCore").style.userSelect = "none";

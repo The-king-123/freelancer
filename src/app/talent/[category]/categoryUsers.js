@@ -19,14 +19,14 @@ export default function PostContent({ content }) {
       glitchMembers = data.map((user, key) => (
         user.designation != 'Admin' &&
         <Link
-          data-key="336302677822455"
           href={"/user/" + user.key}
           key={key}
-          className="userKey categoryUser w3-half"
+          className="categoryUser w3-half"
           style={{ padding: 8 }}
         >
           <div
-            className={"w3-flex w3-flex-row w3-flex-center w3-round " +(themeDark ? "w3-black" : "w3-light-grey")}
+            data-key={user.key}
+            className={"userKey w3-flex w3-flex-row w3-flex-center w3-round " +(themeDark ? "w3-black" : "w3-light-grey")}
             style={{ padding: 12 }}
           >
             <Image
