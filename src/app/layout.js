@@ -63,7 +63,7 @@ export default function RootLayout({ children }) {
   const [displayChoice, setdisplayChoice] = useState("");
   const [chatData, setchatData] = useState([]);
 
-  const [designationData, setdesignationData] = useState([]);
+  const [dataUsers, setdataUsers] = useState([]);
   const [killer, setkiller] = useState({ starter: null });
   const [topicData, settopicData] = useState([]);
   const [stepper, setstepper] = useState({
@@ -806,6 +806,16 @@ export default function RootLayout({ children }) {
     openDropdown("switchPannel")
   }
 
+  const user = document.getElementsByClassName('userKey')
+  for (let i = 0; i < user.length; i++) {
+    const element = user[i];
+    element.addEventListener('click', () => {
+      const key = element.getAttribute("data-key");
+      console.log(dataUsers);
+      console.log(key);
+    })
+  }
+
   useEffect(() => {
 
 
@@ -855,6 +865,16 @@ export default function RootLayout({ children }) {
       }
 
       setTimeout(() => {
+
+        const user = document.getElementsByClassName('userKey')
+        for (let i = 0; i < user.length; i++) {
+          const element = user[i];
+          element.addEventListener('click', () => {
+            const key = element.getAttribute("data-key");
+            console.log(dataUsers);
+            console.log(key);
+          })
+        }
 
         const forumCore = document.getElementsByClassName("forumCore");
         for (let i = 0; i < forumCore.length; i++) {
@@ -911,7 +931,7 @@ export default function RootLayout({ children }) {
                   {adm.icon}{adm.title}
                 </Link>
               ))
-              setInterval(() => {
+              setTimeout(() => {
                 setadminCore(glitchCr);
               }, 2000);
 
@@ -929,6 +949,10 @@ export default function RootLayout({ children }) {
             document.getElementById('userPDP').style.backgroundImage = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.data
           }
           var user = localStorage.getItem("user");
+
+          res.data.data.forEach(user => {
+            dataUsers.push(user);
+          });
 
           if (user) {
             showUser(res.data.data, user == 'undefined' ? "160471339156947" : user);
@@ -966,10 +990,6 @@ export default function RootLayout({ children }) {
 
       setInterval(() => {
 
-        if (location.pathname.split('/')[1] == 'user') {
-          localStorage.setItem('user', location.pathname.split('/')[2])
-        }
-
         if (document.getElementById("mainCore")) {
           document.getElementById("mainCore").style.userSelect = "none";
           if (window.innerWidth <= 993) {
@@ -999,7 +1019,6 @@ export default function RootLayout({ children }) {
         window.removeEventListener("resize", updateHeight);
       };
     }
-
 
   }, []);
 
@@ -1059,9 +1078,10 @@ export default function RootLayout({ children }) {
                 style={{ paddingBlock: 8, zIndex: 9999 }}
               >
                 <Link
+                  data-key="160471339156947"
                   id="Page"
                   onClick={() => localStorage.setItem("user", "160471339156947")}
-                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+                  className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"/"}
                 >
@@ -1116,8 +1136,9 @@ export default function RootLayout({ children }) {
                 </Link>
 
                 <Link
+                  data-key="336302677822455"
                   id="userPage"
-                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+                  className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"/user/336302677822455"}
                 >
