@@ -22,9 +22,9 @@ function Store() {
     if (data.length > 0) {
       glitchStore = data.map((product, key) => (
         <Link key={key} href={'/store/product/' + product.slug} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
-          <div className="w3-overflow w3-round w3-pointer w3-dark-grey">
+          <div className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow w3-round w3-pointer"}>
             <div
-              className={(themeLight ? "w3-light-grey" : "w3-black")+" w3-big w3-small w3-flex-row w3-flex-center-v"}
+              className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-big w3-small w3-flex-row w3-flex-center-v"}
               title={parse(product.name)}
             >
               <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>{parse(product.name)}</div>
@@ -52,7 +52,7 @@ function Store() {
             </div>
 
             <div
-              className="postMedia w3-display-container w3-black product-image"
+              className={(themeLight ? "w3-light-grey" : "w3-black") + " postMedia w3-display-container product-image"}
               style={{ zIndex: 2 }}
             >
               <Image
@@ -74,11 +74,11 @@ function Store() {
                   height: '65vw',
                   maxHeight: 180
                 }}
-                className="w3-overflow w3-black product-image w3-block"
+                className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow product-image w3-block"}
               />
 
               <div
-                className="w3-dark-grey w3-circle w3-display-bottomright w3-card"
+                className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-circle w3-display-bottomright w3-card"}
                 style={{ width: 32, height: 32, margin: 8 }}
               >
                 <div className="w3-block w3-height w3-flex w3-flex-center">
@@ -116,7 +116,7 @@ function Store() {
 
       });
   }
-  
+
   useEffect(() => {
     //
     axios

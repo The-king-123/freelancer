@@ -156,16 +156,6 @@ export default function Home(props) {
 
       }, 1000);
 
-      if (document.getElementById('lienInvalideButton')) {
-        document.getElementById('lienInvalideButton').addEventListener('click', () => {
-          if (window.history.length > 0) {
-            window.history.back()
-          } else {
-            window.location = '/'
-          }
-        })
-      }
-
       const postsTitle = document.getElementsByClassName("postTitle");
       for (let i = 0; i < postsTitle.length; i++) {
         postsTitle[i].addEventListener("click", () => {

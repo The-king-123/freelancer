@@ -302,11 +302,11 @@ export default function RootLayout({ children }) {
           <div
             key={key}
             onClick={() => thisChoice(topic, type)}
-            style={{ marginInline: 8, maxWidth: 320, marginBlock: 8 }}
+            style={{ marginInline: 8, maxWidth: 320 }}
           >
             <div
               id={choiceTitleExtractor(topic.name).brackets ? choiceTitleExtractor(topic.name).code : 'choiceTitle' + key}
-              style={{ paddingBlock: 8 }}
+              style={{ paddingBlock: 6 }}
               className="w3-pointer"
             >
               {choiceTitleExtractor(topic.name).text}
@@ -899,16 +899,6 @@ export default function RootLayout({ children }) {
         }
 
       }, 1000);
-
-      if (document.getElementById('lienInvalideButton')) {
-        document.getElementById('lienInvalideButton').addEventListener('click', () => {
-          if (window.history.length > 0) {
-            window.history.back()
-          } else {
-            window.location = '/'
-          }
-        })
-      }
 
       const xcode = localStorage.getItem('x-code');
       axios

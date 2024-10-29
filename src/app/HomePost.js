@@ -63,7 +63,7 @@ export default function PostContent({ posts }) {
     const glitchPost = posts.map((post, key) => (
       (type == 'premium' ? post.category == type : post.category != 'premium') &&
       <Link className="postCard" href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
-        <div className="w3-overflow w3-round w3-pointer w3-dark-grey">
+        <div className={(themeLight ? "w3-light-grey" : "w3-black")+" w3-overflow w3-round w3-pointer"}>
           <div
             className={(themeLight ? "w3-light-grey" : "w3-black")+" w3-big w3-small w3-flex-row w3-flex-center-v"}
             title={parse(post.title)}
@@ -128,7 +128,7 @@ export default function PostContent({ posts }) {
           </div>
 
           <div
-            className="postMedia w3-display-container w3-black post-image"
+            className={(themeLight ? "w3-light-grey" : "w3-black")+" postMedia w3-display-container post-image"}
             style={{ zIndex: 2 }}
           >
             <Image
@@ -150,7 +150,7 @@ export default function PostContent({ posts }) {
                 height: '65vw',
                 maxHeight: 200,
               }}
-              className="w3-overflow w3-black post-image"
+              className={(themeLight ? "w3-light-grey" : "w3-black")+" w3-overflow post-image"}
             />
             {/* {(post.type == "image/audio" || post.type == "video" || post.type == "image/video") && (
                 <div className="w3-light-grey w3-opacity-max w3-block w3-height w3-padding w3-display-middle"></div>

@@ -189,7 +189,7 @@ export default function ProductContent({ content }) {
           </div>
           <div>{parse(singleStoreInfo.description)}</div>
           <div>
-            <div onClick={() => download(singleStoreInfo.id)} className={"w3-button w3-round-xxlarge w3-light-grey w3-flex-row w3-flex-center w3-margin-top " + (singleStoreInfo.type == "premium" ? 'w3-text-yellow' : '')}>
+            <div onClick={() => download(singleStoreInfo.id)} className={"w3-button w3-round-xxlarge w3-yellow w3-text-black w3-flex-row w3-flex-center w3-margin-top " + (singleStoreInfo.type == "premium" ? 'w3-text-yellow' : '')}>
               <FontAwesomeIcon id="freeDownloadIcon" icon={faDownload} className="w3-margin-right" />
               <FontAwesomeIcon id="freeDownloadSpinner" icon={faSpinner} className="w3-margin-right w3-spin" style={{display:'none'}} />
               Download
