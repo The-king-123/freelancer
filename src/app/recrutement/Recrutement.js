@@ -20,7 +20,7 @@ function Recrutement(props) {
                             href={"/recrutement/" + recrutement.slug}
                         >
                             <div
-                                className="w3-light-grey w3-round"
+                                className="w3-black w3-round"
                                 style={{ padding: 16 }}
                             >
                                 <div>
@@ -42,7 +42,7 @@ function Recrutement(props) {
                                         Postulée le {dateMaker(recrutement.updated_at)}
                                     </div>
                                 </div>
-                                <div className='w3-round w3-white' style={{ marginTop: 16, paddingInline: 16, paddingBlock: 8 }} >
+                                <div className='w3-round w3-dark-grey' style={{ marginTop: 16, paddingInline: 16, paddingBlock: 8 }} >
                                     <div className='w3-nowrap-multiline w3-overflow' style={{height:68}}>
                                         {recrutement.content}
                                     </div>

@@ -170,7 +170,7 @@ function previewForum({ forum }) {
               objectPosition: "center",
               objectFit: "cover",
             }}
-            className="w3-light-grey post-image w3-round w3-overflow"
+            className="w3-black post-image w3-round w3-overflow"
           />
         }
         <div className='w3-big w3-large w3-margin-top'>
@@ -202,16 +202,16 @@ function previewForum({ forum }) {
           forum.response.length > 0 &&
           <hr />
         }
-        <div className="w3-white w3-round-xxlarge w3-overflow w3-flex-row">
+        <div className="w3-dark-grey w3-round-xxlarge w3-overflow w3-flex-row">
           <input
             type='text'
             id={"inputForumComent0"}
             onChange={(e) => commentInfo.comment = e.target.value}
-            className="input w3-input w3-border-0 w3-light-grey w3-block w3-flex-1"
+            className="input w3-input w3-border-0 w3-black w3-block w3-flex-1"
             style={{ borderBottomLeftRadius: 32, borderTopLeftRadius: 32 }}
             placeholder="Laisser un commentaire"
           />
-          <button onClick={() => comment(forum, 0)} className="w3-bitton w3-border-0 w3-black w3-pointer" style={{ minWidth: 80 }}>
+          <button onClick={() => comment(forum, 0)} className="w3-button w3-border-0 w3-yellow w3-pointer" style={{ minWidth: 80 }}>
             <span id={"comentTextSpinner0"}>Envoyer</span>
             <FontAwesomeIcon id={"comentButtonSpinner0"} icon={faSpinner} className="w3-spin" style={{ display: 'none' }} />
           </button>

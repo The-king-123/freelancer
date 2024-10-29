@@ -179,7 +179,7 @@ export default function Premium({ content, owner, slug }) {
               onClick={() => {
                 audioBox.chaine.currentTime = 0;
               }}
-              className="w3-white w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
+              className="w3-dark-grey w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
               style={{ width: 32, height: 32, marginRight: 12 }}
             >
               <FontAwesomeIcon
@@ -203,7 +203,7 @@ export default function Premium({ content, owner, slug }) {
                   document.getElementById("iconPause").style.display = "none";
                 }
               }}
-              className="w3-white w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
+              className="w3-dark-grey w3-card w3-circle w3-pointer w3-border w3-border-black w3-flex w3-flex-center"
               style={{ width: 32, height: 32 }}
             >
               <FontAwesomeIcon
@@ -229,7 +229,7 @@ export default function Premium({ content, owner, slug }) {
             marginInline: "auto",
           }}
         >
-          <div className="w3-overflow w3-light-grey w3-round-large">
+          <div className="w3-overflow w3-black w3-round-large">
             {(singlePostInfo.type == "image" ||
               singlePostInfo.type == "image/audio") && (
                 <Image
@@ -248,7 +248,7 @@ export default function Premium({ content, owner, slug }) {
                     objectPosition: "center",
                     objectFit: "cover",
                   }}
-                  className="w3-light-grey post-image"
+                  className="w3-black post-image"
                 />
               )}
             {!singlePostInfo.videoUrl.includes('<iframe') && (singlePostInfo.type == "image/video" || singlePostInfo.type == "video") && (
@@ -256,7 +256,7 @@ export default function Premium({ content, owner, slug }) {
                 style={{
                   objectPosition: "center",
                 }}
-                className="w3-overflow w3-block w3-black"
+                className="w3-overflow w3-block w3-light-grey"
                 controls
               >
                 <source

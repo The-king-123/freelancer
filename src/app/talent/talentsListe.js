@@ -12,7 +12,7 @@ export default function PostContent() {
 
   const reloadTalents = (data) => {
 
-    const themeDark = localStorage.getItem('theme') == 'dark' ? true : false
+    const themeLight = localStorage.getItem('theme') == 'light' ? true : false
 
     var glitchTalents
     glitchTalents = data.map((des, key) => (
@@ -24,7 +24,7 @@ export default function PostContent() {
           style={{ padding: 8 }}
         >
           <div
-            className={"w3-flex w3-flex-row w3-flex-center w3-round " +(themeDark ? "w3-black" : "w3-light-grey")}
+            className={"w3-flex w3-flex-row w3-flex-center w3-round " +(themeLight ? "w3-light-grey" : "w3-black")}
             style={{ padding: 8 }}
           >
             <Image

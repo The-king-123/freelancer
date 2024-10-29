@@ -329,7 +329,7 @@ function PostCreate(props) {
         if (data.length > 0) {
             glitchPost = data.map((post, key) => (
                 <div key={key} style={{ padding: 4 }}>
-                    <div onClick={() => showThisPost(post)} className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
+                    <div onClick={() => showThisPost(post)} className="w3-black w3-round w3-padding w3-nowrap w3-overflow">
                         <div>{post.title}</div>
                         <div className="w3-small w3-text-grey">{post.state == 'public' ? 'Publique' : 'Brouillon'}{post.category == 'premium' ? ' - ' : ''}{post.category == 'premium' ? <span className="w3-text-yellow">Premium</span> : ''}</div>
                     </div>
@@ -400,7 +400,7 @@ function PostCreate(props) {
                 document.getElementById("repeatRecord").style.display = 'flex'
                 document.getElementById("recordingState").innerText = "Écouter l'enregistrement"
 
-                document.getElementById("playRecord").className = "w3-flex-1 w3-button w3-hover-text-white w3-black w3-hover-black w3-border w3-border-black w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
+                document.getElementById("playRecord").className = "w3-flex-1 w3-button w3-hover-text-white w3-light-grey w3-hover-black w3-border w3-border-black w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
 
                 document.getElementById("noRecordIcon").style.display = 'none'
                 document.getElementById("pauseRecordIcon").style.display = 'none'
@@ -415,7 +415,7 @@ function PostCreate(props) {
             document.getElementById("iconTimes").style.display = "inline-block";
             document.getElementById("videoEmbed").style.display = "flex";
 
-            document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-light-grey', 'w3-black').replace('w3-text-grey', 'w3-text-white');
+            document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-black', 'w3-light-grey').replace('w3-text-grey', 'w3-text-white');
             document.getElementById("postVideo").value = JSON.parse(data.info).videoUrl ? JSON.parse(data.info).videoUrl : data.link;
 
             document.getElementById("showImageWrapper").style.display = "none";
@@ -433,7 +433,7 @@ function PostCreate(props) {
             document.getElementById("iconTimes").style.display = "none";
             document.getElementById("videoEmbed").style.display = "flex";
 
-            document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-black', 'w3-light-grey').replace('w3-text-white', 'w3-text-grey');
+            document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-light-grey', 'w3-black').replace('w3-text-white', 'w3-text-grey');
 
             document.getElementById("showImageWrapper").style.display = "none";
             document.getElementById("audioSection").style.display = "none";
@@ -497,7 +497,7 @@ function PostCreate(props) {
     const reloadCategory = (data) => {
         setselectCategoryList(data)
         const glitchCategory = data.map((element, key) => (
-            <div key={key} className="w3-flex-row w3-light-grey w3-round w3-overflow w3-flex-center-v" style={{ marginBlock: 4 }}>
+            <div key={key} className="w3-flex-row w3-black w3-round w3-overflow w3-flex-center-v" style={{ marginBlock: 4 }}>
                 <div
                     className="w3-nowrap w3-hover-grey w3-flex-1 w3-overflow"
                     style={{ paddingInline: 8 }}
@@ -605,7 +605,7 @@ function PostCreate(props) {
 
         document.getElementById("postVideo").value = '';
 
-        document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-black', 'w3-light-grey').replace('w3-text-white', 'w3-text-grey');
+        document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-light-grey', 'w3-black').replace('w3-text-white', 'w3-text-grey');
     }
 
     const closeModalVideoPreview = () => {
@@ -615,7 +615,7 @@ function PostCreate(props) {
 
     const addEmbedVideo = () => {
 
-        if (document.getElementById("videoEmbed").className.includes('w3-black')) {
+        if (document.getElementById("videoEmbed").className.includes('w3-light-grey')) {
             postInfo.info.videoUrl = '';
             postInfo.type = 'text';
             postInfo.media = null;
@@ -634,7 +634,7 @@ function PostCreate(props) {
 
             document.getElementById("postVideo").value = '';
 
-            document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-black', 'w3-light-grey').replace('w3-text-white', 'w3-text-grey');
+            document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-light-grey', 'w3-black').replace('w3-text-white', 'w3-text-grey');
         } else {
             postInfo.type = 'video';
             document.getElementById("inputImage").style.display = "none";
@@ -643,7 +643,7 @@ function PostCreate(props) {
             document.getElementById("iconVideo").style.display = "none";
             document.getElementById("iconTimes").style.display = "inline-block";
 
-            document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-light-grey', 'w3-black').replace('w3-text-grey', 'w3-text-white');
+            document.getElementById("videoEmbed").className = document.getElementById("videoEmbed").className.replace('w3-black', 'w3-light-grey').replace('w3-text-grey', 'w3-text-white');
         }
     }
 
@@ -708,7 +708,7 @@ function PostCreate(props) {
         if (data.length > 0) {
             glicthKeyList = data.map((code, key) => (
                 <div key={key} style={{ padding: 4 }}>
-                    <div className="w3-light-grey w3-round w3-padding w3-flex-row w3-flex-center-v">
+                    <div className="w3-black w3-round w3-padding w3-flex-row w3-flex-center-v">
                         <div className="w3-nowrap w3-overflow w3-flex-column w3-flex-1">
                             <div>{code.fullname}</div>
                             <div className="w3-small w3-text-grey">{code.email}</div>
@@ -722,7 +722,7 @@ function PostCreate(props) {
         } else {
             //
             glicthKeyList = (<div style={{ padding: 8 }}>
-                <div className="w3-light-grey w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
+                <div className="w3-black w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
                     <div style={{ paddingInline: 16 }}>
                         Ce post n'a aucune code pour le moment...
                     </div>
@@ -979,7 +979,7 @@ function PostCreate(props) {
                 repeatButton.style.display = 'flex'
                 recordingState.innerText = "Écouter l'enregistrement"
 
-                playButton.className = "w3-flex-1 w3-button w3-hover-text-white w3-black w3-hover-black w3-border w3-border-black w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
+                playButton.className = "w3-flex-1 w3-button w3-hover-text-white w3-light-grey w3-hover-black w3-border w3-border-black w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
                 postInfo.type = "image/audio";
 
                 iconMicro.style.display = 'none'
@@ -1038,7 +1038,7 @@ function PostCreate(props) {
                 iconPlay.style.display = "none";
                 iconMicro.style.display = "inline-block";
 
-                playButton.className = "w3-flex-1 w3-button w3-hover-text-black w3-hover-white w3-light-grey w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v"
+                playButton.className = "w3-flex-1 w3-button w3-hover-text-black w3-hover-white w3-black w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v"
 
                 audioElement.removeAttribute("src");
 
@@ -1081,7 +1081,7 @@ function PostCreate(props) {
                 iconPause.style.display = 'none'
                 iconPlay.style.display = 'inline-block'
 
-                playButton.className = "w3-flex-1 w3-button w3-hover-text-white w3-black w3-hover-black w3-border w3-border-black w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
+                playButton.className = "w3-flex-1 w3-button w3-hover-text-white w3-light-grey w3-hover-black w3-border w3-border-black w3-text-white w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v";
                 postInfo.type = "image/audio";
             };
         };
@@ -1110,7 +1110,7 @@ function PostCreate(props) {
                             document.getElementById('createPostCore').style.display = 'none'
                             document.getElementById("modalKeyListe").style.display = 'block'
                         }}
-                        className="w3-black w3-circle w3-flex w3-flex-center"
+                        className="w3-light-grey w3-circle w3-flex w3-flex-center"
                         style={{ width: 32, height: 32, display: 'none' }}
                         title="Gérer votre code premium."
                     >
@@ -1126,7 +1126,7 @@ function PostCreate(props) {
                             document.getElementById('createPostCore').style.display = 'none'
                             document.getElementById("modalPostListe").style.display = 'block'
                         }}
-                        className="w3-light-grey w3-circle w3-flex w3-flex-center w3-margin-left"
+                        className="w3-black w3-circle w3-flex w3-flex-center w3-margin-left"
                         style={{ width: 32, height: 32 }}
                     >
                         <FontAwesomeIcon
@@ -1142,7 +1142,7 @@ function PostCreate(props) {
                     <div className="w3-right" style={{ width: '35%' }}>
                         <div
                             onClick={openModalCategory}
-                            className="w3-black w3-center w3-round"
+                            className="w3-light-grey w3-center w3-round"
                             style={{ paddingBlock: 7 }}
                         >
                             Catégorie
@@ -1152,7 +1152,7 @@ function PostCreate(props) {
                         <select
                             id="postCategory"
                             onChange={(e) => postInfo.category = e.target.value}
-                            className="w3-light-grey w3-input w3-border-0 w3-block w3-nowrap w3-overflow w3-round"
+                            className="w3-black w3-input w3-border-0 w3-block w3-nowrap w3-overflow w3-round"
                             style={{ paddingBlock: 8 }}
                             defaultValue={null}
                         >
@@ -1171,7 +1171,7 @@ function PostCreate(props) {
                 <input
                     id="postTitle"
                     onChange={(e) => (postInfo.title = e.target.value)}
-                    className="w3-input w3-border-0 w3-light-grey w3-round"
+                    className="w3-input w3-border-0 w3-black w3-round"
                     type="text"
                     maxLength={200}
                     style={{ marginTop: 16 }}
@@ -1180,7 +1180,7 @@ function PostCreate(props) {
                 <div
                     contentEditable
                     id="postContent"
-                    className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
+                    className="w3-input w3-border-0 w3-black w3-round w3-overflow-scroll w3-noscrollbar"
                     style={{
                         height: 160,
                         minWidth: "100%",
@@ -1192,7 +1192,7 @@ function PostCreate(props) {
                     <div
                         id="videoEmbed"
                         onClick={addEmbedVideo}
-                        className="w3-right w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-margin-left"
+                        className="w3-right w3-black w3-round w3-text-grey w3-flex w3-flex-center w3-margin-left"
                         style={{ height: 40, width: 40, marginTop: 16 }}
                     >
                         <FontAwesomeIcon id="iconVideo" icon={faVideo} style={{ width: 16, height: 16 }} />
@@ -1201,7 +1201,7 @@ function PostCreate(props) {
                     <div
                         id="inputImage"
                         onClick={() => inputImage.click()}
-                        className="w3-right w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center"
+                        className="w3-right w3-black w3-round w3-text-grey w3-flex w3-flex-center"
                         style={{ height: 40, width: 40, marginTop: 16 }}
                     >
                         <FontAwesomeIcon icon={faImage} style={{ width: 16, height: 16 }} />
@@ -1216,7 +1216,7 @@ function PostCreate(props) {
                             <Image
                                 id="showImage"
                                 src={''}
-                                className="w3-display-middle w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
+                                className="w3-display-middle w3-black w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
                                 height={100}
                                 width={100}
                                 style={{
@@ -1227,7 +1227,7 @@ function PostCreate(props) {
                             <div className="w3-display-topright" style={{ padding: 4 }}>
                                 <div
                                     onClick={cancelImageInsertion}
-                                    className="w3-circle w3-card w3-white w3-flex w3-flex-center"
+                                    className="w3-circle w3-card w3-dark-grey w3-flex w3-flex-center"
                                     style={{ width: 24, height: 24 }}
                                 >
                                     <FontAwesomeIcon
@@ -1266,7 +1266,7 @@ function PostCreate(props) {
                             style={{
                                 width: 180,
                             }}
-                            className="w3-flex-1 w3-button w3-hover-text-black w3-hover-white w3-light-grey w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v"
+                            className="w3-flex-1 w3-button w3-hover-text-black w3-hover-white w3-black w3-round-xxlarge w3-flex w3-flex-row w3-flex-center-v"
                         >
                             <FontAwesomeIcon
                                 id="noRecordIcon"
@@ -1327,7 +1327,7 @@ function PostCreate(props) {
                         <input
                             id="postVideo"
                             onChange={(e) => postInfo.info.videoUrl = e.target.value}
-                            className="w3-border-0 w3-flex-1 w3-block w3-input w3-light-grey w3-round-xxlarge"
+                            className="w3-border-0 w3-flex-1 w3-block w3-input w3-black w3-round-xxlarge"
                             type="text"
                             placeholder="Lien video"
                             style={{
@@ -1337,7 +1337,7 @@ function PostCreate(props) {
                         <div
                             onClick={previewVideo}
                             id="previewVideo"
-                            className="w3-pointer w3-text-white w3-margin-left w3-flex  w3-black w3-round-xxlarge w3-flex-center"
+                            className="w3-pointer w3-text-white w3-margin-left w3-flex  w3-light-grey w3-round-xxlarge w3-flex-center"
                             style={{
                                 height: 36,
                                 paddingInline: 16,
@@ -1349,7 +1349,7 @@ function PostCreate(props) {
                     <div>
                         <div id="inputImageVideoWrapper" onClick={() => inputImageVideo.click()} className="w3-pointer w3-flex-row w3-flex-center-v" style={{ marginTop: 16 }}>
                             <div
-                                className="w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center"
+                                className="w3-black w3-round w3-text-grey w3-flex w3-flex-center"
                                 style={{ height: 40, width: 40 }}
                             >
                                 <FontAwesomeIcon icon={faImage} style={{ width: 16, height: 16 }} />
@@ -1367,7 +1367,7 @@ function PostCreate(props) {
                             <Image
                                 id="showImageVideo"
                                 src={''}
-                                className="w3-display-middle w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
+                                className="w3-display-middle w3-black w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
                                 height={100}
                                 width={100}
                                 style={{
@@ -1380,7 +1380,7 @@ function PostCreate(props) {
                             <div className="w3-display-topright" style={{ paddingTop: 12, }}>
                                 <div
                                     onClick={cancelImageVideoInsertion}
-                                    className="w3-circle w3-card w3-white w3-flex w3-flex-center"
+                                    className="w3-circle w3-card w3-dark-grey w3-flex w3-flex-center"
                                     style={{ width: 24, height: 24 }}
                                 >
                                     <FontAwesomeIcon
@@ -1400,7 +1400,7 @@ function PostCreate(props) {
                 <div style={{ marginTop: 24 }}>
                     <button
                         onClick={() => save("public")}
-                        className="w3-button w3-black w3-round-xxlarge w3-block w3-flex w3-flex-center"
+                        className="w3-button w3-light-grey w3-round-xxlarge w3-block w3-flex w3-flex-center"
                     >
                         Publier votre post{" "}
                         <FontAwesomeIcon
@@ -1447,7 +1447,7 @@ function PostCreate(props) {
                     style={{ maxWidth: 420, top: 48 }}
                 >
 
-                    <div onClick={closeModalCategory} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 32, height: 32, marginInline: 16, marginTop: 16 }}>
+                    <div onClick={closeModalCategory} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 32, height: 32, marginInline: 16, marginTop: 16 }}>
                         <FontAwesomeIcon icon={faTimes} />
                     </div>
 
@@ -1461,7 +1461,7 @@ function PostCreate(props) {
                         />
                         <button
                             onClick={saveCategory}
-                            className="w3-button w3-margin-left w3-round w3-white w3-black w3-flex w3-flex-center"
+                            className="w3-button w3-margin-left w3-round w3-dark-grey w3-light-grey w3-flex w3-flex-center"
                             style={{ height: 40 }}
                         >
                             <FontAwesomeIcon icon={faPlus} />
@@ -1482,7 +1482,7 @@ function PostCreate(props) {
                     style={{ maxWidth: 420, top: 64 }}
                 >
 
-                    <div onClick={closeModalVideoPreview} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 32, height: 32, marginInline: 16, marginTop: 16 }}>
+                    <div onClick={closeModalVideoPreview} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 32, height: 32, marginInline: 16, marginTop: 16 }}>
                         <FontAwesomeIcon icon={faTimes} />
                     </div>
 
@@ -1511,7 +1511,7 @@ function PostCreate(props) {
                     <div onClick={() => {
                         document.getElementById('createPostCore').style.display = 'block'
                         document.getElementById('modalPostListe').style.display = 'none'
-                    }} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+                    }} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
                         <FontAwesomeIcon icon={faArrowLeft} />
                     </div>
 
@@ -1543,15 +1543,15 @@ function PostCreate(props) {
                         <div onClick={() => {
                             document.getElementById('createPostCore').style.display = 'block'
                             document.getElementById('modalKeyListe').style.display = 'none'
-                        }} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+                        }} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
                             <FontAwesomeIcon icon={faArrowLeft} />
                         </div>
                         <div className="w3-flex-1"></div>
                         <div>
-                            <div id="afficheNewKeyArea" title="Ajouter un nouveau code utilisateur" onClick={displayAddNewKeyArea} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+                            <div id="afficheNewKeyArea" title="Ajouter un nouveau code utilisateur" onClick={displayAddNewKeyArea} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
                                 <FontAwesomeIcon icon={faPlus} />
                             </div>
-                            <div id="afficheKeyListArea" title="Afficher la liste code utilisateur" onClick={displayKeyListArea} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16, display: 'none' }}>
+                            <div id="afficheKeyListArea" title="Afficher la liste code utilisateur" onClick={displayKeyListArea} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16, display: 'none' }}>
                                 <FontAwesomeIcon icon={faListDots} />
                             </div>
                         </div>
@@ -1567,7 +1567,7 @@ function PostCreate(props) {
                             />
                             <button
                                 onClick={addKeyToUser}
-                                className="w3-button w3-margin-left w3-round w3-white w3-black w3-flex w3-flex-center"
+                                className="w3-button w3-margin-left w3-round w3-dark-grey w3-light-grey w3-flex w3-flex-center"
                                 style={{ height: 40 }}
                                 title="Generer un code d'acces."
                             >

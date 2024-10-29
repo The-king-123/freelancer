@@ -29,15 +29,15 @@ function ChatbotCreate() {
     }
 
     const reloadTopics = (data) => {
-        const themeDark = localStorage.getItem('theme') == 'dark' ? true : false
+        const themeLight = localStorage.getItem('theme') == 'light' ? true : false
         const glitchTopic = data.map((chatbot, key) => (
             <div key={key} style={{ paddingBlock: 4, marginBottom: -2 }}>
                 <div
                     onClick={() => showTopic(chatbot)} 
-                    className={"w3-round w3-flex-row w3-flex-center-v " +(themeDark ? "w3-black" : "w3-light-grey")}
+                    className={"w3-round w3-flex-row w3-flex-center-v " +(themeLight ? "w3-light-grey" : "w3-black")}
                     style={{ padding: 8 }}
                 >
-                    <div className={"w3-circle w3-flex w3-flex-center w3-margin-right " + (themeDark ? "w3-dark-grey" : "w3-white")} style={{ minWidth: 40, minHeight: 40, maxWidth: 40, maxHeight: 40, }}>
+                    <div className={"w3-circle w3-flex w3-flex-center w3-margin-right " + (themeLight ? "w3-white" : "w3-dark-grey")} style={{ minWidth: 40, minHeight: 40, maxWidth: 40, maxHeight: 40, }}>
                         <FontAwesomeIcon
                             icon={faBookmark}
                         />
@@ -265,7 +265,7 @@ function ChatbotCreate() {
                     <div
                         id="chatbotStarter"
                         contentEditable={true}
-                        className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
+                        className="w3-input w3-border-0 w3-black w3-round w3-overflow-scroll w3-noscrollbar"
                         style={{
                             height: 160,
                             minWidth: "100%",
@@ -273,7 +273,7 @@ function ChatbotCreate() {
                             paddingRight: 48
                         }}
                     ></div>
-                    <div onClick={saveStarter} style={{ width: 32, height: 32, margin: 8 }} className='w3-pointer w3-flex w3-flex-center w3-display-topright w3-circle w3-black'>
+                    <div onClick={saveStarter} style={{ width: 32, height: 32, margin: 8 }} className='w3-pointer w3-flex w3-flex-center w3-display-topright w3-circle w3-light-grey'>
                         <FontAwesomeIcon id='chatbotSaveStarterSaveIcon' icon={faSave} />
                         <FontAwesomeIcon id='chatbotSaveStarterSpinnerIcon' icon={faSpinner} className='w3-spin' style={{ display: 'none' }} />
                     </div>
@@ -283,7 +283,7 @@ function ChatbotCreate() {
                     <div className="w3-right" style={{ width: '35%' }}>
                         <div
                             onClick={createTopic}
-                            className="w3-black w3-center w3-round"
+                            className="w3-light-grey w3-center w3-round"
                             style={{ paddingBlock: 7 }}
                         >
                             <FontAwesomeIcon style={{ marginRight: 8 }} icon={faPlus} />Créer
@@ -293,7 +293,7 @@ function ChatbotCreate() {
                         <input
                             id='topicTitle'
                             onChange={(e) => singleTopicInfo.name = e.target.value}
-                            className="w3-input w3-border-0 w3-light-grey w3-round"
+                            className="w3-input w3-border-0 w3-black w3-round"
                             type="text"
                             maxLength={100}
                             placeholder="Nouveau topic"
@@ -314,7 +314,7 @@ function ChatbotCreate() {
                 >
                     <div className='w3-flex w3-flex-row w3-flex-center-v' style={{ paddingInline: 16, paddingTop: 16 }}>
                         <div id='topicTitleModal' contentEditable={true} className='w3-flex-1 w3-big'></div>
-                        <div onClick={closeModalShowTopic} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 32, height: 32 }}>
+                        <div onClick={closeModalShowTopic} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 32, height: 32 }}>
                             <FontAwesomeIcon icon={faTimes} />
                         </div>
                     </div>
@@ -329,7 +329,7 @@ function ChatbotCreate() {
                         ></div>
                     </div>
 
-                    <div className="w3-flex w3-flex-row w3-flex-center-v w3-light-grey w3-padding w3-red">
+                    <div className="w3-flex w3-flex-row w3-flex-center-v w3-black w3-padding w3-red">
                         <button
                             onClick={deleteTopic}
                             id="deleteButton"
@@ -346,7 +346,7 @@ function ChatbotCreate() {
                         <button
                             onClick={saveTopic}
                             id="saveButton"
-                            className="w3-flex-1 w3-button w3-round w3-white w3-black w3-margin-left"
+                            className="w3-flex-1 w3-button w3-round w3-dark-grey w3-light-grey w3-margin-left"
                         >
                             Sauvegarder&nbsp;
                             <FontAwesomeIcon

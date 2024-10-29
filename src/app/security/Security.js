@@ -140,14 +140,14 @@ function Security() {
                         <input
                             onChange={(e) => cpasswordRegister(e)}
                             type="password"
-                            className="w3-border-0 w3-input input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium"
+                            className="w3-border-0 w3-input input w3-black w3-round-xxlarge w3-block w3-text-grey w3-medium"
                             placeholder="Mot de passe actuel"
                             id="cpassword"
                             name="user_cp"
                             required
                         />
                         <div
-                            className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            className="w3-light-grey input-icon w3-display-right w3-circle w3-flex w3-flex-center"
                             style={{ marginRight: 3 }}
                         >
                             <span className="w3-text-white">
@@ -176,14 +176,14 @@ function Security() {
                         <input
                             onChange={(e) => npasswordRegister(e)}
                             type="password"
-                            className="w3-border-0 w3-input input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium"
+                            className="w3-border-0 w3-input input w3-black w3-round-xxlarge w3-block w3-text-grey w3-medium"
                             placeholder="Nouveau mot de passe"
                             id="npassword"
                             name="user_np"
                             required
                         />
                         <div
-                            className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            className="w3-light-grey input-icon w3-display-right w3-circle w3-flex w3-flex-center"
                             style={{ marginRight: 3 }}
                         >
                             <span className="w3-text-white">
@@ -214,14 +214,14 @@ function Security() {
                         <input
                             onChange={(e) => rpasswordRegister(e)}
                             type="password"
-                            className="w3-border-0 w3-input input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium"
+                            className="w3-border-0 w3-input input w3-black w3-round-xxlarge w3-block w3-text-grey w3-medium"
                             placeholder="Confirmer le nouveau mot de passe"
                             id="rpassword"
                             name="user_rp"
                             required
                         />
                         <div
-                            className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            className="w3-light-grey input-icon w3-display-right w3-circle w3-flex w3-flex-center"
                             style={{ marginRight: 3 }}
                         >
                             <span className="w3-text-white">
@@ -229,12 +229,12 @@ function Security() {
                             </span>
                         </div>
                     </div>
-                    <div className="w3-center w3-white w3-flex w3-flex-center">
+                    <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
                         <div className="w3-margin">
                             <div
                                 style={{ paddingInline: 32 }}
                                 onClick={() => updatePassword()}
-                                className="transition w3-medium w3-button w3-round-xxlarge w3-text-white w3-black w3-margin-bottom"
+                                className="transition w3-medium w3-button w3-round-xxlarge w3-text-white w3-light-grey w3-margin-bottom"
                             >
                                 Changer le mot de passe
 

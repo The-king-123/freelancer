@@ -163,7 +163,7 @@ export default function ProductContent({ content }) {
             marginInline: "auto",
           }}
         >
-          <div className="w3-overflow w3-light-grey w3-round-large">
+          <div className="w3-overflow w3-black w3-round-large">
             <Image
               id="storeImageMedia"
               alt={singleStoreInfo.name}
@@ -181,7 +181,7 @@ export default function ProductContent({ content }) {
                 objectPosition: "center",
                 objectFit: "cover",
               }}
-              className="w3-light-grey store-image"
+              className="w3-black store-image"
             />
           </div>
           <div className="w3-large w3-big" style={{ marginTop: 8 }}>
@@ -189,7 +189,7 @@ export default function ProductContent({ content }) {
           </div>
           <div>{parse(singleStoreInfo.description)}</div>
           <div>
-            <div onClick={() => download(singleStoreInfo.id)} className={"w3-button w3-round-xxlarge w3-black w3-flex-row w3-flex-center w3-margin-top " + (singleStoreInfo.type == "premium" ? 'w3-text-yellow' : '')}>
+            <div onClick={() => download(singleStoreInfo.id)} className={"w3-button w3-round-xxlarge w3-yellow w3-text-black w3-flex-row w3-flex-center w3-margin-top " + (singleStoreInfo.type == "premium" ? 'w3-text-yellow' : '')}>
               <FontAwesomeIcon id="freeDownloadIcon" icon={faDownload} className="w3-margin-right" />
               <FontAwesomeIcon id="freeDownloadSpinner" icon={faSpinner} className="w3-margin-right w3-spin" style={{display:'none'}} />
               Download
@@ -202,7 +202,7 @@ export default function ProductContent({ content }) {
             {
               content.features.map((feature, key) => (
                 <div key={key} style={{ paddingBlock: 8 }}>
-                  <Link href={'/store/product/' + feature.slug} className="w3-pointer w3-light-grey w3-round w3-flex-row w3-flex-center-v " style={{ padding: 8 }}>
+                  <Link href={'/store/product/' + feature.slug} className="w3-pointer w3-black w3-round w3-flex-row w3-flex-center-v " style={{ padding: 8 }}>
                     <Image
                       alt={feature.name}
                       unoptimized
@@ -218,7 +218,7 @@ export default function ProductContent({ content }) {
                         objectPosition: "center",
                         objectFit: "cover",
                       }}
-                      className="w3-white w3-round"
+                      className="w3-dark-grey w3-round"
                     />
 
                     <div style={{ paddingInline: 16 }} className="w3-overflow w3-nowrap w3-big">
@@ -241,7 +241,7 @@ export default function ProductContent({ content }) {
           style={{ padding: 24, zIndex: 999999 }}
         >
           <div
-            className="w3-white w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
+            className="w3-dark-grey w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
             style={{
               minHeight: 240,
               paddingBlock: 8,
@@ -271,13 +271,13 @@ export default function ProductContent({ content }) {
                   Ce contenu est payant. Pour y accéder, il est nécessaire d'entrer un code de téléchargement.
                 </div>
                 <div style={{ paddingInline: 24, paddingBlock: 8 }}>
-                  <input style={{ paddingInline: 16 }} onChange={(e) => code.code = e.target.value} className="w3-input w3-border-0 w3-light-grey w3-block w3-round-xxlarge" type="text" placeholder="Code de téléchargement" />
+                  <input style={{ paddingInline: 16 }} onChange={(e) => code.code = e.target.value} className="w3-input w3-border-0 w3-black w3-block w3-round-xxlarge" type="text" placeholder="Code de téléchargement" />
                 </div>
-                <div className="w3-center w3-white w3-flex w3-flex-center">
+                <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
                   <div className="w3-margin w3-block" style={{ paddingInline: 16 }}>
                     <div
                       onClick={downloadPremiumFile}
-                      className="transition w3-medium w3-text-yellow w3-button w3-block w3-round-xxlarge w3-black"
+                      className="transition w3-medium w3-text-yellow w3-button w3-block w3-round-xxlarge w3-light-grey"
                     >
                       <span id='buttonContactText'>Confirmer</span>
                       <FontAwesomeIcon id="premiumDownloadIcon" className='w3-margin-left' icon={faArrowRight} />

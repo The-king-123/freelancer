@@ -147,7 +147,7 @@ function Gestion() {
         if (data.length > 0) {
             glicthKeyList = data.map((code, key) => (
                 <div key={key} style={{ padding: 4 }}>
-                    <div className="w3-light-grey w3-round w3-padding w3-flex-row w3-flex-center-v">
+                    <div className="w3-black w3-round w3-padding w3-flex-row w3-flex-center-v">
                         <div className="w3-nowrap w3-overflow w3-flex-column w3-flex-1">
                             <div>{code.code}</div>
                             <div className="w3-small w3-text-grey">{code.email}</div>
@@ -161,7 +161,7 @@ function Gestion() {
         } else {
             //
             glicthKeyList = (<div style={{ padding: 8 }}>
-                <div className="w3-light-grey w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
+                <div className="w3-black w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
                     <div style={{ paddingInline: 16 }}>
                         Ce post n'a aucune code pour le moment...
                     </div>
@@ -295,7 +295,7 @@ function Gestion() {
     const reloadCategory = (data) => {
         setselectCategoryList(data)
         const glitchCategory = data.map((element, key) => (
-            <div key={key} className="w3-flex-row w3-light-grey w3-round w3-overflow w3-flex-center-v" style={{ marginBlock: 4 }}>
+            <div key={key} className="w3-flex-row w3-black w3-round w3-overflow w3-flex-center-v" style={{ marginBlock: 4 }}>
                 <div
                     className="w3-nowrap w3-hover-grey w3-flex-1 w3-overflow"
                     style={{ paddingInline: 8 }}
@@ -394,7 +394,7 @@ function Gestion() {
         if (data.length > 0) {
             glitchProduct = data.map((product, key) => (
                 <div key={key} style={{ padding: 4 }}>
-                    <div onClick={() => showThisProduct(product)} className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
+                    <div onClick={() => showThisProduct(product)} className="w3-black w3-round w3-padding w3-nowrap w3-overflow">
                         <div>{product.name}</div>
                         <div className="w3-small w3-text-grey">{product.downloadcount} Downloads{product.type == 'premium' ? <span className="w3-text-yellow"> - Premium</span> : ''}</div>
                     </div>
@@ -768,7 +768,7 @@ function Gestion() {
                                 // document.getElementById('createProductCore').style.display = 'none'
                                 document.getElementById("modalKeyListe").style.display = 'block'
                             }}
-                            className="w3-black w3-circle w3-flex w3-flex-center w3-margin-right"
+                            className="w3-light-grey w3-circle w3-flex w3-flex-center w3-margin-right"
                             style={{ width: 32, height: 32, display: 'none' }}
                             title="Gérer votre code premium."
                         >
@@ -781,7 +781,7 @@ function Gestion() {
                     <div id="openProductListeButton">
                         <div
                             onClick={() => document.getElementById('modalProductListe').style.display = 'block'}
-                            className="w3-black w3-circle w3-flex w3-flex-center"
+                            className="w3-light-grey w3-circle w3-flex w3-flex-center"
                             style={{ width: 32, height: 32 }}
                         >
                             <FontAwesomeIcon
@@ -796,7 +796,7 @@ function Gestion() {
                         <div className="w3-right" style={{ width: '35%' }}>
                             <div
                                 onClick={openModalCategory}
-                                className="w3-black w3-center w3-round"
+                                className="w3-light-grey w3-center w3-round"
                                 style={{ paddingBlock: 7 }}
                             >
                                 Catégorie
@@ -806,7 +806,7 @@ function Gestion() {
                             <select
                                 id="postCategory"
                                 onChange={(e) => productInfos.category = e.target.value}
-                                className="w3-light-grey w3-input w3-border-0 w3-block w3-nowrap w3-overflow w3-round"
+                                className="w3-black w3-input w3-border-0 w3-block w3-nowrap w3-overflow w3-round"
                                 style={{ paddingBlock: 8 }}
                                 defaultValue={"default"}
                             >
@@ -839,7 +839,7 @@ function Gestion() {
                     <input
                         id="productName"
                         onChange={(e) => (productInfos.name = e.target.value)}
-                        className="w3-input w3-border-0 w3-light-grey w3-round w3-margin-bottom"
+                        className="w3-input w3-border-0 w3-black w3-round w3-margin-bottom"
                         type="text"
                         maxLength={200}
                         placeholder="Nom du produits"
@@ -848,7 +848,7 @@ function Gestion() {
                     <input
                         id="productDescription"
                         onChange={(e) => (productInfos.description = e.target.value)}
-                        className="w3-input w3-border-0 w3-light-grey w3-round w3-margin-bottom"
+                        className="w3-input w3-border-0 w3-black w3-round w3-margin-bottom"
                         type="text"
                         maxLength={200}
                         placeholder="Description courte du produit"
@@ -860,7 +860,7 @@ function Gestion() {
                         <div
                             id="inputImage"
                             onClick={() => inputImage.click()}
-                            className="w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center-v"
+                            className="w3-black w3-round w3-text-grey w3-flex w3-flex-center-v"
                             style={{ height: 40, paddingInline: 24 }}
                         >
                             <FontAwesomeIcon className="w3-margin-right" icon={faImage} style={{ width: 16, height: 16 }} />
@@ -876,7 +876,7 @@ function Gestion() {
                                 <Image
                                     id="showImage"
                                     src={''}
-                                    className="w3-display-middle w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
+                                    className="w3-display-middle w3-black w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
                                     height={120}
                                     width={120}
                                     style={{
@@ -887,7 +887,7 @@ function Gestion() {
                                 <div id="cancelImageInsertion" className="w3-display-topright" style={{ padding: 4 }}>
                                     <div
                                         onClick={cancelImageInsertion}
-                                        className="w3-circle w3-card w3-white w3-flex w3-flex-center"
+                                        className="w3-circle w3-card w3-dark-grey w3-flex w3-flex-center"
                                         style={{ width: 24, height: 24 }}
                                     >
                                         <FontAwesomeIcon
@@ -903,7 +903,7 @@ function Gestion() {
                         <div
                             id="inputFichier"
                             onClick={() => productInfos.image ? inputFichier.click() : false}
-                            className="w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center-v"
+                            className="w3-black w3-round w3-text-grey w3-flex w3-flex-center-v"
                             style={{ height: 40, marginTop: 16, paddingInline: 24, opacity: 0.5 }}
                         >
                             <FontAwesomeIcon className="w3-margin-right" icon={faPaperclip} style={{ width: 16, height: 16 }} />
@@ -916,13 +916,13 @@ function Gestion() {
                                 id="showFichierWrapper"
                                 style={{ display: "none", width: 320, padding: 16, marginTop: 24 }}
                             >
-                                <div id="fileName" className="w3-display-middle w3-block w3-height w3-light-grey w3-round w3-overflow w3-nowrap" style={{ padding: 16, height: 54 }}>
+                                <div id="fileName" className="w3-display-middle w3-block w3-height w3-black w3-round w3-overflow w3-nowrap" style={{ padding: 16, height: 54 }}>
                                     Just a file name
                                 </div>
                                 <div className="w3-display-topright" style={{ padding: 4 }}>
                                     <div
                                         onClick={cancelFichierInsertion}
-                                        className="w3-circle w3-card w3-white w3-flex w3-flex-center"
+                                        className="w3-circle w3-card w3-dark-grey w3-flex w3-flex-center"
                                         style={{ width: 24, height: 24 }}
                                     >
                                         <FontAwesomeIcon
@@ -939,7 +939,7 @@ function Gestion() {
                     <div style={{ marginTop: 24 }}>
                         <button
                             onClick={() => save("public")}
-                            className="w3-button w3-black w3-round-xxlarge w3-block w3-flex w3-flex-center"
+                            className="w3-button w3-light-grey w3-round-xxlarge w3-block w3-flex w3-flex-center"
                         >
                             Mise en vente{" "}
                             <FontAwesomeIcon
@@ -975,7 +975,7 @@ function Gestion() {
                     style={{ maxWidth: 420, top: 32 }}
                 >
 
-                    <div onClick={() => document.getElementById('modalProductListe').style.display = 'none'} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+                    <div onClick={() => document.getElementById('modalProductListe').style.display = 'none'} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
                         <FontAwesomeIcon icon={faArrowLeft} />
                     </div>
 
@@ -1004,7 +1004,7 @@ function Gestion() {
                     style={{ maxWidth: 420, top: 48 }}
                 >
 
-                    <div onClick={closeModalCategory} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 32, height: 32, marginInline: 16, marginTop: 16 }}>
+                    <div onClick={closeModalCategory} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 32, height: 32, marginInline: 16, marginTop: 16 }}>
                         <FontAwesomeIcon icon={faTimes} />
                     </div>
 
@@ -1018,7 +1018,7 @@ function Gestion() {
                         />
                         <button
                             onClick={saveCategory}
-                            className="w3-button w3-margin-left w3-round w3-white w3-black w3-flex w3-flex-center"
+                            className="w3-button w3-margin-left w3-round w3-dark-grey w3-light-grey w3-flex w3-flex-center"
                             style={{ height: 40 }}
                         >
                             <FontAwesomeIcon icon={faPlus} />
@@ -1058,15 +1058,15 @@ function Gestion() {
                         <div onClick={() => {
                             document.getElementById('createPostCore').style.display = 'block'
                             document.getElementById('modalKeyListe').style.display = 'none'
-                        }} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+                        }} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
                             <FontAwesomeIcon icon={faArrowLeft} />
                         </div>
                         <div className="w3-flex-1"></div>
                         <div>
-                            <div id="afficheNewKeyArea" title="Ajouter un nouveau code utilisateur" onClick={displayAddNewKeyArea} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+                            <div id="afficheNewKeyArea" title="Ajouter un nouveau code utilisateur" onClick={displayAddNewKeyArea} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
                                 <FontAwesomeIcon icon={faPlus} />
                             </div>
-                            <div id="afficheKeyListArea" title="Afficher la liste code utilisateur" onClick={displayKeyListArea} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16, display: 'none' }}>
+                            <div id="afficheKeyListArea" title="Afficher la liste code utilisateur" onClick={displayKeyListArea} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16, display: 'none' }}>
                                 <FontAwesomeIcon icon={faListDots} />
                             </div>
                         </div>
@@ -1082,7 +1082,7 @@ function Gestion() {
                             />
                             <button
                                 onClick={addKeyToUser}
-                                className="w3-button w3-margin-left w3-round w3-white w3-black w3-flex w3-flex-center"
+                                className="w3-button w3-margin-left w3-round w3-dark-grey w3-light-grey w3-flex w3-flex-center"
                                 style={{ height: 40 }}
                                 title="Generer un code d'acces."
                             >

@@ -85,7 +85,7 @@ function gestionTarfis() {
                             {key + 1}
                         </div>
                     </div>
-                    <div className='w3-light-grey w3-round'>
+                    <div className='w3-black w3-round'>
                         <div className={'w3-round w3-text-white ' + (tarifs.length <= 3 ? colors[key + 1] : colors[key])} style={{ paddingBlock: 12, paddingInline: 20 }}>
                             <div className='w3-big w3-medium w3-flex-row w3-flex-center-v'>
                                 <div className='w3-flex-1 w3-pointer' onClick={() => opeAccordionTarif(key)}>{tarif.name}</div>
@@ -427,7 +427,7 @@ function gestionTarfis() {
                 <input
                     onChange={(e) => tarifInfo.name = e.target.value}
                     id="tarifName"
-                    className="w3-border-0 w3-flex-1 w3-block w3-input w3-light-grey w3-round"
+                    className="w3-border-0 w3-flex-1 w3-block w3-input w3-black w3-round"
                     type="text"
                     placeholder="Nom du tarif"
                     style={{
@@ -438,7 +438,7 @@ function gestionTarfis() {
                 <input
                     onChange={(e) => tarifInfo.tarif = e.target.value}
                     id="tarifCore"
-                    className="w3-border-0 w3-flex-1 w3-block w3-input w3-light-grey w3-round"
+                    className="w3-border-0 w3-flex-1 w3-block w3-input w3-black w3-round"
                     type="text"
                     placeholder="Tarif"
                     style={{
@@ -447,7 +447,7 @@ function gestionTarfis() {
                     }}
                 />
                 <div
-                    className="w3-border-0 w3-block w3-light-grey w3-round"
+                    className="w3-border-0 w3-block w3-black w3-round"
                     style={{
                         marginBottom: 16
                     }}
@@ -465,7 +465,7 @@ function gestionTarfis() {
                         id="addAccessInput"
                         onKeyUp={(e) => addToAccess(e)}
                         onChange={(e) => access.text = e.target.value}
-                        className="w3-border-0 w3-flex-1 w3-block w3-input w3-light-grey w3-round"
+                        className="w3-border-0 w3-flex-1 w3-block w3-input w3-black w3-round"
                         type="text"
                         placeholder="Ajouter les avantages ( Entrer pour ajouter )"
                         style={{
@@ -475,14 +475,14 @@ function gestionTarfis() {
                     />
                 </div>
                 <div className='w3-container' style={{ padding: 0 }}>
-                    <div onClick={emptyForme} className='w3-right w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center' style={{ width: 26, height: 26 }}>
+                    <div onClick={emptyForme} className='w3-right w3-circle w3-black w3-hover-black w3-flex w3-flex-center' style={{ width: 26, height: 26 }}>
                         <FontAwesomeIcon icon={faEraser} />
                     </div>
                 </div>
                 <div style={{ marginTop: 24, padding: 8 }}>
                     <button
                         onClick={saveTarif}
-                        className="w3-button w3-black w3-round-xxlarge w3-block w3-flex w3-flex-center"
+                        className="w3-button w3-light-grey w3-round-xxlarge w3-block w3-flex w3-flex-center"
                     >
                         Sauvegarder{" "}
                         <FontAwesomeIcon

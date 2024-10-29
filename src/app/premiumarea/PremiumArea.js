@@ -69,9 +69,9 @@ export default function Premium(props) {
                 {posts && posts.length > 0 &&
                     posts.map((post, key) => (
                         <Link className="postCard" href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
-                            <div className="w3-overflow w3-round w3-pointer w3-white">
+                            <div className="w3-overflow w3-round w3-pointer w3-dark-grey">
                                 <div
-                                    className="w3-light-grey w3-big w3-small w3-flex-row w3-flex-center-v"
+                                    className="w3-black w3-big w3-small w3-flex-row w3-flex-center-v"
                                     title={parse(post.title)}
                                 >
                                     <div className="w3-nowrap w3-overflow w3-flex-1" style={{ padding: 8 }}>
@@ -115,7 +115,7 @@ export default function Premium(props) {
                                 </div>
 
                                 <div
-                                    className="postMedia w3-display-container w3-light-grey post-image"
+                                    className="postMedia w3-display-container w3-black post-image"
                                     style={{ zIndex: 2 }}
                                 >
                                     <Image
@@ -137,14 +137,14 @@ export default function Premium(props) {
                                             height: '65vw',
                                             maxHeight: 260
                                         }}
-                                        className="w3-overflow w3-light-grey post-image"
+                                        className="w3-overflow w3-black post-image"
                                     />
                                     {/* {(post.type == "image/audio" || post.type == "video" || post.type == "image/video") && (
-                                        <div className="w3-black w3-opacity-max w3-block w3-height w3-padding w3-display-middle"></div>
+                                        <div className="w3-light-grey w3-opacity-max w3-block w3-height w3-padding w3-display-middle"></div>
                                     )} */}
                                     {post.type == "image/audio" && (
                                         <div
-                                            className="w3-white w3-circle w3-display-middle w3-card"
+                                            className="w3-dark-grey w3-circle w3-display-middle w3-card"
                                             style={{ width: 40, height: 40 }}
                                         >
                                             <div className="w3-block w3-height w3-flex w3-flex-center">
@@ -157,7 +157,7 @@ export default function Premium(props) {
                                     )}
                                     {(post.type == "video" || post.type == "image/video") && (
                                         <div
-                                            className="w3-white w3-circle w3-display-middle w3-card"
+                                            className="w3-dark-grey w3-circle w3-display-middle w3-card"
                                             style={{ width: 40, height: 40 }}
                                         >
                                             <div className="w3-block w3-height w3-flex w3-flex-center">

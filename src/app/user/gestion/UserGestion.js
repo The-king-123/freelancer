@@ -30,11 +30,11 @@ function UserGestion() {
         if (data.length > 0) {
             glitchUsers = data.map((user, key) => (
                 <div key={key} style={{ padding: 8, display: 'inline-block', width: '33.33%' }}>
-                    <div onClick={() => showThisUser(user)} className='w3-round w3-pointer w3-light-grey w3-overflow' style={{ padding: 8 }}>
+                    <div onClick={() => showThisUser(user)} className='w3-round w3-pointer w3-black w3-overflow' style={{ padding: 8 }}>
                         <Image
                             loading='lazy'
                             src={source + '/images.php?w=420&h=420&zlonk=3733&zlink=' + user.key}
-                            className="w3-white w3-round w3-block"
+                            className="w3-dark-grey w3-round w3-block"
                             height={100}
                             width={100}
                             style={{
@@ -53,7 +53,7 @@ function UserGestion() {
                         <div>
                             {
                                 user.authority == 'ghest' &&
-                                <div className='w3-white w3-circle' style={{ width: 16, height: 16, marginInline: 4 }}></div>
+                                <div className='w3-dark-grey w3-circle' style={{ width: 16, height: 16, marginInline: 4 }}></div>
                             }
                             {
                                 user.authority != 'ghest' ?
@@ -193,7 +193,7 @@ function UserGestion() {
 
             <div id='usersListeWrapper'>
                 <div style={{ padding: 8 }}>
-                    <input onKeyUp={e => searchInput(e.key)} onChange={(e) => search.keyword = e.target.value} className='w3-input w3-light-grey w3-round-xxlarge w3-border-0' style={{ paddingInline: 20 }} placeholder='Rechercher un nom ou un email' />
+                    <input onKeyUp={e => searchInput(e.key)} onChange={(e) => search.keyword = e.target.value} className='w3-input w3-black w3-round-xxlarge w3-border-0' style={{ paddingInline: 20 }} placeholder='Rechercher un nom ou un email' />
                 </div>
                 <div>
                     {displayUsers}
@@ -218,7 +218,7 @@ function UserGestion() {
                             loading='lazy'
                             id="showImageUser"
                             src={imageShowPDP}
-                            className="w3-light-grey w3-circle w3-block w3-overflow"
+                            className="w3-black w3-circle w3-block w3-overflow"
                             height={80}
                             width={80}
                             style={{
