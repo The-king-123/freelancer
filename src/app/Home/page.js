@@ -54,7 +54,7 @@ export default function Home(props) {
     for (let i = 0; i < allDropContent.length; i++) {
       if (allDropContent[i].id != ID) {
         allDropContent[i].className = allDropContent[i].className.replace(" w3-show", "");
-        dropButton[i].className = dropButton[i].className.replace("w3-black", "w3-white");
+        dropButton[i].className = dropButton[i].className.replace("w3-light-grey", "w3-dark-grey");
       }
     }
     if (document.getElementById(ID)) {
@@ -62,12 +62,12 @@ export default function Home(props) {
       if (x.className.indexOf("w3-show") == -1) {
         x.className += " w3-show";
         if (document.getElementById(ID + 'Wrapper')) {
-          document.getElementById(ID + 'Wrapper').className = document.getElementById(ID + 'Wrapper').className.replace("w3-white", "w3-black")
+          document.getElementById(ID + 'Wrapper').className = document.getElementById(ID + 'Wrapper').className.replace("w3-dark-grey", "w3-light-grey")
         }
       } else {
         x.className = x.className.replace(" w3-show", "");
         if (document.getElementById(ID + 'Wrapper')) {
-          document.getElementById(ID + 'Wrapper').className = document.getElementById(ID + 'Wrapper').className.replace("w3-black", "w3-white")
+          document.getElementById(ID + 'Wrapper').className = document.getElementById(ID + 'Wrapper').className.replace("w3-light-grey", "w3-dark-grey")
         }
       }
     }
@@ -79,12 +79,12 @@ export default function Home(props) {
     const allMenuListe = document.getElementsByClassName('menuItem')
     for (let i = 0; i < allMenuListe.length; i++) {
       const element = allMenuListe[i];
-      element.className = element.className.replace('w3-yellow', (localStorage.getItem('theme') == 'dark' ? 'w3-black' : 'w3-light-grey'))
+      element.className = element.className.replace('w3-yellow', (localStorage.getItem('theme') == 'light' ? 'w3-light-grey' : 'w3-black'))
     }
 
     const firstPath = location.pathname.split('/')[1]
     if (document.getElementById(firstPath + 'Page')) {
-      document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') == 'dark' ? 'w3-black' : 'w3-light-grey'), 'w3-yellow')
+      document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') == 'light' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow')
     }
 
     if (localStorage.getItem('firstPassed') == null) {
@@ -304,7 +304,7 @@ export default function Home(props) {
                 contenu ...
               </div>
             </div>
-            <div className="w3-container w3-light-grey w3-padding">
+            <div className="w3-container w3-black w3-padding">
               <button
                 id="confirmWarning"
                 className="w3-button w3-right w3-round w3-border w3-red"
@@ -319,7 +319,7 @@ export default function Home(props) {
               </button>
               <button
                 id="cancelWarning"
-                className="w3-button w3-right w3-round w3-white w3-border w3-margin-right"
+                className="w3-button w3-right w3-round w3-dark-grey w3-border w3-margin-right"
               >
                 Annuler
               </button>
@@ -336,14 +336,14 @@ export default function Home(props) {
         style={{ padding: 24, zIndex: 9999 }}
       >
         <div
-          className="w3-white w3-overflow w3-display-middle w3-block w3-round-large w3-content"
+          className="w3-dark-grey w3-overflow w3-display-middle w3-block w3-round-large w3-content"
           style={{
             height: 520,
             maxWidth: 520,
           }}
         >
           <div
-            className="w3-container w3-light-grey"
+            className="w3-container w3-black"
             style={{ paddingBlock: 0, padding: 16 }}
           >
 
@@ -352,7 +352,7 @@ export default function Home(props) {
               <div className="w3-flex-1">
                 <div
                   onClick={() => document.getElementById('createPostOnDesktop').style.display = 'none'}
-                  className="w3-pointer w3-flex w3-flex-center w3-black w3-circle"
+                  className="w3-pointer w3-flex w3-flex-center w3-light-grey w3-circle"
                   style={{ width: 32, height: 32, }}
                 >
                   <FontAwesomeIcon
@@ -364,7 +364,7 @@ export default function Home(props) {
               <div>
                 <Link
                   href={'/post/create'}
-                  className="w3-black w3-circle w3-flex w3-flex-center"
+                  className="w3-light-grey w3-circle w3-flex w3-flex-center"
                   style={{ width: 32, height: 32 }}
                 >
                   <FontAwesomeIcon
@@ -389,21 +389,21 @@ export default function Home(props) {
         style={{ padding: 24, zIndex: 9999 }}
       >
         <div
-          className="w3-white w3-overflow w3-display-middle w3-block w3-round-large w3-content"
+          className="w3-dark-grey w3-overflow w3-display-middle w3-block w3-round-large w3-content"
           style={{
             height: 520,
             maxWidth: 520,
           }}
         >
           <div
-            className="w3-container w3-light-grey"
+            className="w3-container w3-black"
             style={{ paddingBlock: 0, padding: 16 }}
           >
             <div className="w3-flex-row w3-flex-center-v">
               <div className="w3-flex-1">
                 <div
                   onClick={() => document.getElementById('createForumOnDesktop').style.display = 'none'}
-                  className="w3-pointer w3-flex w3-flex-center w3-black w3-circle"
+                  className="w3-pointer w3-flex w3-flex-center w3-light-grey w3-circle"
                   style={{ width: 32, height: 32, }}
                 >
                   <FontAwesomeIcon
@@ -415,7 +415,7 @@ export default function Home(props) {
               <div>
                 <Link
                   href={'/forum/create'}
-                  className="w3-black w3-circle w3-flex w3-flex-center"
+                  className="w3-light-grey w3-circle w3-flex w3-flex-center"
                   style={{ width: 32, height: 32 }}
                 >
                   <FontAwesomeIcon

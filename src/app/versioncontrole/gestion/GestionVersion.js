@@ -101,7 +101,7 @@ function GestionVersion() {
           <div
             id="appAnnonce"
             contentEditable={true}
-            className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
+            className="w3-input w3-border-0 w3-black w3-round w3-overflow-scroll w3-noscrollbar"
             style={{
               height: 160,
               minWidth: "100%",
@@ -118,7 +118,7 @@ function GestionVersion() {
           <div
             id="appAbout"
             contentEditable={true}
-            className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
+            className="w3-input w3-border-0 w3-black w3-round w3-overflow-scroll w3-noscrollbar"
             style={{
               height: 160,
               minWidth: "100%",
@@ -135,7 +135,7 @@ function GestionVersion() {
           <div
             id="appSupport"
             contentEditable={true}
-            className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
+            className="w3-input w3-border-0 w3-black w3-round w3-overflow-scroll w3-noscrollbar"
             style={{
               height: 160,
               minWidth: "100%",
@@ -147,7 +147,7 @@ function GestionVersion() {
         <div style={{ paddingBlock: 16 }}>
           <button
             onClick={() => saveVerion()}
-            className="w3-button w3-black w3-round-xxlarge w3-block w3-flex w3-flex-center"
+            className="w3-button w3-light-grey w3-round-xxlarge w3-block w3-flex w3-flex-center"
           >
             Sauvegader les modifications{" "}
             <FontAwesomeIcon

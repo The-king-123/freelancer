@@ -91,7 +91,7 @@ function createForum(props) {
     if (data.length > 0) {
       glitchForum = data.map((forum, key) => (
         <div key={key} style={{ padding: 4 }}>
-          <div onClick={() => showThisForum(forum)} className="w3-light-grey w3-round w3-padding w3-nowrap w3-overflow">
+          <div onClick={() => showThisForum(forum)} className="w3-black w3-round w3-padding w3-nowrap w3-overflow">
             <div>{forum.title}</div>
             <div className="w3-small w3-text-grey">{forum.state == 'public' ? 'Publique' : 'Brouillon'}{forum.response.length > 0 ? " - " + forum.response.length + " Commentaire" + (forum.response.length == 1 ? '' : 's') : ''}</div>
           </div>
@@ -412,7 +412,7 @@ function createForum(props) {
         <div id="openForumListeButton">
           <div
             onClick={() => document.getElementById('modalForumListe').style.display = 'block'}
-            className="w3-light-grey w3-circle w3-flex w3-flex-center"
+            className="w3-black w3-circle w3-flex w3-flex-center"
             style={{ width: 32, height: 32 }}
           >
             <FontAwesomeIcon
@@ -427,7 +427,7 @@ function createForum(props) {
         <input
           id="forumTitle"
           onChange={(e) => (forumInfos.title = e.target.value)}
-          className="w3-input w3-border-0 w3-light-grey w3-round"
+          className="w3-input w3-border-0 w3-black w3-round"
           type="text"
           maxLength={200}
           placeholder="Titre"
@@ -435,7 +435,7 @@ function createForum(props) {
         <div
           id="forumContent"
           contentEditable={true}
-          className="w3-input w3-border-0 w3-light-grey w3-round w3-overflow-scroll w3-noscrollbar"
+          className="w3-input w3-border-0 w3-black w3-round w3-overflow-scroll w3-noscrollbar"
           style={{
             height: 160,
             minWidth: "100%",
@@ -446,7 +446,7 @@ function createForum(props) {
           <div
             id="inputImage"
             onClick={() => inputImage.click()}
-            className="w3-right w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center"
+            className="w3-right w3-black w3-round w3-text-grey w3-flex w3-flex-center"
             style={{ height: 40, width: 40, marginTop: 16 }}
           >
             <FontAwesomeIcon icon={faImage} style={{ width: 16, height: 16 }} />
@@ -461,7 +461,7 @@ function createForum(props) {
               <Image
                 id="showImage"
                 src={''}
-                className="w3-display-middle w3-light-grey w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
+                className="w3-display-middle w3-black w3-round w3-text-grey w3-flex w3-flex-center w3-overflow"
                 height={120}
                 width={120}
                 style={{
@@ -472,7 +472,7 @@ function createForum(props) {
               <div className="w3-display-topright" style={{ padding: 4 }}>
                 <div
                   onClick={cancelImageInsertion}
-                  className="w3-circle w3-card w3-white w3-flex w3-flex-center"
+                  className="w3-circle w3-card w3-dark-grey w3-flex w3-flex-center"
                   style={{ width: 24, height: 24 }}
                 >
                   <FontAwesomeIcon
@@ -487,7 +487,7 @@ function createForum(props) {
         <div style={{ marginTop: 24 }}>
           <button
             onClick={() => save("public")}
-            className="w3-button w3-black w3-round-xxlarge w3-block w3-flex w3-flex-center"
+            className="w3-button w3-light-grey w3-round-xxlarge w3-block w3-flex w3-flex-center"
           >
             Publier votre forum{" "}
             <FontAwesomeIcon
@@ -534,7 +534,7 @@ function createForum(props) {
           style={{ maxWidth: 420, top: 32 }}
         >
 
-          <div onClick={() => document.getElementById('modalForumListe').style.display = 'none'} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
+          <div onClick={() => document.getElementById('modalForumListe').style.display = 'none'} className="w3-circle w3-light-grey w3-hover-black w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16, marginTop: 16 }}>
             <FontAwesomeIcon icon={faArrowLeft} />
           </div>
 
@@ -566,14 +566,14 @@ function createForum(props) {
             <button
               onClick={closeModalOptionForum}
               style={{ paddingInline: 16, paddingBlock: 8 }}
-              className="w3-round-xxlarge w3-border-0 w3-black w3-margin-right"
+              className="w3-round-xxlarge w3-border-0 w3-light-grey w3-margin-right"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
             </button>
             <button
               onClick={afficher}
               style={{ paddingInline: 16, paddingBlock: 8 }}
-              className="w3-round-xxlarge w3-black w3-border-0 w3-margin-right w3-flex-1"
+              className="w3-round-xxlarge w3-light-grey w3-border-0 w3-margin-right w3-flex-1"
             >
               Afficher
             </button>

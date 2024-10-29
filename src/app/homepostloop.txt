@@ -6,10 +6,10 @@
   >
     Texte copié...
   </div>
-  <div className="w3-flex-column w3-overflow w3-card w3-round w3-pointer w3-white">
+  <div className="w3-flex-column w3-overflow w3-card w3-round w3-pointer w3-dark-grey">
     <div
       data={"https://freelancer.mg/post/" + post.slug}
-      className="postTitle w3-nowrap w3-overflow w3-light-grey w3-big"
+      className="postTitle w3-nowrap w3-overflow w3-black w3-big"
       style={{ paddingBlock: 8, paddingInline: 16 }}
       title="Click to copy post link"
     >
@@ -29,7 +29,7 @@
     {(post.type == "image" || post.type == "image/audio") && (
       <div
         onClick={() => showSinglePost(post)}
-        className="postMedia w3-display-container w3-light-grey post-image"
+        className="postMedia w3-display-container w3-black post-image"
         data={JSON.stringify(post)}
         style={{ zIndex: 2 }}
       >
@@ -50,14 +50,14 @@
             objectFit: "cover",
             zIndex: 1,
           }}
-          className="w3-overflow w3-light-grey post-image"
+          className="w3-overflow w3-black post-image"
         />
         {post.type == "image/audio" && (
-          <div className="w3-black w3-opacity w3-block w3-height w3-padding w3-display-middle"></div>
+          <div className="w3-light-grey w3-opacity w3-block w3-height w3-padding w3-display-middle"></div>
         )}
         {post.type == "image/audio" && (
           <div
-            className="w3-white w3-circle w3-display-middle"
+            className="w3-dark-grey w3-circle w3-display-middle"
             style={{ width: 60, height: 60 }}
           >
             <div className="w3-block w3-height w3-flex w3-flex-center">

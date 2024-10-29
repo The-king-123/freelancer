@@ -43,13 +43,13 @@ function RecrutementView(props) {
                         <div>{props.view.dactylot == 'true' && 'Je sais taper sans regarder le clavier'}</div>
                     </div>
                     <div style={{ paddingBlock: 8 }}>
-                        <div className="w3-light-grey w3-round" style={{ padding: 16 }}>{parse(props.view.content)}</div>
+                        <div className="w3-black w3-round" style={{ padding: 16 }}>{parse(props.view.content)}</div>
                     </div>
 
 
                     <div className="w3-text-grey w3-small">Postulée le {dateMaker(props.view.updated_at)}</div>
 
-                    <div className="w3-margin-top w3-round w3-light-grey" style={{ padding: 8,marginBlock:8 }}>Photo CIN :</div>
+                    <div className="w3-margin-top w3-round w3-black" style={{ padding: 8,marginBlock:8 }}>Photo CIN :</div>
                     <Image
                         alt={props.view.title}
                         unoptimized
@@ -66,10 +66,10 @@ function RecrutementView(props) {
                             objectFit: "cover",
                             zIndex: 1,
                         }}
-                        className="w3-light-grey w3-round"
+                        className="w3-black w3-round"
                     />
 
-                    <div className="w3-margin-top w3-round w3-light-grey" style={{ padding: 8,marginBlock:8 }}>CV :</div>
+                    <div className="w3-margin-top w3-round w3-black" style={{ padding: 8,marginBlock:8 }}>CV :</div>
 
                     <Image
                         alt={props.view.title}
@@ -87,7 +87,7 @@ function RecrutementView(props) {
                             objectFit: "cover",
                             zIndex: 1,
                         }}
-                        className="w3-light-grey post-image"
+                        className="w3-black post-image"
                     />
                 </div>
 

@@ -12,7 +12,7 @@ export default function PostContent({ content }) {
 
   const reloadMembers = (data) => {
 
-    const themeDark = localStorage.getItem('theme') == 'dark' ? true : false
+    const themeLight = localStorage.getItem('theme') == 'light' ? true : false
 
     var glitchMembers
     if (data.length > 0) {
@@ -26,7 +26,7 @@ export default function PostContent({ content }) {
         >
           <div
             data-key={user.key}
-            className={"userKey w3-flex w3-flex-row w3-flex-center w3-round " +(themeDark ? "w3-black" : "w3-light-grey")}
+            className={"userKey w3-flex w3-flex-row w3-flex-center w3-round " +(themeLight ? "w3-light-grey" : "w3-black")}
             style={{ padding: 12 }}
           >
             <Image

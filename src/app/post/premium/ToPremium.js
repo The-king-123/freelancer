@@ -58,7 +58,7 @@ function ToPremium(props) {
                 style={{ padding: 24, zIndex: 999999 }}
             >
                 <div
-                    className="w3-white w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
+                    className="w3-dark-grey w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
                     style={{
                         minHeight: 240,
                         paddingBlock: 8,
@@ -87,11 +87,11 @@ function ToPremium(props) {
                             <div style={{ padding: 24 }} id='cardNotPremiumText'>
                             Ce contenu est payant. Pour y accéder, il est nécessaire de souscrire à une offre.
                             </div>
-                            <div className="w3-center w3-white w3-flex w3-flex-center">
+                            <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
                                 <div className="w3-margin w3-block" style={{paddingInline:16}}>
                                     <div
                                         id='versMonTarifs'
-                                        className="transition w3-medium w3-text-yellow w3-button w3-block w3-round-xxlarge w3-black"
+                                        className="transition w3-medium w3-text-yellow w3-button w3-block w3-round-xxlarge w3-light-grey"
                                     >
                                         <span id='buttonContactText'>Nos Tarifs</span>
                                         <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />

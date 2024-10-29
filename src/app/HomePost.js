@@ -59,13 +59,13 @@ export default function PostContent({ posts }) {
   }
 
   const loadPost = (type) => {
-    const themeDark = localStorage.getItem('theme') == 'dark' ? true : false
+    const themeLight = localStorage.getItem('theme') == 'light' ? true : false
     const glitchPost = posts.map((post, key) => (
       (type == 'premium' ? post.category == type : post.category != 'premium') &&
       <Link className="postCard" href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
-        <div className="w3-overflow w3-round w3-pointer w3-white">
+        <div className="w3-overflow w3-round w3-pointer w3-dark-grey">
           <div
-            className={(themeDark ? "w3-black" : "w3-light-grey")+" w3-big w3-small w3-flex-row w3-flex-center-v"}
+            className={(themeLight ? "w3-light-grey" : "w3-black")+" w3-big w3-small w3-flex-row w3-flex-center-v"}
             title={parse(post.title)}
           >
             {post.category != 'premium' &&
@@ -128,7 +128,7 @@ export default function PostContent({ posts }) {
           </div>
 
           <div
-            className="postMedia w3-display-container w3-light-grey post-image"
+            className="postMedia w3-display-container w3-black post-image"
             style={{ zIndex: 2 }}
           >
             <Image
@@ -150,14 +150,14 @@ export default function PostContent({ posts }) {
                 height: '65vw',
                 maxHeight: 200,
               }}
-              className="w3-overflow w3-light-grey post-image"
+              className="w3-overflow w3-black post-image"
             />
             {/* {(post.type == "image/audio" || post.type == "video" || post.type == "image/video") && (
-                <div className="w3-black w3-opacity-max w3-block w3-height w3-padding w3-display-middle"></div>
+                <div className="w3-light-grey w3-opacity-max w3-block w3-height w3-padding w3-display-middle"></div>
               )} */}
             {post.type == "image/audio" && (
               <div
-                className="w3-white w3-circle w3-display-middle w3-card"
+                className="w3-dark-grey w3-circle w3-display-middle w3-card"
                 style={{ width: 40, height: 40 }}
               >
                 <div className="w3-block w3-height w3-flex w3-flex-center">
@@ -170,7 +170,7 @@ export default function PostContent({ posts }) {
             )}
             {(post.type == "video" || post.type == "image/video") && (
               <div
-                className="w3-white w3-circle w3-display-middle w3-card"
+                className="w3-dark-grey w3-circle w3-display-middle w3-card"
                 style={{ width: 40, height: 40 }}
               >
                 <div className="w3-block w3-height w3-flex w3-flex-center">
@@ -334,10 +334,10 @@ export default function PostContent({ posts }) {
     <div style={{ position: 'relative' }}>
       <div id="homePostCore">
         {/* <div style={{ padding: 8 }}>
-          <div onClick={createPost} className="w3-flex-row w3-flex-center-v w3-light-grey w3-round" style={{ padding: 16 }}>
-            <div id="userPDP" className="w3-circle w3-overflow w3-white w3-margin-right" style={{ width: 42, height: 42, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
+          <div onClick={createPost} className="w3-flex-row w3-flex-center-v w3-black w3-round" style={{ padding: 16 }}>
+            <div id="userPDP" className="w3-circle w3-overflow w3-dark-grey w3-margin-right" style={{ width: 42, height: 42, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
             <input
-              className="w3-white w3-input w3-round-xxlarge w3-border-0 w3-flex-1"
+              className="w3-dark-grey w3-input w3-round-xxlarge w3-border-0 w3-flex-1"
               style={{ height: 42, paddingInline: 16, }}
               placeholder="Qu'est-ce que vous pensez!?"
             />

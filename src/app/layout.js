@@ -4,7 +4,7 @@ import "./globals.css";
 import "./app.css";
 import { app_name, console_source as source } from "@/app/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faCalculator, faCheck, faChevronCircleUp, faCode, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faTimesCircle, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCalculator, faCheck, faChevronCircleUp, faCode, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faSun, faTimesCircle, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { faFacebookMessenger, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
@@ -91,18 +91,18 @@ export default function RootLayout({ children }) {
     key: "",
   });
 
-  const ActiveDarkMode = () => {
+  const ActiveLightMode = () => {
 
-    if (document.getElementById('darkModeCheck')) {
-      if (document.getElementById('darkModeCheck').style.display == 'none') {
-        document.getElementById('darkModeCheckTop').style.display = 'inline-block';
-        document.getElementById('darkModeCheck').style.display = 'inline-block';
-        localStorage.setItem('theme', 'dark');
+    if (document.getElementById('lightModeCheck')) {
+      if (document.getElementById('lightModeCheck').style.display == 'none') {
+        document.getElementById('lightModeCheckTop').style.display = 'inline-block';
+        document.getElementById('lightModeCheck').style.display = 'inline-block';
+        localStorage.setItem('theme', 'light');
         window.location.reload()
       } else {
-        document.getElementById('darkModeCheck').style.display = 'none';
-        document.getElementById('darkModeCheckTop').style.display = 'none';
-        localStorage.setItem('theme', 'light');
+        document.getElementById('lightModeCheck').style.display = 'none';
+        document.getElementById('lightModeCheckTop').style.display = 'none';
+        localStorage.setItem('theme', 'dark');
         window.location.reload()
       }
     }
@@ -307,7 +307,7 @@ export default function RootLayout({ children }) {
             <div
               id={choiceTitleExtractor(topic.name).brackets ? choiceTitleExtractor(topic.name).code : 'choiceTitle' + key}
               style={{ paddingBlock: 8 }}
-              className="w3-pointer chat-black w3-round"
+              className="w3-pointer"
             >
               {choiceTitleExtractor(topic.name).text}
             </div>
@@ -318,7 +318,7 @@ export default function RootLayout({ children }) {
             key={key}
             onClick={() => thisChoice(topic, type)}
             style={{ marginInline: 8, maxWidth: 320, marginBlock: 8, paddingBlock: 8 }}
-            className="w3-pointer chat-black w3-round"
+            className="w3-pointer"
           >
             {topic.name}
           </div>
@@ -542,7 +542,7 @@ export default function RootLayout({ children }) {
     for (let i = 0; i < allDropContent.length; i++) {
       if (allDropContent[i].id != ID) {
         allDropContent[i].className = allDropContent[i].className.replace(" w3-show", "");
-        dropButton[i].className = dropButton[i].className.replace("w3-black", "w3-white");
+        dropButton[i].className = dropButton[i].className.replace("w3-light-grey", "w3-dark-grey");
       }
     }
     if (document.getElementById(ID)) {
@@ -550,12 +550,12 @@ export default function RootLayout({ children }) {
       if (x.className.indexOf("w3-show") == -1) {
         x.className += " w3-show";
         if (document.getElementById(ID + 'Wrapper')) {
-          document.getElementById(ID + 'Wrapper').className = document.getElementById(ID + 'Wrapper').className.replace("w3-white", "w3-black")
+          document.getElementById(ID + 'Wrapper').className = document.getElementById(ID + 'Wrapper').className.replace("w3-dark-grey", "w3-light-grey")
         }
       } else {
         x.className = x.className.replace(" w3-show", "");
         if (document.getElementById(ID + 'Wrapper')) {
-          document.getElementById(ID + 'Wrapper').className = document.getElementById(ID + 'Wrapper').className.replace("w3-black", "w3-white")
+          document.getElementById(ID + 'Wrapper').className = document.getElementById(ID + 'Wrapper').className.replace("w3-light-grey", "w3-dark-grey")
         }
       }
     }
@@ -564,13 +564,13 @@ export default function RootLayout({ children }) {
 
   const toggleChat = () => {
 
-    const themeDark = localStorage.getItem('theme') == 'dark' ? true : false
+    const themeLight = localStorage.getItem('theme') == 'light' ? true : false
 
     if (document.getElementById("sidebarChat").style.display != "block") {
       closeAllPanel();
       document.getElementById("overlay").style.display = "block";
       document.getElementById("sidebarChat").className =
-        "mobileHeightPanel panel w3-sidebar w3-bar-block w3-collapse w3-top w3-animate-right " + (themeDark ? "w3-black" : "w3-light-grey");
+        "mobileHeightPanel panel w3-sidebar w3-bar-block w3-collapse w3-top w3-animate-right " + (themeLight ? "w3-light-grey" : "w3-black");
       document.getElementById("sidebarChat").style.display = "block";
     } else {
       document.getElementById("overlay").style.display = "none";
@@ -824,27 +824,30 @@ export default function RootLayout({ children }) {
 
   useEffect(() => {
 
+    if (localStorage.getItem('theme') == 'light') {
 
-    if (localStorage.getItem('theme') == 'dark') {
+      document.getElementById('lightModeCheck').style.display = 'inline-block'
+      document.getElementById('lightModeCheckTop').style.display = 'inline-block';
 
-      document.getElementById('darkModeCheck').style.display = 'inline-block'
-      document.getElementById('darkModeCheckTop').style.display = 'inline-block';
-
-      const elementGrey = document.getElementsByClassName('w3-light-grey').length
-      const elementWhite = document.getElementsByClassName('w3-white').length
-      const borderWhite = document.getElementsByClassName('w3-border-white').length
+      const elementGrey = document.getElementsByClassName('w3-black').length
+      const elementWhite = document.getElementsByClassName('w3-dark-grey').length
+      const borderWhite = document.getElementsByClassName('w3-border-dark-grey').length
       for (let i = 0; i < elementGrey; i++) {
-        const element = document.getElementsByClassName('w3-light-grey')[0];
-        element.className = element.className.replace('w3-light-grey', 'w3-black')
+        const element = document.getElementsByClassName('w3-black')[0];
+        element.className = element.className.replace('w3-black', 'w3-light-grey')
       }
       for (let i = 0; i < elementWhite; i++) {
-        const element = document.getElementsByClassName('w3-white')[0];
-        element.className = element.className.replace('w3-white', 'w3-dark-grey')
+        const element = document.getElementsByClassName('w3-dark-grey')[0];
+        element.className = element.className.replace('w3-dark-grey', 'w3-white')
       }
       for (let i = 0; i < borderWhite; i++) {
-        const element = document.getElementsByClassName('w3-border-white')[0];
-        element.className = element.className.replace('w3-border-white', 'w3-border-dark-grey')
+        const element = document.getElementsByClassName('w3-border-dark-grey')[0];
+        element.className = element.className.replace('w3-border-dark-grey', 'w3-border-white')
       }
+
+      document.getElementById('appCore').style.display = 'block'
+    }else{
+      document.getElementById('appCore').style.display = 'block'
     }
 
     // end theme changer
@@ -1022,7 +1025,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body id="appCore" className={inter.className} style={{display:'none'}}>
 
         <div
           onClick={() => closeAllPanel()}
@@ -1030,10 +1033,10 @@ export default function RootLayout({ children }) {
           style={{ width: "100vw", height: "100vh", zIndex: 4 }}
           className="w3-display-middle w3-hide-large"
         ></div>
-        <div className="container w3-white">
+        <div className="container w3-dark-grey">
           {freeLink}
           <nav
-            className="mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
+            className="mobileHeightPanel panel w3-sidebar w3-bar-block w3-black w3-collapse w3-top"
             style={{
               zIndex: 5,
               width: 250,
@@ -1049,7 +1052,7 @@ export default function RootLayout({ children }) {
               >
                 {/* ///-------------------- */}
                 <div className="w3-flex-column">
-                  <div className="btn3_container w3-white w3-border-white" style={{ marginInline: 'auto' }}>
+                  <div className="btn3_container w3-dark-grey w3-border-dark-grey" style={{ marginInline: 'auto' }}>
                     <span className="main w3-pointer">
                       <div id="freeSwitch" className="btn w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
                         <FontAwesomeIcon icon={faDollarSign} />
@@ -1079,7 +1082,7 @@ export default function RootLayout({ children }) {
                   data-key="160471339156947"
                   id="Page"
                   onClick={() => localStorage.setItem("user", "160471339156947")}
-                  className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+                  className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"/"}
                 >
@@ -1093,7 +1096,7 @@ export default function RootLayout({ children }) {
 
                 <Link
                   id="storePage"
-                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"/store/all"}
                 >
@@ -1107,7 +1110,7 @@ export default function RootLayout({ children }) {
 
                 <div
                   id="forumPage"
-                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round w3-pointer"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-pointer"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   onClick={userForum}
                 >
@@ -1121,7 +1124,7 @@ export default function RootLayout({ children }) {
 
                 <Link
                   id="talentPage"
-                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"/talent"}
                 >
@@ -1136,7 +1139,7 @@ export default function RootLayout({ children }) {
                 <Link
                   data-key="336302677822455"
                   id="userPage"
-                  className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+                  className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"/user/336302677822455"}
                 >
@@ -1150,7 +1153,7 @@ export default function RootLayout({ children }) {
 
                 <Link
                   id="recrutementPage"
-                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"/recrutement/postule"}
                 >
@@ -1164,7 +1167,7 @@ export default function RootLayout({ children }) {
 
                 <div
                   id="tarifsPage"
-                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round w3-pointer"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-pointer"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   onClick={userTarifs}
                 >
@@ -1177,7 +1180,7 @@ export default function RootLayout({ children }) {
                 </div>
 
                 <Link
-                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-light-grey w3-round"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"https://pos.freelancer.mg"}
                   target="_blank"
@@ -1212,16 +1215,16 @@ export default function RootLayout({ children }) {
                         {/* / arrow marker / */}
                         <div className="w3-flex-1 w3-overflow w3-round" style={{ zIndex: 2 }}>
 
-                          <div onClick={() => ActiveDarkMode()} className="w3-bar-item w3-button">
+                          <div onClick={() => ActiveLightMode()} className="w3-bar-item w3-button">
                             <div className="w3-flex-row w3-flex-center-v">
                               <div className="w3-flex-1">
                                 <FontAwesomeIcon
                                   className="w3-margin-right"
-                                  icon={faMoon}
+                                  icon={faSun}
                                 />
-                                Dark mode
+                                Light mode
                               </div>
-                              <FontAwesomeIcon icon={faCheck} id="darkModeCheck" style={{ display: 'none' }} />
+                              <FontAwesomeIcon icon={faCheck} id="lightModeCheck" style={{ display: 'none' }} />
                             </div>
                           </div>
 
@@ -1295,7 +1298,7 @@ export default function RootLayout({ children }) {
                     <div
                       id="settingWrapper"
                       onClick={(e) => openDropdown("setting")}
-                      className="dropButton w3-flex-row w3-flex-center-v w3-round w3-white"
+                      className="dropButton w3-flex-row w3-flex-center-v w3-round w3-dark-grey"
                       style={{ height: 40, paddingInline: 16, marginBlock: 4 }}
                     >
                       <FontAwesomeIcon
@@ -1345,7 +1348,7 @@ export default function RootLayout({ children }) {
                     contenu ...
                   </div>
                 </div>
-                <div className="w3-container w3-light-grey w3-padding">
+                <div className="w3-container w3-black w3-padding">
                   <button
                     id="confirmWarning"
                     className="w3-button w3-right w3-round w3-border w3-red"
@@ -1360,7 +1363,7 @@ export default function RootLayout({ children }) {
                   </button>
                   <button
                     id="cancelWarning"
-                    className="w3-button w3-right w3-round w3-white w3-border w3-margin-right"
+                    className="w3-button w3-right w3-round w3-dark-grey w3-border w3-margin-right"
                   >
                     Annuler
                   </button>
@@ -1371,7 +1374,7 @@ export default function RootLayout({ children }) {
           </main>
 
           <nav
-            className="mobileHeightPanel panel w3-sidebar w3-bar-block w3-light-grey w3-collapse w3-top"
+            className="mobileHeightPanel panel w3-sidebar w3-bar-block w3-black w3-collapse w3-top"
             style={{
               zIndex: 5,
               width: 320,
@@ -1389,7 +1392,7 @@ export default function RootLayout({ children }) {
               <div style={{ marginInline: "auto" }}>
                 <div>
                   <div
-                    className="w3-light-grey w3-flex w3-flex-row w3-flex-center-v"
+                    className="w3-black w3-flex w3-flex-row w3-flex-center-v"
                     style={{ minWidth: 80, minHeight: 80 }}
                   >
                     {imagePDP && (
@@ -1507,19 +1510,19 @@ export default function RootLayout({ children }) {
               }}
             >
               <div
-                className="w3-light-grey w3-card"
+                className="w3-black w3-card"
                 style={{ display: "block", paddingTop: 12 }}
               >
                 {displayChoice}
               </div>
               <div
-                className="w3-light-grey"
+                className="w3-black"
                 style={{ paddingInline: 16, paddingBottom: 10 }}
               >
                 <div className="w3-flex-row w3-flex-center-v">
                   <div
                     onClick={() => expand()}
-                    className="w3-button w3-hover-black w3-black w3-flex-1 w3-round-xxlarge w3-flex-row w3-flex-center-v"
+                    className="w3-button w3-hover-grey w3-yellow w3-flex-1 w3-round-xxlarge w3-flex-row w3-flex-center-v"
                     style={{ marginTop: 12 }}
                   >
                     <span className="w3-center w3-flex-1">Des questions !?</span>{" "}
@@ -1532,7 +1535,7 @@ export default function RootLayout({ children }) {
 
           {/* // Top bar menu */}
           <div
-            className="w3-top w3-block w3-card w3-white w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
+            className="w3-top w3-block w3-card w3-dark-grey w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
             style={{ paddingBlock: 8, paddingInline: 16, zIndex: 3 }}
           >
             <div className="w3-flex-1">
@@ -1548,7 +1551,7 @@ export default function RootLayout({ children }) {
                 <div
                   id="settingMobileWrapper"
                   onClick={(e) => openDropdown("settingMobile")}
-                  className="dropButton w3-flex w3-flex-center w3-card w3-round w3-white"
+                  className="dropButton w3-flex w3-flex-center w3-card w3-round w3-dark-grey"
                   style={{ width: 36, height: 36, marginInline: "auto" }}
                 >
                   <FontAwesomeIcon
@@ -1571,7 +1574,7 @@ export default function RootLayout({ children }) {
                     />
                   </div>
                   {/* / arrow marker / */}
-                  <div onClick={() => ActiveDarkMode()} className="w3-bar-item w3-button">
+                  <div onClick={() => ActiveLightMode()} className="w3-bar-item w3-button">
                     <div className="w3-flex-row w3-flex-center-v">
                       <div className="w3-flex-1">
                         <FontAwesomeIcon
@@ -1580,7 +1583,7 @@ export default function RootLayout({ children }) {
                         />
                         Dark mode
                       </div>
-                      <FontAwesomeIcon icon={faCheck} id="darkModeCheckTop" style={{ display: 'none' }} />
+                      <FontAwesomeIcon icon={faCheck} id="lightModeCheckTop" style={{ display: 'none' }} />
                     </div>
                   </div>
 
@@ -1665,7 +1668,7 @@ export default function RootLayout({ children }) {
 
           {/* // bottom menu */}
           <div
-            className="w3-bottom w3-block w3-card w3-white w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
+            className="w3-bottom w3-block w3-card w3-dark-grey w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
             style={{ paddingBlock: 8, zIndex: 9999 }}
           >
 
@@ -1676,7 +1679,7 @@ export default function RootLayout({ children }) {
             >
               <div
                 id="talentScreen"
-                className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
+                className="w3-flex w3-flex-center w3-overflow w3-black w3-round"
                 style={{ width: 36, height: 36, marginInline: "auto" }}
               >
                 <FontAwesomeIcon
@@ -1694,7 +1697,7 @@ export default function RootLayout({ children }) {
             >
               <div
                 id="recrutementScreen"
-                className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
+                className="w3-flex w3-flex-center w3-overflow w3-black w3-round"
                 style={{ width: 36, height: 36, marginInline: "auto" }}
               >
                 <FontAwesomeIcon
@@ -1739,7 +1742,7 @@ export default function RootLayout({ children }) {
                   id="settingMobileWrapper"
                   className="w3-flex-column"
                 >
-                  <div className="btn3_container1 w3-light-grey w3-border-white" onClick={() => {
+                  <div className="btn3_container1 w3-black w3-border-dark-grey" onClick={() => {
                     if (location.pathname.split('/')[1] != '' && location.pathname.split('/')[1] != 'user') {
                       document.location = '/'
                     }
@@ -1766,7 +1769,7 @@ export default function RootLayout({ children }) {
                 {/* <div
               id="settingMobileWrapper"
               onClick={(e) => openDropdown("switchPannel")}
-              className="dropButton w3-flex w3-flex-center w3-card w3-round w3-white"
+              className="dropButton w3-flex w3-flex-center w3-card w3-round w3-dark-grey"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
@@ -1789,7 +1792,7 @@ export default function RootLayout({ children }) {
             >
               <div
                 id="storeScreen"
-                className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
+                className="w3-flex w3-flex-center w3-overflow w3-black w3-round"
                 style={{ width: 36, height: 36, marginInline: "auto" }}
               >
                 <FontAwesomeIcon
@@ -1802,7 +1805,7 @@ export default function RootLayout({ children }) {
 
             {/* <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
           <div
-            className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
+            className="w3-flex w3-flex-center w3-overflow w3-black w3-round"
             style={{ width: 36, height: 36, marginInline: "auto" }}
           >
             <FontAwesomeIcon
@@ -1819,7 +1822,7 @@ export default function RootLayout({ children }) {
               style={{ width: 36, height: 36 }}
             >
               <div
-                className="w3-flex w3-flex-center w3-overflow w3-light-grey w3-round"
+                className="w3-flex w3-flex-center w3-overflow w3-black w3-round"
                 style={{ width: 36, height: 36, marginInline: "auto" }}
               >
                 <FontAwesomeIcon
@@ -1838,7 +1841,7 @@ export default function RootLayout({ children }) {
             style={{ padding: 24, zIndex: 999999 }}
           >
             <div
-              className="w3-white w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
+              className="w3-dark-grey w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
               style={{
                 minHeight: 320,
                 paddingBlock: 8,
@@ -1894,17 +1897,17 @@ export default function RootLayout({ children }) {
                     <input
                       onChange={(e) => emailRegister(e)}
                       type="text"
-                      className="input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium w3-border-0"
+                      className="input w3-black w3-round-xxlarge w3-block w3-text-grey w3-medium w3-border-0"
                       placeholder="Adresse e-mail"
                       id="mail"
                       name="user_email"
                       required
                     />
                     <div
-                      className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                      className="w3-light-grey input-icon w3-display-right w3-circle w3-flex w3-flex-center"
                       style={{ marginRight: 20 }}
                     >
-                      <span className="w3-text-white">
+                      <span>
                         <FontAwesomeIcon icon={faUser} />
                       </span>
                     </div>
@@ -1913,7 +1916,7 @@ export default function RootLayout({ children }) {
                     <input
                       onChange={(e) => passwordRegister(e)}
                       type="password"
-                      className="input w3-light-grey w3-round-xxlarge w3-block w3-text-grey w3-medium w3-border-0"
+                      className="input w3-black w3-round-xxlarge w3-block w3-medium w3-border-0"
                       placeholder="Mot de passe"
                       id="password"
                       name="user_password"
@@ -1921,21 +1924,21 @@ export default function RootLayout({ children }) {
                     />
 
                     <div
-                      className="w3-black input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                      className="w3-light-grey input-icon w3-display-right w3-circle w3-flex w3-flex-center"
                       style={{ marginRight: 20 }}
                     >
-                      <span className="w3-text-white">
+                      <span>
                         <FontAwesomeIcon icon={faKey} />
                       </span>
                     </div>
                   </div>
-                  <div className="w3-center w3-white w3-flex w3-flex-center">
+                  <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
                     <div className="w3-margin w3-col l8 m8 s8">
                       <button
                         id="buttonConnexion"
                         disabled={false}
                         onClick={() => login()}
-                        className="transition w3-medium w3-block w3-button w3-round-xxlarge w3-text-white w3-black"
+                        className="transition w3-medium w3-block w3-button w3-round-xxlarge w3-yellow"
                       >
                         Se connecter
                         <span
@@ -1948,20 +1951,18 @@ export default function RootLayout({ children }) {
                       </button>
                     </div>
                   </div>
-                  <div className="w3-center w3-white w3-flex w3-flex-center">
+                  <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
                     <div
                       className="w3-col l8 m8 s8"
                       style={{ marginInline: 16, marginBottom: 24 }}
                     >
-                      <button
+                      <div
                         id="buttonSignup"
-                        onClick={() =>
-                          (window.location = "/signup")
-                        }
-                        className="transition w3-medium w3-block w3-button w3-round-xxlarge w3-text-black w3-yellow"
+                        onClick={() => window.location = "/signup"}
+                        className="w3-small w3-center w3-pointer"
                       >
-                        S'inscrire
-                      </button>
+                        Vous n'avez pas de comptre: <u>S'inscrire</u>
+                      </div>
                     </div>
                   </div>
                 </div>

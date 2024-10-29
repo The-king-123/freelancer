@@ -282,7 +282,7 @@ function userRegistre() {
                 <input
                   onChange={(e) => (importInfo.index.email = e.target.value)}
                   type="number"
-                  className="w3-white w3-border-0 w3-center"
+                  className="w3-dark-grey w3-border-0 w3-center"
                   maxLength={2}
                   defaultValue={1}
                   style={{ width: 24 }}
@@ -294,7 +294,7 @@ function userRegistre() {
                 <input
                   onChange={(e) => (importInfo.index.prenom = e.target.value)}
                   type="number"
-                  className="w3-white w3-border-0 w3-center"
+                  className="w3-dark-grey w3-border-0 w3-center"
                   maxLength={2}
                   defaultValue={2}
                   style={{ width: 24 }}
@@ -306,7 +306,7 @@ function userRegistre() {
                 <input
                   onChange={(e) => (importInfo.index.nom = e.target.value)}
                   type="number"
-                  className="w3-white w3-border-0 w3-center"
+                  className="w3-dark-grey w3-border-0 w3-center"
                   maxLength={2}
                   defaultValue={3}
                   style={{ width: 24 }}
@@ -317,12 +317,12 @@ function userRegistre() {
           </div>
         </div>
         <div
-          className="w3-animate-opacity w3-round-large w3-white w3-block w3-flex-column w3-flex-center"
+          className="w3-animate-opacity w3-round-large w3-dark-grey w3-block w3-flex-column w3-flex-center"
           style={{ minHeight: 160 }}
         >
           <div
             onClick={() => inputCSV.click()}
-            className="w3-circle w3-pointer w3-light-grey w3-flex w3-flex-column w3-flex-center"
+            className="w3-circle w3-pointer w3-black w3-flex w3-flex-column w3-flex-center"
             style={{ width: 120, height: 120 }}
           >
             <FontAwesomeIcon
@@ -354,7 +354,7 @@ function userRegistre() {
           <button
             onClick={importLaunch}
             style={{ paddingInline: 24 }}
-            className="w3-flex w3-flex-center w3-button w3-black w3-round-xxlarge w3-block"
+            className="w3-flex w3-flex-center w3-button w3-light-grey w3-round-xxlarge w3-block"
           >
             LANCER
             <FontAwesomeIcon

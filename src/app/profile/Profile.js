@@ -261,7 +261,7 @@ function Profile() {
           />
           <div
             id="imagePDProfilSpinner"
-            className="w3-display-middle w3-black-semitransparent w3-flex w3-flex-center"
+            className="w3-display-middle w3-light-grey-semitransparent w3-flex w3-flex-center"
             style={{
               width: 100,
               height: 100,
@@ -320,7 +320,7 @@ function Profile() {
             <input
               onChange={(e) => userInfo.fullname = e.target.value}
               type="text"
-              className="w3-input w3-light-grey w3-round w3-text-grey w3-block w3-border-0"
+              className="w3-input w3-black w3-round w3-text-grey w3-block w3-border-0"
               placeholder="Nom complet"
               id="fullname"
               name="user_fn"
@@ -348,7 +348,7 @@ function Profile() {
             <input
               onChange={(e) => userInfo.newemail = e.target.value}
               type="email"
-              className="w3-input w3-light-grey w3-round w3-text-grey w3-block w3-border-0"
+              className="w3-input w3-black w3-round w3-text-grey w3-block w3-border-0"
               placeholder="Adresse e-mail"
               id="email"
               name="user_email"
@@ -376,7 +376,7 @@ function Profile() {
             <input
               onChange={(e) => userInfo.telephone = e.target.value}
               type="number"
-              className="w3-input w3-light-grey w3-round w3-text-grey w3-block w3-border-0"
+              className="w3-input w3-black w3-round w3-text-grey w3-block w3-border-0"
               placeholder="Numéro de téléphone"
               id="number"
               name="user_number"
@@ -405,7 +405,7 @@ function Profile() {
             <input
               onChange={(e) => userInfo.whatsapp = e.target.value}
               type="number"
-              className="w3-input w3-light-grey w3-round w3-text-grey w3-block w3-border-0"
+              className="w3-input w3-black w3-round w3-text-grey w3-block w3-border-0"
               placeholder="Numéro Whatsapp"
               id="whatsapp"
               name="user_whatsapp"
@@ -433,7 +433,7 @@ function Profile() {
             <input
               onChange={(e) => userInfo.messenger = e.target.value}
               type="text"
-              className="w3-input w3-light-grey w3-round w3-text-grey w3-block w3-border-0"
+              className="w3-input w3-black w3-round w3-text-grey w3-block w3-border-0"
               placeholder="Lien Messenger"
               id="messenger"
               name="user_messenger"
@@ -448,7 +448,7 @@ function Profile() {
             <select
               onChange={(e) => userInfo.designation = e.target.value}
               id="designation"
-              className="w3-input w3-light-grey w3-round w3-text-grey w3-block w3-border-0"
+              className="w3-input w3-black w3-round w3-text-grey w3-block w3-border-0"
               style={{ paddingBlock: 8 }}
             >
               <option value="Acheteur">
@@ -518,7 +518,7 @@ function Profile() {
         </div>
         <div
           onClick={updateUserinfo}
-          className="w3-block transition w3-medium w3-button w3-round-xxlarge w3-text-white w3-black w3-margin-bottom"
+          className="w3-block transition w3-medium w3-button w3-round-xxlarge w3-light-grey w3-margin-bottom"
         >
           Sauvegarder
           <span
