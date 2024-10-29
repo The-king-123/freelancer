@@ -10,11 +10,7 @@ import Link from "next/link";
 export default function PostContent({ posts }) {
 
   const [audioBox, setaudioBox] = useState({ chaine: null });
-  const [imagePostModal, setimagePostModal] = useState(
-    source + "/images.php?w=720&h=720&zlonk=3733&zlink=160471339156947"
-  );
   
-  const [showThisPost, setshowThisPost] = useState();
   const [displayPost, setdisplayPost] = useState(
     <div style={{ padding: 24 }} className='w3-center'>
       <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
@@ -264,7 +260,6 @@ export default function PostContent({ posts }) {
         premiumIcon1.style.display = 'flex'
         main1.className = "active31 w3-pointer"
         premiumfreeText1.innerText = "Gratuit"
-        premiumfreeText1.className = "w3-text-green w3-small"
         premiumfreeText1.style.textAlign = 'left'
 
         loadPost('free')
@@ -278,7 +273,6 @@ export default function PostContent({ posts }) {
         premiumIcon1.style.display = 'none'
         main1.className = "main1 w3-pointer"
         premiumfreeText1.innerText = "Premium"
-        premiumfreeText1.className = "w3-text-black w3-small"
         premiumfreeText1.style.textAlign = 'right'
 
         loadPost('premium')

@@ -340,6 +340,7 @@ export default function RootLayout({ children }) {
   };
 
   const reloadStarter = (data) => {
+
     clearInterval(killer.starter);
 
     document.getElementById("loaderCursor").style.display = "none";
@@ -516,6 +517,7 @@ export default function RootLayout({ children }) {
     await axios
       .get(source + "/_accrocher/" + key)
       .then((res) => {
+        console.log('kozyav_accrocher');
         reloadStarter(res.data.data[0]);
       })
       .catch((e) => {
@@ -806,20 +808,24 @@ export default function RootLayout({ children }) {
     openDropdown("switchPannel")
   }
 
-  const userKeyTaker = () => {
-    setInterval(() => {
-      const user = document.getElementsByClassName('userKey')
-      for (let i = 0; i < user.length; i++) {
-        const element = user[i];
-        element.addEventListener('click', () => {
-          const key = element.getAttribute("data-key");
-          stopAllIntervalAndTimeout()
-          showUser(dataUsers, key)
-          userKeyTaker()
-        })
-      }
-    }, 2000);
 
+  const userKeyTaker = () => {
+    var counterBeast = 0
+    const beastInterval = setInterval(() => {
+      if (document.getElementsByClassName('beastUser')) {
+        clearInterval(beastInterval)
+        const user = document.getElementsByClassName('beastUser')
+        for (let i = 0; i < user.length; i++) {
+          const element = user[i];
+          element.addEventListener('click', () => {
+            const key = element.getAttribute("data-key");
+            stopAllIntervalAndTimeout()
+            showUser(dataUsers, key)
+          })
+        }
+      }
+      counterBeast++;
+    }, 500);
   }
 
   useEffect(() => {
@@ -846,9 +852,10 @@ export default function RootLayout({ children }) {
       }
 
       document.getElementById('appCore').style.display = 'block'
-    }else{
+    } else {
       document.getElementById('appCore').style.display = 'block'
     }
+
 
     // end theme changer
 
@@ -942,6 +949,18 @@ export default function RootLayout({ children }) {
             dataUsers.push(user);
           });
 
+          if (document.getElementsByClassName('userKey')) {
+            const user = document.getElementsByClassName('userKey')
+            for (let i = 0; i < user.length; i++) {
+              const element = user[i];
+              element.addEventListener('click', () => {
+                const key = element.getAttribute("data-key");
+                stopAllIntervalAndTimeout()
+                showUser(res.data.data, key)
+              })
+            }
+          }
+
           if (user) {
             showUser(res.data.data, user == 'undefined' ? "160471339156947" : user);
           } else {
@@ -1013,7 +1032,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body id="appCore" className={inter.className} style={{display:'none'}}>
+      <body id="appCore" className={inter.className} style={{ display: 'none' }}>
 
         <div
           onClick={() => closeAllPanel()}

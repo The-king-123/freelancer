@@ -26,7 +26,7 @@ export default function PostContent({ content }) {
         >
           <div
             data-key={user.key}
-            className={"userKey w3-flex w3-flex-row w3-flex-center w3-round " +(themeLight ? "w3-light-grey" : "w3-black")}
+            className={"beastUser w3-flex w3-flex-row w3-flex-center w3-round " +(themeLight ? "w3-light-grey" : "w3-black")}
             style={{ padding: 12 }}
           >
             <Image
