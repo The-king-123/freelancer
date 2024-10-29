@@ -982,11 +982,9 @@ export default function RootLayout({ children }) {
           stepper.scrolling = false;
         }
       });
-      
+
       userKeyTaker()
       setInterval(() => {
-
-
 
         if (document.getElementById("mainCore")) {
           document.getElementById("mainCore").style.userSelect = "none";
