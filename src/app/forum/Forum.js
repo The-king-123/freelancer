@@ -251,7 +251,7 @@ export default function Forum(props) {
                   style={{ borderBottomLeftRadius: 32, borderTopLeftRadius: 32 }}
                   placeholder="Laisser un commentaire"
                 />
-                <button onClick={() => comment(forum, key)} className={"w3-bitton w3-border-0 w3-pointer"+ (themeLight ? 'w3-dark-grey' : 'w3-light-grey')} style={{ minWidth: 80 }}>
+                <button onClick={() => comment(forum, key)} className={"w3-bitton w3-border-0 w3-pointer w3-yellow"} style={{ minWidth: 80 }}>
                   <span id={"comentTextSpinner" + key}>Envoyer</span>
                   <FontAwesomeIcon id={"comentButtonSpinner" + key} icon={faSpinner} className="w3-spin" style={{ display: 'none' }} />
                 </button>

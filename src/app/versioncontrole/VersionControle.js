@@ -102,9 +102,9 @@ function VersionControle() {
             className='w3-text-grey'
           ></div>
         </div>
-        <Link href={'https://developer.mg'} target='_blank' className='w3-flex-column w3-center w3-light-grey w3-round' style={{ padding: 16 }}>
-          <div className='w3-text-grey'>Powered by</div>
-          <div className='w3-big w3-text-white'>www.developer.mg</div>
+        <Link href={'https://developer.mg'} target='_blank' className='w3-flex-column w3-center w3-deep-purple w3-round' style={{ padding: 16 }}>
+          <div className='w3-text-light-grey w3-small'>Powered by</div>
+          <div className='w3-big w3-text-white' style={{paddingTop:8}}>www.developer.mg</div>
         </Link>
         <div style={{ paddingBlock: 8 }} className='w3-small w3-text-grey w3-center'>
           Copyright © {copyright}
