@@ -10,7 +10,7 @@ import Link from "next/link";
 export default function PostContent({ posts }) {
 
   const [audioBox, setaudioBox] = useState({ chaine: null });
-  
+
   const [displayPost, setdisplayPost] = useState(
     <div style={{ padding: 24 }} className='w3-center'>
       <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
@@ -59,9 +59,9 @@ export default function PostContent({ posts }) {
     const glitchPost = posts.map((post, key) => (
       (type == 'premium' ? post.category == type : post.category != 'premium') &&
       <Link className="postCard" href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
-        <div className={(themeLight ? "w3-light-grey" : "w3-black")+" w3-overflow w3-round w3-pointer"}>
+        <div className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow w3-round w3-pointer"}>
           <div
-            className={(themeLight ? "w3-light-grey" : "w3-black")+" w3-big w3-small w3-flex-row w3-flex-center-v"}
+            className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-big w3-small w3-flex-row w3-flex-center-v"}
             title={parse(post.title)}
           >
             {post.category != 'premium' &&
@@ -124,7 +124,7 @@ export default function PostContent({ posts }) {
           </div>
 
           <div
-            className={(themeLight ? "w3-light-grey" : "w3-black")+" postMedia w3-display-container post-image"}
+            className={(themeLight ? "w3-light-grey" : "w3-black") + " postMedia w3-display-container post-image"}
             style={{ zIndex: 2 }}
           >
             <Image
@@ -146,7 +146,7 @@ export default function PostContent({ posts }) {
                 height: '65vw',
                 maxHeight: 200,
               }}
-              className={(themeLight ? "w3-light-grey" : "w3-black")+" w3-overflow post-image"}
+              className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow post-image"}
             />
             {/* {(post.type == "image/audio" || post.type == "video" || post.type == "image/video") && (
                 <div className="w3-light-grey w3-opacity-max w3-block w3-height w3-padding w3-display-middle"></div>
@@ -200,6 +200,7 @@ export default function PostContent({ posts }) {
     // side menu button
     const premiumfreeText = document.querySelector("#premiumfreeText");
     const main = document.querySelector(".main");
+    const active3 = document.querySelector(".active3");
 
     const freeIcon = document.querySelector("#freeSwitch");
     const premiumIcon = document.querySelector("#premiumSwitch");
@@ -207,6 +208,7 @@ export default function PostContent({ posts }) {
     // bottom menu switch button
     const premiumfreeText1 = document.querySelector("#premiumfreeText1");
     const main1 = document.querySelector(".main1");
+    const active31 = document.querySelector(".active31");
 
     const freeIcon1 = document.querySelector("#freeSwitch1");
     const premiumIcon1 = document.querySelector("#premiumSwitch1");
@@ -320,6 +322,27 @@ export default function PostContent({ posts }) {
     }, 1000);
 
     // end switch animation
+
+    //default switch premium
+    freeIcon.style.display = 'flex'
+    premiumIcon.style.display = 'none'
+    if (main) {
+      main.className = "main w3-pointer"
+    } else if (active3) {
+      active3.className = "main w3-pointer"
+    }
+    premiumfreeText.innerText = "Premium"
+
+    freeIcon1.style.display = 'flex'
+    premiumIcon1.style.display = 'none'
+    if (main1) {
+      main1.className = "main1 w3-pointer"
+    } else if (active31) {
+      active31.className = "main w3-pointer"
+    }
+    premiumfreeText1.innerText = "Premium"
+    premiumfreeText1.className = "w3-text-black w3-small"
+    premiumfreeText1.style.textAlign = 'right'
     loadPost('premium')
 
   }, [])

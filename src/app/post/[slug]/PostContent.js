@@ -72,6 +72,28 @@ export default function PostContent({ content }) {
   };
 
   useEffect(() => {
+    if (localStorage.getItem('theme') == 'light') {
+
+      const elementGrey = document.getElementsByClassName('w3-black').length
+      const elementWhite = document.getElementsByClassName('w3-dark-grey').length
+      const borderWhite = document.getElementsByClassName('w3-border-dark-grey').length
+      for (let i = 0; i < elementGrey; i++) {
+        const element = document.getElementsByClassName('w3-black')[0];
+        element.className = element.className.replace('w3-black', 'w3-light-grey')
+      }
+      for (let i = 0; i < elementWhite; i++) {
+        const element = document.getElementsByClassName('w3-dark-grey')[0];
+        element.className = element.className.replace('w3-dark-grey', 'w3-white')
+      }
+      for (let i = 0; i < borderWhite; i++) {
+        const element = document.getElementsByClassName('w3-border-dark-grey')[0];
+        element.className = element.className.replace('w3-border-dark-grey', 'w3-border-white')
+      }
+
+      document.getElementById('singlePost').style.display = 'block'
+    } else {
+      document.getElementById('singlePost').style.display = 'block'
+    }
 
     audioBox.chaine = document.getElementById("audioBox");
     audioBox.chaine.src =
@@ -95,7 +117,7 @@ export default function PostContent({ content }) {
   }, []);
 
   return (
-    <div>
+    <div id="singlePost" style={{display:'none'}}>
       <h3 className="w3-wide w3-flex-row w3-flex-center-v w3-large">
         <div id="backButton" className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large" style={{ paddingInline: 4 }}>
           <FontAwesomeIcon
