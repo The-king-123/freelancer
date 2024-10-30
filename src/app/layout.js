@@ -587,17 +587,6 @@ export default function RootLayout({ children }) {
     document.getElementById("overlay").style.display = "none";
   };
 
-  const copyToClipboard = (text) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(function () {
-        console.log("Text copied to clipboard");
-      })
-      .catch(function (err) {
-        console.error("Could not copy text: ", err);
-      });
-  };
-
   const stopAllIntervalAndTimeout = () => {
     if (stepper.intervalTyper) {
       clearInterval(stepper.intervalTyper);
@@ -669,19 +658,6 @@ export default function RootLayout({ children }) {
       }, 100);
     }
   };
-
-  const userPremiumArea = () => {
-    var user = localStorage.getItem("user");
-    if (user) {
-      if (user == "160471339156947" || user == "undefined") {
-        window.location = "/premiumarea";
-      } else {
-        window.location = "/premiumarea/" + user;
-      }
-    } else {
-      window.location = "/premiumarea";
-    }
-  }
 
   const emailRegister = (element) => {
     signinAuthElement.email = element.target.value;
@@ -806,6 +782,8 @@ export default function RootLayout({ children }) {
 
 
   useEffect(() => {
+
+    localStorage.setItem('freePremiumListened','not')
 
     if (localStorage.getItem('theme') == 'light') {
 

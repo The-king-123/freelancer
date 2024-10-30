@@ -210,13 +210,11 @@ export default function PostContent({ posts }) {
     const freeIcon1 = document.querySelector("#freeSwitch1");
     const premiumIcon1 = document.querySelector("#premiumSwitch1");
 
-    console.log(killer.freepremium);
-    console.log('etoary');
-    
-
-    if (premiumfreeText && !killer.freepremium) {
+    if (premiumfreeText && !killer.freepremium && localStorage.getItem('freePremiumListened')=='not') {
 
       killer.freepremium = true;
+      localStorage.setItem('freePremiumListened','yes')
+      
       premiumfreeText.addEventListener("click", () => {
 
         console.log('clicked');
