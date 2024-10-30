@@ -188,15 +188,8 @@ export default function PostContent({ posts }) {
 
   }
 
-  useEffect(() => {
 
-    if (document.getElementById("audioBox")) {
-      audioBox.chaine = document.getElementById("audioBox");
-      audioBox.chaine.addEventListener("ended", () => {
-        document.getElementById("iconPlay").style.display = "inline-block";
-        document.getElementById("iconPause").style.display = "none";
-      });
-    }
+  const beastChangerSide = () => {
 
     // side menu button
     const premiumfreeText = document.querySelector("#premiumfreeText");
@@ -210,81 +203,110 @@ export default function PostContent({ posts }) {
     const freeIcon1 = document.querySelector("#freeSwitch1");
     const premiumIcon1 = document.querySelector("#premiumSwitch1");
 
-    if (premiumfreeText && !killer.freepremium && localStorage.getItem('freePremiumListened') == 'not') {
+    if (premiumIcon.style.display == 'none') {
+      freeIcon.style.display = 'none'
+      premiumIcon.style.display = 'flex'
+      main.className = "active3 w3-pointer"
+      premiumfreeText.innerText = "Gratuit"
+
+      freeIcon1.style.display = 'none'
+      premiumIcon1.style.display = 'flex'
+      main1.className = "active31 w3-pointer"
+      premiumfreeText1.innerText = "Gratuit"
+      premiumfreeText1.className = "w3-text-green w3-small"
+      premiumfreeText1.style.textAlign = 'left'
+
+      loadPost('free')
+
+    } else {
+      freeIcon.style.display = 'flex'
+      premiumIcon.style.display = 'none'
+      main.className = "main w3-pointer"
+      premiumfreeText.innerText = "Premium"
+
+      freeIcon1.style.display = 'flex'
+      premiumIcon1.style.display = 'none'
+      main1.className = "main1 w3-pointer"
+      premiumfreeText1.innerText = "Premium"
+      premiumfreeText1.className = "w3-text-black w3-small"
+      premiumfreeText1.style.textAlign = 'right'
+
+      loadPost('premium')
+
+    }
+
+  }
+
+  const beastChangerBottom = () => {
+    // side menu button
+    const premiumfreeText = document.querySelector("#premiumfreeText");
+    const main = document.querySelector(".main") ? document.querySelector(".main") : document.querySelector(".active3");
+    const freeIcon = document.querySelector("#freeSwitch");
+    const premiumIcon = document.querySelector("#premiumSwitch");
+
+    // bottom menu switch button
+    const premiumfreeText1 = document.querySelector("#premiumfreeText1");
+    const main1 = document.querySelector(".main1") ? document.querySelector(".main1") : document.querySelector(".active31");
+    const freeIcon1 = document.querySelector("#freeSwitch1");
+    const premiumIcon1 = document.querySelector("#premiumSwitch1");
+
+    if (premiumIcon1.style.display == 'none') {
+
+      freeIcon.style.display = 'none'
+      premiumIcon.style.display = 'flex'
+      main.className = "active3 w3-pointer"
+      premiumfreeText.innerText = "Gratuit"
+
+      freeIcon1.style.display = 'none'
+      premiumIcon1.style.display = 'flex'
+      main1.className = "active31 w3-pointer"
+      premiumfreeText1.innerText = "Gratuit"
+      premiumfreeText1.style.textAlign = 'left'
+
+      loadPost('free')
+    } else {
+      freeIcon.style.display = 'flex'
+      premiumIcon.style.display = 'none'
+      main.className = "main w3-pointer"
+      premiumfreeText.innerText = "Premium"
+
+      freeIcon1.style.display = 'flex'
+      premiumIcon1.style.display = 'none'
+      main1.className = "main1 w3-pointer"
+      premiumfreeText1.innerText = "Premium"
+      premiumfreeText1.style.textAlign = 'right'
+
+      loadPost('premium')
+    }
+
+  }
+
+  function removeAllEventListeners(element) {
+    const newElement = element.cloneNode(true); // true means deep clone
+    element.parentNode.replaceChild(newElement, element);
+  }
+
+  useEffect(() => {
+
+    if (document.getElementById("audioBox")) {
+      audioBox.chaine = document.getElementById("audioBox");
+      audioBox.chaine.addEventListener("ended", () => {
+        document.getElementById("iconPlay").style.display = "inline-block";
+        document.getElementById("iconPause").style.display = "none";
+      });
+    }
+
+    const myElement = document.getElementById('beastWrapper');
+    removeAllEventListeners(myElement);
+
+    const premiumfreeText = document.querySelector("#premiumfreeText");
+    const premiumfreeText1 = document.querySelector("#premiumfreeText1");
+
+    if (premiumfreeText && !killer.freepremium) {
 
       killer.freepremium = true;
-      localStorage.setItem('freePremiumListened', 'yes')
-
-      premiumfreeText.addEventListener("click", () => {
-
-        console.log('clicked');
-
-        if (premiumIcon.style.display == 'none') {
-
-          loadPost('free')
-          freeIcon.style.display = 'none'
-          premiumIcon.style.display = 'flex'
-          main.className = "active3 w3-pointer"
-          premiumfreeText.innerText = "Gratuit"
-
-          freeIcon1.style.display = 'none'
-          premiumIcon1.style.display = 'flex'
-          main1.className = "active31 w3-pointer"
-          premiumfreeText1.innerText = "Gratuit"
-          premiumfreeText1.className = "w3-text-green w3-small"
-          premiumfreeText1.style.textAlign = 'left'
-
-        } else {
-
-          loadPost('premium')
-          freeIcon.style.display = 'flex'
-          premiumIcon.style.display = 'none'
-          main.className = "main w3-pointer"
-          premiumfreeText.innerText = "Premium"
-
-          freeIcon1.style.display = 'flex'
-          premiumIcon1.style.display = 'none'
-          main1.className = "main1 w3-pointer"
-          premiumfreeText1.innerText = "Premium"
-          premiumfreeText1.className = "w3-text-black w3-small"
-          premiumfreeText1.style.textAlign = 'right'
-
-        }
-
-      });
-
-      premiumfreeText1.addEventListener("click", () => {
-
-        if (premiumIcon1.style.display == 'none') {
-
-          freeIcon.style.display = 'none'
-          premiumIcon.style.display = 'flex'
-          main.className = "active3 w3-pointer"
-          premiumfreeText.innerText = "Gratuit"
-
-          freeIcon1.style.display = 'none'
-          premiumIcon1.style.display = 'flex'
-          main1.className = "active31 w3-pointer"
-          premiumfreeText1.innerText = "Gratuit"
-          premiumfreeText1.style.textAlign = 'left'
-
-          loadPost('free')
-        } else {
-          freeIcon.style.display = 'flex'
-          premiumIcon.style.display = 'none'
-          main.className = "main w3-pointer"
-          premiumfreeText.innerText = "Premium"
-
-          freeIcon1.style.display = 'flex'
-          premiumIcon1.style.display = 'none'
-          main1.className = "main1 w3-pointer"
-          premiumfreeText1.innerText = "Premium"
-          premiumfreeText1.style.textAlign = 'right'
-
-          loadPost('premium')
-        }
-
-      });
+      premiumfreeText.addEventListener("click", beastChangerSide);
+      premiumfreeText1.addEventListener("click", beastChangerBottom);
 
       const choiceListenerInterval = setInterval(() => {
         if (document.getElementById("formationPayante")) {
@@ -324,24 +346,10 @@ export default function PostContent({ posts }) {
           clearInterval(choiceListenerInterval)
         }
       }, 1000);
+
+      loadPost('premium')
     }
-
-
     // end switch animation
-
-    //default switch premium
-    freeIcon.style.display = 'flex'
-    premiumIcon.style.display = 'none'
-    main.className = "main w3-pointer"
-    premiumfreeText.innerText = "Premium"
-
-    freeIcon1.style.display = 'flex'
-    premiumIcon1.style.display = 'none'
-    main1.className = "main1 w3-pointer"
-    premiumfreeText1.innerText = "Premium"
-    premiumfreeText1.className = "w3-text-black w3-small"
-    premiumfreeText1.style.textAlign = 'right'
-    loadPost('premium')
 
   }, [])
 

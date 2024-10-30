@@ -6,10 +6,6 @@ import {
   faArrowLeft,
   faListDots,
   faSpinner,
-  faStore,
-  faUserCircle,
-  faUserPlus,
-  faUsers,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
 import "cloudinary-video-player/cld-video-player.min.css";

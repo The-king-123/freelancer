@@ -782,8 +782,6 @@ export default function RootLayout({ children }) {
 
   useEffect(() => {
 
-    localStorage.setItem('freePremiumListened','not')
-
     if (localStorage.getItem('theme') == 'light') {
 
       document.getElementById('lightModeCheck').style.display = 'inline-block'
@@ -1026,7 +1024,7 @@ export default function RootLayout({ children }) {
                 className="w3-pointer w3-center w3-flex-row w3-flex-center w3-large"
               >
                 {/* ///-------------------- */}
-                <div className="w3-flex-column">
+                <div id="beastWrapper" className="w3-flex-column">
                   <div className="btn3_container w3-dark-grey w3-border-dark-grey" style={{ marginInline: 'auto' }}>
                     <span className="main w3-pointer">
                       <div id="freeSwitch" className="btn w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
