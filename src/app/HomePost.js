@@ -210,17 +210,18 @@ export default function PostContent({ posts }) {
     const freeIcon1 = document.querySelector("#freeSwitch1");
     const premiumIcon1 = document.querySelector("#premiumSwitch1");
 
-    if (premiumfreeText && !killer.freepremium && localStorage.getItem('freePremiumListened')=='not') {
+    if (premiumfreeText && !killer.freepremium && localStorage.getItem('freePremiumListened') == 'not') {
 
       killer.freepremium = true;
-      localStorage.setItem('freePremiumListened','yes')
-      
+      localStorage.setItem('freePremiumListened', 'yes')
+
       premiumfreeText.addEventListener("click", () => {
 
         console.log('clicked');
 
         if (premiumIcon.style.display == 'none') {
 
+          loadPost('free')
           freeIcon.style.display = 'none'
           premiumIcon.style.display = 'flex'
           main.className = "active3 w3-pointer"
@@ -233,8 +234,9 @@ export default function PostContent({ posts }) {
           premiumfreeText1.className = "w3-text-green w3-small"
           premiumfreeText1.style.textAlign = 'left'
 
-          loadPost('free')
         } else {
+
+          loadPost('premium')
           freeIcon.style.display = 'flex'
           premiumIcon.style.display = 'none'
           main.className = "main w3-pointer"
@@ -247,7 +249,6 @@ export default function PostContent({ posts }) {
           premiumfreeText1.className = "w3-text-black w3-small"
           premiumfreeText1.style.textAlign = 'right'
 
-          loadPost('premium')
         }
 
       });
