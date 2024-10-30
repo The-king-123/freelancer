@@ -76,6 +76,8 @@ export default function Home(props) {
 
   useEffect(() => {
 
+    localStorage.setItem('freePremiumListened','not')
+
     const allMenuListe = document.getElementsByClassName('menuItem')
     for (let i = 0; i < allMenuListe.length; i++) {
       const element = allMenuListe[i];

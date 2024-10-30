@@ -780,25 +780,6 @@ export default function RootLayout({ children }) {
     openDropdown("switchPannel")
   }
 
-  const userKeyTaker = () => {
-    var counterBeast = 0
-    const beastInterval = setInterval(() => {
-      if (document.getElementsByClassName('beastUser')) {
-        clearInterval(beastInterval)
-        const user = document.getElementsByClassName('beastUser')
-        for (let i = 0; i < user.length; i++) {
-          const element = user[i];
-          element.addEventListener('click', () => {
-            const key = element.getAttribute("data-key");
-            stopAllIntervalAndTimeout()
-            showUser(dataUsers, key)
-          })
-        }
-      }
-      counterBeast++;
-    }, 500);
-  }
-
   useEffect(() => {
 
     localStorage.setItem('freePremiumListened','not')
