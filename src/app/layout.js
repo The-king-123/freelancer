@@ -780,7 +780,6 @@ export default function RootLayout({ children }) {
     openDropdown("switchPannel")
   }
 
-<<<<<<< HEAD
   const userKeyTaker = () => {
     var counterBeast = 0
     const beastInterval = setInterval(() => {
@@ -799,8 +798,6 @@ export default function RootLayout({ children }) {
       counterBeast++;
     }, 500);
   }
-=======
->>>>>>> 26a5e10b3ee5634bcc1a90172ed5f20a29df20e7
 
   useEffect(() => {
 
