@@ -211,6 +211,8 @@ export default function PostContent({ posts }) {
 
     premiumfreeText.addEventListener("click", () => {
 
+      console.log('clicked');
+      
       if (premiumIcon.style.display == 'none') {
 
         freeIcon.style.display = 'none'
