@@ -213,7 +213,7 @@ export default function PostContent({ posts }) {
       premiumIcon1.style.display = 'flex'
       main1.className = "active31 w3-pointer"
       premiumfreeText1.innerText = "Gratuit"
-      premiumfreeText1.className = "w3-text-green w3-small"
+      premiumfreeText1.className = "w3-small"
       premiumfreeText1.style.textAlign = 'left'
 
       loadPost('free')
@@ -228,7 +228,7 @@ export default function PostContent({ posts }) {
       premiumIcon1.style.display = 'none'
       main1.className = "main1 w3-pointer"
       premiumfreeText1.innerText = "Premium"
-      premiumfreeText1.className = "w3-text-black w3-small"
+      premiumfreeText1.className = "w3-small"
       premiumfreeText1.style.textAlign = 'right'
 
       loadPost('premium')
@@ -322,7 +322,7 @@ export default function PostContent({ posts }) {
       premiumIcon1.style.display = 'none'
       main1.className = "main1 w3-pointer"
       premiumfreeText1.innerText = "Premium"
-      premiumfreeText1.className = "w3-text-black w3-small"
+      premiumfreeText1.className = "w3-small"
       premiumfreeText1.style.textAlign = 'right'
 
       killer.freepremium = true;

@@ -21,8 +21,8 @@ export default async function page() {
 
 export function metadata() {
   const meta = {
-    title: app_name,
-    description: 'Nos forums pour vous aider a resoudre tout les problemes du monde.',
+    title: app_name + " - Forum",
+    description: "Le forum pour les partages, les histoires fascinantes et pour s'entraider.",
   };
   return meta;
 }

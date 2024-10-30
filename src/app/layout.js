@@ -869,7 +869,6 @@ export default function RootLayout({ children }) {
             document.getElementById('userPDP').style.backgroundImage = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.data
           }
 
-
           res.data.data.forEach(user => {
             dataUsers.push(user);
           });
@@ -1164,6 +1163,20 @@ export default function RootLayout({ children }) {
                     height={20}
                   />
                   <div className="w3-margin-left w3-medium">POS</div>
+                </Link>
+
+                <Link
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                  href={"/chat"}
+                  target="_blank"
+                >
+                  <FontAwesomeIcon
+                    icon={faPaperPlane}
+                    width={20}
+                    height={20}
+                  />
+                  <div className="w3-margin-left w3-medium">Message</div>
                 </Link>
 
                 <div style={{ height: 40 }}>
@@ -1512,7 +1525,7 @@ export default function RootLayout({ children }) {
             style={{ paddingBlock: 8, paddingInline: 16, zIndex: 3 }}
           >
             <div className="w3-flex-1">
-              <div className="w3-pointer w3-flex-row">
+              <div className="w3-pointer w3-flex-row" onClick={() => window.location = '/'}>
                 {/* Header text here */} FREELANCER
               </div>
             </div>
@@ -1799,7 +1812,7 @@ export default function RootLayout({ children }) {
                 style={{ width: 36, height: 36, marginInline: "auto" }}
               >
                 <FontAwesomeIcon
-                  icon={faPaperPlane}
+                  icon={faRobot}
                   width={20}
                   height={20}
                 />
