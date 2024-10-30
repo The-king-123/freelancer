@@ -299,10 +299,31 @@ export default function PostContent({ posts }) {
     const myElement = document.getElementById('beastWrapper');
     removeAllEventListeners(myElement);
 
+    // side menu button
     const premiumfreeText = document.querySelector("#premiumfreeText");
+    const main = document.querySelector(".main") ? document.querySelector(".main") : document.querySelector(".active3");
+    const freeIcon = document.querySelector("#freeSwitch");
+    const premiumIcon = document.querySelector("#premiumSwitch");
+
+    // bottom menu switch button
     const premiumfreeText1 = document.querySelector("#premiumfreeText1");
+    const main1 = document.querySelector(".main1") ? document.querySelector(".main1") : document.querySelector(".active31");
+    const freeIcon1 = document.querySelector("#freeSwitch1");
+    const premiumIcon1 = document.querySelector("#premiumSwitch1");
 
     if (premiumfreeText && !killer.freepremium) {
+
+      freeIcon.style.display = 'flex'
+      premiumIcon.style.display = 'none'
+      main.className = "main w3-pointer"
+      premiumfreeText.innerText = "Premium"
+
+      freeIcon1.style.display = 'flex'
+      premiumIcon1.style.display = 'none'
+      main1.className = "main1 w3-pointer"
+      premiumfreeText1.innerText = "Premium"
+      premiumfreeText1.className = "w3-text-black w3-small"
+      premiumfreeText1.style.textAlign = 'right'
 
       killer.freepremium = true;
       premiumfreeText.addEventListener("click", beastChangerSide);
