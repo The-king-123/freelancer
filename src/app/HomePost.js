@@ -221,12 +221,14 @@ export default function PostContent({ posts }) {
 
       if (premiumIcon.style.display == 'none') {
 
+        const main10 = document.querySelector(".main");
+        const main11 = document.querySelector(".main1");
         const active310 = document.querySelector(".active3");
         const active311 = document.querySelector(".active31");
 
-        if (main && main1) {
-          main.className = "active3 w3-pointer"
-          main1.className = "active31 w3-pointer"
+        if (main10 && main11) {
+          main10.className = "active3 w3-pointer"
+          main11.className = "active31 w3-pointer"
         } else if (active310 && active311) {
           active310.className = "active3 w3-pointer"
           active311.className = "active3 w3-pointer"
@@ -246,12 +248,14 @@ export default function PostContent({ posts }) {
         loadPost('free')
       } else {
 
+        const main10 = document.querySelector(".main");
+        const main11 = document.querySelector(".main1");
         const active310 = document.querySelector(".active3");
         const active311 = document.querySelector(".active31");
 
-        if (main && main1) {
-          main.className = "main w3-pointer"
-          main1.className = "main1 w3-pointer"
+        if (main10 && main11) {
+          main10.className = "main w3-pointer"
+          main11.className = "main1 w3-pointer"
         } else if (active310 && active311) {
           active310.className = "main w3-pointer"
           active311.className = "main1 w3-pointer"
