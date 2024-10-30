@@ -200,16 +200,20 @@ export default function PostContent({ posts }) {
     // side menu button
     const premiumfreeText = document.querySelector("#premiumfreeText");
     const main = document.querySelector(".main");
-    const active3 = document.querySelector(".active3");
-
+    var active3 = null
+    if (document.getElementsByClassName('active3')) {
+      active3 = document.querySelector(".active3");
+    }
     const freeIcon = document.querySelector("#freeSwitch");
     const premiumIcon = document.querySelector("#premiumSwitch");
 
     // bottom menu switch button
     const premiumfreeText1 = document.querySelector("#premiumfreeText1");
     const main1 = document.querySelector(".main1");
-    const active31 = document.querySelector(".active31");
-
+    var active31 = null
+    if (document.getElementsByClassName('active31')) {
+      active31 = document.querySelector(".active31");
+    }
     const freeIcon1 = document.querySelector("#freeSwitch1");
     const premiumIcon1 = document.querySelector("#premiumSwitch1");
 
