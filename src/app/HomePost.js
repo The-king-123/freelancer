@@ -10,7 +10,8 @@ import Link from "next/link";
 export default function PostContent({ posts }) {
 
   const [audioBox, setaudioBox] = useState({ chaine: null });
-  
+  const [killer, setkiller] = useState({ freepremium: false })
+
   const [displayPost, setdisplayPost] = useState(
     <div style={{ padding: 24 }} className='w3-center'>
       <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
@@ -59,9 +60,9 @@ export default function PostContent({ posts }) {
     const glitchPost = posts.map((post, key) => (
       (type == 'premium' ? post.category == type : post.category != 'premium') &&
       <Link className="postCard" href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
-        <div className={(themeLight ? "w3-light-grey" : "w3-black")+" w3-overflow w3-round w3-pointer"}>
+        <div className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow w3-round w3-pointer"}>
           <div
-            className={(themeLight ? "w3-light-grey" : "w3-black")+" w3-big w3-small w3-flex-row w3-flex-center-v"}
+            className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-big w3-small w3-flex-row w3-flex-center-v"}
             title={parse(post.title)}
           >
             {post.category != 'premium' &&
@@ -124,7 +125,7 @@ export default function PostContent({ posts }) {
           </div>
 
           <div
-            className={(themeLight ? "w3-light-grey" : "w3-black")+" postMedia w3-display-container post-image"}
+            className={(themeLight ? "w3-light-grey" : "w3-black") + " postMedia w3-display-container post-image"}
             style={{ zIndex: 2 }}
           >
             <Image
@@ -146,7 +147,7 @@ export default function PostContent({ posts }) {
                 height: '65vw',
                 maxHeight: 200,
               }}
-              className={(themeLight ? "w3-light-grey" : "w3-black")+" w3-overflow post-image"}
+              className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow post-image"}
             />
             {/* {(post.type == "image/audio" || post.type == "video" || post.type == "image/video") && (
                 <div className="w3-light-grey w3-opacity-max w3-block w3-height w3-padding w3-display-middle"></div>
@@ -199,108 +200,28 @@ export default function PostContent({ posts }) {
 
     // side menu button
     const premiumfreeText = document.querySelector("#premiumfreeText");
-    const main = document.querySelector(".main");
-
+    const main = document.querySelector(".main") ? document.querySelector(".main") : document.querySelector(".active3");
     const freeIcon = document.querySelector("#freeSwitch");
     const premiumIcon = document.querySelector("#premiumSwitch");
 
     // bottom menu switch button
     const premiumfreeText1 = document.querySelector("#premiumfreeText1");
-    const main1 = document.querySelector(".main1");
-
+    const main1 = document.querySelector(".main1") ? document.querySelector(".main1") : document.querySelector(".active31");
     const freeIcon1 = document.querySelector("#freeSwitch1");
     const premiumIcon1 = document.querySelector("#premiumSwitch1");
 
-    premiumfreeText.addEventListener("click", () => {
+    if (premiumfreeText && !killer.freepremium && localStorage.getItem('freePremiumListened') == 'not') {
 
-      if (premiumIcon.style.display == 'none') {
+      killer.freepremium = true;
+      localStorage.setItem('freePremiumListened', 'yes')
 
-        freeIcon.style.display = 'none'
-        premiumIcon.style.display = 'flex'
-        main.className = "active3 w3-pointer"
-        premiumfreeText.innerText = "Gratuit"
+      premiumfreeText.addEventListener("click", () => {
 
-        freeIcon1.style.display = 'none'
-        premiumIcon1.style.display = 'flex'
-        main1.className = "active31 w3-pointer"
-        premiumfreeText1.innerText = "Gratuit"
-        premiumfreeText1.className = "w3-text-green w3-small"
-        premiumfreeText1.style.textAlign = 'left'
+        console.log('clicked');
 
-        loadPost('free')
-      } else {
-        freeIcon.style.display = 'flex'
-        premiumIcon.style.display = 'none'
-        main.className = "main w3-pointer"
-        premiumfreeText.innerText = "Premium"
+        if (premiumIcon.style.display == 'none') {
 
-        freeIcon1.style.display = 'flex'
-        premiumIcon1.style.display = 'none'
-        main1.className = "main1 w3-pointer"
-        premiumfreeText1.innerText = "Premium"
-        premiumfreeText1.className = "w3-text-black w3-small"
-        premiumfreeText1.style.textAlign = 'right'
-
-        loadPost('premium')
-      }
-
-    });
-
-
-    premiumfreeText1.addEventListener("click", () => {
-
-      if (premiumIcon1.style.display == 'none') {
-
-        freeIcon.style.display = 'none'
-        premiumIcon.style.display = 'flex'
-        main.className = "active3 w3-pointer"
-        premiumfreeText.innerText = "Gratuit"
-
-        freeIcon1.style.display = 'none'
-        premiumIcon1.style.display = 'flex'
-        main1.className = "active31 w3-pointer"
-        premiumfreeText1.innerText = "Gratuit"
-        premiumfreeText1.style.textAlign = 'left'
-
-        loadPost('free')
-      } else {
-        freeIcon.style.display = 'flex'
-        premiumIcon.style.display = 'none'
-        main.className = "main w3-pointer"
-        premiumfreeText.innerText = "Premium"
-
-        freeIcon1.style.display = 'flex'
-        premiumIcon1.style.display = 'none'
-        main1.className = "main1 w3-pointer"
-        premiumfreeText1.innerText = "Premium"
-        premiumfreeText1.style.textAlign = 'right'
-
-        loadPost('premium')
-      }
-
-    });
-
-    const choiceListenerInterval = setInterval(() => {
-      if (document.getElementById("formationPayante")) {
-        document.getElementById("formationPayante").addEventListener('click', () => {
-          freeIcon.style.display = 'flex'
-          premiumIcon.style.display = 'none'
-          main.className = "main w3-pointer"
-          premiumfreeText.innerText = "Premium"
-
-          freeIcon1.style.display = 'flex'
-          premiumIcon1.style.display = 'none'
-          main1.className = "main1 w3-pointer"
-          premiumfreeText1.innerText = "Premium"
-          premiumfreeText1.className = "w3-small"
-          premiumfreeText1.style.textAlign = 'right'
-
-          loadPost('premium')
-        })
-      }
-
-      if (document.getElementById("formationGratuite")) {
-        document.getElementById("formationGratuite").addEventListener('click', () => {
+          loadPost('free')
           freeIcon.style.display = 'none'
           premiumIcon.style.display = 'flex'
           main.className = "active3 w3-pointer"
@@ -310,16 +231,116 @@ export default function PostContent({ posts }) {
           premiumIcon1.style.display = 'flex'
           main1.className = "active31 w3-pointer"
           premiumfreeText1.innerText = "Gratuit"
-          premiumfreeText1.className = "w3-small"
+          premiumfreeText1.className = "w3-text-green w3-small"
+          premiumfreeText1.style.textAlign = 'left'
+
+        } else {
+
+          loadPost('premium')
+          freeIcon.style.display = 'flex'
+          premiumIcon.style.display = 'none'
+          main.className = "main w3-pointer"
+          premiumfreeText.innerText = "Premium"
+
+          freeIcon1.style.display = 'flex'
+          premiumIcon1.style.display = 'none'
+          main1.className = "main1 w3-pointer"
+          premiumfreeText1.innerText = "Premium"
+          premiumfreeText1.className = "w3-text-black w3-small"
+          premiumfreeText1.style.textAlign = 'right'
+
+        }
+
+      });
+
+      premiumfreeText1.addEventListener("click", () => {
+
+        if (premiumIcon1.style.display == 'none') {
+
+          freeIcon.style.display = 'none'
+          premiumIcon.style.display = 'flex'
+          main.className = "active3 w3-pointer"
+          premiumfreeText.innerText = "Gratuit"
+
+          freeIcon1.style.display = 'none'
+          premiumIcon1.style.display = 'flex'
+          main1.className = "active31 w3-pointer"
+          premiumfreeText1.innerText = "Gratuit"
           premiumfreeText1.style.textAlign = 'left'
 
           loadPost('free')
-        })
-        clearInterval(choiceListenerInterval)
-      }
-    }, 1000);
+        } else {
+          freeIcon.style.display = 'flex'
+          premiumIcon.style.display = 'none'
+          main.className = "main w3-pointer"
+          premiumfreeText.innerText = "Premium"
+
+          freeIcon1.style.display = 'flex'
+          premiumIcon1.style.display = 'none'
+          main1.className = "main1 w3-pointer"
+          premiumfreeText1.innerText = "Premium"
+          premiumfreeText1.style.textAlign = 'right'
+
+          loadPost('premium')
+        }
+
+      });
+
+      const choiceListenerInterval = setInterval(() => {
+        if (document.getElementById("formationPayante")) {
+          document.getElementById("formationPayante").addEventListener('click', () => {
+            freeIcon.style.display = 'flex'
+            premiumIcon.style.display = 'none'
+            main.className = "main w3-pointer"
+            premiumfreeText.innerText = "Premium"
+
+            freeIcon1.style.display = 'flex'
+            premiumIcon1.style.display = 'none'
+            main1.className = "main1 w3-pointer"
+            premiumfreeText1.innerText = "Premium"
+            premiumfreeText1.className = "w3-small"
+            premiumfreeText1.style.textAlign = 'right'
+
+            loadPost('premium')
+          })
+        }
+
+        if (document.getElementById("formationGratuite")) {
+          document.getElementById("formationGratuite").addEventListener('click', () => {
+            freeIcon.style.display = 'none'
+            premiumIcon.style.display = 'flex'
+            main.className = "active3 w3-pointer"
+            premiumfreeText.innerText = "Gratuit"
+
+            freeIcon1.style.display = 'none'
+            premiumIcon1.style.display = 'flex'
+            main1.className = "active31 w3-pointer"
+            premiumfreeText1.innerText = "Gratuit"
+            premiumfreeText1.className = "w3-small"
+            premiumfreeText1.style.textAlign = 'left'
+
+            loadPost('free')
+          })
+          clearInterval(choiceListenerInterval)
+        }
+      }, 1000);
+    }
+
 
     // end switch animation
+
+    //default switch premium
+    freeIcon.style.display = 'flex'
+    premiumIcon.style.display = 'none'
+    main.className = "main w3-pointer"
+    premiumfreeText.innerText = "Premium"
+
+    freeIcon1.style.display = 'flex'
+    premiumIcon1.style.display = 'none'
+    main1.className = "main1 w3-pointer"
+    premiumfreeText1.innerText = "Premium"
+    premiumfreeText1.className = "w3-text-black w3-small"
+    premiumfreeText1.style.textAlign = 'right'
     loadPost('premium')
 
   }, [])

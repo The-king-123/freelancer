@@ -64,7 +64,7 @@ export default function RootLayout({ children }) {
   const [chatData, setchatData] = useState([]);
 
   const [dataUsers, setdataUsers] = useState([]);
-  const [killer, setkiller] = useState({ starter: null });
+  const [killer, setkiller] = useState({ starter: null, beastUser: false });
   const [topicData, settopicData] = useState([]);
   const [stepper, setstepper] = useState({
     key: 0,
@@ -517,7 +517,6 @@ export default function RootLayout({ children }) {
     await axios
       .get(source + "/_accrocher/" + key)
       .then((res) => {
-        console.log('kozyav_accrocher');
         reloadStarter(res.data.data[0]);
       })
       .catch((e) => {
@@ -588,26 +587,12 @@ export default function RootLayout({ children }) {
     document.getElementById("overlay").style.display = "none";
   };
 
-  const copyToClipboard = (text) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(function () {
-        console.log("Text copied to clipboard");
-      })
-      .catch(function (err) {
-        console.error("Could not copy text: ", err);
-      });
-  };
-
   const stopAllIntervalAndTimeout = () => {
-    var highestIntervalId = window.setInterval(() => { }, 1);
-    for (var i = 0; i < highestIntervalId; i++) {
-      window.clearInterval(i);
+    if (stepper.intervalTyper) {
+      clearInterval(stepper.intervalTyper);
     }
-
-    var highestTimeoutId = window.setTimeout(() => { }, 1);
-    for (var i = 0; i < highestTimeoutId; i++) {
-      window.clearTimeout(i);
+    if (killer.starter) {
+      clearInterval(killer.starter);
     }
   };
 
@@ -673,19 +658,6 @@ export default function RootLayout({ children }) {
       }, 100);
     }
   };
-
-  const userPremiumArea = () => {
-    var user = localStorage.getItem("user");
-    if (user) {
-      if (user == "160471339156947" || user == "undefined") {
-        window.location = "/premiumarea";
-      } else {
-        window.location = "/premiumarea/" + user;
-      }
-    } else {
-      window.location = "/premiumarea";
-    }
-  }
 
   const emailRegister = (element) => {
     signinAuthElement.email = element.target.value;
@@ -808,6 +780,7 @@ export default function RootLayout({ children }) {
     openDropdown("switchPannel")
   }
 
+<<<<<<< HEAD
   const userKeyTaker = () => {
     var counterBeast = 0
     const beastInterval = setInterval(() => {
@@ -826,8 +799,12 @@ export default function RootLayout({ children }) {
       counterBeast++;
     }, 500);
   }
+=======
+>>>>>>> 26a5e10b3ee5634bcc1a90172ed5f20a29df20e7
 
   useEffect(() => {
+
+    localStorage.setItem('freePremiumListened','not')
 
     if (localStorage.getItem('theme') == 'light') {
 
@@ -879,33 +856,6 @@ export default function RootLayout({ children }) {
         document.getElementById("mainCore").style.display = "block";
       }
 
-      setTimeout(() => {
-        const forumCore = document.getElementsByClassName("forumCore");
-        for (let i = 0; i < forumCore.length; i++) {
-          forumCore[i].addEventListener("click", () => {
-            if (document.getElementById("forum" + i).className == "_expand_") {
-              document.getElementById("forum" + i).className =
-                "w3-overflow w3-nowrap-multiline";
-            } else {
-              document.getElementById("forum" + i).className = "_expand_";
-            }
-          });
-        }
-
-        const forumComent = document.getElementsByClassName("forumComent");
-        for (let i = 0; i < forumComent.length; i++) {
-          forumComent[i].addEventListener("click", () => {
-            if (document.getElementById(forumComent[i].getAttribute("data")).className == "_expand_") {
-              document.getElementById(forumComent[i].getAttribute("data")).className =
-                "w3-overflow w3-nowrap-multiline";
-            } else {
-              document.getElementById(forumComent[i].getAttribute("data")).className = "_expand_";
-            }
-          });
-        }
-
-      }, 1000);
-
       const xcode = localStorage.getItem('x-code');
       axios
         .get(source + "/_auth?xcode=" + xcode)
@@ -942,7 +892,7 @@ export default function RootLayout({ children }) {
           if (document.getElementById('userPDP')) {
             document.getElementById('userPDP').style.backgroundImage = source + "/images.php?w=100&h=100&zlonk=3733&zlink=" + res.data.data
           }
-          var user = localStorage.getItem("user");
+
 
           res.data.data.forEach(user => {
             dataUsers.push(user);
@@ -954,17 +904,38 @@ export default function RootLayout({ children }) {
               const element = user[i];
               element.addEventListener('click', () => {
                 const key = element.getAttribute("data-key");
-                stopAllIntervalAndTimeout()
-                showUser(res.data.data, key)
+                if (location.pathname.split('/')[1] == 'user') {
+                  if (location.pathname.split('/')[2] != key) {
+                    stopAllIntervalAndTimeout()
+                    showUser(res.data.data, key)
+                  }
+                } else {
+                  if (key != '160471339156947') {
+                    stopAllIntervalAndTimeout()
+                    showUser(res.data.data, key)
+                  }
+                }
+
               })
             }
           }
 
+          var user = localStorage.getItem("user");
           if (user) {
-            showUser(res.data.data, user == 'undefined' ? "160471339156947" : user);
+            if (location.pathname.split('/')[1] == 'user') {
+              showUser(res.data.data, location.pathname.split('/')[2]);
+            } else {
+              showUser(res.data.data, user == 'undefined' ? "160471339156947" : user);
+            }
           } else {
-            localStorage.setItem("user", "160471339156947");
-            showUser(res.data.data, "160471339156947");
+            if (location.pathname.split('/')[1] == 'user') {
+              localStorage.setItem("user", location.pathname.split('/')[2]);
+              showUser(res.data.data, location.pathname.split('/')[2]);
+            } else {
+              localStorage.setItem("user", "160471339156947");
+              showUser(res.data.data, "160471339156947");
+            }
+
           }
         })
         .catch((e) => {
@@ -994,8 +965,28 @@ export default function RootLayout({ children }) {
         }
       });
 
-      userKeyTaker()
       setInterval(() => {
+
+        if (location.pathname.split('/')[1] == 'talent') {
+          if (location.pathname.split('/')[2]) {
+            if (!killer.beastUser) {
+              const user = document.getElementsByClassName('beastUser')
+              for (let i = 0; i < user.length; i++) {
+                const element = user[i];
+                element.addEventListener('click', () => {
+                  const key = element.getAttribute("data-key");
+                  stopAllIntervalAndTimeout()
+                  showUser(dataUsers, key)
+                })
+              }
+              killer.beastUser = true
+            }
+          } else {
+            killer.beastUser = false
+          }
+        }
+
+
 
         if (document.getElementById("mainCore")) {
           document.getElementById("mainCore").style.userSelect = "none";
