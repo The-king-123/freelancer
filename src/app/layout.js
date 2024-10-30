@@ -517,7 +517,6 @@ export default function RootLayout({ children }) {
     await axios
       .get(source + "/_accrocher/" + key)
       .then((res) => {
-        console.log('kozyav_accrocher');
         reloadStarter(res.data.data[0]);
       })
       .catch((e) => {

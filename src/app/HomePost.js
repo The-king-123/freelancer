@@ -221,28 +221,48 @@ export default function PostContent({ posts }) {
 
       if (premiumIcon.style.display == 'none') {
 
+        const active310 = document.querySelector(".active3");
+        const active311 = document.querySelector(".active31");
+
+        if (main && main1) {
+          main.className = "active3 w3-pointer"
+          main1.className = "active31 w3-pointer"
+        } else if (active310 && active311) {
+          active310.className = "active3 w3-pointer"
+          active311.className = "active3 w3-pointer"
+        }
+
         freeIcon.style.display = 'none'
         premiumIcon.style.display = 'flex'
-        main.className = "active3 w3-pointer"
+
         premiumfreeText.innerText = "Gratuit"
 
         freeIcon1.style.display = 'none'
         premiumIcon1.style.display = 'flex'
-        main1.className = "active31 w3-pointer"
         premiumfreeText1.innerText = "Gratuit"
         premiumfreeText1.className = "w3-text-green w3-small"
         premiumfreeText1.style.textAlign = 'left'
 
         loadPost('free')
       } else {
+
+        const active310 = document.querySelector(".active3");
+        const active311 = document.querySelector(".active31");
+
+        if (main && main1) {
+          main.className = "main w3-pointer"
+          main1.className = "main1 w3-pointer"
+        } else if (active310 && active311) {
+          active310.className = "main w3-pointer"
+          active311.className = "main1 w3-pointer"
+        }
+
         freeIcon.style.display = 'flex'
         premiumIcon.style.display = 'none'
-        main.className = "main w3-pointer"
         premiumfreeText.innerText = "Premium"
 
         freeIcon1.style.display = 'flex'
         premiumIcon1.style.display = 'none'
-        main1.className = "main1 w3-pointer"
         premiumfreeText1.innerText = "Premium"
         premiumfreeText1.className = "w3-text-black w3-small"
         premiumfreeText1.style.textAlign = 'right'
