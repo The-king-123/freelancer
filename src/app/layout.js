@@ -1169,7 +1169,6 @@ export default function RootLayout({ children }) {
                   className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
                   style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                   href={"/chat"}
-                  target="_blank"
                 >
                   <FontAwesomeIcon
                     icon={faPaperPlane}
