@@ -1,86 +1,135 @@
-<div key={key} style={{ padding: 8, zIndex: 1 }}>
-  <div
-    className="w3-small w3-text-grey"
-    style={{ paddingInline: 8, textAlign: "right", display: "none" }}
-    id={"flashInfo" + key}
-  >
-    Texte copié...
-  </div>
-  <div className="w3-flex-column w3-overflow w3-card w3-round w3-pointer w3-dark-grey">
-    <div
-      data={"https://freelancer.mg/post/" + post.slug}
-      className="postTitle w3-nowrap w3-overflow w3-black w3-big"
-      style={{ paddingBlock: 8, paddingInline: 16 }}
-      title="Click to copy post link"
-    >
-      {parse(post.title)}
-    </div>
-    <div>
-      <div className="postCore">
-        <div
-          id={"post" + key}
-          className="w3-overflow w3-nowrap-multiline"
-          style={{ marginInline: 16, marginBlock: 8 }}
-        >
-          {parse(JSON.parse(post.info).description)}
-        </div>
-      </div>
-    </div>
-    {(post.type == "image" || post.type == "image/audio") && (
-      <div
-        onClick={() => showSinglePost(post)}
-        className="postMedia w3-display-container w3-black post-image"
-        data={JSON.stringify(post)}
-        style={{ zIndex: 2 }}
-      >
-        <Image
-          alt={"image" + key}
-          unoptimized
-          loading="lazy"
-          onContextMenu={(e) => e.preventDefault()}
-          height={320}
-          width={520}
-          src={
-            source +
-            "/images.php?w=420&h=420&zlonk=2733&zlink=" +
-            post.link
-          }
-          style={{
-            objectPosition: "center",
-            objectFit: "cover",
-            zIndex: 1,
-          }}
-          className="w3-overflow w3-black post-image"
-        />
-        {post.type == "image/audio" && (
-          <div className="w3-light-grey w3-opacity w3-block w3-height w3-padding w3-display-middle"></div>
-        )}
-        {post.type == "image/audio" && (
-          <div
-            className="w3-dark-grey w3-circle w3-display-middle"
-            style={{ width: 60, height: 60 }}
-          >
-            <div className="w3-block w3-height w3-flex w3-flex-center">
-              <FontAwesomeIcon
-                icon={faPlay}
-                style={{ height: 24, width: 24, marginLeft: 4 }}
-              />
+const displayMessage = () => {
+        const glitchChat = chat.map((bull, key, chatArray) => (
+            <div key={key}>
+                {bull.from == "admin" && (
+                    <div
+                        className="w3-block w3-nowrap w3-container"
+                        style={{
+                            paddingInline: 0,
+                            display: "table",
+                            paddingTop:
+                                key > 0
+                                    ? chatArray[key - 1].from == "client"
+                                        ? 8
+                                        : 1
+                                    : 8,
+                            paddingBottom:
+                                key < chat.length - 1
+                                    ? chatArray[key + 1].from == "client"
+                                        ? 8
+                                        : 1
+                                    : 8,
+                        }}
+                    >
+                        <div
+                            className="w3-container w3-block"
+                            style={{
+                                display: "table-cell",
+                                paddingBlock: 0,
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                            }}
+                        >
+                            <div
+                                className="accent w3-round-xlarge w3-small w3-right w3-nowrap w3-text-white"
+                                style={{
+                                    maxWidth: 220,
+                                    paddingInline: 16,
+                                    paddingBlock: 10,
+                                    borderTopRightRadius: 4,
+                                    borderBottomRightRadius:
+                                        key < chat.length - 1
+                                            ? chatArray[key + 1].from == "admin"
+                                                ? 4
+                                                : 16
+                                            : 16,
+                                    whiteSpace: "normal",
+                                    marginTop: 0,
+                                }}
+                            >
+                                {bull.sms}
+                            </div>
+                        </div>
+                        <div
+                            style={{
+                                width: 0,
+                                display: "table-cell",
+                            }}
+                        ></div>
+                    </div>
+                )}
+                {bull.from == "client" && (
+                    <div
+                        className="w3-block w3-nowrap w3-container"
+                        style={{
+                            paddingInline: 0,
+                            display: "table",
+                            paddingTop:
+                                key > 0
+                                    ? chatArray[key - 1].from == "admin"
+                                        ? 8
+                                        : 1
+                                    : 8,
+                            paddingBottom:
+                                key < chat.length - 1
+                                    ? chatArray[key + 1].from == "admin"
+                                        ? 8
+                                        : 1
+                                    : 8,
+                        }}
+                    >
+                        <div
+                            className="w3-container w3-block"
+                            style={{
+                                display: "table-cell",
+                                paddingBlock: 0,
+                                paddingRight: 0,
+                                paddingLeft: 0,
+                            }}
+                        >
+                            <div
+                                className="w3-light-grey w3-text-black w3-round-xlarge w3-small w3-left w3-nowrap"
+                                style={{
+                                    maxWidth: 220,
+                                    paddingInline: 16,
+                                    paddingBlock: 10,
+                                    borderTopLeftRadius: 4,
+                                    borderBottomLeftRadius:
+                                        key < chat.length - 1
+                                            ? chatArray[key + 1].from ==
+                                              "client"
+                                                ? 4
+                                                : 16
+                                            : 16,
+                                    whiteSpace: "normal",
+                                    marginTop:
+                                        key > 0
+                                            ? chatArray[key - 1].from ==
+                                              "client"
+                                                ? 0
+                                                : -8
+                                            : -8,
+                                }}
+                            >
+                                {bull.sms}
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
-          </div>
-        )}
-      </div>
-    )}
+        ));
 
-    {post.type == "video" && (
-      <iframe
-        id={"videoPosts" + key}
-        className="videoPosts w3-block"
-        height="420"
-        src={getUrl(post.link)}
-        title={getTitle(post.link)}
-        frameBorder={0}
-        allowFullScreen
-      ></iframe>
-    )}
-  </div>
-</div>
+        setdisplayChat(glitchChat);
+
+        setTimeout(() => {
+            if (
+                document.getElementById("chatField").scrollHeight >
+                window.innerHeight - 160
+            ) {
+                document.getElementById("chatField").scrollTop =
+                    document.getElementById("chatField").scrollHeight -
+                    (window.innerHeight - 160);
+            }
+            activeTheme();
+        }, 50);
+    };

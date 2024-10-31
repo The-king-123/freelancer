@@ -108,11 +108,146 @@ function chatBox() {
     return diffInYears === 1 ? `a year ago` : `${diffInYears} years ago`;
   }
 
+  const displayMessage = () => {
+
+    const glitchChat = chat.map((bull, key, chatArray) => (
+      <div key={key}>
+        {bull.from == "admin" && (
+          <div
+            className="w3-block w3-nowrap w3-container"
+            style={{
+              paddingInline: 0,
+              display: "table",
+              paddingTop:
+                key > 0
+                  ? chatArray[key - 1].from == "client"
+                    ? 8
+                    : 1
+                  : 8,
+              paddingBottom:
+                key < chat.length - 1
+                  ? chatArray[key + 1].from == "client"
+                    ? 8
+                    : 1
+                  : 8,
+            }}
+          >
+            <div
+              className="w3-container w3-block"
+              style={{
+                display: "table-cell",
+                paddingBlock: 0,
+                paddingLeft: 0,
+                paddingRight: 0,
+              }}
+            >
+              <div
+                className="accent w3-round-xlarge w3-small w3-right w3-nowrap w3-text-white"
+                style={{
+                  maxWidth: 220,
+                  paddingInline: 16,
+                  paddingBlock: 10,
+                  borderTopRightRadius: 4,
+                  borderBottomRightRadius:
+                    key < chat.length - 1
+                      ? chatArray[key + 1].from == "admin"
+                        ? 4
+                        : 16
+                      : 16,
+                  whiteSpace: "normal",
+                  marginTop: 0,
+                }}
+              >
+                {bull.sms}
+              </div>
+            </div>
+            <div
+              style={{
+                width: 0,
+                display: "table-cell",
+              }}
+            ></div>
+          </div>
+        )}
+        {bull.from == "client" && (
+          <div
+            className="w3-block w3-nowrap w3-container"
+            style={{
+              paddingInline: 0,
+              display: "table",
+              paddingTop:
+                key > 0
+                  ? chatArray[key - 1].from == "admin"
+                    ? 8
+                    : 1
+                  : 8,
+              paddingBottom:
+                key < chat.length - 1
+                  ? chatArray[key + 1].from == "admin"
+                    ? 8
+                    : 1
+                  : 8,
+            }}
+          >
+            <div
+              className="w3-container w3-block"
+              style={{
+                display: "table-cell",
+                paddingBlock: 0,
+                paddingRight: 0,
+                paddingLeft: 0,
+              }}
+            >
+              <div
+                className="w3-light-grey w3-text-black w3-round-xlarge w3-small w3-left w3-nowrap"
+                style={{
+                  maxWidth: 220,
+                  paddingInline: 16,
+                  paddingBlock: 10,
+                  borderTopLeftRadius: 4,
+                  borderBottomLeftRadius:
+                    key < chat.length - 1
+                      ? chatArray[key + 1].from ==
+                        "client"
+                        ? 4
+                        : 16
+                      : 16,
+                  whiteSpace: "normal",
+                  marginTop:
+                    key > 0
+                      ? chatArray[key - 1].from ==
+                        "client"
+                        ? 0
+                        : -8
+                      : -8,
+                }}
+              >
+                {bull.sms}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    ));
+
+    setdisplayChat(glitchChat);
+
+    setTimeout(() => {
+      if (
+        document.getElementById("chatField").scrollHeight >
+        window.innerHeight - 160
+      ) {
+        document.getElementById("chatField").scrollTop =
+          document.getElementById("chatField").scrollHeight -
+          (window.innerHeight - 160);
+      }
+      activeTheme();
+    }, 50);
+  };
+
   useEffect(() => {
     reloadChat();
   }, [])
-
-
 
   return (
     <div>
