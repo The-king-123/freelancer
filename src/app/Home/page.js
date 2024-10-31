@@ -221,11 +221,9 @@ export default function Home(props) {
         if (document.getElementById("coreMain")) {
           document.getElementById("coreMain").style.userSelect = "none";
           if (window.innerWidth <= 993) {
-            document.getElementsByClassName("mobileHeight")[0].style.height =
-              window.innerHeight - 52 + "px !important";
             const panels = document.getElementsByClassName("mobileHeightPanel");
             for (let i = 0; i < panels.length; i++) {
-              panels[i].style.height = window.innerHeight - 68 + "px !important";
+              panels[i].style.height = window.innerHeight - 88 + "px !important";
             }
           }
         }
@@ -255,12 +253,12 @@ export default function Home(props) {
   return (
     <div
       id="coreMain"
-      style={{ userSelect: "none" }}
+      style={{ userSelect: "none", paddingBlock:8 }}
     >
 
       <main
         id="mainCore"
-        className="mobileHeight w3-main w3-100vh w3-overflow-scroll w3-noscrollbar "
+        className="w3-main"
       >
         <div
           id="coreContainerMain"

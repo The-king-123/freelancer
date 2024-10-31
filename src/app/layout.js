@@ -966,6 +966,7 @@ export default function RootLayout({ children }) {
         if (document.getElementById("mainCore")) {
           document.getElementById("mainCore").style.userSelect = "none";
           if (window.innerWidth <= 993) {
+            document.getElementById("mainCore").style.height = window.innerHeight - 84 + "px !important";
             document.getElementsByClassName("mobileHeight")[0].style.height =
               window.innerHeight - 52 + "px !important";
             const panels = document.getElementsByClassName("mobileHeightPanel");
@@ -1304,15 +1305,15 @@ export default function RootLayout({ children }) {
 
           <main
             id="mainCore"
-            className="mobileHeight w3-main w3-100vh w3-overflow-scroll w3-noscrollbar "
+            className="w3-main w3-100vh w3-overflow-scroll w3-noscrollbar "
             style={{ marginLeft: 250, marginRight: 320, padding: 8, position: 'relative' }}
           >
             <div
               id="coreContainerMain"
               className="w3-container"
-              style={{ padding: 0, maxWidth: 620, margin: "auto" }} // >1086:33.33% 620, <1086:50% 480
+              style={{ padding: 0, maxWidth: 620, margin: "auto" }}
             >
-              <div className="w3-text-white w3-hide-large" style={{ height: 54, opacity:0 }}>
+              <div className="w3-hide-large" style={{ height: 44, opacity:0 }}>
                 freelancer.mg
               </div>
               {children}
