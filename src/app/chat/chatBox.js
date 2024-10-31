@@ -20,32 +20,32 @@ function chatBox() {
   const database = getDatabase(app);
 
   const [chatCase, setchatCase] = useState([])
+  const [displayChat, setdisplayChat] = useState('')
 
   const [userInfo, setuserInfo] = useState({
     fullname: '',
-    key: null,
+    key: '12345678',
     des_fullname: '',
-    des_key: null,
+    des_key: '87654321',
   })
 
   const [chatInfo, setchatInfo] = useState({
+    key: '',
+    des_key: '',
     timestamp: '',
     attachement: null,
     responseTo: null,
-    message: '',
+    message: "Je ne sais pas quoi dire, puisque c'est juste un esssaye gratuit de Netflix",
     reaction: null,
     deleted: false,
+    state: 'sent'
   })
 
   const reloadChat = () => {
-    onValue(ref(database, 'chatcase/340509348095805'), (snapshot) => {
+    onValue(ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key), (snapshot) => {
       if (snapshot.exists()) {
-
         const chat = snapshot.val()
-        Object.entries(chat).sort(([, a], [, b]) => a.timestamp - b.timestamp).map(([key, value]) => {
-          console.log(formatChatTimestamp(new Date(value.timestamp)));
-        });
-
+        displayMessage(Object.entries(chat).sort(([, a], [, b]) => a.timestamp - b.timestamp));
       } else {
         console.log("No data available");
       }
@@ -55,11 +55,21 @@ function chatBox() {
   }
 
   const sendMessage = () => {
+
+    chatInfo.key = userInfo.key
+    chatInfo.des_key = userInfo.des_key
+
     if (chatInfo.message.trim().length > 0) {
       chatInfo.timestamp = Date.now()
       set(push(ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key)), chatInfo)
         .then(() => {
-          console.log('Data written successfully!');
+          set(push(ref(database, 'chatcase/' + userInfo.des_key + '_' + userInfo.key)), chatInfo)
+            .then(() => {
+              console.log('Data written successfully!');
+            })
+            .catch((error) => {
+              console.error('Error writing data:', error);
+            });;
         })
         .catch((error) => {
           console.error('Error writing data:', error);
@@ -108,11 +118,11 @@ function chatBox() {
     return diffInYears === 1 ? `a year ago` : `${diffInYears} years ago`;
   }
 
-  const displayMessage = () => {
+  const displayMessage = (chat) => {
 
-    const glitchChat = chat.map((bull, key, chatArray) => (
+    const glitchChat = chat.map(([index, bull], key, chatArray) => (
       <div key={key}>
-        {bull.from == "admin" && (
+        {bull.key == userInfo.key && (
           <div
             className="w3-block w3-nowrap w3-container"
             style={{
@@ -120,13 +130,13 @@ function chatBox() {
               display: "table",
               paddingTop:
                 key > 0
-                  ? chatArray[key - 1].from == "client"
+                  ? chatArray[key - 1][1].des_key == userInfo.key
                     ? 8
                     : 1
                   : 8,
               paddingBottom:
-                key < chat.length - 1
-                  ? chatArray[key + 1].from == "client"
+                key < chatArray.length - 1
+                  ? chatArray[key + 1][1].des_key == userInfo.key
                     ? 8
                     : 1
                   : 8,
@@ -142,23 +152,21 @@ function chatBox() {
               }}
             >
               <div
-                className="accent w3-round-xlarge w3-small w3-right w3-nowrap w3-text-white"
+                className="w3-yellow w3-round-xlarge w3-small w3-right w3-nowrap"
                 style={{
                   maxWidth: 220,
                   paddingInline: 16,
                   paddingBlock: 10,
                   borderTopRightRadius: 4,
                   borderBottomRightRadius:
-                    key < chat.length - 1
-                      ? chatArray[key + 1].from == "admin"
-                        ? 4
-                        : 16
+                    key < chatArray.length - 1
+                      ? (chatArray[key + 1][1].key == userInfo.key ? 4 : 16)
                       : 16,
                   whiteSpace: "normal",
                   marginTop: 0,
                 }}
               >
-                {bull.sms}
+                {bull.message}
               </div>
             </div>
             <div
@@ -169,7 +177,7 @@ function chatBox() {
             ></div>
           </div>
         )}
-        {bull.from == "client" && (
+        {bull.key != userInfo.key && (
           <div
             className="w3-block w3-nowrap w3-container"
             style={{
@@ -177,13 +185,13 @@ function chatBox() {
               display: "table",
               paddingTop:
                 key > 0
-                  ? chatArray[key - 1].from == "admin"
+                  ? chatArray[key - 1][1].key == userInfo.key
                     ? 8
                     : 1
                   : 8,
               paddingBottom:
-                key < chat.length - 1
-                  ? chatArray[key + 1].from == "admin"
+                key < chatArray.length - 1
+                  ? chatArray[key + 1][1].key == userInfo.key
                     ? 8
                     : 1
                   : 8,
@@ -199,30 +207,28 @@ function chatBox() {
               }}
             >
               <div
-                className="w3-light-grey w3-text-black w3-round-xlarge w3-small w3-left w3-nowrap"
+                className="w3-black w3-round-xlarge w3-small w3-left w3-nowrap"
                 style={{
                   maxWidth: 220,
                   paddingInline: 16,
                   paddingBlock: 10,
                   borderTopLeftRadius: 4,
                   borderBottomLeftRadius:
-                    key < chat.length - 1
-                      ? chatArray[key + 1].from ==
-                        "client"
+                    key < chatArray.length - 1
+                      ? chatArray[key + 1][1].des_key == userInfo.des_key
                         ? 4
                         : 16
                       : 16,
                   whiteSpace: "normal",
                   marginTop:
                     key > 0
-                      ? chatArray[key - 1].from ==
-                        "client"
+                      ? chatArray[key - 1][1].des_key == userInfo.des_key
                         ? 0
                         : -8
                       : -8,
                 }}
               >
-                {bull.sms}
+                {bull.message}
               </div>
             </div>
           </div>
@@ -232,17 +238,17 @@ function chatBox() {
 
     setdisplayChat(glitchChat);
 
-    setTimeout(() => {
-      if (
-        document.getElementById("chatField").scrollHeight >
-        window.innerHeight - 160
-      ) {
-        document.getElementById("chatField").scrollTop =
-          document.getElementById("chatField").scrollHeight -
-          (window.innerHeight - 160);
-      }
-      activeTheme();
-    }, 50);
+    // setTimeout(() => {
+    //   if (
+    //     document.getElementById("chatField").scrollHeight >
+    //     window.innerHeight - 160
+    //   ) {
+    //     document.getElementById("chatField").scrollTop =
+    //       document.getElementById("chatField").scrollHeight -
+    //       (window.innerHeight - 160);
+    //   }
+    //   activeTheme();
+    // }, 50);
   };
 
   useEffect(() => {
@@ -252,8 +258,8 @@ function chatBox() {
   return (
     <div>
       <div style={{ padding: 16 }}>Bientôt, il sera possible d'envoyer des messages directement sur la plateforme, ce qui facilitera la communication et renforcera les interactions. Cette nouvelle fonctionnalité permettra d'échanger des idées, de poser des questions et de partager des expériences en temps réel, rendant l'expérience encore plus dynamique et conviviale.</div>
-      <div>
-
+      <div style={{padding:8}}>
+        {displayChat}
       </div>
     </div>
   )
