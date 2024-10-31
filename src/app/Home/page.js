@@ -217,19 +217,6 @@ export default function Home(props) {
         }
       });
 
-      setInterval(() => {
-        if (document.getElementById("coreMain")) {
-          document.getElementById("coreMain").style.userSelect = "none";
-          if (window.innerWidth <= 993) {
-            const panels = document.getElementsByClassName("mobileHeightPanel");
-            for (let i = 0; i < panels.length; i++) {
-              panels[i].style.height = window.innerHeight - 88 + "px !important";
-            }
-          }
-        }
-
-      }, 500);
-
       const updateHeight = () => {
         setHeight(window.innerHeight - 80 - (window.innerWidth > 992 ? 0 : 20));
       };
@@ -257,7 +244,6 @@ export default function Home(props) {
     >
 
       <main
-        id="mainCore"
         className="w3-main"
       >
         <div

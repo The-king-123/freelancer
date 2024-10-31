@@ -961,17 +961,18 @@ export default function RootLayout({ children }) {
           }
         }
 
-
-
         if (document.getElementById("mainCore")) {
-          document.getElementById("mainCore").style.userSelect = "none";
           if (window.innerWidth <= 993) {
-            document.getElementById("mainCore").style.height = window.innerHeight - 84 + "px !important";
-            document.getElementsByClassName("mobileHeight")[0].style.height =
-              window.innerHeight - 52 + "px !important";
+            document.getElementById("mainCore").style.height = (window.innerHeight - 52) + "px";
+          }
+        }
+
+        if (document.getElementById("coreMain")) {
+          document.getElementById("coreMain").style.userSelect = "none";
+          if (window.innerWidth <= 993) {
             const panels = document.getElementsByClassName("mobileHeightPanel");
             for (let i = 0; i < panels.length; i++) {
-              panels[i].style.height = window.innerHeight - 68 + "px !important";
+              panels[i].style.height = window.innerHeight - 72 + "px !important";
             }
           }
         }
@@ -1305,7 +1306,7 @@ export default function RootLayout({ children }) {
 
           <main
             id="mainCore"
-            className="w3-main w3-100vh w3-overflow-scroll w3-noscrollbar "
+            className="w3-main w3-overflow-scroll w3-noscrollbar w3-100vh"
             style={{ marginLeft: 250, marginRight: 320, padding: 8, position: 'relative' }}
           >
             <div
@@ -1313,7 +1314,7 @@ export default function RootLayout({ children }) {
               className="w3-container"
               style={{ padding: 0, maxWidth: 620, margin: "auto" }}
             >
-              <div className="w3-hide-large" style={{ height: 44, opacity:0 }}>
+              <div className="w3-hide-large" style={{ height: 44, opacity: 0 }}>
                 freelancer.mg
               </div>
               {children}
