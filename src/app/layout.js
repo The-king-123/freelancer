@@ -1312,7 +1312,7 @@ export default function RootLayout({ children }) {
               className="w3-container"
               style={{ padding: 0, maxWidth: 620, margin: "auto" }} // >1086:33.33% 620, <1086:50% 480
             >
-              <div className="w3-text-white w3-hide-large" style={{ height: 54 }}>
+              <div className="w3-text-white w3-hide-large" style={{ height: 54, opacity:0 }}>
                 freelancer.mg
               </div>
               {children}
