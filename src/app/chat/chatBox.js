@@ -1,7 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 
 function chatBox() {
@@ -18,7 +17,6 @@ function chatBox() {
   };
 
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
   const database = getDatabase(app);
 
   const [chatCase, setchatCase] = useState([])
