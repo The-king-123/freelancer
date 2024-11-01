@@ -731,8 +731,8 @@ export default function RootLayout({ children }) {
   };
 
   const closeModalLogin = () => {
-    document.getElementById("mail").value = "";
-    document.getElementById("password").value = "";
+    document.getElementById("mailLogin").value = "";
+    document.getElementById("passwordLogin").value = "";
     signinAuthElement.email = "";
     signinAuthElement.password = "";
     var user = localStorage.getItem("user");
@@ -917,11 +917,17 @@ export default function RootLayout({ children }) {
           console.error("failure", e);
         });
 
-      document.onkeyup = async (e) => {
-        if (e.key == "Enter") {
-          login();
+      document.getElementById('passwordLogin').addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+          login()
         }
-      };
+      });
+
+      document.getElementById('mailLogin').addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+          login()
+        }
+      });
 
       window.addEventListener("scroll", function () {
         // Calculate the scrollable height
@@ -998,7 +1004,7 @@ export default function RootLayout({ children }) {
   }, []);
 
   return (
-    <html id="htmlCore" style={{display:'none'}} className="w3-dark-grey" lang="en">
+    <html id="htmlCore" style={{ display: 'none' }} className="w3-dark-grey" lang="en">
       <body id="appCore" className={inter.className}>
 
         <div
@@ -1305,7 +1311,7 @@ export default function RootLayout({ children }) {
 
         <main
           id="mainCore"
-          className="w3-main w3-overflow-scroll w3-noscrollbar w3-100vh"
+          className="w3-main w3-overflow-scroll w3-noscrollbar w3-100vh w3-display-contenair"
           style={{ marginLeft: 250, marginRight: 320, padding: 8, position: 'relative' }}
         >
           <div
@@ -1883,9 +1889,9 @@ export default function RootLayout({ children }) {
                   <input
                     onChange={(e) => emailRegister(e)}
                     type="text"
-                    className="input w3-black w3-round-xxlarge w3-block w3-text-grey w3-medium w3-border-0"
+                    className="input w3-black w3-round-xxlarge w3-block w3-medium w3-border-0"
                     placeholder="Adresse e-mail"
-                    id="mail"
+                    id="mailLogin"
                     name="user_email"
                     required
                   />
@@ -1904,7 +1910,7 @@ export default function RootLayout({ children }) {
                     type="password"
                     className="input w3-black w3-round-xxlarge w3-block w3-medium w3-border-0"
                     placeholder="Mot de passe"
-                    id="password"
+                    id="passwordLogin"
                     name="user_password"
                     required
                   />

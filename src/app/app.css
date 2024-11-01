@@ -264,3 +264,9 @@ input[type="number"] {
 input[type="checkbox"] {
   accent-color: black;
 }
+
+/* // chat coprs */
+
+.bullWrapper:hover .bullOption{
+  display: flex !important;
+}
