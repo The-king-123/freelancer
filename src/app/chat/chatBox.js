@@ -120,6 +120,7 @@ function chatBox() {
 
   const displayMessage = (chat) => {
 
+    const themeLight = localStorage.getItem('theme') == 'light' ? true : false
     const glitchChat = chat.map(([index, bull], key, chatArray) => (
       <div key={key}>
         {bull.key == userInfo.key && (
@@ -130,15 +131,11 @@ function chatBox() {
               display: "table",
               paddingTop:
                 key > 0
-                  ? chatArray[key - 1][1].des_key == userInfo.key
-                    ? 8
-                    : 1
+                  ? (chatArray[key - 1][1].des_key == userInfo.key ? 8 : 1)
                   : 8,
               paddingBottom:
                 key < chatArray.length - 1
-                  ? chatArray[key + 1][1].des_key == userInfo.key
-                    ? 8
-                    : 1
+                  ? (chatArray[key + 1][1].des_key == userInfo.key ? 8 : 1)
                   : 8,
             }}
           >
@@ -152,9 +149,8 @@ function chatBox() {
               }}
             >
               <div
-                className="w3-yellow w3-round-xlarge w3-small w3-right w3-nowrap"
+                className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap"
                 style={{
-                  maxWidth: 220,
                   paddingInline: 16,
                   paddingBlock: 10,
                   borderTopRightRadius: 4,
@@ -185,9 +181,7 @@ function chatBox() {
               display: "table",
               paddingTop:
                 key > 0
-                  ? chatArray[key - 1][1].key == userInfo.key
-                    ? 8
-                    : 1
+                  ? (chatArray[key - 1][1].key == userInfo.key ? 8 : 1)
                   : 8,
               paddingBottom:
                 key < chatArray.length - 1
@@ -207,24 +201,19 @@ function chatBox() {
               }}
             >
               <div
-                className="w3-black w3-round-xlarge w3-small w3-left w3-nowrap"
+                className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-left w3-nowrap"}
                 style={{
-                  maxWidth: 220,
                   paddingInline: 16,
                   paddingBlock: 10,
                   borderTopLeftRadius: 4,
                   borderBottomLeftRadius:
                     key < chatArray.length - 1
-                      ? chatArray[key + 1][1].des_key == userInfo.des_key
-                        ? 4
-                        : 16
+                      ? (chatArray[key + 1][1].des_key == userInfo.des_key ? 4 : 16)
                       : 16,
                   whiteSpace: "normal",
                   marginTop:
                     key > 0
-                      ? chatArray[key - 1][1].des_key == userInfo.des_key
-                        ? 0
-                        : -8
+                      ? (chatArray[key - 1][1].des_key == userInfo.des_key ? 0 : -8)
                       : -8,
                 }}
               >
@@ -258,7 +247,7 @@ function chatBox() {
   return (
     <div>
       <div style={{ padding: 16 }}>Bientôt, il sera possible d'envoyer des messages directement sur la plateforme, ce qui facilitera la communication et renforcera les interactions. Cette nouvelle fonctionnalité permettra d'échanger des idées, de poser des questions et de partager des expériences en temps réel, rendant l'expérience encore plus dynamique et conviviale.</div>
-      <div style={{padding:8}}>
+      <div style={{ padding: 8 }}>
         {displayChat}
       </div>
     </div>

@@ -126,35 +126,58 @@ input[type="number"] {
 }
 
 @media (min-width: 992px) and (max-width: 1166px) {
-    .post-image {
-      height: 140px !important;
-    }
+  .post-image {
+    height: 140px !important;
   }
+}
 
+.chatbull {
+  max-width: 260px;
+}
 
-  /* // marquee text  */
+@media (min-width: 992px) and (max-width: 1024px) {
+  .chatbull {
+    max-width: 260px;
+  }
+}
 
-  .marquee {
-    width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
+@media (min-width: 460px) and (max-width: 992px) {
+  .chatbull {
+    max-width: 320px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .chatbull {
+    max-width: 320px;
+  }
+}
+
+/* // marquee text  */
+
+.marquee {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .marquee span {
-    display: inline-block;
-    /* animation: marquee 12s linear infinite; 10s de défilement + 2s de pause */
+  display: inline-block;
+  /* animation: marquee 12s linear infinite; 10s de défilement + 2s de pause */
 }
 
 @keyframes marquee {
-    0% {
-        transform: translateX(0); /* Le texte commence en dehors de la vue, à droite */
-    }
-    25% {
-        transform: translateX(0); /* Le texte défile jusqu'à disparaître à gauche */
-    }
-    100% {
-        transform: translateX(-100%); /* Pause pendant 20% du temps (2s sur 12s) */
-    }
+  0% {
+    transform: translateX(
+      0
+    ); /* Le texte commence en dehors de la vue, à droite */
+  }
+  25% {
+    transform: translateX(0); /* Le texte défile jusqu'à disparaître à gauche */
+  }
+  100% {
+    transform: translateX(-100%); /* Pause pendant 20% du temps (2s sur 12s) */
+  }
 }
 
 /* // switch animation */
@@ -233,7 +256,7 @@ input[type="number"] {
 /* en switvh animation */
 
 /* text glow menu */
-.glowText{
+.glowText {
   text-shadow: #ffe710e6 0px 0px 10px !important;
   color: #ffe710e6 !important;
 }
