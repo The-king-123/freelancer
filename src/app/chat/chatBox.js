@@ -236,7 +236,7 @@ function chatBox() {
               {bull.responseTo &&
                 <div>
                   <div
-                    className={(themeLight ? "w3-light-grey w3-opacity-min" : "w3-black w3-opacity-max") + " chatbull w3-round-xlarge w3-left w3-nowrap w3-overflow"}
+                    className={(themeLight ? "w3-light-grey w3-opacity" : "w3-black w3-opacity-max") + " chatbull w3-round-xlarge w3-left w3-nowrap w3-overflow"}
                     style={{
                       paddingInline: 16,
                       paddingBlock: 10,
