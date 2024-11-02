@@ -137,11 +137,11 @@ function chatBox() {
               paddingInline: 0,
               paddingTop:
                 key > 0
-                  ? (chatArray[key - 1][1].key == userInfo.key ? 1 : 8)
+                  ? (chatArray[key - 1][1].key == userInfo.key ? 2 : 8)
                   : 8,
               paddingBottom:
                 key < chatArray.length - 1
-                  ? (chatArray[key + 1][1].key == userInfo.key ? 1 : 8)
+                  ? (chatArray[key + 1][1].key == userInfo.key ? 2 : 8)
                   : 8,
             }}
           >
@@ -166,33 +166,16 @@ function chatBox() {
               {bull.responseTo &&
                 <div>
                   <div
-                    className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap"
-                    style={{
-                      paddingInline: 16,
-                      paddingBlock: 10,
-                      borderTopLeftRadius: 4,
-                      borderBottomLeftRadius: 4,
-                      fontSize: 14,
-                    }}
-                  >
-                    {chatBrut[bull.responseTo].message}
-                  </div>
-
-                  <div
-                    className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap"
+                    className={"w3-yellow w3-opacity-max chatbull w3-round-xlarge w3-right w3-nowrap w3-overflow"}
                     style={{
                       paddingInline: 16,
                       paddingBlock: 10,
                       borderTopRightRadius: 4,
-                      borderBottomRightRadius:
-                        key < chatArray.length - 1
-                          ? (chatArray[key + 1][1].key == userInfo.key ? 4 : 16)
-                          : 16,
-                      whiteSpace: "normal",
-                      marginTop: 0,
+                      borderBottomRightRadius: 4,
+                      fontSize: 14,
                     }}
                   >
-                    {bull.message}
+                    {chatBrut[bull.responseTo].message}
                   </div>
                 </div>
               }
@@ -209,11 +192,14 @@ function chatBox() {
                       ? (chatArray[key + 1][1].key == userInfo.key ? 4 : 16)
                       : 16,
                   whiteSpace: "normal",
-                  marginTop: 0,
+                  marginTop: key > 0
+                  ? (chatArray[key - 1][1].key == userInfo.key ? (bull.responseTo ? -8 : 0) : (bull.responseTo ? -8 : 0))
+                  : 0,
                 }}
               >
                 {bull.message}
               </div>
+
             </div>
             <div
               style={{
@@ -230,11 +216,11 @@ function chatBox() {
               paddingInline: 0,
               paddingTop:
                 key > 0
-                  ? (chatArray[key - 1][1].key == userInfo.key ? 8 : 1)
+                  ? (chatArray[key - 1][1].key == userInfo.key ? 8 : 2)
                   : 8,
               paddingBottom:
                 key < chatArray.length - 1
-                  ? (chatArray[key + 1][1].key == userInfo.key ? 8 : 1)
+                  ? (chatArray[key + 1][1].key == userInfo.key ? 8 : 2)
                   : 8,
             }}
           >
