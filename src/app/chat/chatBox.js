@@ -84,6 +84,14 @@ function chatBox() {
               document.getElementById('messageTextarea').value = ''
               chatInfo.message = '';
               userInfo.sendHolder = false;
+              chatInfo.key = '';
+              chatInfo.des_key = '';
+              chatInfo.timestamp = '';
+              chatInfo.attachement = null;
+              chatInfo.responseTo = null;
+              chatInfo.reaction = null;
+              chatInfo.deleted = false;
+              chatInfo.state = 'sent';
             })
             .catch((error) => {
               console.error('Error writing data:', error);
@@ -167,7 +175,7 @@ function chatBox() {
               <div className='w3-flex-1'></div>
               <div>
                 <div className='bullOption w3-flex-row' style={{ marginLeft: 'auto', display: 'none' }}>
-                  <div style={{ padding: 8 }}>
+                  <div style={{ paddingTop: 8 }}>
                     <div className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
                       <FontAwesomeIcon className='w3-large w3-text-grey' icon={faFaceSmileBeam} />
                       <div style={{ padding: 20, width: 260, marginLeft: -100 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
@@ -194,7 +202,7 @@ function chatBox() {
                       </div>
                     </div>
                   </div>
-                  <div style={{ padding: 8 }} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
+                  <div style={{ padding: 8 }} onClick={() => reply(index, chatArray)} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
                   <div style={{ padding: 8 }} title='Option'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} /></div>
                 </div>
               </div>
@@ -413,8 +421,28 @@ function chatBox() {
 
   // Bull option react reply
 
-  const deletedBull = (id) => {
+  const deletedBull = (idBull) => {
+    if (!userInfo.reactHolder) {
+      userInfo.reactHolder = true;
+      const react = {
+        timestamp: Date.now(),
+        reaction: emoji,
+      }
+      set(ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key + '/' + idBull + '/reaction/' + userInfo.key), react)
+        .then(() => {
+          set(ref(database, 'chatcase/' + userInfo.des_key + '_' + userInfo.key + '/' + idBull + '/reaction/' + userInfo.key), react)
+            .then(() => {
+              userInfo.reactHolder = false
+            })
+            .catch((error) => {
+              console.error('Error writing data:', error);
+            });
+        })
+        .catch((error) => {
+          console.error('Error writing data:', error);
+        });
 
+    }
   }
 
   const reactExtractor = (reactions) => {
@@ -460,12 +488,15 @@ function chatBox() {
     }
   }
 
-  const editBull = (id) => {
+  const editBull = (idBull) => {
 
   }
+  const cancelReply = (idBull) => {
 
-  const reply = (id) => {
-
+  }
+  const reply = (idBull, chatArray) => {
+    console.log(chatArray);
+    
   }
 
   useEffect(() => {
