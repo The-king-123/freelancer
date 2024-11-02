@@ -7,6 +7,16 @@ import { faEllipsisH, faFaceSmileBeam, faImage, faPaperPlane, faReply, faSmile, 
 
 function chatBox() {
 
+  const reactionListe = {
+    heart: '❤️',
+    laugh: '😆',
+    sad: '😥',
+    socked: '😮',
+    angry: '😡',
+    angry: '😡',
+    fire: '🔥',
+  }
+
   const firebaseConfig = {
     apiKey: "AIzaSyBI0egg-gSu_99VAcprwtbgRguW9GxrGIs",
     authDomain: "freelancer-chatbox.firebaseapp.com",
@@ -30,6 +40,7 @@ function chatBox() {
     des_fullname: '',
     des_key: '87654321',
     sendHolder: false,
+    reactHolder: false,
   })
 
   const [chatInfo, setchatInfo] = useState({
@@ -64,8 +75,8 @@ function chatBox() {
     chatInfo.message = document.getElementById('messageTextarea').value.trim();
 
     if (chatInfo.message.length > 0 && !userInfo.sendHolder) {
-      userInfo.sendHolder = true,
-        chatInfo.timestamp = Date.now()
+      userInfo.sendHolder = true;
+      chatInfo.timestamp = Date.now()
       set(push(ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key)), chatInfo)
         .then(() => {
           set(push(ref(database, 'chatcase/' + userInfo.des_key + '_' + userInfo.key)), chatInfo)
@@ -76,11 +87,11 @@ function chatBox() {
             })
             .catch((error) => {
               console.error('Error writing data:', error);
-            });;
+            });
         })
         .catch((error) => {
           console.error('Error writing data:', error);
-        });;
+        });
     }
   }
 
@@ -97,7 +108,7 @@ function chatBox() {
 
     // On the same day
     if (diffInDays === 0) {
-      return `at ${date.toLocaleTimeString([], options)}`;
+      return date.toLocaleTimeString([], options);
     }
     // Yesterday
     else if (diffInDays === 1) {
@@ -131,154 +142,257 @@ function chatBox() {
     const glitchChat = chat.map(([index, bull], key, chatArray) => (
       <div key={key}>
         {bull.key == userInfo.key && (
-          <div
-            className="bullWrapper w3-block w3-nowrap w3-container w3-pointer w3-flex-row w3-flex-center-v"
-            style={{
-              paddingInline: 0,
-              paddingTop:
-                key > 0
-                  ? (chatArray[key - 1][1].key == userInfo.key ? 2 : 8)
-                  : 8,
-              paddingBottom:
-                key < chatArray.length - 1
-                  ? (chatArray[key + 1][1].key == userInfo.key ? 2 : 8)
-                  : 8,
-            }}
-          >
-
-            <div className='w3-flex-1'></div>
-            <div>
-              <div className='bullOption w3-flex-row' style={{ marginLeft: 'auto', display: 'none' }}>
-                <div style={{ padding: 8 }} title='React'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faFaceSmileBeam} /></div>
-                <div style={{ padding: 8 }} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
-                <div style={{ padding: 8 }} title='Option'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} /></div>
+          <div>
+            {formatChatTimestamp(bull.timestamp) != (key > 0 ? formatChatTimestamp(chatArray[key - 1][1].timestamp) : 'first') &&
+              <div className='w3-center w3-text-grey w3-small' style={{ paddingBlock: 4 }}>
+                {formatChatTimestamp(bull.timestamp)}
               </div>
-            </div>
+            }
+
             <div
-              className="w3-container"
+              className="bullWrapper w3-block w3-nowrap w3-container w3-pointer w3-flex-row w3-flex-center-v"
               style={{
-                paddingBlock: 0,
-                paddingLeft: 0,
-                paddingRight: 0,
+                paddingInline: 0,
+                paddingTop:
+                  key > 0
+                    ? (chatArray[key - 1][1].key == userInfo.key ? 2 : 8)
+                    : 8,
+                paddingBottom:
+                  key < chatArray.length - 1
+                    ? (chatArray[key + 1][1].key == userInfo.key ? 2 : 8)
+                    : 8,
               }}
             >
-              {/* Reply bull here */}
-              {bull.responseTo &&
-                <div>
-                  <div
-                    className={(themeLight ? "w3-opacity" : "w3-opacity-max") + " w3-yellow chatbull w3-round-xlarge w3-right w3-nowrap w3-overflow"}
-                    style={{
-                      paddingInline: 16,
-                      paddingBlock: 10,
-                      borderTopRightRadius: 4,
-                      borderBottomRightRadius: 4,
-                      fontSize: 14,
-                    }}
-                  >
-                    {chatBrut[bull.responseTo].message}
-                  </div>
-                </div>
-              }
 
-              {/* Bull core */}
+              <div className='w3-flex-1'></div>
+              <div>
+                <div className='bullOption w3-flex-row' style={{ marginLeft: 'auto', display: 'none' }}>
+                  <div style={{ padding: 8 }}>
+                    <div className="w3-dropdown-hover w3-dark-grey">
+                      <FontAwesomeIcon className='w3-large w3-text-grey' icon={faFaceSmileBeam} />
+                      <div style={{ padding: 20, width: 260, marginLeft: -100 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
+                        <div className='w3-flex-row w3-flex-center-v'>
+                          <div onClick={() => reaction('heart', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                            {reactionListe.heart}
+                          </div>
+                          <div onClick={() => reaction('laugh', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                            {reactionListe.laugh}
+                          </div>
+                          <div onClick={() => reaction('sad', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                            {reactionListe.sad}
+                          </div>
+                          <div onClick={() => reaction('socked', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                            {reactionListe.socked}
+                          </div>
+                          <div onClick={() => reaction('angry', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                            {reactionListe.angry}
+                          </div>
+                          <div onClick={() => reaction('fire', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                            {reactionListe.fire}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{ padding: 8 }} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
+                  <div style={{ padding: 8 }} title='Option'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} /></div>
+                </div>
+              </div>
               <div
-                className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap"
+                className="w3-container"
                 style={{
-                  paddingInline: 16,
-                  paddingBlock: 10,
-                  borderTopRightRadius: 4,
-                  borderBottomRightRadius:
-                    key < chatArray.length - 1
-                      ? (chatArray[key + 1][1].key == userInfo.key ? 4 : 16)
-                      : 16,
-                  whiteSpace: "normal",
-                  marginTop: key > 0
-                  ? (chatArray[key - 1][1].key == userInfo.key ? (bull.responseTo ? -8 : 0) : (bull.responseTo ? -8 : 0))
-                  : 0,
+                  paddingBlock: 0,
+                  paddingLeft: 0,
+                  paddingRight: 0,
                 }}
               >
-                {bull.message}
-              </div>
+                {/* Reply bull here */}
+                {bull.responseTo &&
+                  <div className='w3-container' style={{ padding: 0 }}>
+                    <div
+                      className={(themeLight ? "w3-opacity" : "w3-opacity-max") + " w3-yellow chatbull w3-round-xlarge w3-right w3-nowrap w3-overflow"}
+                      style={{
+                        paddingInline: 16,
+                        paddingBlock: 10,
+                        borderTopRightRadius: 4,
+                        borderBottomRightRadius: 4,
+                        fontSize: 14,
+                      }}
+                    >
+                      {chatBrut[bull.responseTo].message}
+                    </div>
+                  </div>
+                }
 
+                {/* Bull core */}
+                <div
+                  className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap"
+                  style={{
+                    paddingInline: 16,
+                    paddingBlock: 10,
+                    borderTopRightRadius: 4,
+                    borderBottomRightRadius:
+                      key < chatArray.length - 1
+                        ? (chatArray[key + 1][1].key == userInfo.key ? 4 : 16)
+                        : 16,
+                    whiteSpace: "normal",
+                    marginTop: key > 0
+                      ? (chatArray[key - 1][1].key == userInfo.key ? (bull.responseTo ? -8 : 0) : (bull.responseTo ? -8 : 0))
+                      : 0,
+                  }}
+                >
+                  {bull.message}
+                </div>
+
+                {/* Bull reaction */}
+                {bull.reaction &&
+                  <div className='w3-container' style={{ padding: 0 }}>
+                    <div
+                      className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-right w3-small w3-card"}
+                      style={{
+                        paddingTop: 4,
+                        paddingInline: 4,
+                        borderRadius: 16,
+                        marginTop: -8,
+                        marginInline: 8
+                      }}
+                    >
+                      {reactExtractor(bull.reaction).join('')}
+                    </div>
+                  </div>
+                }
+
+              </div>
+              <div
+                style={{
+                  width: 0,
+                  display: "table-cell",
+                }}
+              ></div>
             </div>
-            <div
-              style={{
-                width: 0,
-                display: "table-cell",
-              }}
-            ></div>
           </div>
         )}
         {bull.key != userInfo.key && (
-          <div
-            className="bullWrapper w3-pointer w3-block w3-nowrap w3-container w3-flex-row w3-flex-center-v"
-            style={{
-              paddingInline: 0,
-              paddingTop:
-                key > 0
-                  ? (chatArray[key - 1][1].key == userInfo.key ? 8 : 2)
-                  : 8,
-              paddingBottom:
-                key < chatArray.length - 1
-                  ? (chatArray[key + 1][1].key == userInfo.key ? 8 : 2)
-                  : 8,
-            }}
-          >
+          <div>
+            {formatChatTimestamp(bull.timestamp) != (key > 0 ? formatChatTimestamp(chatArray[key - 1][1].timestamp) : 'first') &&
+              <div className='w3-center w3-text-grey w3-small' style={{ paddingBlock: 4 }}>
+                {formatChatTimestamp(bull.timestamp)}
+              </div>
+            }
             <div
-              className="w3-container"
+              className="bullWrapper w3-pointer w3-block w3-nowrap w3-container w3-flex-row w3-flex-center-v"
               style={{
-                paddingBlock: 0,
-                paddingRight: 0,
-                paddingLeft: 0,
+                paddingInline: 0,
+                paddingTop:
+                  key > 0
+                    ? (chatArray[key - 1][1].key == userInfo.key ? 8 : 2)
+                    : 8,
+                paddingBottom:
+                  key < chatArray.length - 1
+                    ? (chatArray[key + 1][1].key == userInfo.key ? 8 : 2)
+                    : 8,
               }}
             >
-              {/* Reply bull here */}
-              {bull.responseTo &&
-                <div>
-                  <div
-                    className={(themeLight ? "w3-light-grey w3-opacity" : "w3-black w3-opacity-max") + " chatbull w3-round-xlarge w3-left w3-nowrap w3-overflow"}
-                    style={{
-                      paddingInline: 16,
-                      paddingBlock: 10,
-                      borderTopLeftRadius: 4,
-                      borderBottomLeftRadius: 4,
-                      fontSize: 14,
-                    }}
-                  >
-                    {chatBrut[bull.responseTo].message}
-                  </div>
-                </div>
-              }
-
-              {/* Bull core here */}
               <div
-                className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-left w3-nowrap"}
+                className="w3-container"
                 style={{
-                  paddingInline: 16,
-                  paddingBlock: 10,
-                  borderTopLeftRadius: 4,
-                  borderBottomLeftRadius:
-                    key < chatArray.length - 1
-                      ? (chatArray[key + 1][1].key != userInfo.key ? 4 : 16)
-                      : 16,
-                  whiteSpace: "normal",
-                  marginTop:
-                    key > 0
-                      ? (chatArray[key - 1][1].key != userInfo.key ? (bull.responseTo ? -8 : 0) : (bull.responseTo ? -8 : -4))
-                      : -4,
+                  paddingBlock: 0,
+                  paddingRight: 0,
+                  paddingLeft: 0,
                 }}
               >
-                {bull.message}
+                {/* Reply bull here */}
+                {bull.responseTo &&
+                  <div className='w3-container' style={{ padding: 0 }}>
+                    <div
+                      className={(themeLight ? "w3-light-grey w3-opacity" : "w3-black w3-opacity-max") + " chatbull w3-round-xlarge w3-left w3-nowrap w3-overflow"}
+                      style={{
+                        paddingInline: 16,
+                        paddingBlock: 10,
+                        borderTopLeftRadius: 4,
+                        borderBottomLeftRadius: 4,
+                        fontSize: 14,
+                      }}
+                    >
+                      {chatBrut[bull.responseTo].message}
+                    </div>
+                  </div>
+                }
+
+                {/* Bull core here */}
+                <div
+                  className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-left w3-nowrap"}
+                  style={{
+                    paddingInline: 16,
+                    paddingBlock: 10,
+                    borderTopLeftRadius: 4,
+                    borderBottomLeftRadius:
+                      key < chatArray.length - 1
+                        ? (chatArray[key + 1][1].key != userInfo.key ? 4 : 16)
+                        : 16,
+                    whiteSpace: "normal",
+                    marginTop:
+                      key > 0
+                        ? (chatArray[key - 1][1].key != userInfo.key ? (bull.responseTo ? -8 : 0) : (bull.responseTo ? -8 : -4))
+                        : -4,
+                  }}
+                >
+                  {bull.message}
+                </div>
+
+                {/* Bull reaction */}
+                {bull.reaction &&
+                  <div className='w3-container' style={{ padding: 0 }}>
+                    <div
+                      className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-left w3-small w3-card"}
+                      style={{
+                        paddingTop: 4,
+                        paddingInline: 4,
+                        borderRadius: 16,
+                        marginTop: -8,
+                        marginInline: 8
+                      }}
+                    >
+                      {reactExtractor(bull.reaction).join('')}
+                    </div>
+                  </div>
+                }
+
+
               </div>
-            </div>
-            <div>
-              <div className='bullOption w3-flex-row' style={{ marginLeft: 'auto', display: 'none' }}>
-                <div style={{ padding: 8 }} title='React'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faFaceSmileBeam} /></div>
-                <div style={{ padding: 8 }} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
-                <div style={{ padding: 8 }} title='Option'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} /></div>
+              <div>
+                <div className='bullOption w3-flex-row' style={{ marginLeft: 'auto', display: 'none' }}>
+                  <div className="w3-dropdown-hover w3-dark-grey">
+                    <FontAwesomeIcon className='w3-large w3-text-grey' icon={faFaceSmileBeam} />
+                    <div style={{ padding: 20, width: 260, marginLeft: -100 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
+                      <div className='w3-flex-row w3-flex-center-v'>
+                        <div onClick={() => reaction('heart', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          {reactionListe.heart}
+                        </div>
+                        <div onClick={() => reaction('laugh', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          {reactionListe.laugh}
+                        </div>
+                        <div onClick={() => reaction('sad', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          {reactionListe.sad}
+                        </div>
+                        <div onClick={() => reaction('socked', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          {reactionListe.socked}
+                        </div>
+                        <div onClick={() => reaction('angry', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          {reactionListe.angry}
+                        </div>
+                        <div onClick={() => reaction('fire', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          {reactionListe.fire}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{ padding: 8 }} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
+                  <div style={{ padding: 8 }} title='Option'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} /></div>
+                </div>
               </div>
+              <div className='w3-flex-1'></div>
             </div>
-            <div className='w3-flex-1'></div>
           </div>
         )}
       </div>
@@ -305,8 +419,47 @@ function chatBox() {
 
   }
 
-  const reaction = (emoji, id) => {
+  const reactExtractor = (reactions) => {
+    const reactArray = []
+    Object.entries(reactions).sort(([, a], [, b]) => a.timestamp - b.timestamp).map(([index, react], key, reactions) => {
+      var counter = 0
+      for (let i = 0; i < reactArray.length; i++) {
+        const element = reactArray[i];
+        if (element == reactionListe[react.reaction]) {
+          counter++
+        }
+      }
+      if (counter <= 0) {
+        reactArray.push(reactionListe[react.reaction])
+      }
+    });
 
+    return reactArray
+  }
+
+  const reaction = (emoji, idBull) => {
+
+    if (!userInfo.reactHolder) {
+      userInfo.reactHolder = true;
+      const react = {
+        timestamp: Date.now(),
+        reaction: emoji,
+      }
+      set(ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key + '/' + idBull + '/reaction/' + userInfo.key), react)
+        .then(() => {
+          set(ref(database, 'chatcase/' + userInfo.des_key + '_' + userInfo.key + '/' + idBull + '/reaction/' + userInfo.key), react)
+            .then(() => {
+              userInfo.reactHolder = false
+            })
+            .catch((error) => {
+              console.error('Error writing data:', error);
+            });
+        })
+        .catch((error) => {
+          console.error('Error writing data:', error);
+        });
+
+    }
   }
 
   const editBull = (id) => {

@@ -543,7 +543,9 @@ export default function RootLayout({ children }) {
     for (let i = 0; i < allDropContent.length; i++) {
       if (allDropContent[i].id != ID) {
         allDropContent[i].className = allDropContent[i].className.replace(" w3-show", "");
-        dropButton[i].className = dropButton[i].className.replace("w3-light-grey", "w3-dark-grey");
+        if (dropButton[i]) {
+          dropButton[i].className = dropButton[i].className.replace("w3-light-grey", "w3-dark-grey");
+        }
       }
     }
     if (document.getElementById(ID)) {
@@ -812,8 +814,12 @@ export default function RootLayout({ children }) {
     // end theme changer
 
     if (localStorage.getItem('firstPassed') == null) {
-      openDropdown("switchPannel")
+      openDropdown("switchPannel");
+      setTimeout(() => {
+        openDropdown("switchPannel");
+      }, 3000);
     }
+
     const localHosts = ["localhost", "127.0.0.1", "::1"];
     stopAllIntervalAndTimeout();
     if (typeof window !== "undefined") {

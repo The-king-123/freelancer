@@ -44,32 +44,6 @@ export default function Home(props) {
       });
   };
 
-  const openDropdown = (ID, IDW) => {
-    const allDropContent = document.getElementsByClassName('w3-dropdown-content')
-    const dropButton = document.getElementsByClassName('dropButton')
-    for (let i = 0; i < allDropContent.length; i++) {
-      if (allDropContent[i].id != ID) {
-        allDropContent[i].className = allDropContent[i].className.replace(" w3-show", "");
-        dropButton[i].className = dropButton[i].className.replace("w3-light-grey", "w3-dark-grey");
-      }
-    }
-    if (document.getElementById(ID)) {
-      var x = document.getElementById(ID);
-      if (x.className.indexOf("w3-show") == -1) {
-        x.className += " w3-show";
-        if (document.getElementById(ID + 'Wrapper')) {
-          document.getElementById(ID + 'Wrapper').className = document.getElementById(ID + 'Wrapper').className.replace("w3-dark-grey", "w3-light-grey")
-        }
-      } else {
-        x.className = x.className.replace(" w3-show", "");
-        if (document.getElementById(ID + 'Wrapper')) {
-          document.getElementById(ID + 'Wrapper').className = document.getElementById(ID + 'Wrapper').className.replace("w3-light-grey", "w3-dark-grey")
-        }
-      }
-    }
-
-  };
-
   useEffect(() => {
 
     localStorage.setItem('freePremiumListened','not')
@@ -83,13 +57,6 @@ export default function Home(props) {
     const firstPath = location.pathname.split('/')[1]
     if (document.getElementById(firstPath + 'Page')) {
       document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') == 'light' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow')
-    }
-
-    if (localStorage.getItem('firstPassed') == null) {
-      openDropdown("switchPannel");
-      setTimeout(() => {
-        openDropdown("switchPannel");
-      }, 3000);
     }
 
     //----------------
