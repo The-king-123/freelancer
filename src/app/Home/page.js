@@ -194,12 +194,6 @@ export default function Home(props) {
           });
       }
 
-      document.onkeyup = async (e) => {
-        if (e.key == "Enter") {
-          login();
-        }
-      };
-
       window.addEventListener("scroll", function () {
         // Calculate the scrollable height
         const chatElement = document.getElementById("chatCoreWrapper");

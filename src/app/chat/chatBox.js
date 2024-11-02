@@ -48,7 +48,7 @@ function chatBox() {
     onValue(ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key), (snapshot) => {
       if (snapshot.exists()) {
         const chat = snapshot.val()
-        displayMessage(Object.entries(chat).sort(([, a], [, b]) => a.timestamp - b.timestamp));
+        displayMessage(Object.entries(chat).sort(([, a], [, b]) => a.timestamp - b.timestamp), chat);
       } else {
         console.log("No data available");
       }
@@ -125,7 +125,7 @@ function chatBox() {
     return diffInYears === 1 ? `a year ago` : `${diffInYears} years ago`;
   }
 
-  const displayMessage = (chat) => {
+  const displayMessage = (chat, chatBrut) => {
 
     const themeLight = localStorage.getItem('theme') == 'light' ? true : false
     const glitchChat = chat.map(([index, bull], key, chatArray) => (
@@ -162,6 +162,42 @@ function chatBox() {
                 paddingRight: 0,
               }}
             >
+              {/* Reply bull here */}
+              {bull.responseTo &&
+                <div>
+                  <div
+                    className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap"
+                    style={{
+                      paddingInline: 16,
+                      paddingBlock: 10,
+                      borderTopLeftRadius: 4,
+                      borderBottomLeftRadius: 4,
+                      fontSize: 14,
+                    }}
+                  >
+                    {chatBrut[bull.responseTo].message}
+                  </div>
+
+                  <div
+                    className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap"
+                    style={{
+                      paddingInline: 16,
+                      paddingBlock: 10,
+                      borderTopRightRadius: 4,
+                      borderBottomRightRadius:
+                        key < chatArray.length - 1
+                          ? (chatArray[key + 1][1].key == userInfo.key ? 4 : 16)
+                          : 16,
+                      whiteSpace: "normal",
+                      marginTop: 0,
+                    }}
+                  >
+                    {bull.message}
+                  </div>
+                </div>
+              }
+
+              {/* Bull core */}
               <div
                 className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap"
                 style={{
@@ -210,6 +246,25 @@ function chatBox() {
                 paddingLeft: 0,
               }}
             >
+              {/* Reply bull here */}
+              {bull.responseTo &&
+                <div>
+                  <div
+                    className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-opacity-max chatbull w3-round-xlarge w3-left w3-nowrap w3-overflow"}
+                    style={{
+                      paddingInline: 16,
+                      paddingBlock: 10,
+                      borderTopLeftRadius: 4,
+                      borderBottomLeftRadius: 4,
+                      fontSize: 14,
+                    }}
+                  >
+                    {chatBrut[bull.responseTo].message}
+                  </div>
+                </div>
+              }
+
+              {/* Bull core here */}
               <div
                 className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-left w3-nowrap"}
                 style={{
@@ -223,7 +278,7 @@ function chatBox() {
                   whiteSpace: "normal",
                   marginTop:
                     key > 0
-                      ? (chatArray[key - 1][1].key != userInfo.key ? 0 : -4)
+                      ? (chatArray[key - 1][1].key != userInfo.key ? (bull.responseTo ? -8 : 0) : (bull.responseTo ? -8 : -4))
                       : -4,
                 }}
               >
@@ -258,6 +313,24 @@ function chatBox() {
     // }, 50);
   };
 
+  // Bull option react reply
+
+  const deletedBull = (id) => {
+
+  }
+
+  const reaction = (emoji, id) => {
+
+  }
+
+  const editBull = (id) => {
+
+  }
+
+  const reply = (id) => {
+
+  }
+
   useEffect(() => {
     reloadChat();
     document.getElementById('messageTextarea').addEventListener('keydown', function (event) {
@@ -276,12 +349,12 @@ function chatBox() {
 
   return (
     <div>
-      <div id='bullField' className='w3-noscrollbar w3-overflow-scroll' style={{ padding: 8,display:'none' }}>
+      <div id='bullField' className='w3-noscrollbar w3-overflow-scroll' style={{ padding: 8, display: 'none' }}>
         <div style={{ padding: 16 }}>Bientôt, il sera possible d'envoyer des messages directement sur la plateforme, ce qui facilitera la communication et renforcera les interactions. Cette nouvelle fonctionnalité permettra d'échanger des idées, de poser des questions et de partager des expériences en temps réel, rendant l'expérience encore plus dynamique et conviviale.</div>
         {displayChat}
         <div style={{ height: 52 }}></div>
       </div>
-      <div style={{ maxWidth: 620, margin: "auto", paddingInline: 6, paddingBottom:8 }} className='w3-dark-grey w3-block w3-display-bottommiddle'>
+      <div style={{ maxWidth: 620, margin: "auto", paddingInline: 6, paddingBottom: 8 }} className='w3-dark-grey w3-block w3-display-bottommiddle'>
         <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
           <div className='w3-flex-row w3-flex-center-v'>
             <div className='w3-pointer w3-white w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
