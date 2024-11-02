@@ -168,7 +168,7 @@ function chatBox() {
               <div>
                 <div className='bullOption w3-flex-row' style={{ marginLeft: 'auto', display: 'none' }}>
                   <div style={{ padding: 8 }}>
-                    <div className="w3-dropdown-hover w3-dark-grey">
+                    <div className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
                       <FontAwesomeIcon className='w3-large w3-text-grey' icon={faFaceSmileBeam} />
                       <div style={{ padding: 20, width: 260, marginLeft: -100 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                         <div className='w3-flex-row w3-flex-center-v'>
@@ -357,12 +357,10 @@ function chatBox() {
                     </div>
                   </div>
                 }
-
-
               </div>
               <div>
                 <div className='bullOption w3-flex-row' style={{ marginLeft: 'auto', display: 'none' }}>
-                  <div className="w3-dropdown-hover w3-dark-grey">
+                  <div className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
                     <FontAwesomeIcon className='w3-large w3-text-grey' icon={faFaceSmileBeam} />
                     <div style={{ padding: 20, width: 260, marginLeft: -100 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div className='w3-flex-row w3-flex-center-v'>
