@@ -326,6 +326,9 @@ function chatBox() {
                   }}
                 >
                   {parse(bull.message.replace(/\n/g, "<br/>"))}
+                  {
+                    mostLongTextLine(bull.message)
+                  }
                 </div>
 
                 {/* Bull reaction */}
