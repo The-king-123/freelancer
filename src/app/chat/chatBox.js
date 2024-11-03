@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faEllipsisH, faFaceSmileBeam, faImage, faPaperPlane, faReply, faSmile, faSmileBeam, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faImage, faPaperPlane, faReply, faShare, faSmile, faSmileBeam, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import parse from "html-react-parser";
 
 function chatBox() {
 
@@ -123,6 +124,7 @@ function chatBox() {
                 chatInfo.reaction = null;
                 chatInfo.deleted = false;
                 chatInfo.state = 'sent';
+                cancelReply()
               })
               .catch((error) => {
                 console.error('Error writing data:', error);
@@ -189,6 +191,12 @@ function chatBox() {
     return replayed
   }
 
+  const mostLongTextLine = (message) => {
+    const lines = message.trim().split("\n");
+    const maxLength = Math.max(...lines.map(line => line.length));
+    return maxLength
+  }
+
   const displayMessage = (chat, chatBrut) => {
 
     const themeLight = localStorage.getItem('theme') == 'light' ? true : false
@@ -251,22 +259,23 @@ function chatBox() {
                   <div style={{ paddingRight: 8, paddingBlock: 8 }} className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
                     <FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} />
                     <div style={{ maxWidth: 80, marginLeft: -60 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
-                      <div>
-                        <div id={index + 'FlashInfo'} onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-bar-item'>
-                          Copier
+                      <div id={index + 'FlashInfo'} className='w3-text-grey w3-small' style={{ padding: 8, display: 'none' }}>Texte copié...</div>
+                      <div className='w3-flex-row w3-flex-center-v'>
+                        <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                          <FontAwesomeIcon icon={faCopy} />
                         </div>
                         {(!bull.reaction && !replyChecker(index, chatArray) && (Date.now() - (bull.timestamp * 1) < 160000)) &&
                           <>
-                            <div onClick={() => deletedBull(index)} className='w3-button w3-bar-item'>
-                              Supprimer
+                            <div title='Supprimer' onClick={() => deletedBull(index)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                              <FontAwesomeIcon icon={faTrash} />
                             </div>
-                            <div onClick={() => editBull(index, bull.message)} className='w3-button w3-bar-item'>
-                              Editer
+                            <div title='Modifier' onClick={() => editBull(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                              <FontAwesomeIcon icon={faEdit} />
                             </div>
                           </>
                         }
-                        <div onClick={() => transferBull(bull.message)} className='w3-button w3-bar-item'>
-                          Transférer
+                        <div title='Transférer' onClick={() => transferBull(bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                          <FontAwesomeIcon icon={faShare} />
                         </div>
                       </div>
                     </div>
@@ -316,7 +325,7 @@ function chatBox() {
                       : 0,
                   }}
                 >
-                  {bull.message}
+                  {parse(bull.message.replace(/\n/g, "<br/>"))}
                 </div>
 
                 {/* Bull reaction */}
@@ -412,7 +421,7 @@ function chatBox() {
                         : -4,
                   }}
                 >
-                  {bull.message}
+                  {parse(bull.message.replace(/\n/g, "<br/>"))}
                 </div>
 
                 {/* Bull reaction */}
@@ -464,22 +473,23 @@ function chatBox() {
                   <div style={{ paddingRight: 8, paddingBlock: 8 }} className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
                     <FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} />
                     <div style={{ maxWidth: 80, marginLeft: -60 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
-                      <div>
-                        <div id={index + 'FlashInfo'} onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-bar-item'>
-                          Copier
+                      <div id={index + 'FlashInfo'} className='w3-text-grey w3-small' style={{ padding: 8, display: 'none' }}>Texte copié...</div>
+                      <div className='w3-flex-row w3-flex-center-v'>
+                        <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                          <FontAwesomeIcon icon={faCopy} />
                         </div>
                         {(!bull.reaction && !replyChecker(index, chatArray) && (Date.now() - (bull.timestamp * 1) < 160000)) &&
                           <>
-                            <div onClick={() => deletedBull(index)} className='w3-button w3-bar-item'>
-                              Supprimer
+                            <div title='Supprimer' onClick={() => deletedBull(index)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                              <FontAwesomeIcon icon={faTrash} />
                             </div>
-                            <div onClick={() => editBull(index, bull.message)} className='w3-button w3-bar-item'>
-                              Editer
+                            <div title='Modifier' onClick={() => editBull(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                              <FontAwesomeIcon icon={faEdit} />
                             </div>
                           </>
                         }
-                        <div onClick={() => transferBull(bull.message)} className='w3-button w3-bar-item'>
-                          Transférer
+                        <div title='Transférer' onClick={() => transferBull(bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                          <FontAwesomeIcon icon={faShare} />
                         </div>
                       </div>
                     </div>
@@ -576,7 +586,7 @@ function chatBox() {
 
   const editBull = (idBull, bullMessage) => {
     userInfo.editBull = idBull
-    document.getElementById('editPanelText').innerText = bullMessage
+    document.getElementById('editPanelText').innerText = bullMessage.replace(/\n/g, " ")
     document.getElementById('messageTextarea').value = bullMessage
     document.getElementById('editPanel').style.display = 'flex'
   }
@@ -588,8 +598,9 @@ function chatBox() {
   const copyBullMessage = (index, message) => {
     navigator.clipboard.writeText(message).then(() => {
       document.getElementById(index + 'FlashInfo').innerText = 'Texte copié...'
+      document.getElementById(index + 'FlashInfo').style.display = 'block'
       setTimeout(() => {
-        document.getElementById(index + 'FlashInfo').innerText = 'Copier'
+        document.getElementById(index + 'FlashInfo').style.display = 'none'
       }, 2000);
     }).catch(err => {
       console.error("Échec de la copie : ", err);
@@ -603,7 +614,7 @@ function chatBox() {
 
   const reply = (idBull, bullMessage) => {
     chatInfo.responseTo = idBull
-    document.getElementById('replyPanelText').innerText = bullMessage
+    document.getElementById('replyPanelText').innerText = bullMessage.replace(/\n/g, " ")
     document.getElementById('replyPanel').style.display = 'flex'
   }
 
@@ -628,7 +639,7 @@ function chatBox() {
       <div id='bullField' className='w3-noscrollbar w3-overflow-scroll' style={{ padding: 8, display: 'flex', flexDirection: 'column-reverse' }}>
         <div className='w3-block'><div style={{ padding: 16 }}>Bientôt, il sera possible d'envoyer des messages directement sur la plateforme, ce qui facilitera la communication et renforcera les interactions. Cette nouvelle fonctionnalité permettra d'échanger des idées, de poser des questions et de partager des expériences en temps réel, rendant l'expérience encore plus dynamique et conviviale.</div>
           {displayChat}
-          <div style={{ height: 52 }}></div>
+          <div style={{ height: 96 }}></div>
         </div>
       </div>
       <div style={{ maxWidth: 620, margin: "auto", paddingInline: 6, paddingBottom: 8 }} className='w3-dark-grey w3-block w3-display-bottommiddle'>
