@@ -37,8 +37,8 @@ function chatBox() {
 
   const [userInfo, setuserInfo] = useState({
     fullname: '',
-    key: '12345678',
     des_fullname: '',
+    key: '12345678',
     des_key: '87654321',
     sendHolder: false,
     reactHolder: false,
@@ -231,7 +231,20 @@ function chatBox() {
                   <div style={{ paddingTop: 8 }}>
                     <div className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
                       <FontAwesomeIcon className='w3-large w3-text-grey' icon={faFaceSmileBeam} />
-                      <div style={{ padding: 20, width: 260, marginLeft: -100 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
+                      <div
+                        style={{
+                          padding: 20,
+                          width: 260,
+                          marginLeft: (bull.responseTo
+                            ? (mostLongTextLine(chatBrut[bull.responseTo].message) > mostLongTextLine(bull.message)
+                              ? (mostLongTextLine(chatBrut[bull.responseTo].message) > 26
+                                ? 0
+                                : -180 + mostLongTextLine(chatBrut[bull.responseTo].message) * 8)
+                              : mostLongTextLine(bull.message) > 26 ? 0 : -180 + mostLongTextLine(bull.message) * 8)
+                            : mostLongTextLine(bull.message) > 26 ? 0 : -180 + mostLongTextLine(bull.message) * 8)
+                        }}
+
+                        className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                         <div className='w3-flex-row w3-flex-center-v'>
                           <div onClick={() => reaction('heart', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                             {reactionListe.heart}
@@ -261,20 +274,20 @@ function chatBox() {
                     <div style={{ maxWidth: 80, marginLeft: -60 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div id={index + 'FlashInfo'} className='w3-text-grey w3-small' style={{ padding: 8, display: 'none' }}>Texte copié...</div>
                       <div className='w3-flex-row w3-flex-center-v'>
-                        <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                        <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                           <FontAwesomeIcon icon={faCopy} />
                         </div>
                         {(!bull.reaction && !replyChecker(index, chatArray) && (Date.now() - (bull.timestamp * 1) < 160000)) &&
                           <>
-                            <div title='Supprimer' onClick={() => deletedBull(index)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                            <div title='Supprimer' onClick={() => deletedBull(index)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                               <FontAwesomeIcon icon={faTrash} />
                             </div>
-                            <div title='Modifier' onClick={() => editBull(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                            <div title='Modifier' onClick={() => editBull(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                               <FontAwesomeIcon icon={faEdit} />
                             </div>
                           </>
                         }
-                        <div title='Transférer' onClick={() => transferBull(bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                        <div title='Transférer' onClick={() => transferBull(bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                           <FontAwesomeIcon icon={faShare} />
                         </div>
                       </div>
@@ -325,10 +338,7 @@ function chatBox() {
                       : 0,
                   }}
                 >
-                  {parse(bull.message.replace(/\n/g, "<br/>"))}
-                  {
-                    mostLongTextLine(bull.message)
-                  }
+                  {/\n.+/.test(bull.message) ? parse(bull.message.replace(/\n/g, "<br/>")) : bull.message}
                 </div>
 
                 {/* Bull reaction */}
@@ -424,7 +434,7 @@ function chatBox() {
                         : -4,
                   }}
                 >
-                  {parse(bull.message.replace(/\n/g, "<br/>"))}
+                  {/\n.+/.test(bull.message) ? parse(bull.message.replace(/\n/g, "<br/>")) : bull.message}
                 </div>
 
                 {/* Bull reaction */}
@@ -449,7 +459,18 @@ function chatBox() {
                 <div className='bullOption w3-flex-row w3-flex-center-v' style={{ marginRight: 'auto', marginLeft: 8, display: 'none' }}>
                   <div className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
                     <FontAwesomeIcon className='w3-large w3-text-grey' icon={faFaceSmileBeam} />
-                    <div style={{ padding: 20, width: 260, marginLeft: -100 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
+                    <div style={{
+                      padding: 20,
+                      width: 260,
+                      marginLeft: (bull.responseTo
+                        ? (mostLongTextLine(chatBrut[bull.responseTo].message) > mostLongTextLine(bull.message)
+                          ? (mostLongTextLine(chatBrut[bull.responseTo].message) > 26
+                            ? -240
+                            : -120 + mostLongTextLine(chatBrut[bull.responseTo].message) * 8)
+                          : mostLongTextLine(bull.message) > 26 ? -240 : -120 + mostLongTextLine(bull.message) * 8)
+                        : mostLongTextLine(bull.message) > 26 ? -240 : -120 + mostLongTextLine(bull.message) * 8)
+                    }} 
+                    className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div className='w3-flex-row w3-flex-center-v'>
                         <div onClick={() => reaction('heart', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                           {reactionListe.heart}
@@ -478,20 +499,20 @@ function chatBox() {
                     <div style={{ maxWidth: 80, marginLeft: -60 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div id={index + 'FlashInfo'} className='w3-text-grey w3-small' style={{ padding: 8, display: 'none' }}>Texte copié...</div>
                       <div className='w3-flex-row w3-flex-center-v'>
-                        <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                        <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                           <FontAwesomeIcon icon={faCopy} />
                         </div>
                         {(!bull.reaction && !replyChecker(index, chatArray) && (Date.now() - (bull.timestamp * 1) < 160000)) &&
                           <>
-                            <div title='Supprimer' onClick={() => deletedBull(index)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                            <div title='Supprimer' onClick={() => deletedBull(index)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                               <FontAwesomeIcon icon={faTrash} />
                             </div>
-                            <div title='Modifier' onClick={() => editBull(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                            <div title='Modifier' onClick={() => editBull(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                               <FontAwesomeIcon icon={faEdit} />
                             </div>
                           </>
                         }
-                        <div title='Transférer' onClick={() => transferBull(bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{paddingInline:0}}>
+                        <div title='Transférer' onClick={() => transferBull(bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                           <FontAwesomeIcon icon={faShare} />
                         </div>
                       </div>
