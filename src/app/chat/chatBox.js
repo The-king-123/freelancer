@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisH, faFaceSmileBeam, faImage, faPaperPlane, faReply, faSmile, faSmileBeam, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faEllipsisH, faFaceSmileBeam, faImage, faPaperPlane, faReply, faSmile, faSmileBeam, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 function chatBox() {
 
@@ -82,29 +82,56 @@ function chatBox() {
       const chatRef = ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key);
       const chatPush = push(chatRef)
 
-      set(chatPush, chatInfo)
-        .then(() => {
-          set(ref(database, 'chatcase/' + userInfo.des_key + '_' + userInfo.key + '/' + chatPush.key), chatInfo)
-            .then(() => {
-              document.getElementById('messageTextarea').value = ''
-              chatInfo.message = '';
-              userInfo.sendHolder = false;
-              chatInfo.key = '';
-              chatInfo.des_key = '';
-              chatInfo.timestamp = '';
-              chatInfo.attachement = null;
-              chatInfo.responseTo = null;
-              chatInfo.reaction = null;
-              chatInfo.deleted = false;
-              chatInfo.state = 'sent';
-            })
-            .catch((error) => {
-              console.error('Error writing data:', error);
-            });
-        })
-        .catch((error) => {
-          console.error('Error writing data:', error);
-        });
+      if (userInfo.editBull) {
+
+        set(ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key + '/' + userInfo.editBull + '/message'), chatInfo.message)
+        set(ref(database, 'chatcase/' + userInfo.des_key + '_' + userInfo.key + '/' + userInfo.editBull + '/message'), chatInfo.message)
+        set(ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key + '/' + userInfo.editBull + '/edited'), true)
+        set(ref(database, 'chatcase/' + userInfo.des_key + '_' + userInfo.key + '/' + userInfo.editBull + '/edited'), true)
+          .then(() => {
+            userInfo.editBull = false
+            document.getElementById('messageTextarea').value = ''
+            chatInfo.message = '';
+            userInfo.sendHolder = false;
+            chatInfo.key = '';
+            chatInfo.des_key = '';
+            chatInfo.timestamp = '';
+            chatInfo.attachement = null;
+            chatInfo.responseTo = null;
+            chatInfo.reaction = null;
+            chatInfo.deleted = false;
+            chatInfo.state = 'sent';
+            cancelEdit()
+          })
+          .catch((error) => {
+            console.error('Error writing data:', error);
+          });
+      } else {
+
+        set(chatPush, chatInfo)
+          .then(() => {
+            set(ref(database, 'chatcase/' + userInfo.des_key + '_' + userInfo.key + '/' + chatPush.key), chatInfo)
+              .then(() => {
+                document.getElementById('messageTextarea').value = ''
+                chatInfo.message = '';
+                userInfo.sendHolder = false;
+                chatInfo.key = '';
+                chatInfo.des_key = '';
+                chatInfo.timestamp = '';
+                chatInfo.attachement = null;
+                chatInfo.responseTo = null;
+                chatInfo.reaction = null;
+                chatInfo.deleted = false;
+                chatInfo.state = 'sent';
+              })
+              .catch((error) => {
+                console.error('Error writing data:', error);
+              });
+          })
+          .catch((error) => {
+            console.error('Error writing data:', error);
+          });
+      }
     }
   }
 
@@ -147,6 +174,19 @@ function chatBox() {
     // More than a year ago
     const diffInYears = Math.floor(diffInDays / 365);
     return diffInYears === 1 ? `a year ago` : `${diffInYears} years ago`;
+  }
+
+  const replyChecker = (idBull, chatArray) => {
+    var replayed = false
+    chatArray.map(([index, bull]) => {
+      if (bull.responseTo) {
+        if (bull.responseTo == idBull) {
+          replayed = true
+        }
+      }
+    });
+
+    return replayed
   }
 
   const displayMessage = (chat, chatBrut) => {
@@ -208,20 +248,24 @@ function chatBox() {
                     </div>
                   </div>
                   <div style={{ padding: 8 }} onClick={() => reply(index, bull.message)} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
-                  <div style={{ padding: 8 }} className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
+                  <div style={{ paddingRight: 8, paddingBlock: 8 }} className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
                     <FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} />
                     <div style={{ maxWidth: 80, marginLeft: -60 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div>
-                        <div className='w3-button w3-bar-item'>
+                        <div id={index + 'FlashInfo'} onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-bar-item'>
                           Copier
                         </div>
-                        <div className='w3-button w3-bar-item'>
-                          Supprimer
-                        </div>
-                        <div className='w3-button w3-bar-item'>
-                          Editer
-                        </div>
-                        <div className='w3-button w3-bar-item'>
+                        {(!bull.reaction && !replyChecker(index, chatArray) && (Date.now() - (bull.timestamp * 1) < 160000)) &&
+                          <>
+                            <div onClick={() => deletedBull(index)} className='w3-button w3-bar-item'>
+                              Supprimer
+                            </div>
+                            <div onClick={() => editBull(index, bull.message)} className='w3-button w3-bar-item'>
+                              Editer
+                            </div>
+                          </>
+                        }
+                        <div onClick={() => transferBull(bull.message)} className='w3-button w3-bar-item'>
                           Transférer
                         </div>
                       </div>
@@ -417,7 +461,29 @@ function chatBox() {
                     </div>
                   </div>
                   <div style={{ padding: 8 }} onClick={() => reply(index, bull.message)} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
-                  <div style={{ padding: 8 }} title='Option'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} /></div>
+                  <div style={{ paddingRight: 8, paddingBlock: 8 }} className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
+                    <FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} />
+                    <div style={{ maxWidth: 80, marginLeft: -60 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
+                      <div>
+                        <div id={index + 'FlashInfo'} onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-bar-item'>
+                          Copier
+                        </div>
+                        {(!bull.reaction && !replyChecker(index, chatArray) && (Date.now() - (bull.timestamp * 1) < 160000)) &&
+                          <>
+                            <div onClick={() => deletedBull(index)} className='w3-button w3-bar-item'>
+                              Supprimer
+                            </div>
+                            <div onClick={() => editBull(index, bull.message)} className='w3-button w3-bar-item'>
+                              Editer
+                            </div>
+                          </>
+                        }
+                        <div onClick={() => transferBull(bull.message)} className='w3-button w3-bar-item'>
+                          Transférer
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className='w3-flex-1'></div>
@@ -435,16 +501,10 @@ function chatBox() {
         ) {
           document.getElementById("bullField").scrollTop = document.getElementById("bullField").scrollHeight - (window.innerHeight - 160);
         }
-        if (userInfo.messageCounter == 0) {
-          setTimeout(() => {
-            document.getElementById("bullField").style.opacity = 1
-            userInfo.messageCounter = chat.length
-          }, 500);
-        } else {
-          userInfo.messageCounter = chat.length
-        }
-
+        userInfo.messageCounter = chat.length
       }, 50);
+    } else {
+      userInfo.messageCounter = chat.length
     }
   };
 
@@ -453,20 +513,11 @@ function chatBox() {
   const deletedBull = (idBull) => {
 
     // 'Raha mbola tsy misy response na reaction na ao anatin'ny deux minute'
-
+    set(ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key + '/' + idBull), null)
     set(ref(database, 'chatcase/' + userInfo.des_key + '_' + userInfo.key + '/' + idBull), null)
       .then(() => {
-        document.getElementById('messageTextarea').value = ''
-        chatInfo.message = '';
-        userInfo.sendHolder = false;
-        chatInfo.key = '';
-        chatInfo.des_key = '';
-        chatInfo.timestamp = '';
-        chatInfo.attachement = null;
-        chatInfo.responseTo = null;
-        chatInfo.reaction = null;
-        chatInfo.deleted = false;
-        chatInfo.state = 'sent';
+        // deleted info
+        cancelEdit()
       })
       .catch((error) => {
         console.error('Error writing data:', error);
@@ -476,7 +527,7 @@ function chatBox() {
 
   const reactExtractor = (reactions) => {
     const reactArray = []
-    Object.entries(reactions).sort(([, a], [, b]) => a.timestamp - b.timestamp).map(([index, react], key, reactions) => {
+    Object.entries(reactions).sort(([, a], [, b]) => a.timestamp - b.timestamp).map(([index, react]) => {
       var counter = 0
       for (let i = 0; i < reactArray.length; i++) {
         const element = reactArray[i];
@@ -517,11 +568,35 @@ function chatBox() {
     }
   }
 
-  const editBull = (idBull, bull) => {
+  const cancelEdit = () => {
+    userInfo.editBull = false
+    document.getElementById('editPanel').style.display = 'none'
+    document.getElementById('messageTextarea').value = ''
+  }
+
+  const editBull = (idBull, bullMessage) => {
+    userInfo.editBull = idBull
+    document.getElementById('editPanelText').innerText = bullMessage
+    document.getElementById('messageTextarea').value = bullMessage
+    document.getElementById('editPanel').style.display = 'flex'
+  }
+
+  const transferBull = (message) => {
 
   }
 
-  const cancelReply = (idBull) => {
+  const copyBullMessage = (index, message) => {
+    navigator.clipboard.writeText(message).then(() => {
+      document.getElementById(index + 'FlashInfo').innerText = 'Texte copié...'
+      setTimeout(() => {
+        document.getElementById(index + 'FlashInfo').innerText = 'Copier'
+      }, 2000);
+    }).catch(err => {
+      console.error("Échec de la copie : ", err);
+    });
+  }
+
+  const cancelReply = () => {
     chatInfo.responseTo = null
     document.getElementById('replyPanel').style.display = 'none'
   }
@@ -545,15 +620,16 @@ function chatBox() {
     });
 
     document.getElementById('bullField').style.height = window.innerHeight - 96 + 'px'
-    document.getElementById('bullField').style.display = 'block'
+    document.getElementById('bullField').style.display = 'flex'
   }, [])
 
   return (
     <div>
-      <div id='bullField' className='w3-noscrollbar w3-overflow-scroll' style={{ padding: 8, display: 'none', opacity: 0 }}>
-        <div style={{ padding: 16 }}>Bientôt, il sera possible d'envoyer des messages directement sur la plateforme, ce qui facilitera la communication et renforcera les interactions. Cette nouvelle fonctionnalité permettra d'échanger des idées, de poser des questions et de partager des expériences en temps réel, rendant l'expérience encore plus dynamique et conviviale.</div>
-        {displayChat}
-        <div style={{ height: 52 }}></div>
+      <div id='bullField' className='w3-noscrollbar w3-overflow-scroll' style={{ padding: 8, display: 'flex', flexDirection: 'column-reverse' }}>
+        <div className='w3-block'><div style={{ padding: 16 }}>Bientôt, il sera possible d'envoyer des messages directement sur la plateforme, ce qui facilitera la communication et renforcera les interactions. Cette nouvelle fonctionnalité permettra d'échanger des idées, de poser des questions et de partager des expériences en temps réel, rendant l'expérience encore plus dynamique et conviviale.</div>
+          {displayChat}
+          <div style={{ height: 52 }}></div>
+        </div>
       </div>
       <div style={{ maxWidth: 620, margin: "auto", paddingInline: 6, paddingBottom: 8 }} className='w3-dark-grey w3-block w3-display-bottommiddle'>
         <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
@@ -561,6 +637,11 @@ function chatBox() {
             <FontAwesomeIcon icon={faReply} />
             <div id='replyPanelText' className='w3-margin-left w3-margin-right w3-nowrap w3-overflow' style={{ maxWidth: 260 }}>some text here to reply sdfb sldkhflskdhklsjdhjh sdh </div>
             <FontAwesomeIcon onClick={cancelReply} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
+          </div>
+          <div id='editPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
+            <FontAwesomeIcon icon={faEdit} />
+            <div id='editPanelText' className='w3-margin-left w3-margin-right w3-nowrap w3-overflow' style={{ maxWidth: 260 }}>some text here to reply sdfb sldkhflskdhklsjdhjh sdh </div>
+            <FontAwesomeIcon onClick={cancelEdit} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
           </div>
           <div className='w3-flex-row w3-flex-center-v'>
             <div className='w3-pointer w3-white w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
