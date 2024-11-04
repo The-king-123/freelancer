@@ -38,8 +38,8 @@ function chatBox() {
   const [userInfo, setuserInfo] = useState({
     fullname: '',
     des_fullname: '',
-    key: '12345678',
-    des_key: '87654321',
+    key: '87654321',
+    des_key: '12345678',
     sendHolder: false,
     reactHolder: false,
     messageCounter: 0,
@@ -240,8 +240,8 @@ function chatBox() {
                               ? (mostLongTextLine(chatBrut[bull.responseTo].message) > 26
                                 ? 0
                                 : -180 + mostLongTextLine(chatBrut[bull.responseTo].message) * 8)
-                              : mostLongTextLine(bull.message) > 26 ? 0 : -180 + mostLongTextLine(bull.message) * 8)
-                            : mostLongTextLine(bull.message) > 26 ? 0 : -180 + mostLongTextLine(bull.message) * 8)
+                              : mostLongTextLine(bull.message) > 26 ? 0 : -180 + (mostLongTextLine(bull.message) * 8))
+                            : mostLongTextLine(bull.message) > 26 ? 0 : -180 + (mostLongTextLine(bull.message) * 8))
                         }}
 
                         className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
@@ -271,7 +271,17 @@ function chatBox() {
                   <div style={{ padding: 8 }} onClick={() => reply(index, bull.message)} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
                   <div style={{ paddingRight: 8, paddingBlock: 8 }} className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
                     <FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} />
-                    <div style={{ maxWidth: 80, marginLeft: -60 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
+                    <div style={{ 
+                      maxWidth: 80, 
+                      marginLeft: (bull.responseTo
+                        ? (mostLongTextLine(chatBrut[bull.responseTo].message) > mostLongTextLine(bull.message)
+                          ? (mostLongTextLine(chatBrut[bull.responseTo].message) > 12
+                            ? 0
+                            : -120 + mostLongTextLine(chatBrut[bull.responseTo].message) * 8)
+                          : mostLongTextLine(bull.message) > 12 ? 0 : -120 + (mostLongTextLine(bull.message) * 8))
+                        : mostLongTextLine(bull.message) > 12 ? 0 : -120 + (mostLongTextLine(bull.message) * 8))
+                    }} 
+                      className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div id={index + 'FlashInfo'} className='w3-text-grey w3-small' style={{ padding: 8, display: 'none' }}>Texte copié...</div>
                       <div className='w3-flex-row w3-flex-center-v'>
                         <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
@@ -466,9 +476,9 @@ function chatBox() {
                         ? (mostLongTextLine(chatBrut[bull.responseTo].message) > mostLongTextLine(bull.message)
                           ? (mostLongTextLine(chatBrut[bull.responseTo].message) > 26
                             ? -240
-                            : -120 + mostLongTextLine(chatBrut[bull.responseTo].message) * 8)
-                          : mostLongTextLine(bull.message) > 26 ? -240 : -120 + mostLongTextLine(bull.message) * 8)
-                        : mostLongTextLine(bull.message) > 26 ? -240 : -120 + mostLongTextLine(bull.message) * 8)
+                            : - (mostLongTextLine(chatBrut[bull.responseTo].message) * 8))
+                          : mostLongTextLine(bull.message) > 26 ? -240 : - (mostLongTextLine(bull.message) * 8))
+                        : mostLongTextLine(bull.message) > 26 ? -240 : - (mostLongTextLine(bull.message) * 8))
                     }} 
                     className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div className='w3-flex-row w3-flex-center-v'>
@@ -502,7 +512,7 @@ function chatBox() {
                         <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                           <FontAwesomeIcon icon={faCopy} />
                         </div>
-                        {(!bull.reaction && !replyChecker(index, chatArray) && (Date.now() - (bull.timestamp * 1) < 160000)) &&
+                        {( userInfo.key == bull.key && !bull.reaction && !replyChecker(index, chatArray) && (Date.now() - (bull.timestamp * 1) < 160000)) &&
                           <>
                             <div title='Supprimer' onClick={() => deletedBull(index)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                               <FontAwesomeIcon icon={faTrash} />
