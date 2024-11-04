@@ -3,8 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faImage, faPaperPlane, faReply, faShare, faSmile, faSmileBeam, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faImage, faPaperPlane, faReply, faShare, faSmile, faSmileBeam, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import parse from "html-react-parser";
+import axios from 'axios';
+import { console_source as source } from '../data';
+import Image from 'next/image';
 
 function chatBox() {
 
@@ -31,15 +34,23 @@ function chatBox() {
 
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
+  const [search, setsearch] = useState({ keyword: '' })
+  const [discutionsData, setdiscutionsData] = useState([])
 
   const [chatCase, setchatCase] = useState([])
   const [displayChat, setdisplayChat] = useState('')
+  const [chatListe, setchatListe] = useState(
+    <div style={{ padding: 24 }} className='w3-center'>
+      <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
+    </div>
+  )
+  const [usersData, setusersData] = useState([])
 
   const [userInfo, setuserInfo] = useState({
     fullname: '',
     des_fullname: '',
-    key: '87654321',
-    des_key: '12345678',
+    key: null,
+    des_key: null,
     sendHolder: false,
     reactHolder: false,
     messageCounter: 0,
@@ -48,6 +59,8 @@ function chatBox() {
   const [chatInfo, setchatInfo] = useState({
     key: '',
     des_key: '',
+    fullname: '',
+    des_fullname: '',
     timestamp: '',
     attachement: null,
     responseTo: null,
@@ -58,12 +71,16 @@ function chatBox() {
   })
 
   const reloadChat = () => {
-    onValue(ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key), (snapshot) => {
+    onValue(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key), (snapshot) => {
       if (snapshot.exists()) {
         const chat = snapshot.val()
+        delete chat.userInfo;
+        console.log(chat);
+        console.log('misy');
+        
         displayMessage(Object.entries(chat).sort(([, a], [, b]) => a.timestamp - b.timestamp), chat);
       } else {
-        console.log("No data available");
+        displayMessage([])
       }
     }, (error) => {
       console.error("Error reading data:", error);
@@ -80,15 +97,15 @@ function chatBox() {
       userInfo.sendHolder = true;
       chatInfo.timestamp = Date.now()
 
-      const chatRef = ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key);
+      const chatRef = ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key);
       const chatPush = push(chatRef)
 
       if (userInfo.editBull) {
 
-        set(ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key + '/' + userInfo.editBull + '/message'), chatInfo.message)
-        set(ref(database, 'chatcase/' + userInfo.des_key + '_' + userInfo.key + '/' + userInfo.editBull + '/message'), chatInfo.message)
-        set(ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key + '/' + userInfo.editBull + '/edited'), true)
-        set(ref(database, 'chatcase/' + userInfo.des_key + '_' + userInfo.key + '/' + userInfo.editBull + '/edited'), true)
+        set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/' + userInfo.editBull + '/message'), chatInfo.message)
+        set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + userInfo.editBull + '/message'), chatInfo.message)
+        set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/' + userInfo.editBull + '/edited'), true)
+        set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + userInfo.editBull + '/edited'), true)
           .then(() => {
             userInfo.editBull = false
             document.getElementById('messageTextarea').value = ''
@@ -102,6 +119,21 @@ function chatBox() {
             chatInfo.reaction = null;
             chatInfo.deleted = false;
             chatInfo.state = 'sent';
+
+            set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo'), {
+              fullname: userInfo.des_fullname,
+              key: userInfo.des_key,
+              timestamp: Date.now(),
+              state: 'sent'
+            })
+
+            set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
+              fullname: userInfo.fullname,
+              key: userInfo.key,
+              timestamp: Date.now(),
+              state: 'sent'
+            })
+
             cancelEdit()
           })
           .catch((error) => {
@@ -111,7 +143,7 @@ function chatBox() {
 
         set(chatPush, chatInfo)
           .then(() => {
-            set(ref(database, 'chatcase/' + userInfo.des_key + '_' + userInfo.key + '/' + chatPush.key), chatInfo)
+            set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + chatPush.key), chatInfo)
               .then(() => {
                 document.getElementById('messageTextarea').value = ''
                 chatInfo.message = '';
@@ -123,7 +155,21 @@ function chatBox() {
                 chatInfo.responseTo = null;
                 chatInfo.reaction = null;
                 chatInfo.deleted = false;
-                chatInfo.state = 'sent';
+
+                set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo'), {
+                  fullname: userInfo.des_fullname,
+                  key: userInfo.des_key,
+                  timestamp: Date.now(),
+                  state: 'sent'
+                })
+
+                set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
+                  fullname: userInfo.fullname,
+                  key: userInfo.key,
+                  timestamp: Date.now(),
+                  state: 'sent'
+                })
+
                 cancelReply()
               })
               .catch((error) => {
@@ -137,7 +183,7 @@ function chatBox() {
     }
   }
 
-  function formatChatTimestamp(timestamp) {
+  const formatChatTimestamp = (timestamp) => {
     const now = new Date();
     const date = new Date(timestamp);
 
@@ -271,8 +317,8 @@ function chatBox() {
                   <div style={{ padding: 8 }} onClick={() => reply(index, bull.message)} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
                   <div style={{ paddingRight: 8, paddingBlock: 8 }} className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
                     <FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} />
-                    <div style={{ 
-                      maxWidth: 80, 
+                    <div style={{
+                      maxWidth: 80,
                       marginLeft: (bull.responseTo
                         ? (mostLongTextLine(chatBrut[bull.responseTo].message) > mostLongTextLine(bull.message)
                           ? (mostLongTextLine(chatBrut[bull.responseTo].message) > 12
@@ -280,7 +326,7 @@ function chatBox() {
                             : -120 + mostLongTextLine(chatBrut[bull.responseTo].message) * 8)
                           : mostLongTextLine(bull.message) > 12 ? 0 : -120 + (mostLongTextLine(bull.message) * 8))
                         : mostLongTextLine(bull.message) > 12 ? 0 : -120 + (mostLongTextLine(bull.message) * 8))
-                    }} 
+                    }}
                       className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div id={index + 'FlashInfo'} className='w3-text-grey w3-small' style={{ padding: 8, display: 'none' }}>Texte copié...</div>
                       <div className='w3-flex-row w3-flex-center-v'>
@@ -445,6 +491,7 @@ function chatBox() {
                   }}
                 >
                   {/\n.+/.test(bull.message) ? parse(bull.message.replace(/\n/g, "<br/>")) : bull.message}
+                  
                 </div>
 
                 {/* Bull reaction */}
@@ -479,8 +526,8 @@ function chatBox() {
                             : - (mostLongTextLine(chatBrut[bull.responseTo].message) * 8))
                           : mostLongTextLine(bull.message) > 26 ? -240 : - (mostLongTextLine(bull.message) * 8))
                         : mostLongTextLine(bull.message) > 26 ? -240 : - (mostLongTextLine(bull.message) * 8))
-                    }} 
-                    className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
+                    }}
+                      className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div className='w3-flex-row w3-flex-center-v'>
                         <div onClick={() => reaction('heart', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                           {reactionListe.heart}
@@ -506,13 +553,24 @@ function chatBox() {
                   <div style={{ padding: 8 }} onClick={() => reply(index, bull.message)} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
                   <div style={{ paddingRight: 8, paddingBlock: 8 }} className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
                     <FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} />
-                    <div style={{ maxWidth: 80, marginLeft: -60 }} className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
+                    <div style={{
+                      maxWidth: 80,
+                      marginLeft: (bull.responseTo
+                        ? (mostLongTextLine(chatBrut[bull.responseTo].message) > mostLongTextLine(bull.message)
+                          ? (mostLongTextLine(chatBrut[bull.responseTo].message) > 9
+                            ? -140
+                            : -60 + mostLongTextLine(chatBrut[bull.responseTo].message) * 8)
+                          : mostLongTextLine(bull.message) > 9 ? -140 : - 60 - (mostLongTextLine(bull.message) * 8))
+                        : mostLongTextLine(bull.message) > 9 ? -140 : - 60
+                          - (mostLongTextLine(bull.message) * 8))
+                    }}
+                      className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div id={index + 'FlashInfo'} className='w3-text-grey w3-small' style={{ padding: 8, display: 'none' }}>Texte copié...</div>
                       <div className='w3-flex-row w3-flex-center-v'>
                         <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                           <FontAwesomeIcon icon={faCopy} />
                         </div>
-                        {( userInfo.key == bull.key && !bull.reaction && !replyChecker(index, chatArray) && (Date.now() - (bull.timestamp * 1) < 160000)) &&
+                        {(userInfo.key == bull.key && !bull.reaction && !replyChecker(index, chatArray) && (Date.now() - (bull.timestamp * 1) < 160000)) &&
                           <>
                             <div title='Supprimer' onClick={() => deletedBull(index)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                               <FontAwesomeIcon icon={faTrash} />
@@ -546,9 +604,13 @@ function chatBox() {
           document.getElementById("bullField").scrollTop = document.getElementById("bullField").scrollHeight - (window.innerHeight - 160);
         }
         userInfo.messageCounter = chat.length
+        document.getElementById('bullField').style.display = 'flex';
+
       }, 50);
     } else {
       userInfo.messageCounter = chat.length
+      document.getElementById('bullField').style.display = 'flex';
+
     }
   };
 
@@ -557,8 +619,8 @@ function chatBox() {
   const deletedBull = (idBull) => {
 
     // 'Raha mbola tsy misy response na reaction na ao anatin'ny deux minute'
-    set(ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key + '/' + idBull), null)
-    set(ref(database, 'chatcase/' + userInfo.des_key + '_' + userInfo.key + '/' + idBull), null)
+    set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/' + idBull), null)
+    set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + idBull), null)
       .then(() => {
         // deleted info
         cancelEdit()
@@ -595,9 +657,9 @@ function chatBox() {
         timestamp: Date.now(),
         reaction: emoji,
       }
-      set(ref(database, 'chatcase/' + userInfo.key + '_' + userInfo.des_key + '/' + idBull + '/reaction/' + userInfo.key), react)
+      set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/' + idBull + '/reaction/' + userInfo.key), react)
         .then(() => {
-          set(ref(database, 'chatcase/' + userInfo.des_key + '_' + userInfo.key + '/' + idBull + '/reaction/' + userInfo.key), react)
+          set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + idBull + '/reaction/' + userInfo.key), react)
             .then(() => {
               userInfo.reactHolder = false
             })
@@ -652,55 +714,244 @@ function chatBox() {
     document.getElementById('replyPanel').style.display = 'flex'
   }
 
+  const reloadChatsList = (data, type) => {
+
+    const themeLight = localStorage.getItem('theme') == 'light' ? true : false
+    var glitchChat
+    if (data.length > 0) {
+      glitchChat = data.map((user, key) => (
+        <div key={key} style={{ padding: 4 }}>
+          <div
+            onClick={() => displayDiscution(user)}
+            className={"w3-flex w3-flex-row w3-flex-center w3-round " + (themeLight ? "w3-white" : "w3-dark-grey")}
+            style={{ padding: 12 }}
+          >
+            <Image
+              loading="lazy"
+              unoptimized
+              width={48}
+              height={48}
+              src={
+                source + "/images.php?w=80&h=80&zlonk=3733&zlink=" + user.key
+              }
+              className="w3-circle w3-margin-right"
+              alt={user.fullname}
+              style={{ objectFit: "cover", objectPosition: "center", minHeight: 48, minWidth: 48 }}
+            />
+            <div className="w3-flex-1 w3-medium w3-big w3-nowrap w3-overflow w3-block">
+              {user.fullname}
+            </div>
+          </div>
+        </div>
+      ))
+    } else {
+      //
+      var glitchChat = (
+        <div style={{ padding: 8 }}>
+          <div className="w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
+            <div style={{ paddingInline: 16 }}>
+              {
+                type == 'search'
+                  ? "Aucun contact ne correspond à votre recherche..."
+                  : "Vous n’avez aucune discussion pour le moment..."
+              }
+
+            </div>
+          </div>
+        </div>
+      )
+    }
+    setchatListe(glitchChat)
+  }
+
+  const searchUsers = () => {
+    const searchResults = usersData.filter(user => user.fullname.toLowerCase().includes((search.keyword.toLowerCase()) || user.email.toLowerCase().includes(search.keyword.toLowerCase())) && user.key != userInfo.key);
+    if (search.keyword.length >= 3) {
+      console.log(searchResults);
+
+      reloadChatsList(searchResults, 'search')
+    } else {
+      console.log(discutionsData);
+
+      reloadChatsList(discutionsData, 'discution')
+    }
+
+  }
+
+  const displayDiscution = (user) => {
+    if (user.key != userInfo.des_key) {
+      userInfo.des_fullname = user.fullname
+      userInfo.des_key = user.key
+
+      document.getElementById('modalChatListe').style.display = 'none'
+      document.getElementById('chattingCore').style.display = 'flex';
+
+      reloadChat()
+    } else {
+      document.getElementById('bullField').style.display = 'flex';
+    }
+  }
+
   useEffect(() => {
-    reloadChat();
-    document.getElementById('messageTextarea').addEventListener('keydown', function (event) {
-      if (event.key === 'Enter') {
-        if (event.shiftKey) {
-          return;
+
+    if (localStorage.getItem('theme') == 'light') {
+
+      const elementGrey = document.getElementsByClassName('w3-black').length
+      const elementWhite = document.getElementsByClassName('w3-dark-grey').length
+      const backTransparent = document.getElementsByClassName('black-opacity').length
+      for (let i = 0; i < elementGrey; i++) {
+        const element = document.getElementsByClassName('w3-black')[0];
+        element.className = element.className.replace('w3-black', 'w3-light-grey')
+      }
+      for (let i = 0; i < elementWhite; i++) {
+        const element = document.getElementsByClassName('w3-dark-grey')[0];
+        element.className = element.className.replace('w3-dark-grey', 'w3-white')
+      }
+      for (let i = 0; i < backTransparent; i++) {
+        const element = document.getElementsByClassName('black-opacity')[0];
+        element.className = element.className.replace('black-opacity', 'white-opacity')
+      }
+
+      document.getElementById('htmlCore').style.display = 'block'
+    }
+
+    const xcode = localStorage.getItem('x-code');
+    axios
+      .get(source + "/_auth?xcode=" + xcode)
+      .then((res) => {
+        if (res.data.logedin) {
+          userInfo.key = res.data.user.key;
+          userInfo.fullname = res.data.user.fullname;
+
+          document.getElementById('bullField').style.height = window.innerHeight - 96 + 'px';
+
+          onValue(ref(database, 'chatcase/' + res.data.user.key), (snapshot) => {
+            if (snapshot.exists()) {
+              const chats = snapshot.val();
+              const discutions = []
+              Object.entries(chats).sort(([, a], [, b]) => a.timestamp - b.timestamp).map(([index, chat]) => {
+                discutions.push(chat.userInfo);
+              });
+              reloadChatsList(discutions, 'discution')
+            } else {
+              reloadChatsList([], 'discution')
+            }
+          }, (error) => {
+            console.error("Error reading data:", error);
+          });
+
+          axios
+            .get(source + "/_auth/create")
+            .then((res) => {
+              res.data.data.forEach(user => {
+                usersData.push(user);
+              });
+              document.getElementById('modalChatListe').style.display = 'block'
+            })
+            .catch((e) => {
+              console.error("failure", e);
+            });
+
+          document.getElementById('messageTextarea').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+              if (event.shiftKey) {
+                return;
+              } else {
+                sendMessage()
+              }
+            }
+          });
+
         } else {
-          sendMessage()
+          if (document.getElementById('modalLogin')) {
+            document.getElementById('modalLogin').style.display = 'block'
+          }
+          document.getElementById('profilCore').innerHTML = '';
+
         }
+      })
+      .catch((e) => {
+        console.error("failure", e);
+        //
+      });
+
+    document.getElementById('searchUserInput').addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        searchUsers()
       }
     });
 
-    document.getElementById('bullField').style.height = window.innerHeight - 96 + 'px'
-    document.getElementById('bullField').style.display = 'flex'
   }, [])
 
   return (
-    <div>
-      <div id='bullField' className='w3-noscrollbar w3-overflow-scroll' style={{ padding: 8, display: 'flex', flexDirection: 'column-reverse' }}>
-        <div className='w3-block'><div style={{ padding: 16 }}>Bientôt, il sera possible d'envoyer des messages directement sur la plateforme, ce qui facilitera la communication et renforcera les interactions. Cette nouvelle fonctionnalité permettra d'échanger des idées, de poser des questions et de partager des expériences en temps réel, rendant l'expérience encore plus dynamique et conviviale.</div>
-          {displayChat}
-          <div style={{ height: 96 }}></div>
+    <div style={{ position: 'relative' }}>
+      <div id='chattingCore' style={{ display: 'none' }}>
+        <div id='bullField' className='w3-noscrollbar w3-overflow-scroll' style={{ padding: 8, display: 'flex', flexDirection: 'column-reverse' }}>
+          <div className='w3-block'><div style={{ padding: 16 }}>Bientôt, il sera possible d'envoyer des messages directement sur la plateforme, ce qui facilitera la communication et renforcera les interactions. Cette nouvelle fonctionnalité permettra d'échanger des idées, de poser des questions et de partager des expériences en temps réel, rendant l'expérience encore plus dynamique et conviviale.</div>
+            {displayChat}
+            <div style={{ height: 96 }}></div>
+          </div>
+        </div>
+        <div style={{ maxWidth: 620, margin: "auto", paddingInline: 6, paddingBottom: 8 }} className='w3-dark-grey w3-block w3-display-bottommiddle'>
+          <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
+            <div id='replyPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
+              <FontAwesomeIcon icon={faReply} />
+              <div id='replyPanelText' className='w3-margin-left w3-margin-right w3-nowrap w3-overflow' style={{ maxWidth: 260 }}>some text here to reply sdfb sldkhflskdhklsjdhjh sdh </div>
+              <FontAwesomeIcon onClick={cancelReply} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
+            </div>
+            <div id='editPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
+              <FontAwesomeIcon icon={faEdit} />
+              <div id='editPanelText' className='w3-margin-left w3-margin-right w3-nowrap w3-overflow' style={{ maxWidth: 260 }}>some text here to reply sdfb sldkhflskdhklsjdhjh sdh </div>
+              <FontAwesomeIcon onClick={cancelEdit} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
+            </div>
+            <div className='w3-flex-row w3-flex-center-v'>
+              <div className='w3-pointer w3-white w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
+                <FontAwesomeIcon icon={faImage} />
+              </div>
+              <div className='w3-flex-1'>
+                <textarea id='messageTextarea' style={{ paddingInline: 24, height: 40, resize: 'none' }} type='text' placeholder='Message' className='w3-input w3-border-0 w3-round-xxlarge w3-block w3-white w3-noscrollbar' />
+              </div>
+              <div onClick={sendMessage} className='w3-pointer w3-white w3-circle w3-flex w3-flex-center w3-margin-left' style={{ width: 32, height: 32 }}>
+                <FontAwesomeIcon icon={faPaperPlane} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div style={{ maxWidth: 620, margin: "auto", paddingInline: 6, paddingBottom: 8 }} className='w3-dark-grey w3-block w3-display-bottommiddle'>
-        <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
-          <div id='replyPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
-            <FontAwesomeIcon icon={faReply} />
-            <div id='replyPanelText' className='w3-margin-left w3-margin-right w3-nowrap w3-overflow' style={{ maxWidth: 260 }}>some text here to reply sdfb sldkhflskdhklsjdhjh sdh </div>
-            <FontAwesomeIcon onClick={cancelReply} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
-          </div>
-          <div id='editPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
-            <FontAwesomeIcon icon={faEdit} />
-            <div id='editPanelText' className='w3-margin-left w3-margin-right w3-nowrap w3-overflow' style={{ maxWidth: 260 }}>some text here to reply sdfb sldkhflskdhklsjdhjh sdh </div>
-            <FontAwesomeIcon onClick={cancelEdit} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
-          </div>
-          <div className='w3-flex-row w3-flex-center-v'>
-            <div className='w3-pointer w3-white w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
-              <FontAwesomeIcon icon={faImage} />
+      {/* modal forum liste */}
+      <div id="modalChatListe" className="w3-modal w3-round black-opacity" style={{ position: 'absolute', height: 'calc(100vh - 32px)', marginTop: -64 }}>
+        <div
+          className="w3-modal-content w3-card w3-round w3-overflow w3-black"
+          style={{ maxWidth: 420, top: 32 }}
+        >
+
+          <div style={{ marginTop: 16 }} className='w3-flex-row w3-flex-center-v'>
+            <div onClick={() => document.getElementById('modalChatListe').style.display = 'none'} className="w3-circle w3-dark-grey w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16 }}>
+              <FontAwesomeIcon icon={faArrowLeft} />
             </div>
             <div className='w3-flex-1'>
-              <textarea id='messageTextarea' style={{ paddingInline: 24, height: 40, resize: 'none' }} type='text' placeholder='Message' className='w3-input w3-border-0 w3-round-xxlarge w3-block w3-white w3-noscrollbar' />
-            </div>
-            <div onClick={sendMessage} className='w3-pointer w3-white w3-circle w3-flex w3-flex-center w3-margin-left' style={{ width: 32, height: 32 }}>
-              <FontAwesomeIcon icon={faPaperPlane} />
+              ChatBox
             </div>
           </div>
+
+          <div style={{ paddingInline: 16, paddingBlock: 16 }}>
+            <input
+              id="searchUserInput"
+              onChange={(e) => search.keyword = e.target.value}
+              className="input w3-border-0 w3-input w3-border-0 w3-round-xxlarge w3-dark-grey "
+              placeholder="Chercher un contact"
+              type="text"
+            />
+          </div>
+          <div style={{ height: '60vh', paddingInline: 12, marginBottom: 16 }} className="w3-overflow-scroll w3-noscrollbar">
+            {
+              chatListe
+            }
+          </div>
+
         </div>
       </div>
+      {/* end modal forum liste */}
     </div>
   )
 }

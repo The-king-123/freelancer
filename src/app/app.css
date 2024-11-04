@@ -110,6 +110,9 @@ a[href] {
 .white-opacity {
   background-color: #ffffffc2;
 }
+.black-opacity{
+  background-color: #222222c6;
+}
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
