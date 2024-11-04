@@ -75,8 +75,6 @@ function chatBox() {
       if (snapshot.exists()) {
         const chat = snapshot.val()
         delete chat.userInfo;
-        console.log(chat);
-        console.log('misy');
         
         displayMessage(Object.entries(chat).sort(([, a], [, b]) => a.timestamp - b.timestamp), chat);
       } else {
