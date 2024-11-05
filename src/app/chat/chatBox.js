@@ -1039,7 +1039,7 @@ function chatBox() {
         >
 
           <div style={{ marginTop: 16 }} className='w3-flex-row w3-flex-center-v'>
-            <div id='chatListeCloseButton' onClick={() => document.getElementById('modalChatListe').style.display = 'none'} className="w3-circle w3-dark-grey w3-flex w3-flex-center" style={{ width: 24, height: 24, marginLeft: 16, display: 'none' }}>
+            <div id='chatListeCloseButton' onClick={() => {document.getElementById('modalChatListe').style.display = 'none';reloadChat()}} className="w3-circle w3-dark-grey w3-flex w3-flex-center" style={{ width: 24, height: 24, marginLeft: 16, display: 'none' }}>
               <FontAwesomeIcon icon={faArrowLeft} />
             </div>
             <div className='w3-flex-1 w3-big w3-large' style={{ marginLeft: 16 }}>
