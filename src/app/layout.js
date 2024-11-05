@@ -1709,7 +1709,7 @@ export default function RootLayout({ children }) {
           {/* // Switch free premium with inital panel */}
           <div>
             <div
-              className="w3-dropdown-click w3-hover-white"
+              className="w3-dropdown-click"
             >
 
               <div
@@ -1744,7 +1744,7 @@ export default function RootLayout({ children }) {
                   if (location.pathname.split('/')[1] != '' && location.pathname.split('/')[1] != 'user') {
                     document.location = '/'
                   }
-                }} style={{ marginInline: 'auto' }}>
+                }} style={{ marginInline: 'auto',zIndex:1 }}>
                   <span className="main1 w3-pointer">
                     <div id="freeSwitch1" className="btn1 w3-yellow w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28 }}>
                       <FontAwesomeIcon icon={faDollarSign} />
@@ -1759,7 +1759,7 @@ export default function RootLayout({ children }) {
                     stopAllIntervalAndTimeout();
                     document.location = '/';
                   }
-                }} className="w3-small" style={{ marginTop: -34, zIndex: 1, paddingBlock: 8, fontSize: '16px', paddingInline: 10, textAlign: 'right' }}>
+                }} className="w3-small" style={{ marginTop: -34, zIndex: 2, paddingBlock: 8, fontSize: '16px', paddingInline: 10, textAlign: 'right' }}>
                   Premium
                 </div>
               </div>
