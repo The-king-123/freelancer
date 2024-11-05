@@ -766,12 +766,8 @@ function chatBox() {
   const searchUsers = () => {
     const searchResults = usersData.filter(user => user.fullname.toLowerCase().includes((search.keyword.toLowerCase()) || user.email.toLowerCase().includes(search.keyword.toLowerCase())) && user.key != userInfo.key);
     if (search.keyword.length >= 3) {
-      console.log(searchResults);
-
       reloadChatsList(searchResults, 'search')
     } else {
-      console.log(discutionsData);
-
       reloadChatsList(discutionsData, 'discution')
     }
 
@@ -836,6 +832,7 @@ function chatBox() {
               const discutions = []
               Object.entries(chats).sort(([, a], [, b]) => a.timestamp - b.timestamp).map(([index, chat]) => {
                 discutions.push(chat.userInfo);
+                discutionsData.push(chat.userInfo)
               });
               reloadChatsList(discutions, 'discution')
             } else {
@@ -911,13 +908,13 @@ function chatBox() {
               <FontAwesomeIcon onClick={cancelEdit} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
             </div>
             <div className='w3-flex-row w3-flex-center-v'>
-              <div className='w3-pointer w3-white w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
+              <div className='w3-pointer w3-yellow w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
                 <FontAwesomeIcon icon={faImage} />
               </div>
               <div className='w3-flex-1'>
-                <textarea id='messageTextarea' style={{ paddingInline: 24, height: 40, resize: 'none' }} type='text' placeholder='Message' className='w3-input w3-border-0 w3-round-xxlarge w3-block w3-white w3-noscrollbar' />
+                <textarea id='messageTextarea' style={{ paddingInline: 24, height: 40, resize: 'none' }} type='text' placeholder='Message' className='w3-input w3-border-0 w3-round-xxlarge w3-block w3-dark-grey w3-noscrollbar' />
               </div>
-              <div onClick={sendMessage} className='w3-pointer w3-white w3-circle w3-flex w3-flex-center w3-margin-left' style={{ width: 32, height: 32 }}>
+              <div onClick={sendMessage} className='w3-pointer w3-yellow w3-circle w3-flex w3-flex-center w3-margin-left' style={{ width: 32, height: 32 }}>
                 <FontAwesomeIcon icon={faPaperPlane} />
               </div>
             </div>

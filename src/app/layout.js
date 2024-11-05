@@ -1010,7 +1010,7 @@ export default function RootLayout({ children }) {
   }, []);
 
   return (
-    <html id="htmlCore" style={{ display: 'none' }} className="w3-dark-grey" lang="en">
+    <html id="htmlCore" style={{ display: 'none'}} content="width=device-width, initial-scale=1.0" className="w3-dark-grey" lang="en">
       <body id="appCore" className={inter.className}>
 
         <div
