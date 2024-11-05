@@ -841,8 +841,15 @@ function chatBox() {
                 }
               ]
               Object.entries(chats).sort(([, a], [, b]) => a.timestamp - b.timestamp).map(([index, chat]) => {
-                discutions.push(chat.userInfo);
-                discutionsData.push(chat.userInfo)
+                
+                if (chat.userInfo.key == '160471339156947') {
+                  discutions[0] = chat.userInfo
+                  discutionsData[0] = chat.userInfo
+                }else{
+                  discutions.push(chat.userInfo);
+                  discutionsData.push(chat.userInfo)
+                }
+                
               });
               reloadChatsList(discutions, 'discution')
             } else {
