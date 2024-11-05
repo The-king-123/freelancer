@@ -37,7 +37,7 @@ function chatBox() {
   const [search, setsearch] = useState({ keyword: '' })
   const [discutionsData, setdiscutionsData] = useState([
     {
-      fullname:'FREELANCER',
+      fullname:'FREELANCER.MG',
       key:'160471339156947',
     }
   ])
@@ -836,7 +836,7 @@ function chatBox() {
               const chats = snapshot.val();
               const discutions = [
                 {
-                  fullname:'FREELANCER',
+                  fullname:'FREELANCER.MG',
                   key:'160471339156947',
                 }
               ]
