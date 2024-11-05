@@ -840,6 +840,7 @@ function chatBox() {
                   key:'160471339156947',
                 }
               ]
+              discutionsData.splice(1, discutionsData.length);
               Object.entries(chats).sort(([, a], [, b]) => a.timestamp - b.timestamp).map(([index, chat]) => {
                 
                 if (chat.userInfo.key == '160471339156947') {
