@@ -854,7 +854,7 @@ function chatBox() {
               });
               reloadChatsList(discutions, 'discution')
             } else {
-              reloadChatsList([], 'discution')
+              reloadChatsList(discutionsData, 'discution')
             }
           }, (error) => {
             console.error("Error reading data:", error);
