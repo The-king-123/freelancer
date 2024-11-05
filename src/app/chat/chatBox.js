@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faComment, faComments, faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faImage, faPaperPlane, faReply, faShare, faSmile, faSmileBeam, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCheck, faCheckDouble, faComment, faComments, faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faImage, faPaperPlane, faReply, faShare, faSmile, faSmileBeam, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import parse from "html-react-parser";
 import axios from 'axios';
 import { console_source as source } from '../data';
@@ -37,8 +37,9 @@ function chatBox() {
   const [search, setsearch] = useState({ keyword: '' })
   const [discutionsData, setdiscutionsData] = useState([
     {
-      fullname:'FREELANCER.MG',
-      key:'160471339156947',
+      fullname: 'FREELANCER.MG',
+      key: '160471339156947',
+      new: true,
     }
   ])
 
@@ -79,11 +80,13 @@ function chatBox() {
     onValue(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key), (snapshot) => {
       if (snapshot.exists()) {
         const chat = snapshot.val()
+        const chatCopie = { ...chat }
         delete chat.userInfo;
-
-        displayMessage(Object.entries(chat).sort(([, a], [, b]) => a.timestamp - b.timestamp), chat);
+        if (document.getElementById('modalChatListe').style.display != 'block') {
+          displayMessage(Object.entries(chat).sort(([, a], [, b]) => a.timestamp - b.timestamp), chat, chatCopie.userInfo);
+        }
       } else {
-        displayMessage([])
+        displayMessage([], false, false)
       }
     }, (error) => {
       console.error("Error reading data:", error);
@@ -128,14 +131,22 @@ function chatBox() {
               fullname: userInfo.des_fullname,
               key: userInfo.des_key,
               timestamp: Date.now(),
-              state: 'sent'
-            })
-
-            set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
-              fullname: userInfo.fullname,
-              key: userInfo.key,
-              timestamp: Date.now(),
-              state: 'sent'
+              state: 'sent',
+              lastmessage: {
+                key: userInfo.key,
+                message: chatInfo.message
+              }
+            }).then(() => {
+              set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
+                fullname: userInfo.fullname,
+                key: userInfo.key,
+                timestamp: Date.now(),
+                state: 'sent',
+                lastmessage: {
+                  key: userInfo.key,
+                  message: chatInfo.message
+                }
+              }).then(() => chatInfo.message = '')
             })
 
             cancelEdit()
@@ -150,7 +161,6 @@ function chatBox() {
             set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + chatPush.key), chatInfo)
               .then(() => {
                 document.getElementById('messageTextarea').value = ''
-                chatInfo.message = '';
                 userInfo.sendHolder = false;
                 chatInfo.key = '';
                 chatInfo.des_key = '';
@@ -164,15 +174,25 @@ function chatBox() {
                   fullname: userInfo.des_fullname,
                   key: userInfo.des_key,
                   timestamp: Date.now(),
-                  state: 'sent'
+                  state: 'sent',
+                  lastmessage: {
+                    key: userInfo.key,
+                    message: chatInfo.message
+                  }
+                }).then(() => {
+                  set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
+                    fullname: userInfo.fullname,
+                    key: userInfo.key,
+                    timestamp: Date.now(),
+                    state: 'sent',
+                    lastmessage: {
+                      key: userInfo.key,
+                      message: chatInfo.message
+                    }
+                  }).then(() => chatInfo.message = '')
                 })
 
-                set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
-                  fullname: userInfo.fullname,
-                  key: userInfo.key,
-                  timestamp: Date.now(),
-                  state: 'sent'
-                })
+
 
                 cancelReply()
               })
@@ -247,7 +267,7 @@ function chatBox() {
     return maxLength
   }
 
-  const displayMessage = (chat, chatBrut) => {
+  const displayMessage = (chat, chatBrut, UI) => {
 
     const themeLight = localStorage.getItem('theme') == 'light' ? true : false
     const glitchChat = chat.map(([index, bull], key, chatArray) => (
@@ -599,6 +619,13 @@ function chatBox() {
       </div>
     ));
 
+    if (UI) {
+      if (UI.lastmessage.key != userInfo.key) {
+        set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo/state'), 'read')
+        set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo/state'), 'read')
+      }
+    }
+
     setdisplayChat(glitchChat);
 
     if (chat.length > userInfo.messageCounter) {
@@ -665,6 +692,27 @@ function chatBox() {
         .then(() => {
           set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + idBull + '/reaction/' + userInfo.key), react)
             .then(() => {
+              set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo'), {
+                fullname: userInfo.des_fullname,
+                key: userInfo.des_key,
+                timestamp: Date.now(),
+                state: 'sent',
+                lastmessage: {
+                  key: userInfo.key,
+                  message: 'A réagi ' + reactionListe[emoji]
+                }
+              }).then(() => {
+                set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
+                  fullname: userInfo.fullname,
+                  key: userInfo.key,
+                  timestamp: Date.now(),
+                  state: 'sent',
+                  lastmessage: {
+                    key: userInfo.key,
+                    message: 'A réagi ' + reactionListe[emoji]
+                  }
+                }).then(() => chatInfo.message = '')
+              })
               userInfo.reactHolder = false
             })
             .catch((error) => {
@@ -720,6 +768,17 @@ function chatBox() {
 
   const reloadChatsList = (data, type) => {
 
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].state == 'sent') {
+        if (data[i].lastmessage) {
+          if (data[i].lastmessage.key != userInfo.key) {
+            set(ref(database, 'chatcase/' + userInfo.key + '/' + data[i].key + '/userInfo/state'), 'received')
+            set(ref(database, 'chatcase/' + data[i].key + '/' + userInfo.key + '/userInfo/state'), 'received')
+          }
+        }
+      }
+    }
+
     const themeLight = localStorage.getItem('theme') == 'light' ? true : false
     var glitchChat
     if (data.length > 0) {
@@ -742,8 +801,21 @@ function chatBox() {
               alt={user.fullname}
               style={{ objectFit: "cover", objectPosition: "center", minHeight: 48, minWidth: 48 }}
             />
-            <div className="w3-flex-1 w3-medium w3-big w3-nowrap w3-overflow w3-block">
-              {user.fullname}
+            <div className="w3-flex-1 w3-medium w3-nowrap w3-overflow w3-block">
+              {user.fullname} <br />
+              {type != 'search' && !user.new &&
+                <>
+                  <span className={(user.lastmessage ? (user.lastmessage.key == userInfo.key ? false : true) : false) && user.state != 'read' && 'w3-big'}>
+                    {user.lastmessage ? (user.lastmessage.key == userInfo.key ? 'Vous: ' : '') : ''}{user.lastmessage ? user.lastmessage.message : 'Aucune conversation'}
+                  </span>
+                  <div className='w3-small' style={{ marginTop: -4, textAlign: 'right' }}>
+                    <span className='w3-text-grey'>{formatChatTimestamp(user.timestamp)}</span>
+                    {user.state == 'sent' && <FontAwesomeIcon style={{ marginLeft: 8 }} className='w3-text-grey' icon={faCheck} />}
+                    {user.state == 'received' && <FontAwesomeIcon style={{ marginLeft: 8 }} className='w3-text-blue' icon={faCheck} />}
+                    {user.state == 'read' && <FontAwesomeIcon style={{ marginLeft: 8 }} className='w3-text-blue' icon={faCheckDouble} />}
+                  </div>
+                </>
+              }
             </div>
           </div>
         </div>
@@ -779,20 +851,19 @@ function chatBox() {
   }
 
   const displayDiscution = (user) => {
+
     document.getElementById('chatListeCloseButton').style.display = 'flex'
-    if (user.key != userInfo.des_key) {
-      userInfo.des_fullname = user.fullname
-      userInfo.des_key = user.key
 
-      document.getElementById('modalChatListe').style.display = 'none'
-      document.getElementById('chattingCore').style.display = 'flex';
-      document.getElementById('bullField').style.scrollBehavior = 'unset';
+    userInfo.des_fullname = user.fullname
+    userInfo.des_key = user.key
 
-      reloadChat()
-    } else {
-      document.getElementById('modalChatListe').style.display = 'none'
-      document.getElementById('bullField').style.display = 'flex';
-    }
+    document.getElementById('modalChatListe').style.display = 'none'
+    document.getElementById('chattingCore').style.display = 'flex';
+    document.getElementById('bullField').style.scrollBehavior = 'unset';
+    document.getElementById('bullField').style.display = 'flex';
+
+    reloadChat()
+
   }
 
   useEffect(() => {
@@ -817,7 +888,7 @@ function chatBox() {
 
       document.getElementById('htmlCore').style.display = 'block'
     }
-    if (window.innerWidth<992) {
+    if (window.innerWidth < 992) {
       document.getElementById('chatMainCore').style.height = (window.innerHeight - 128) + 'px';
     }
 
@@ -828,31 +899,45 @@ function chatBox() {
         if (res.data.logedin) {
           userInfo.key = res.data.user.key;
           userInfo.fullname = res.data.user.fullname;
+          
+          if (res.data.user.key == '160471339156947') {
+            document.getElementById('searchUserInput').style.display = 'block'
+          }
 
-          document.getElementById('bullField').style.height = (window.innerHeight - 32 -(window.innerWidth<992 ? 96 :0)) + 'px';
+          document.getElementById('bullField').style.height = (window.innerHeight - 32 - (window.innerWidth < 992 ? 96 : 0)) + 'px';
 
           onValue(ref(database, 'chatcase/' + res.data.user.key), (snapshot) => {
+
             if (snapshot.exists()) {
               const chats = snapshot.val();
               const discutions = [
                 {
-                  fullname:'FREELANCER.MG',
-                  key:'160471339156947',
+                  fullname: 'FREELANCER.MG',
+                  key: '160471339156947',
+                  new: true,
                 }
               ]
+              var uicounter = 0;
               discutionsData.splice(1, discutionsData.length);
-              Object.entries(chats).sort(([, a], [, b]) => a.timestamp - b.timestamp).map(([index, chat]) => {
-                
-                if (chat.userInfo.key == '160471339156947') {
-                  discutions[0] = chat.userInfo
-                  discutionsData[0] = chat.userInfo
-                }else{
-                  discutions.push(chat.userInfo);
-                  discutionsData.push(chat.userInfo)
+              const sortedChats = Object.entries(chats).sort(([, a], [, b]) => b.userInfo.timestamp - a.userInfo.timestamp)
+              sortedChats.map(([index, chat]) => {
+                if (chat.userInfo) {
+                  if (chat.userInfo.key == '160471339156947') {
+                    discutions[0] = chat.userInfo
+                    discutionsData[0] = chat.userInfo
+                  } else {
+                    discutions.push(chat.userInfo);
+                    discutionsData.push(chat.userInfo)
+                  }
+                } else {
+                  uicounter++
                 }
-                
+
               });
-              reloadChatsList(discutions, 'discution')
+              if (uicounter <= 0) {
+                reloadChatsList(discutions, 'discution')
+              }
+
             } else {
               reloadChatsList(discutionsData, 'discution')
             }
@@ -969,6 +1054,7 @@ function chatBox() {
               className="input w3-border-0 w3-input w3-border-0 w3-round-xxlarge w3-dark-grey "
               placeholder="Chercher un contact"
               type="text"
+              style={{display:'none'}}
             />
           </div>
           <div style={{ height: '60vh', paddingInline: 12, marginBottom: 16 }} className="w3-overflow-scroll w3-noscrollbar">
