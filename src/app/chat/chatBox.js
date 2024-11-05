@@ -35,7 +35,12 @@ function chatBox() {
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
   const [search, setsearch] = useState({ keyword: '' })
-  const [discutionsData, setdiscutionsData] = useState([])
+  const [discutionsData, setdiscutionsData] = useState([
+    {
+      fullname:'FREELANCER',
+      key:'160471339156947',
+    }
+  ])
 
   const [chatCase, setchatCase] = useState([])
   const [displayChat, setdisplayChat] = useState('')
@@ -829,7 +834,12 @@ function chatBox() {
           onValue(ref(database, 'chatcase/' + res.data.user.key), (snapshot) => {
             if (snapshot.exists()) {
               const chats = snapshot.val();
-              const discutions = []
+              const discutions = [
+                {
+                  fullname:'FREELANCER',
+                  key:'160471339156947',
+                }
+              ]
               Object.entries(chats).sort(([, a], [, b]) => a.timestamp - b.timestamp).map(([index, chat]) => {
                 discutions.push(chat.userInfo);
                 discutionsData.push(chat.userInfo)
