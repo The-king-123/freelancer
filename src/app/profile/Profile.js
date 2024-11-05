@@ -113,6 +113,27 @@ function Profile() {
 
   useEffect(() => {
 
+    if (localStorage.getItem('theme') == 'light') {
+
+      const elementGrey = document.getElementsByClassName('w3-black').length
+      const elementWhite = document.getElementsByClassName('w3-dark-grey').length
+      const backTransparent = document.getElementsByClassName('black-opacity').length
+      for (let i = 0; i < elementGrey; i++) {
+        const element = document.getElementsByClassName('w3-black')[0];
+        element.className = element.className.replace('w3-black', 'w3-light-grey')
+      }
+      for (let i = 0; i < elementWhite; i++) {
+        const element = document.getElementsByClassName('w3-dark-grey')[0];
+        element.className = element.className.replace('w3-dark-grey', 'w3-white')
+      }
+      for (let i = 0; i < backTransparent; i++) {
+        const element = document.getElementsByClassName('black-opacity')[0];
+        element.className = element.className.replace('black-opacity', 'white-opacity')
+      }
+
+      document.getElementById('htmlCore').style.display = 'block'
+    }
+
     const xcode = localStorage.getItem('x-code');
     axios
       .get(source + "/_auth?xcode=" + xcode)

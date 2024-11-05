@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faImage, faPaperPlane, faReply, faShare, faSmile, faSmileBeam, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faComment, faComments, faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faImage, faPaperPlane, faReply, faShare, faSmile, faSmileBeam, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import parse from "html-react-parser";
 import axios from 'axios';
 import { console_source as source } from '../data';
@@ -75,7 +75,7 @@ function chatBox() {
       if (snapshot.exists()) {
         const chat = snapshot.val()
         delete chat.userInfo;
-        
+
         displayMessage(Object.entries(chat).sort(([, a], [, b]) => a.timestamp - b.timestamp), chat);
       } else {
         displayMessage([])
@@ -90,6 +90,7 @@ function chatBox() {
     chatInfo.key = userInfo.key
     chatInfo.des_key = userInfo.des_key
     chatInfo.message = document.getElementById('messageTextarea').value.trim();
+    document.getElementById('bullField').style.scrollBehavior = 'smooth';
 
     if (chatInfo.message.length > 0 && !userInfo.sendHolder) {
       userInfo.sendHolder = true;
@@ -489,7 +490,7 @@ function chatBox() {
                   }}
                 >
                   {/\n.+/.test(bull.message) ? parse(bull.message.replace(/\n/g, "<br/>")) : bull.message}
-                  
+
                 </div>
 
                 {/* Bull reaction */}
@@ -777,15 +778,18 @@ function chatBox() {
   }
 
   const displayDiscution = (user) => {
+    document.getElementById('chatListeCloseButton').style.display = 'flex'
     if (user.key != userInfo.des_key) {
       userInfo.des_fullname = user.fullname
       userInfo.des_key = user.key
 
       document.getElementById('modalChatListe').style.display = 'none'
       document.getElementById('chattingCore').style.display = 'flex';
+      document.getElementById('bullField').style.scrollBehavior = 'unset';
 
       reloadChat()
     } else {
+      document.getElementById('modalChatListe').style.display = 'none'
       document.getElementById('bullField').style.display = 'flex';
     }
   }
@@ -812,6 +816,9 @@ function chatBox() {
 
       document.getElementById('htmlCore').style.display = 'block'
     }
+    if (window.innerWidth<992) {
+      document.getElementById('chatMainCore').style.height = (window.innerHeight - 128) + 'px';
+    }
 
     const xcode = localStorage.getItem('x-code');
     axios
@@ -821,7 +828,7 @@ function chatBox() {
           userInfo.key = res.data.user.key;
           userInfo.fullname = res.data.user.fullname;
 
-          document.getElementById('bullField').style.height = window.innerHeight - 96 + 'px';
+          document.getElementById('bullField').style.height = (window.innerHeight - 32 -(window.innerWidth<992 ? 96 :0)) + 'px';
 
           onValue(ref(database, 'chatcase/' + res.data.user.key), (snapshot) => {
             if (snapshot.exists()) {
@@ -882,15 +889,16 @@ function chatBox() {
   }, [])
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div id='chatMainCore' style={{ position: 'relative', height: 'calc(100vh - 32px)' }}>
       <div id='chattingCore' style={{ display: 'none' }}>
-        <div id='bullField' className='w3-noscrollbar w3-overflow-scroll' style={{ padding: 8, display: 'flex', flexDirection: 'column-reverse' }}>
-          <div className='w3-block'><div style={{ padding: 16 }}>Bientôt, il sera possible d'envoyer des messages directement sur la plateforme, ce qui facilitera la communication et renforcera les interactions. Cette nouvelle fonctionnalité permettra d'échanger des idées, de poser des questions et de partager des expériences en temps réel, rendant l'expérience encore plus dynamique et conviviale.</div>
+        <div id='bullField' className='w3-noscrollbar w3-overflow-scroll w3-block' style={{ padding: 8, display: 'flex', flexDirection: 'column-reverse' }}>
+          <div className='w3-block'>
+            <div style={{ height: 72 }}></div>
             {displayChat}
             <div style={{ height: 96 }}></div>
           </div>
         </div>
-        <div style={{ maxWidth: 620, margin: "auto", paddingInline: 6, paddingBottom: 8 }} className='w3-dark-grey w3-block w3-display-bottommiddle'>
+        <div style={{ maxWidth: 620, margin: "auto", paddingInline: 6, marginBottom: -8 }} className='w3-dark-grey w3-block w3-display-bottommiddle'>
           <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
             <div id='replyPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
               <FontAwesomeIcon icon={faReply} />
@@ -915,6 +923,13 @@ function chatBox() {
             </div>
           </div>
         </div>
+
+        {/* open chat liste button */}
+        <div className='w3-display-topleft'>
+          <div onClick={() => document.getElementById('modalChatListe').style.display = 'block'} className='w3-pointer w3-card w3-right w3-circle w3-yellow w3-flex w3-flex-center' style={{ width: 42, height: 42, margin: 8 }}>
+            <FontAwesomeIcon icon={faComments} className='w3-large' />
+          </div>
+        </div>
       </div>
       {/* modal forum liste */}
       <div id="modalChatListe" className="w3-modal w3-round black-opacity" style={{ position: 'absolute', height: 'calc(100vh - 32px)', marginTop: -64 }}>
@@ -924,10 +939,10 @@ function chatBox() {
         >
 
           <div style={{ marginTop: 16 }} className='w3-flex-row w3-flex-center-v'>
-            <div onClick={() => document.getElementById('modalChatListe').style.display = 'none'} className="w3-circle w3-dark-grey w3-flex w3-flex-center" style={{ width: 24, height: 24, marginInline: 16 }}>
+            <div id='chatListeCloseButton' onClick={() => document.getElementById('modalChatListe').style.display = 'none'} className="w3-circle w3-dark-grey w3-flex w3-flex-center" style={{ width: 24, height: 24, marginLeft: 16, display: 'none' }}>
               <FontAwesomeIcon icon={faArrowLeft} />
             </div>
-            <div className='w3-flex-1'>
+            <div className='w3-flex-1 w3-big w3-large' style={{ marginLeft: 16 }}>
               ChatBox
             </div>
           </div>

@@ -4,7 +4,7 @@ import "./globals.css";
 import "./app.css";
 import { app_name, console_source as source } from "@/app/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faCalculator, faCheck, faChevronCircleUp, faCode, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faSun, faTimesCircle, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCalculator, faCheck, faChevronCircleUp, faCode, faComment, faComments, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faSun, faTimesCircle, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { faFacebookMessenger, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
@@ -1184,7 +1184,7 @@ export default function RootLayout({ children }) {
                 href={"/chat"}
               >
                 <FontAwesomeIcon
-                  icon={faPaperPlane}
+                  icon={faComments}
                   width={20}
                   height={20}
                 />
