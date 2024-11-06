@@ -443,41 +443,35 @@ function chatBox() {
                 {/* Bull reaction */}
                 {bull.reaction &&
                   <div className='w3-container' style={{ padding: 0 }}>
-                    <div
-                      className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-right w3-small w3-card"}
-                      style={{
-                        paddingTop: 4,
-                        paddingInline: 4,
-                        borderRadius: 16,
-                        marginTop: -8,
-                        marginInline: 8
-                      }}
-                    >
-                      {reactExtractor(bull.reaction).map(react => react.react)}
-                    </div>
 
                     {/* // react list info */}
-                    <div style={{ paddingRight: 8, paddingBlock: 8 }} className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
-                      <FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} />
+                    <div className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover w3-right"}>
+                      <div
+                        className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-small w3-card"}
+                        style={{
+                          paddingTop: 4,
+                          paddingInline: 4,
+                          borderRadius: 16,
+                          marginTop: -8,
+                          marginInline: 8
+                        }}
+                      >
+                        {reactExtractor(bull.reaction).map(react => react.react)}
+                      </div>
                       <div style={{
                         maxWidth: 80,
-                        marginLeft: 0
+                        marginLeft: - 124  + ((reactExtractor(bull.reaction).length - 1 ) * 12)
                       }}
                         className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                         <div className='w3-flex-column'>
                           {
-                            reactExtractor(bull.reaction).map(react =>
-                              <div onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
-                                <FontAwesomeIcon icon={faCopy} />
+                            reactExtractor(bull.reaction).map(react =>(
+                               <div className='w3-button w3-flex-row w3-flex-center' style={{ paddingInline: 8 }}>
+                                {react.react}
+                                <div className='w3-flex-1 w3-right-align'>{react.key==userInfo.key ? 'Vous' : ''}</div>
                               </div>
-                            )
+                            ))
                           }
-                          <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
-                            <FontAwesomeIcon icon={faCopy} />
-                          </div>
-                          <div title='Transférer' onClick={() => transferBull(bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
-                            <FontAwesomeIcon icon={faShare} />
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -577,8 +571,10 @@ function chatBox() {
                 {bull.reaction &&
                   <div className='w3-container' style={{ padding: 0 }}>
 
+                  {/* // react list info */}
+                  <div className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover w3-left"}>
                     <div
-                      className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-left w3-small w3-card"}
+                      className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-small w3-card"}
                       style={{
                         paddingTop: 4,
                         paddingInline: 4,
@@ -589,7 +585,25 @@ function chatBox() {
                     >
                       {reactExtractor(bull.reaction).map(react => react.react)}
                     </div>
+                    <div style={{
+                      maxWidth: 80,
+                      marginLeft:4
+                    }}
+                      className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
+                      <div className='w3-flex-column'>
+                        {
+                          reactExtractor(bull.reaction).map(react =>(
+                             <div className='w3-button w3-flex-row w3-flex-center' style={{ paddingInline: 8 }}>
+                              {react.react}
+                              <div className='w3-flex-1 w3-right-align'>{react.key==userInfo.key ? 'Vous' : ''}</div>
+                            </div>
+                          ))
+                        }
+                      </div>
+                    </div>
                   </div>
+                  {/* // end react list info */}
+                </div>
                 }
               </div>
               <div>
