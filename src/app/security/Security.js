@@ -40,24 +40,27 @@ function Security() {
             document.getElementById("spinnerUpdate").style.display =
                 "inline-block";
 
-            const xcode = localStorage.getItem('x-code')
-            await axios
-                .patch(source + "/_auth/updatepassword?xcode=" + xcode, updateAuthElement)
-                .then((res) => {
-                    if (res.data.updated) {
-                        document.getElementById("spinnerUpdate").style.display =
-                            "none";
-                        window.location.reload()
-                    } else if (res.data.cause == "notmutch") {
-                        document.getElementById("spinner").style.display =
-                            "none";
-                        document.getElementById("cpw_alert").className =
-                            "w3-text-red w3-small";
-                    }
-                })
-                .catch((e) => {
-                    console.error("failure", e);
-                });
+                console.log(updateAuthElement);
+                
+
+            // const xcode = localStorage.getItem('x-code')
+            // await axios
+            //     .patch(source + "/_auth/updatepassword?xcode=" + xcode, updateAuthElement)
+            //     .then((res) => {
+            //         if (res.data.updated) {
+            //             document.getElementById("spinnerUpdate").style.display =
+            //                 "none";
+            //             window.location.reload()
+            //         } else if (res.data.cause == "notmutch") {
+            //             document.getElementById("spinner").style.display =
+            //                 "none";
+            //             document.getElementById("cpw_alert").className =
+            //                 "w3-text-red w3-small";
+            //         }
+            //     })
+            //     .catch((e) => {
+            //         console.error("failure", e);
+            //     });
         }
     };
     async function setCSRFToken() {
