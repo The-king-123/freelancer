@@ -527,7 +527,7 @@ function Profile() {
               document.getElementById('password_alert').className = 'w3-hide w3-small'
             }}
             type="password"
-            className="input w3-round-xxlarge w3-block w3-text-grey w3-medium w3-border-0"
+            className="input w3-round-xxlarge w3-dark-grey w3-block w3-medium w3-border w3-border-grey"
             placeholder="Entrer votre mot de passe"
             id="user_password"
             name="password"

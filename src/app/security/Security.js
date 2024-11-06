@@ -38,29 +38,26 @@ function Security() {
             document.getElementById("npw_alert").className = "w3-hide";
             document.getElementById("rpw_alert").className = "w3-hide";
             document.getElementById("spinnerUpdate").style.display =
-                "inline-block";
+                "inline-block";                
 
-                console.log(updateAuthElement);
-                
-
-            // const xcode = localStorage.getItem('x-code')
-            // await axios
-            //     .patch(source + "/_auth/updatepassword?xcode=" + xcode, updateAuthElement)
-            //     .then((res) => {
-            //         if (res.data.updated) {
-            //             document.getElementById("spinnerUpdate").style.display =
-            //                 "none";
-            //             window.location.reload()
-            //         } else if (res.data.cause == "notmutch") {
-            //             document.getElementById("spinner").style.display =
-            //                 "none";
-            //             document.getElementById("cpw_alert").className =
-            //                 "w3-text-red w3-small";
-            //         }
-            //     })
-            //     .catch((e) => {
-            //         console.error("failure", e);
-            //     });
+            const xcode = localStorage.getItem('x-code')
+            await axios
+                .patch(source + "/_auth/updatepassword?xcode=" + xcode, updateAuthElement)
+                .then((res) => {
+                    if (res.data.updated) {
+                        document.getElementById("spinnerUpdate").style.display =
+                            "none";
+                        window.location.reload()
+                    } else if (res.data.cause == "notmutch") {
+                        document.getElementById("spinner").style.display =
+                            "none";
+                        document.getElementById("cpw_alert").className =
+                            "w3-text-red w3-small";
+                    }
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                });
         }
     };
     async function setCSRFToken() {
@@ -76,7 +73,28 @@ function Security() {
 
     useEffect(() => {
 
+        if (localStorage.getItem('theme') == 'light') {
+
+            const elementGrey = document.getElementsByClassName('w3-black').length
+            const elementWhite = document.getElementsByClassName('w3-dark-grey').length
+            const backTransparent = document.getElementsByClassName('black-opacity').length
+            for (let i = 0; i < elementGrey; i++) {
+              const element = document.getElementsByClassName('w3-black')[0];
+              element.className = element.className.replace('w3-black', 'w3-light-grey')
+            }
+            for (let i = 0; i < elementWhite; i++) {
+              const element = document.getElementsByClassName('w3-dark-grey')[0];
+              element.className = element.className.replace('w3-dark-grey', 'w3-white')
+            }
+            for (let i = 0; i < backTransparent; i++) {
+              const element = document.getElementsByClassName('black-opacity')[0];
+              element.className = element.className.replace('black-opacity', 'white-opacity')
+            }
+      
+          }
+
         const xcode = localStorage.getItem('x-code');
+
         axios
             .get(source + "/_auth?xcode=" + xcode)
             .then((res) => {
@@ -143,17 +161,17 @@ function Security() {
                         <input
                             onChange={(e) => cpasswordRegister(e)}
                             type="password"
-                            className="w3-border-0 w3-input input w3-black w3-round-xxlarge w3-block w3-text-grey w3-medium"
+                            className="w3-border-0 w3-input input w3-black w3-round-xxlarge w3-block w3-medium"
                             placeholder="Mot de passe actuel"
                             id="cpassword"
                             name="user_cp"
                             required
                         />
                         <div
-                            className="w3-light-grey input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            className="w3-yellow input-icon w3-display-right w3-circle w3-flex w3-flex-center"
                             style={{ marginRight: 3 }}
                         >
-                            <span className="w3-text-white">
+                            <span>
                                 <FontAwesomeIcon icon={faKey} />
                             </span>
                         </div>
@@ -179,17 +197,17 @@ function Security() {
                         <input
                             onChange={(e) => npasswordRegister(e)}
                             type="password"
-                            className="w3-border-0 w3-input input w3-black w3-round-xxlarge w3-block w3-text-grey w3-medium"
+                            className="w3-border-0 w3-input input w3-black w3-round-xxlarge w3-block w3-medium"
                             placeholder="Nouveau mot de passe"
                             id="npassword"
                             name="user_np"
                             required
                         />
                         <div
-                            className="w3-light-grey input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            className="w3-yellow input-icon w3-display-right w3-circle w3-flex w3-flex-center"
                             style={{ marginRight: 3 }}
                         >
-                            <span className="w3-text-white">
+                            <span>
                                 <FontAwesomeIcon
                                     icon={faShieldAlt}
                                 />
@@ -217,27 +235,27 @@ function Security() {
                         <input
                             onChange={(e) => rpasswordRegister(e)}
                             type="password"
-                            className="w3-border-0 w3-input input w3-black w3-round-xxlarge w3-block w3-text-grey w3-medium"
+                            className="w3-border-0 w3-input input w3-black w3-round-xxlarge w3-block w3-medium"
                             placeholder="Confirmer le nouveau mot de passe"
                             id="rpassword"
                             name="user_rp"
                             required
                         />
                         <div
-                            className="w3-light-grey input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            className="w3-yellow input-icon w3-display-right w3-circle w3-flex w3-flex-center"
                             style={{ marginRight: 3 }}
                         >
-                            <span className="w3-text-white">
+                            <span>
                                 <FontAwesomeIcon icon={faCheck} />
                             </span>
                         </div>
                     </div>
-                    <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
+                    <div style={{marginTop:16}} className="w3-center w3-flex w3-flex-center">
                         <div className="w3-margin">
                             <div
                                 style={{ paddingInline: 32 }}
                                 onClick={() => updatePassword()}
-                                className="transition w3-medium w3-button w3-round-xxlarge w3-text-white w3-light-grey w3-margin-bottom"
+                                className="transition w3-medium w3-button w3-round-xxlarge w3-yellow w3-margin-bottom"
                             >
                                 Changer le mot de passe
 
