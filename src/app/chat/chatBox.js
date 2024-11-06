@@ -116,13 +116,12 @@ function chatBox() {
           .then(() => {
             userInfo.editBull = false
             document.getElementById('messageTextarea').value = ''
-            chatInfo.message = '';
+
             userInfo.sendHolder = false;
             chatInfo.key = '';
             chatInfo.des_key = '';
             chatInfo.timestamp = '';
             chatInfo.attachement = null;
-            chatInfo.responseTo = null;
             chatInfo.reaction = null;
             chatInfo.deleted = false;
             chatInfo.state = 'sent';
@@ -134,7 +133,7 @@ function chatBox() {
               state: 'sent',
               lastmessage: {
                 key: userInfo.key,
-                message: chatInfo.message
+                message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.message : chatInfo.message
               }
             }).then(() => {
               set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
@@ -144,9 +143,12 @@ function chatBox() {
                 state: 'sent',
                 lastmessage: {
                   key: userInfo.key,
-                  message: chatInfo.message
+                  message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.message : chatInfo.message
                 }
-              }).then(() => chatInfo.message = '')
+              }).then(() => {
+                chatInfo.message = '';
+                chatInfo.responseTo = null;
+              })
             })
 
             cancelEdit()
@@ -166,7 +168,6 @@ function chatBox() {
                 chatInfo.des_key = '';
                 chatInfo.timestamp = '';
                 chatInfo.attachement = null;
-                chatInfo.responseTo = null;
                 chatInfo.reaction = null;
                 chatInfo.deleted = false;
 
@@ -177,7 +178,7 @@ function chatBox() {
                   state: 'sent',
                   lastmessage: {
                     key: userInfo.key,
-                    message: chatInfo.message
+                    message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.message : chatInfo.message
                   }
                 }).then(() => {
                   set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
@@ -187,9 +188,12 @@ function chatBox() {
                     state: 'sent',
                     lastmessage: {
                       key: userInfo.key,
-                      message: chatInfo.message
+                      message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.message : chatInfo.message
                     }
-                  }).then(() => chatInfo.message = '')
+                  }).then(() => {
+                    chatInfo.message = '';
+                    chatInfo.responseTo = null;
+                  })
                 })
 
 
@@ -266,6 +270,7 @@ function chatBox() {
     const maxLength = Math.max(...lines.map(line => line.length));
     return maxLength
   }
+
   const toggleBlink = (id) => {
     const element = document.getElementById(id)
     element.style.transition = '0.5s'
@@ -277,6 +282,7 @@ function chatBox() {
       element.style.opacity = 1;
     }, 2000);
   }
+
   const displayMessage = (chat, chatBrut, UI) => {
 
     const themeLight = localStorage.getItem('theme') == 'light' ? true : false
@@ -326,29 +332,29 @@ function chatBox() {
 
                         className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                         <div className='w3-flex-row w3-flex-center-v'>
-                          <div onClick={() => reaction('heart', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          <div onClick={() => reaction('heart', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                             {reactionListe.heart}
                           </div>
-                          <div onClick={() => reaction('laugh', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          <div onClick={() => reaction('laugh', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                             {reactionListe.laugh}
                           </div>
-                          <div onClick={() => reaction('sad', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          <div onClick={() => reaction('sad', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                             {reactionListe.sad}
                           </div>
-                          <div onClick={() => reaction('socked', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          <div onClick={() => reaction('socked', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                             {reactionListe.socked}
                           </div>
-                          <div onClick={() => reaction('angry', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          <div onClick={() => reaction('angry', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                             {reactionListe.angry}
                           </div>
-                          <div onClick={() => reaction('fire', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          <div onClick={() => reaction('fire', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                             {reactionListe.fire}
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div style={{ padding: 8 }} onClick={() => reply(index, bull.message)} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
+                  <div style={{ padding: 8 }} onClick={() => reply(index, bull)} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
                   <div style={{ paddingRight: 8, paddingBlock: 8 }} className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
                     <FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} />
                     <div style={{
@@ -372,12 +378,12 @@ function chatBox() {
                             <div title='Supprimer' onClick={() => deletedBull(index)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                               <FontAwesomeIcon icon={faTrash} />
                             </div>
-                            <div title='Modifier' onClick={() => editBull(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
+                            <div title='Modifier' onClick={() => editBull(index, bull)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                               <FontAwesomeIcon icon={faEdit} />
                             </div>
                           </>
                         }
-                        <div title='Transférer' onClick={() => transferBull(bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
+                        <div title='Transférer' onClick={() => transferBull(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                           <FontAwesomeIcon icon={faShare} />
                         </div>
                       </div>
@@ -460,15 +466,15 @@ function chatBox() {
                       </div>
                       <div style={{
                         maxWidth: 80,
-                        marginLeft: - 124  + ((reactExtractor(bull.reaction).length - 1 ) * 12)
+                        marginLeft: - 124 + ((reactExtractor(bull.reaction).length - 1) * 12)
                       }}
                         className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                         <div className='w3-flex-column'>
                           {
-                            reactExtractor(bull.reaction).map(react =>(
-                               <div className='w3-button w3-flex-row w3-flex-center' style={{ paddingInline: 8 }}>
+                            reactExtractor(bull.reaction).map(react => (
+                              <div onClick={() => react.key == userInfo.key ? removeMyReaction(index) : false} className='w3-button w3-flex-row w3-flex-center' style={{ paddingInline: 8 }}>
                                 {react.react}
-                                <div className='w3-flex-1 w3-right-align'>{react.key==userInfo.key ? 'Vous' : ''}</div>
+                                <div className='w3-flex-1 w3-right-align'>{react.key == userInfo.key ? 'Vous' : ''}</div>
                               </div>
                             ))
                           }
@@ -571,39 +577,39 @@ function chatBox() {
                 {bull.reaction &&
                   <div className='w3-container' style={{ padding: 0 }}>
 
-                  {/* // react list info */}
-                  <div className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover w3-left"}>
-                    <div
-                      className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-small w3-card"}
-                      style={{
-                        paddingTop: 4,
-                        paddingInline: 4,
-                        borderRadius: 16,
-                        marginTop: -8,
-                        marginInline: 8
+                    {/* // react list info */}
+                    <div className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover w3-left"}>
+                      <div
+                        className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-small w3-card"}
+                        style={{
+                          paddingTop: 4,
+                          paddingInline: 4,
+                          borderRadius: 16,
+                          marginTop: -8,
+                          marginInline: 8
+                        }}
+                      >
+                        {reactExtractor(bull.reaction).map(react => react.react)}
+                      </div>
+                      <div style={{
+                        maxWidth: 80,
+                        marginLeft: 4
                       }}
-                    >
-                      {reactExtractor(bull.reaction).map(react => react.react)}
-                    </div>
-                    <div style={{
-                      maxWidth: 80,
-                      marginLeft:4
-                    }}
-                      className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
-                      <div className='w3-flex-column'>
-                        {
-                          reactExtractor(bull.reaction).map(react =>(
-                             <div className='w3-button w3-flex-row w3-flex-center' style={{ paddingInline: 8 }}>
-                              {react.react}
-                              <div className='w3-flex-1 w3-right-align'>{react.key==userInfo.key ? 'Vous' : ''}</div>
-                            </div>
-                          ))
-                        }
+                        className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
+                        <div className='w3-flex-column'>
+                          {
+                            reactExtractor(bull.reaction).map(react => (
+                              <div onClick={() => react.key == userInfo.key ? removeMyReaction(index) : false} className='w3-button w3-flex-row w3-flex-center' style={{ paddingInline: 8 }}>
+                                {react.react}
+                                <div className='w3-flex-1 w3-right-align'>{react.key == userInfo.key ? 'Vous' : ''}</div>
+                              </div>
+                            ))
+                          }
+                        </div>
                       </div>
                     </div>
+                    {/* // end react list info */}
                   </div>
-                  {/* // end react list info */}
-                </div>
                 }
               </div>
               <div>
@@ -623,28 +629,28 @@ function chatBox() {
                     }}
                       className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div className='w3-flex-row w3-flex-center-v'>
-                        <div onClick={() => reaction('heart', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                        <div onClick={() => reaction('heart', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                           {reactionListe.heart}
                         </div>
-                        <div onClick={() => reaction('laugh', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                        <div onClick={() => reaction('laugh', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                           {reactionListe.laugh}
                         </div>
-                        <div onClick={() => reaction('sad', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                        <div onClick={() => reaction('sad', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                           {reactionListe.sad}
                         </div>
-                        <div onClick={() => reaction('socked', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                        <div onClick={() => reaction('socked', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                           {reactionListe.socked}
                         </div>
-                        <div onClick={() => reaction('angry', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                        <div onClick={() => reaction('angry', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                           {reactionListe.angry}
                         </div>
-                        <div onClick={() => reaction('fire', index)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                        <div onClick={() => reaction('fire', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                           {reactionListe.fire}
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div style={{ padding: 8 }} onClick={() => reply(index, bull.message)} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
+                  <div style={{ padding: 8 }} onClick={() => reply(index, bull)} title='Reply'><FontAwesomeIcon className='w3-large w3-text-grey' icon={faReply} /></div>
                   <div style={{ paddingRight: 8, paddingBlock: 8 }} className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
                     <FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} />
                     <div style={{
@@ -669,12 +675,12 @@ function chatBox() {
                             <div title='Supprimer' onClick={() => deletedBull(index)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                               <FontAwesomeIcon icon={faTrash} />
                             </div>
-                            <div title='Modifier' onClick={() => editBull(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
+                            <div title='Modifier' onClick={() => editBull(index, bull)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                               <FontAwesomeIcon icon={faEdit} />
                             </div>
                           </>
                         }
-                        <div title='Transférer' onClick={() => transferBull(bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
+                        <div title='Transférer' onClick={() => transferBull(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                           <FontAwesomeIcon icon={faShare} />
                         </div>
                       </div>
@@ -721,10 +727,35 @@ function chatBox() {
 
     // 'Raha mbola tsy misy response na reaction na ao anatin'ny deux minute'
     set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/' + idBull), null)
-    set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + idBull), null)
       .then(() => {
-        // deleted info
-        cancelEdit()
+        set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + idBull), null)
+          .then(() => {
+            set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo'), {
+              fullname: userInfo.des_fullname,
+              key: userInfo.des_key,
+              timestamp: Date.now(),
+              state: 'sent',
+              lastmessage: {
+                key: userInfo.key,
+                message: 'A supprimé un message'
+              }
+            }).then(() => {
+              set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
+                fullname: userInfo.fullname,
+                key: userInfo.key,
+                timestamp: Date.now(),
+                state: 'sent',
+                lastmessage: {
+                  key: userInfo.key,
+                  message: 'A supprimé un message'
+                }
+              }).then(() => cancelEdit())
+            })
+            userInfo.reactHolder = false
+          })
+          .catch((error) => {
+            console.error('Error writing data:', error);
+          });
       })
       .catch((error) => {
         console.error('Error writing data:', error);
@@ -753,7 +784,7 @@ function chatBox() {
     return reactArray
   }
 
-  const reaction = (emoji, idBull) => {
+  const reaction = (emoji, idBull, message) => {
 
     if (!userInfo.reactHolder) {
       userInfo.reactHolder = true;
@@ -772,7 +803,7 @@ function chatBox() {
                 state: 'sent',
                 lastmessage: {
                   key: userInfo.key,
-                  message: 'A réagi ' + reactionListe[emoji]
+                  message: 'A réagi ' + reactionListe[emoji] + ' à: ' + message
                 }
               }).then(() => {
                 set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
@@ -782,7 +813,7 @@ function chatBox() {
                   state: 'sent',
                   lastmessage: {
                     key: userInfo.key,
-                    message: 'A réagi ' + reactionListe[emoji]
+                    message: 'A réagi ' + reactionListe[emoji] + ' à: ' + message
                   }
                 }).then(() => chatInfo.message = '')
               })
@@ -799,21 +830,65 @@ function chatBox() {
     }
   }
 
+  const removeMyReaction = (idBull) => {
+
+    set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/' + idBull + '/reaction/' + userInfo.key), null)
+      .then(() => {
+        set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + idBull + '/reaction/' + userInfo.key), null)
+          .then(() => {
+            set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo'), {
+              fullname: userInfo.des_fullname,
+              key: userInfo.des_key,
+              timestamp: Date.now(),
+              state: 'sent',
+              lastmessage: {
+                key: userInfo.key,
+                message: 'A supprimé une réaction'
+              }
+            }).then(() => {
+              set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
+                fullname: userInfo.fullname,
+                key: userInfo.key,
+                timestamp: Date.now(),
+                state: 'sent',
+                lastmessage: {
+                  key: userInfo.key,
+                  message: 'A supprimé une réaction'
+                }
+              })
+            })
+          })
+          .catch((error) => {
+            console.error('Error writing data:', error);
+          });
+      })
+      .catch((error) => {
+        console.error('Error writing data:', error);
+      });
+  }
+
   const cancelEdit = () => {
     userInfo.editBull = false
+    chatInfo.responseTo = null
     document.getElementById('editPanel').style.display = 'none'
     document.getElementById('messageTextarea').value = ''
   }
 
-  const editBull = (idBull, bullMessage) => {
+  const editBull = (idBull, bull) => {
     userInfo.editBull = idBull
-    document.getElementById('editPanelText').innerText = bullMessage.replace(/\n/g, " ")
-    document.getElementById('messageTextarea').value = bullMessage
+    chatInfo.responseTo = bull.responseTo ? bull.responseTo : null
+
+    document.getElementById('editPanelText').innerText = bull.message.replace(/\n/g, " ")
+    document.getElementById('messageTextarea').value = bull.message
     document.getElementById('editPanel').style.display = 'flex'
   }
 
-  const transferBull = (message) => {
-
+  const transferBull = (index, message) => {
+    document.getElementById(index + 'FlashInfo').innerHTML = "La fonctionnalité <br/>\"Transférer\" n'est pas <br/>encore disponible pour <br/>le moment."
+    document.getElementById(index + 'FlashInfo').style.display = 'block'
+    setTimeout(() => {
+      document.getElementById(index + 'FlashInfo').style.display = 'none'
+    }, 2000);
   }
 
   const copyBullMessage = (index, message) => {
@@ -833,9 +908,9 @@ function chatBox() {
     document.getElementById('replyPanel').style.display = 'none'
   }
 
-  const reply = (idBull, bullMessage) => {
+  const reply = (idBull, bull) => {
     chatInfo.responseTo = idBull
-    document.getElementById('replyPanelText').innerText = bullMessage.replace(/\n/g, " ")
+    document.getElementById('replyPanelText').innerText = bull.message.replace(/\n/g, " ")
     document.getElementById('replyPanel').style.display = 'flex'
   }
 
