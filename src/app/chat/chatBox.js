@@ -266,7 +266,17 @@ function chatBox() {
     const maxLength = Math.max(...lines.map(line => line.length));
     return maxLength
   }
-
+  const toggleBlink = (id) => {
+    const element = document.getElementById(id)
+    element.style.transition = '0.5s'
+    const blinkInterval = setInterval(() => {
+      element.style.opacity = (element.style.opacity == 1) ? 0.2 : 1;
+    }, 200);
+    setTimeout(() => {
+      clearInterval(blinkInterval);
+      element.style.opacity = 1;
+    }, 2000);
+  }
   const displayMessage = (chat, chatBrut, UI) => {
 
     const themeLight = localStorage.getItem('theme') == 'light' ? true : false
@@ -385,7 +395,15 @@ function chatBox() {
               >
                 {/* Reply bull here */}
                 {bull.responseTo &&
-                  <div className='w3-container' style={{ padding: 0 }}>
+                  <div onClick={() => {
+                    document.getElementById(bull.responseTo).scrollIntoView(
+                      {
+                        behavior: 'smooth',
+                        block: 'center',
+                        inline: 'nearest'
+                      }
+                    ); toggleBlink(bull.responseTo)
+                  }} className='w3-container' style={{ padding: 0 }}>
                     <div
                       className={(themeLight ? "w3-opacity" : "w3-opacity-max") + " w3-yellow chatbull w3-round-xlarge w3-right w3-nowrap w3-overflow"}
                       style={{
@@ -403,6 +421,7 @@ function chatBox() {
 
                 {/* Bull core */}
                 <div
+                  id={index}
                   className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap"
                   style={{
                     paddingInline: 16,
@@ -434,8 +453,35 @@ function chatBox() {
                         marginInline: 8
                       }}
                     >
-                      {reactExtractor(bull.reaction).join('')}
+                      {reactExtractor(bull.reaction).map(react => react.react)}
                     </div>
+
+                    {/* // react list info */}
+                    <div style={{ paddingRight: 8, paddingBlock: 8 }} className={(themeLight ? "w3-white" : "w3-dark-grey") + " w3-dropdown-hover"}>
+                      <FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} />
+                      <div style={{
+                        maxWidth: 80,
+                        marginLeft: 0
+                      }}
+                        className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
+                        <div className='w3-flex-column'>
+                          {
+                            reactExtractor(bull.reaction).map(react =>
+                              <div onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
+                                <FontAwesomeIcon icon={faCopy} />
+                              </div>
+                            )
+                          }
+                          <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
+                            <FontAwesomeIcon icon={faCopy} />
+                          </div>
+                          <div title='Transférer' onClick={() => transferBull(bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
+                            <FontAwesomeIcon icon={faShare} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/* // end react list info */}
                   </div>
                 }
 
@@ -480,7 +526,15 @@ function chatBox() {
               >
                 {/* Reply bull here */}
                 {bull.responseTo &&
-                  <div className='w3-container' style={{ padding: 0 }}>
+                  <div onClick={() => {
+                    document.getElementById(bull.responseTo).scrollIntoView(
+                      {
+                        behavior: 'smooth',
+                        block: 'center',
+                        inline: 'nearest'
+                      }
+                    ); toggleBlink(bull.responseTo)
+                  }} className='w3-container' style={{ padding: 0 }}>
                     <div
                       className={(themeLight ? "w3-light-grey w3-opacity" : "w3-black w3-opacity-max") + " chatbull w3-round-xlarge w3-left w3-nowrap w3-overflow"}
                       style={{
@@ -498,6 +552,7 @@ function chatBox() {
 
                 {/* Bull core here */}
                 <div
+                  id={index}
                   className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-left w3-nowrap"}
                   style={{
                     paddingInline: 16,
@@ -521,6 +576,7 @@ function chatBox() {
                 {/* Bull reaction */}
                 {bull.reaction &&
                   <div className='w3-container' style={{ padding: 0 }}>
+
                     <div
                       className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-left w3-small w3-card"}
                       style={{
@@ -531,7 +587,7 @@ function chatBox() {
                         marginInline: 8
                       }}
                     >
-                      {reactExtractor(bull.reaction).join('')}
+                      {reactExtractor(bull.reaction).map(react => react.react)}
                     </div>
                   </div>
                 }
@@ -667,13 +723,16 @@ function chatBox() {
     Object.entries(reactions).sort(([, a], [, b]) => a.timestamp - b.timestamp).map(([index, react]) => {
       var counter = 0
       for (let i = 0; i < reactArray.length; i++) {
-        const element = reactArray[i];
+        const element = reactArray[i].react;
         if (element == reactionListe[react.reaction]) {
           counter++
         }
       }
       if (counter <= 0) {
-        reactArray.push(reactionListe[react.reaction])
+        reactArray.push({
+          react: reactionListe[react.reaction],
+          key: index,
+        })
       }
     });
 
@@ -899,7 +958,7 @@ function chatBox() {
         if (res.data.logedin) {
           userInfo.key = res.data.user.key;
           userInfo.fullname = res.data.user.fullname;
-          
+
           if (res.data.user.key == '160471339156947') {
             document.getElementById('searchUserInput').style.display = 'block'
           }
@@ -1039,7 +1098,7 @@ function chatBox() {
         >
 
           <div style={{ marginTop: 16 }} className='w3-flex-row w3-flex-center-v'>
-            <div id='chatListeCloseButton' onClick={() => {document.getElementById('modalChatListe').style.display = 'none';reloadChat()}} className="w3-circle w3-dark-grey w3-flex w3-flex-center" style={{ width: 24, height: 24, marginLeft: 16, display: 'none' }}>
+            <div id='chatListeCloseButton' onClick={() => { document.getElementById('modalChatListe').style.display = 'none'; reloadChat() }} className="w3-circle w3-dark-grey w3-flex w3-flex-center" style={{ width: 24, height: 24, marginLeft: 16, display: 'none' }}>
               <FontAwesomeIcon icon={faArrowLeft} />
             </div>
             <div className='w3-flex-1 w3-big w3-large' style={{ marginLeft: 16 }}>
@@ -1054,7 +1113,7 @@ function chatBox() {
               className="input w3-border-0 w3-input w3-border-0 w3-round-xxlarge w3-dark-grey "
               placeholder="Chercher un contact"
               type="text"
-              style={{display:'none'}}
+              style={{ display: 'none' }}
             />
           </div>
           <div style={{ height: '60vh', paddingInline: 12, marginBottom: 16 }} className="w3-overflow-scroll w3-noscrollbar">
