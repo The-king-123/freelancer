@@ -278,4 +278,5 @@ input[type="checkbox"] {
 *{
   font-family: "Outfit", sans-serif;
   -webkit-tap-highlight-color: transparent !important;
+  outline: none;
 }

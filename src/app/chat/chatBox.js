@@ -1194,7 +1194,7 @@ function chatBox() {
               <FontAwesomeIcon onClick={cancelEdit} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
             </div>
             <div id='mediaPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingRight: 8, paddingBottom: 16, display: 'none' }}>
-              <div id='previewImage' className='w3-round w3-dark-grey' style={{ width: 42, height: 42, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
+              <div id='previewImage' className='w3-round w3-dark-grey' style={{ width: 42, height: 42,minWidth: 42, minHeight: 42, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
               <div id='previewImageName' className='w3-margin-left w3-margin-right w3-nowrap w3-overflow' style={{ maxWidth: 260 }}>some text here to reply sdfb sldkhflskdhklsjdhjh sdh </div>
               <FontAwesomeIcon onClick={cancelMedia} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
             </div>
