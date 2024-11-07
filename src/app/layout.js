@@ -810,6 +810,30 @@ export default function RootLayout({ children }) {
       document.getElementById('htmlCore').style.display = 'block'
     }
 
+    setInterval(() => {
+      if (document.getElementById("appCore")) {
+        document.getElementById("appCore").style.userSelect = "none";
+        if (window.innerWidth < 992) {
+          const panels = document.getElementsByClassName("mobileHeightPanel");
+          for (let i = 0; i < panels.length; i++) {
+            panels[i].style.height = window.innerHeight - 72 + "px !important";
+          }
+        }
+      }
+    }, 500);
+
+
+    document.getElementById('passwordLogin').addEventListener('keydown', function (event) {
+      if (event.key == 'Enter') {
+        login()
+      }
+    });
+
+    document.getElementById('mailLogin').addEventListener('keydown', function (event) {
+      if (event.key == 'Enter') {
+        login()
+      }
+    });
 
     // end theme changer
 
@@ -826,7 +850,7 @@ export default function RootLayout({ children }) {
       fullPath.path = window.location.pathname;
     }
 
-    if (document.getElementById("mainCore")) {
+    if (document.getElementById("appCore")) {
 
       if (
         !localHosts.includes(location.hostname) &&
@@ -835,7 +859,7 @@ export default function RootLayout({ children }) {
         location.href =
           "https://" + location.hostname + location.pathname + location.search;
       } else {
-        document.getElementById("mainCore").style.display = "block";
+        document.getElementById("appCore").style.display = "block";
       }
 
       const xcode = localStorage.getItem('x-code');
@@ -923,17 +947,6 @@ export default function RootLayout({ children }) {
           console.error("failure", e);
         });
 
-      document.getElementById('passwordLogin').addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-          login()
-        }
-      });
-
-      document.getElementById('mailLogin').addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-          login()
-        }
-      });
 
       window.addEventListener("scroll", function () {
         // Calculate the scrollable height
@@ -979,16 +992,6 @@ export default function RootLayout({ children }) {
           }
         }
 
-        if (document.getElementById("coreMain")) {
-          document.getElementById("coreMain").style.userSelect = "none";
-          if (window.innerWidth <= 993) {
-            const panels = document.getElementsByClassName("mobileHeightPanel");
-            for (let i = 0; i < panels.length; i++) {
-              panels[i].style.height = window.innerHeight - 72 + "px !important";
-            }
-          }
-        }
-
       }, 500);
 
       const updateHeight = () => {
@@ -1010,7 +1013,7 @@ export default function RootLayout({ children }) {
   }, []);
 
   return (
-    <html id="htmlCore" style={{ display: 'none'}} content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" className="w3-dark-grey" lang="en">
+    <html id="htmlCore" style={{ display: 'none' }} content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" className="w3-dark-grey" lang="en">
       <body id="appCore" className={inter.className}>
 
         <div
@@ -1179,6 +1182,13 @@ export default function RootLayout({ children }) {
               </Link>
 
               <Link
+                onClick={() => {
+                  if (location.pathname.split('/')[1] == 'chat') {
+                    if (document.getElementById('modalChatListe')) {
+                      document.getElementById('modalChatListe').style.display = 'block'
+                    }
+                  }
+                }}
                 className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"/chat"}
@@ -1662,6 +1672,21 @@ export default function RootLayout({ children }) {
               </div>
             </div>
           </div>
+          <div
+            onClick={toggleChat}
+            style={{ width: 36, height: 36, marginLeft: 16 }}
+          >
+            <div
+              className="w3-flex w3-flex-center w3-overflow w3-dark-grey w3-card w3-round"
+              style={{ width: 36, height: 36 }}
+            >
+              <FontAwesomeIcon
+                icon={faRobot}
+                width={20}
+                height={20}
+              />
+            </div>
+          </div>
         </div>
 
         {/* // bottom menu */}
@@ -1744,7 +1769,7 @@ export default function RootLayout({ children }) {
                   if (location.pathname.split('/')[1] != '' && location.pathname.split('/')[1] != 'user') {
                     document.location = '/'
                   }
-                }} style={{ marginInline: 'auto',zIndex:1 }}>
+                }} style={{ marginInline: 'auto', zIndex: 1 }}>
                   <span className="main1 w3-pointer">
                     <div id="freeSwitch1" className="btn1 w3-yellow w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28 }}>
                       <FontAwesomeIcon icon={faDollarSign} />
@@ -1814,8 +1839,15 @@ export default function RootLayout({ children }) {
           </div>
         </div> */}
 
-          <div
-            onClick={toggleChat}
+          <Link
+            onClick={() => {
+              if (location.pathname.split('/')[1] == 'chat') {
+                if (document.getElementById('modalChatListe')) {
+                  document.getElementById('modalChatListe').style.display = 'block'
+                }
+              }
+            }}
+            href={'/chat'}
             className="w3-flex-1"
             style={{ width: 36, height: 36 }}
           >
@@ -1824,12 +1856,12 @@ export default function RootLayout({ children }) {
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
-                icon={faRobot}
+                icon={faComments}
                 width={20}
                 height={20}
               />
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* modal logedin */}

@@ -46,7 +46,7 @@ export default function Home(props) {
 
   useEffect(() => {
 
-    localStorage.setItem('freePremiumListened','not')
+    localStorage.setItem('freePremiumListened', 'not')
 
     const allMenuListe = document.getElementsByClassName('menuItem')
     for (let i = 0; i < allMenuListe.length; i++) {
@@ -162,15 +162,10 @@ export default function Home(props) {
       }
 
       window.addEventListener("scroll", function () {
-        // Calculate the scrollable height
         const chatElement = document.getElementById("chatCoreWrapper");
         const totalHeight = chatElement.scrollHeight;
         const viewportHeight = chatElement.clientHeight;
-
-        // Determine the current scroll position
         const currentScroll = chatElement.scrollTop;
-
-        // Check if the current scroll position is less than the maximum scrollable height minus the viewport height
         if (currentScroll + viewportHeight < totalHeight) {
           stepper.scrolling = true;
         } else {
@@ -178,30 +173,25 @@ export default function Home(props) {
         }
       });
 
-      const updateHeight = () => {
-        setHeight(window.innerHeight - 80 - (window.innerWidth > 992 ? 0 : 20));
-      };
+      document.getElementById("mainCore").style.display = "block";
 
-      // Set the initial height
-      updateHeight();
-
-      // Update height on window resize
-      window.addEventListener("resize", updateHeight);
-
-      // Clean up the event listener on component unmount
-      return () => {
-        window.removeEventListener("resize", updateHeight);
-      };
     }
-    //----------------
 
+    const updateHeight = () => {
+      setHeight(window.innerHeight - 80 - (window.innerWidth > 992 ? 0 : 20));
+    };
+    updateHeight();
+    window.addEventListener("resize", updateHeight);
+    return () => {
+      window.removeEventListener("resize", updateHeight);
+    };
 
   }, []);
 
   return (
     <div
       id="coreMain"
-      style={{ userSelect: "none", paddingBlock:8 }}
+      style={{ userSelect: "none", paddingBlock: 8 }}
     >
 
       <main

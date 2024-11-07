@@ -697,8 +697,8 @@ function chatBox() {
 
 
     if (UI) {
-      if (UI.lastmessage.key*1 != userInfo.key*1) {
-        set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo/state'), 'read').then(()=>{
+      if (UI.lastmessage.key * 1 != userInfo.key * 1) {
+        set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo/state'), 'read').then(() => {
           set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo/state'), 'read')
         })
       }
@@ -920,7 +920,7 @@ function chatBox() {
     for (let i = 0; i < data.length; i++) {
       if (data[i].state == 'sent') {
         if (data[i].lastmessage) {
-          if (data[i].lastmessage.key*1 != userInfo.key*1) {
+          if (data[i].lastmessage.key * 1 != userInfo.key * 1) {
             set(ref(database, 'chatcase/' + data[i].key + '/' + userInfo.key + '/userInfo/state'), 'received').then(() => {
               set(ref(database, 'chatcase/' + userInfo.key + '/' + data[i].key + '/userInfo/state'), 'received')
             })
@@ -1136,6 +1136,36 @@ function chatBox() {
       }
     });
 
+    var imageSelector = document.createElement("input");
+    imageSelector.type = "file";
+    imageSelector.accept = "image/*";
+
+    imageSelector.onchange = (e) => {
+      const file = e.target.files[0];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      const formData = new FormData();
+      formData.append("media", file);
+
+      reader.onload = (readerEvent) => {
+        var content = readerEvent.target.result;
+
+        document.getElementById("showImage").src = content;
+        document.getElementById("showImageWrapper").style.display = "block";
+        document.getElementById("inputImage").style.display = "none";
+
+        document.getElementById("audioSection").style.display = "block";
+        document.getElementById("videoEmbed").style.display = "none";
+
+        postInfo.media = formData;
+        postInfo.type = "image";
+      };
+    };
+
+    document.getElementById('imageSelector').addEventListener('click', () => imageSelector.click())
+
   }, [])
 
   return (
@@ -1161,7 +1191,7 @@ function chatBox() {
               <FontAwesomeIcon onClick={cancelEdit} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
             </div>
             <div className='w3-flex-row w3-flex-center-v'>
-              <div className='w3-pointer w3-yellow w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
+              <div id='imageSelector' className='w3-pointer w3-yellow w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
                 <FontAwesomeIcon icon={faImage} />
               </div>
               <div className='w3-flex-1'>
@@ -1171,13 +1201,6 @@ function chatBox() {
                 <FontAwesomeIcon icon={faPaperPlane} />
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* open chat liste button */}
-        <div className='w3-display-topleft'>
-          <div onClick={() => document.getElementById('modalChatListe').style.display = 'block'} className='w3-pointer w3-card w3-right w3-circle w3-yellow w3-flex w3-flex-center' style={{ width: 42, height: 42, margin: 8 }}>
-            <FontAwesomeIcon icon={faComments} className='w3-large' />
           </div>
         </div>
       </div>
