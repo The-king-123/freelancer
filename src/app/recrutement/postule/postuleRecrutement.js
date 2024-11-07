@@ -384,10 +384,7 @@ function postuleRecrutement(props) {
 
   useEffect(() => {
 
-    if (localStorage.getItem('theme') == 'light') {
-
-      document.getElementById('lightModeCheck').style.display = 'inline-block'
-      document.getElementById('lightModeCheckTop').style.display = 'inline-block';
+    if (localStorage.getItem('theme') != 'dark') {
 
       const elementGrey = document.getElementsByClassName('w3-black').length
       const elementWhite = document.getElementsByClassName('w3-dark-grey').length

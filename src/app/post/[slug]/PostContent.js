@@ -72,7 +72,7 @@ export default function PostContent({ content }) {
   };
 
   useEffect(() => {
-    if (localStorage.getItem('theme') == 'light') {
+    if (localStorage.getItem('theme') != 'dark') {
 
       const elementGrey = document.getElementsByClassName('w3-black').length
       const elementWhite = document.getElementsByClassName('w3-dark-grey').length

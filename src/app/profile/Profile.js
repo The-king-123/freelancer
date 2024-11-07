@@ -113,7 +113,7 @@ function Profile() {
 
   useEffect(() => {
 
-    if (localStorage.getItem('theme') == 'light') {
+    if (localStorage.getItem('theme') != 'dark') {
 
       const elementGrey = document.getElementsByClassName('w3-black').length
       const elementWhite = document.getElementsByClassName('w3-dark-grey').length

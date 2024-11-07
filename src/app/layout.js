@@ -92,19 +92,12 @@ export default function RootLayout({ children }) {
   });
 
   const ActiveLightMode = () => {
-
-    if (document.getElementById('lightModeCheck')) {
-      if (document.getElementById('lightModeCheck').style.display == 'none') {
-        document.getElementById('lightModeCheckTop').style.display = 'inline-block';
-        document.getElementById('lightModeCheck').style.display = 'inline-block';
-        localStorage.setItem('theme', 'light');
-        window.location.reload()
-      } else {
-        document.getElementById('lightModeCheck').style.display = 'none';
-        document.getElementById('lightModeCheckTop').style.display = 'none';
-        localStorage.setItem('theme', 'dark');
-        window.location.reload()
-      }
+    if (localStorage.getItem('theme') != 'dark') {
+      localStorage.setItem('theme', 'dark');
+      window.location.reload()
+    } else {
+      localStorage.setItem('theme', 'light');
+      window.location.reload()
     }
   }
 
@@ -784,10 +777,10 @@ export default function RootLayout({ children }) {
 
   useEffect(() => {
 
-    if (localStorage.getItem('theme') == 'light') {
+    if (localStorage.getItem('theme') != 'dark') {
 
-      document.getElementById('lightModeCheck').style.display = 'inline-block'
-      document.getElementById('lightModeCheckTop').style.display = 'inline-block';
+      document.getElementById('lightModeCheck').style.display = 'none'
+      document.getElementById('lightModeCheckTop').style.display = 'none';
 
       const elementGrey = document.getElementsByClassName('w3-black').length
       const elementWhite = document.getElementsByClassName('w3-dark-grey').length
@@ -807,6 +800,9 @@ export default function RootLayout({ children }) {
 
       document.getElementById('htmlCore').style.display = 'block'
     } else {
+
+      document.getElementById('lightModeCheck').style.display = 'inline-block'
+      document.getElementById('lightModeCheckTop').style.display = 'inline-block';
       document.getElementById('htmlCore').style.display = 'block'
     }
 
@@ -1236,9 +1232,9 @@ export default function RootLayout({ children }) {
                             <div className="w3-flex-1">
                               <FontAwesomeIcon
                                 className="w3-margin-right"
-                                icon={faSun}
+                                icon={faMoon}
                               />
-                              Light mode
+                              Dark mode
                             </div>
                             <FontAwesomeIcon icon={faCheck} id="lightModeCheck" style={{ display: 'none' }} />
                           </div>
@@ -1610,9 +1606,9 @@ export default function RootLayout({ children }) {
                     <div className="w3-flex-1">
                       <FontAwesomeIcon
                         className="w3-margin-right"
-                        icon={faSun}
+                        icon={faMoon}
                       />
-                      Light mode
+                      Dark mode
                     </div>
                     <FontAwesomeIcon icon={faCheck} id="lightModeCheckTop" style={{ display: 'none' }} />
                   </div>
