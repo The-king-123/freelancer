@@ -1016,6 +1016,10 @@ function chatBox() {
 
   }
 
+  const cancelMedia = () => {
+
+  }
+
   useEffect(() => {
 
     if (localStorage.getItem('theme') == 'light') {
@@ -1142,6 +1146,12 @@ function chatBox() {
 
     imageSelector.onchange = (e) => {
       const file = e.target.files[0];
+      const maxFileSize = 5 * 1024 * 1024;
+
+      if (file.size > maxFileSize) {
+        alert("L'image dépasse la taille maximale autorisée de 5 Mo.");
+        return;
+      }
 
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -1150,17 +1160,10 @@ function chatBox() {
       formData.append("media", file);
 
       reader.onload = (readerEvent) => {
-        var content = readerEvent.target.result;
-
-        document.getElementById("showImage").src = content;
-        document.getElementById("showImageWrapper").style.display = "block";
-        document.getElementById("inputImage").style.display = "none";
-
-        document.getElementById("audioSection").style.display = "block";
-        document.getElementById("videoEmbed").style.display = "none";
-
-        postInfo.media = formData;
-        postInfo.type = "image";
+        const content = readerEvent.target.result;
+        document.getElementById("previewImage").style.backgroundImage = `url(${content})`;
+        document.getElementById("previewImageName").innerText = file.name;
+        document.getElementById("mediaPanel").style.display = 'flex';
       };
     };
 
@@ -1189,6 +1192,11 @@ function chatBox() {
               <FontAwesomeIcon icon={faEdit} />
               <div id='editPanelText' className='w3-margin-left w3-margin-right w3-nowrap w3-overflow' style={{ maxWidth: 260 }}>some text here to reply sdfb sldkhflskdhklsjdhjh sdh </div>
               <FontAwesomeIcon onClick={cancelEdit} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
+            </div>
+            <div id='mediaPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingRight: 8, paddingBottom: 16, display: 'none' }}>
+              <div id='previewImage' className='w3-round w3-dark-grey' style={{ width: 42, height: 42, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
+              <div id='previewImageName' className='w3-margin-left w3-margin-right w3-nowrap w3-overflow' style={{ maxWidth: 260 }}>some text here to reply sdfb sldkhflskdhklsjdhjh sdh </div>
+              <FontAwesomeIcon onClick={cancelMedia} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
             </div>
             <div className='w3-flex-row w3-flex-center-v'>
               <div id='imageSelector' className='w3-pointer w3-yellow w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
