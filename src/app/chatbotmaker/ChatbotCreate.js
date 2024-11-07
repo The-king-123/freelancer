@@ -29,7 +29,7 @@ function ChatbotCreate() {
     }
 
     const reloadTopics = (data) => {
-        const themeLight = localStorage.getItem('theme') == 'light' ? true : false
+        const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
         const glitchTopic = data.map((chatbot, key) => (
             <div key={key} style={{ paddingBlock: 4, marginBottom: -2 }}>
                 <div

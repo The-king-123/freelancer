@@ -12,7 +12,7 @@ export default function PostContent() {
 
   const reloadTalents = (data) => {
 
-    const themeLight = localStorage.getItem('theme') == 'light' ? true : false
+    const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
 
     var glitchTalents
     glitchTalents = data.map((des, key) => (

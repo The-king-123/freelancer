@@ -285,7 +285,7 @@ function chatBox() {
 
   const displayMessage = (chat, chatBrut, UI) => {
 
-    const themeLight = localStorage.getItem('theme') == 'light' ? true : false
+    const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
     const glitchChat = chat.map(([index, bull], key, chatArray) => (
       <div key={key}>
         {bull.key == userInfo.key && (
@@ -929,7 +929,7 @@ function chatBox() {
       }
     }
 
-    const themeLight = localStorage.getItem('theme') == 'light' ? true : false
+    const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
     var glitchChat
     if (data.length > 0) {
       glitchChat = data.map((user, key) => (

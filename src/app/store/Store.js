@@ -17,7 +17,7 @@ function Store() {
   )
 
   const reloadStore = (data) => {
-    const themeLight = localStorage.getItem('theme') == 'light' ? true : false
+    const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
     var glitchStore
     if (data.length > 0) {
       glitchStore = data.map((product, key) => (

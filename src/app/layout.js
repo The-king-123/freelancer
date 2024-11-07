@@ -560,7 +560,7 @@ export default function RootLayout({ children }) {
 
   const toggleChat = () => {
 
-    const themeLight = localStorage.getItem('theme') == 'light' ? true : false
+    const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
 
     if (document.getElementById("sidebarChat").style.display != "block") {
       closeAllPanel();
@@ -820,7 +820,7 @@ export default function RootLayout({ children }) {
 
     const firstPath = location.pathname.split('/')[1]
     if (document.getElementById(firstPath + 'Page')) {
-      document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') == 'light' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow')
+      document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') != 'dark' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow')
     }
     if (document.getElementById(firstPath + 'Screen')) {
       document.getElementById(firstPath + 'Screen').className = document.getElementById(firstPath + 'Screen').className.replace('whiteBlackYellow', 'w3-text-yellow')

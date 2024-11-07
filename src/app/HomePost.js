@@ -56,7 +56,7 @@ export default function PostContent({ posts }) {
   }
 
   const loadPost = (type) => {
-    const themeLight = localStorage.getItem('theme') == 'light' ? true : false
+    const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
     const glitchPost = posts.map((post, key) => (
       (type == 'premium' ? post.category == type : post.category != 'premium') &&
       <Link className="postCard" href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>

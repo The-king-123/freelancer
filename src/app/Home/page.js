@@ -52,7 +52,7 @@ export default function Home(props) {
     const allBottomMenuListe = document.getElementsByClassName('menuItemBottom')
     for (let i = 0; i < allMenuListe.length; i++) {
       const element = allMenuListe[i];
-      element.className = element.className.replace('w3-yellow', (localStorage.getItem('theme') == 'light' ? 'w3-light-grey' : 'w3-black'))
+      element.className = element.className.replace('w3-yellow', (localStorage.getItem('theme') != 'dark' ? 'w3-light-grey' : 'w3-black'))
     }
     for (let i = 0; i < allBottomMenuListe.length; i++) {
       const element = allBottomMenuListe[i];
@@ -61,7 +61,7 @@ export default function Home(props) {
 
     const firstPath = location.pathname.split('/')[1]
     if (document.getElementById(firstPath + 'Page')) {
-      document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') == 'light' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow')
+      document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') != 'dark' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow')
     }
     if (document.getElementById(firstPath + 'Screen')) {
       document.getElementById(firstPath + 'Screen').className = document.getElementById(firstPath + 'Screen').className.replace('whiteBlackYellow', 'w3-text-yellow')

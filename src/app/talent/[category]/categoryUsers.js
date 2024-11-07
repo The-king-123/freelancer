@@ -12,7 +12,7 @@ export default function PostContent({ content }) {
 
   const reloadMembers = (data) => {
 
-    const themeLight = localStorage.getItem('theme') == 'light' ? true : false
+    const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
 
     var glitchMembers
     if (data.length > 0) {

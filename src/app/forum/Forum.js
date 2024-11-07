@@ -152,7 +152,7 @@ export default function Forum(props) {
 
   const reloadForums = (forums) => {
     const xuser = localStorage.getItem('x-user');
-    const themeLight = localStorage.getItem('theme') == 'light' ? true : false
+    const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
     var glitchForum = ''
     if (forums.length > 0) {
       glitchForum = forums.map((forum, key) => (
