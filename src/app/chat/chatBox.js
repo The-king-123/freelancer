@@ -695,10 +695,12 @@ function chatBox() {
       </div>
     ));
 
+
     if (UI) {
-      if (UI.lastmessage.key != userInfo.key) {
-        set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo/state'), 'read')
-        set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo/state'), 'read')
+      if (UI.lastmessage.key*1 != userInfo.key*1) {
+        set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo/state'), 'read').then(()=>{
+          set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo/state'), 'read')
+        })
       }
     }
 
@@ -915,17 +917,12 @@ function chatBox() {
   }
 
   const reloadChatsList = (data, type) => {
-
-    console.log('ato');
-    
-    console.log(data);
-    
     for (let i = 0; i < data.length; i++) {
       if (data[i].state == 'sent') {
         if (data[i].lastmessage) {
           if (data[i].lastmessage.key*1 != userInfo.key*1) {
-            set(ref(database, 'chatcase/' + userInfo.key + '/' + data[i].key + '/userInfo/state'), 'received').then(() => {
-              set(ref(database, 'chatcase/' + data[i].key + '/' + userInfo.key + '/userInfo/state'), 'received')
+            set(ref(database, 'chatcase/' + data[i].key + '/' + userInfo.key + '/userInfo/state'), 'received').then(() => {
+              set(ref(database, 'chatcase/' + userInfo.key + '/' + data[i].key + '/userInfo/state'), 'received')
             })
           }
         }
