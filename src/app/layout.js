@@ -1182,6 +1182,7 @@ export default function RootLayout({ children }) {
               </Link>
 
               <Link
+                id="chatPage"
                 onClick={() => {
                   if (location.pathname.split('/')[1] == 'chat') {
                     if (document.getElementById('modalChatListe')) {
@@ -1552,6 +1553,21 @@ export default function RootLayout({ children }) {
             </div>
           </div>
 
+          <div
+            onClick={toggleChat}
+            style={{ width: 36, height: 36, marginRight: 16 }}
+          >
+            <div
+              className="w3-flex w3-flex-center w3-overflow w3-dark-grey w3-card w3-round"
+              style={{ width: 36, height: 36 }}
+            >
+              <FontAwesomeIcon
+                icon={faRobot}
+                width={20}
+                height={20}
+              />
+            </div>
+          </div>
           <div style={{ width: 36, height: 36 }}>
             <div
               className="w3-dropdown-click w3-hover-white"
@@ -1672,21 +1688,6 @@ export default function RootLayout({ children }) {
               </div>
             </div>
           </div>
-          <div
-            onClick={toggleChat}
-            style={{ width: 36, height: 36, marginLeft: 16 }}
-          >
-            <div
-              className="w3-flex w3-flex-center w3-overflow w3-dark-grey w3-card w3-round"
-              style={{ width: 36, height: 36 }}
-            >
-              <FontAwesomeIcon
-                icon={faRobot}
-                width={20}
-                height={20}
-              />
-            </div>
-          </div>
         </div>
 
         {/* // bottom menu */}
@@ -1702,7 +1703,7 @@ export default function RootLayout({ children }) {
           >
             <div
               id="talentScreen"
-              className="w3-flex w3-flex-center w3-overflow w3-black w3-round"
+              className="menuItemBottom w3-flex w3-flex-center w3-overflow w3-black w3-round whiteBlackYellow"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
@@ -1720,7 +1721,7 @@ export default function RootLayout({ children }) {
           >
             <div
               id="recrutementScreen"
-              className="w3-flex w3-flex-center w3-overflow w3-black w3-round"
+              className="menuItemBottom w3-flex w3-flex-center w3-overflow w3-black w3-round whiteBlackYellow"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
@@ -1788,22 +1789,6 @@ export default function RootLayout({ children }) {
                   Premium
                 </div>
               </div>
-
-              {/* <div
-              id="settingMobileWrapper"
-              onClick={(e) => openDropdown("switchPannel")}
-              className="dropButton w3-flex w3-flex-center w3-card w3-round w3-dark-grey"
-              style={{ width: 36, height: 36, marginInline: "auto" }}
-            >
-              <FontAwesomeIcon
-                icon={faBars}
-                width={20}
-                height={20}
-              />
-            </div> */}
-
-
-
             </div>
           </div>
           {/* // End Switch free premium with inital panel */}
@@ -1815,7 +1800,7 @@ export default function RootLayout({ children }) {
           >
             <div
               id="storeScreen"
-              className="w3-flex w3-flex-center w3-overflow w3-black w3-round"
+              className="menuItemBottom w3-flex w3-flex-center w3-overflow w3-black w3-round whiteBlackYellow"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
@@ -1825,19 +1810,6 @@ export default function RootLayout({ children }) {
               />
             </div>
           </Link>
-
-          {/* <div className="w3-flex-1" style={{ width: 36, height: 36 }}>
-          <div
-            className="w3-flex w3-flex-center w3-overflow w3-black w3-round"
-            style={{ width: 36, height: 36, marginInline: "auto" }}
-          >
-            <FontAwesomeIcon
-              icon={faBell}
-              width={20}
-              height={20}
-            />
-          </div>
-        </div> */}
 
           <Link
             onClick={() => {
@@ -1852,7 +1824,8 @@ export default function RootLayout({ children }) {
             style={{ width: 36, height: 36 }}
           >
             <div
-              className="w3-flex w3-flex-center w3-overflow w3-black w3-round"
+              id="chatScreen"
+              className="menuItemBottom w3-flex w3-flex-center w3-overflow w3-black w3-round whiteBlackYellow"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
