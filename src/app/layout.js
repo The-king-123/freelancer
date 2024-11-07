@@ -830,16 +830,15 @@ export default function RootLayout({ children }) {
       document.getElementById(firstPath + 'Screen').className = document.getElementById(firstPath + 'Screen').className.replace('whiteBlackYellow', 'w3-text-yellow')
     }
 
-
-    document.getElementById('passwordLogin').addEventListener('keydown', function (event) {
+    document.getElementById('passwordLogin').addEventListener('keydown', (event) => {
       if (event.key == 'Enter') {
-        login()
+        document.getElementById('buttonConnexion').click()
       }
     });
 
-    document.getElementById('mailLogin').addEventListener('keydown', function (event) {
+    document.getElementById('mailLogin').addEventListener('keydown', (event) => {
       if (event.key == 'Enter') {
-        login()
+        document.getElementById('buttonConnexion').click()
       }
     });
 

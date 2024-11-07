@@ -370,7 +370,6 @@ function page() {
                     <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
                         <div className="w3-margin w3-col l8 m8 s8">
                             <button
-                                id="buttonConnexion"
                                 disabled={false}
                                 onClick={signup}
                                 className="transition w3-medium w3-block w3-button w3-round-xxlarge w3-yellow"
