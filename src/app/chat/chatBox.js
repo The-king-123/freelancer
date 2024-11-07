@@ -1106,6 +1106,9 @@ function chatBox() {
                 usersData.push(user);
               });
               document.getElementById('modalChatListe').style.display = 'block'
+              if (window.innerWidth<=992) {
+                document.getElementById('modalChatListe').style.height = (window.innerHeight - 52) + 'px';
+              }
             })
             .catch((e) => {
               console.error("failure", e);
