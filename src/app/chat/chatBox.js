@@ -1145,7 +1145,7 @@ function chatBox() {
     }
 
     if (window.innerWidth <= 992) {
-      document.getElementById('modalChatListe').style.height = document.getElementById('coreMain').offsetHeight - 16 + 'px';
+      document.getElementById('modalChatListe').style.height = document.getElementById('coreMain').offsetHeight + 'px';
       document.getElementById('chatListeScrollable').style.height = document.getElementById('coreMain').offsetHeight - 132 + 'px';
     }
 
@@ -1281,7 +1281,7 @@ function chatBox() {
 
   return (
     <div id='chatMainCore' style={{ position: 'relative', height: 'calc(100vh - 32px)' }}>
-      <div id='chattingCore' style={{ display: 'none' }}>
+      <div id='chattingCore' style={{ display: 'nonen' }}>
         <div id='bullField' className='w3-noscrollbar w3-overflow-scroll w3-block' style={{ padding: 8, display: 'flex', flexDirection: 'column-reverse' }}>
           <div className='w3-block'>
             <div style={{ height: 72 }}></div>
