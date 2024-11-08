@@ -1117,7 +1117,7 @@ function chatBox() {
   }
 
   useEffect(() => {
-
+    
     if (localStorage.getItem('theme') != 'dark') {
 
       const elementGrey = document.getElementsByClassName('w3-black').length
