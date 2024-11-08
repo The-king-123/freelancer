@@ -853,17 +853,33 @@ export default function RootLayout({ children }) {
       fullPath.path = window.location.pathname;
     }
 
+    const settingDropContainer = document.getElementById('settingDropContainer');
+    const setting = document.getElementById('setting');
+    document.addEventListener('click', (event) => {
+      if (!settingDropContainer.contains(event.target)) {
+        setting.className = setting.className.replace('w3-show', '');
+      }
+    })
+
+    const settingMobileWrapper = document.getElementById('settingMobileWrapper');
+    const settingMobile = document.getElementById('settingMobile');
+    document.addEventListener('click', (event) => {
+      if (!settingMobileWrapper.contains(event.target)) {
+        settingMobile.className = settingMobile.className.replace('w3-show', '');
+      }
+    })
+    
     if (document.getElementById("appCore")) {
 
-      if (
-        !localHosts.includes(location.hostname) &&
-        location.protocol === "http:"
-      ) {
-        location.href =
-          "https://" + location.hostname + location.pathname + location.search;
-      } else {
-        document.getElementById("appCore").style.display = "block";
-      }
+      // if (
+      //   !localHosts.includes(location.hostname) &&
+      //   location.protocol === "http:"
+      // ) {
+      //   location.href =
+      //     "https://" + location.hostname + location.pathname + location.search;
+      // } else {
+      //   document.getElementById("appCore").style.display = "block";
+      // }
 
       const xcode = localStorage.getItem('x-code');
       axios
@@ -1207,6 +1223,7 @@ export default function RootLayout({ children }) {
 
               <div style={{ height: 40 }}>
                 <div
+                  id="settingDropContainer"
                   className="w3-dropdown-click"
                 >
 
@@ -1573,10 +1590,10 @@ export default function RootLayout({ children }) {
           </div>
           <div style={{ width: 36, height: 36 }}>
             <div
+                id="settingMobileWrapper"
               className="w3-dropdown-click w3-hover-white"
             >
               <div
-                id="settingMobileWrapper"
                 onClick={(e) => openDropdown("settingMobile")}
                 className="dropButton w3-flex w3-flex-center w3-card w3-round w3-dark-grey"
                 style={{ width: 36, height: 36, marginInline: "auto" }}

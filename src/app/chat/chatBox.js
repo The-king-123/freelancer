@@ -11,6 +11,8 @@ import Image from 'next/image';
 
 function chatBox() {
 
+  axios.defaults.withCredentials = true;
+
   const reactionListe = {
     heart: '❤️',
     laugh: '😆',
@@ -42,7 +44,12 @@ function chatBox() {
       new: true,
     }
   ])
-
+  const [attachementInfo, setattachementInfo] = useState({
+    media: null,
+    name: '',
+    link: '',
+    type: '',
+  })
   const [chatCase, setchatCase] = useState([])
   const [displayChat, setdisplayChat] = useState('')
   const [chatListe, setchatListe] = useState(
@@ -76,6 +83,17 @@ function chatBox() {
     state: 'sent'
   })
 
+  async function setCSRFToken() {
+    try {
+      // Fetch CSRF token from the server
+      const response = await axios.get(source + '/csrf-token');
+      // Set CSRF token as a default header for all future requests
+      axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+    } catch (error) {
+      console.error('CSRF token fetch failed:', error);
+    }
+  }
+
   const reloadChat = () => {
     onValue(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key), (snapshot) => {
       if (snapshot.exists()) {
@@ -93,14 +111,14 @@ function chatBox() {
     });
   }
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
 
     chatInfo.key = userInfo.key
     chatInfo.des_key = userInfo.des_key
     chatInfo.message = document.getElementById('messageTextarea').value.trim();
     document.getElementById('bullField').style.scrollBehavior = 'smooth';
 
-    if (chatInfo.message.length > 0 && !userInfo.sendHolder) {
+    if ((chatInfo.attachement || chatInfo.message.length > 0) && !userInfo.sendHolder) {
       userInfo.sendHolder = true;
       chatInfo.timestamp = Date.now()
 
@@ -109,11 +127,11 @@ function chatBox() {
 
       if (userInfo.editBull) {
 
-        set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/' + userInfo.editBull + '/message'), chatInfo.message)
-        set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + userInfo.editBull + '/message'), chatInfo.message)
-        set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/' + userInfo.editBull + '/edited'), true)
-        set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + userInfo.editBull + '/edited'), true)
-          .then(() => {
+        await set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/' + userInfo.editBull + '/message'), chatInfo.message)
+        await set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + userInfo.editBull + '/message'), chatInfo.message)
+        await set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/' + userInfo.editBull + '/edited'), true)
+        await set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + userInfo.editBull + '/edited'), true)
+          .then(async () => {
             userInfo.editBull = false
             document.getElementById('messageTextarea').value = ''
 
@@ -126,7 +144,7 @@ function chatBox() {
             chatInfo.deleted = false;
             chatInfo.state = 'sent';
 
-            set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo'), {
+            await set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo'), {
               fullname: userInfo.des_fullname,
               key: userInfo.des_key,
               timestamp: Date.now(),
@@ -135,8 +153,8 @@ function chatBox() {
                 key: userInfo.key,
                 message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.message : chatInfo.message
               }
-            }).then(() => {
-              set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
+            }).then(async () => {
+              await set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
                 fullname: userInfo.fullname,
                 key: userInfo.key,
                 timestamp: Date.now(),
@@ -150,8 +168,12 @@ function chatBox() {
                 chatInfo.responseTo = null;
               })
             })
-
-            cancelEdit()
+            document.getElementById('mediaPanel').style.display = 'none'
+            attachementInfo.name = ''
+            attachementInfo.type = ''
+            attachementInfo.link = ''
+            attachementInfo.media = null
+            cancelEdit();
           })
           .catch((error) => {
             console.error('Error writing data:', error);
@@ -283,7 +305,7 @@ function chatBox() {
     }, 2000);
   }
 
-  const displayMessage = (chat, chatBrut, UI) => {
+  const displayMessage = async (chat, chatBrut, UI) => {
 
     const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
     const glitchChat = chat.map(([index, bull], key, chatArray) => (
@@ -445,6 +467,26 @@ function chatBox() {
                 >
                   {/\n.+/.test(bull.message) ? parse(bull.message.replace(/\n/g, "<br/>")) : bull.message}
                 </div>
+
+                {/* Bull media */}
+                {bull.attachement &&
+                  <>
+                    {bull.attachement.type == 'image' &&
+                      <Image
+                        loading="lazy"
+                        unoptimized
+                        width={200}
+                        height={200}
+                        src={
+                          source + "/images.php?w=320&h=320&zlonk=2733&zlink=" + user.key
+                        }
+                        className="w3-round-large  post-image"
+                        alt={bull.attachement.name}
+                        style={{ objectFit: "cover", objectPosition: "center", minHeight: 48, minWidth: 48 }}
+                      />
+                    }
+                  </>
+                }
 
                 {/* Bull reaction */}
                 {bull.reaction &&
@@ -698,8 +740,8 @@ function chatBox() {
 
     if (UI) {
       if (UI.lastmessage.key * 1 != userInfo.key * 1) {
-        set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo/state'), 'read').then(() => {
-          set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo/state'), 'read')
+        await set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo/state'), 'read').then(async () => {
+          await set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo/state'), 'read')
         })
       }
     }
@@ -1017,7 +1059,61 @@ function chatBox() {
   }
 
   const cancelMedia = () => {
+    if (!userInfo.sendHolder) {
+      document.getElementById('mediaPanel').style.display = 'none'
+      attachementInfo.name = ''
+      attachementInfo.type = ''
+      attachementInfo.link = ''
+      attachementInfo.media = null
+    }
+  }
 
+  const uploadMedia = async () => {
+
+    if (attachementInfo.media && !userInfo.sendHolder) {
+
+      document.getElementById('uploadMediaSpinner').style.display = 'flex'
+      document.getElementById('previewImageName').innerText = "En cours de téléversement..."
+
+      userInfo.sendHolder = true;
+      attachementInfo.media.append("type", 'chatMediaStore');
+
+      const xcode = localStorage.getItem("x-code");
+      await setCSRFToken();
+      await axios
+        .post(source + "/_post?xcode=" + xcode, attachementInfo.media)
+        .then((res) => {
+          if (res.data.logedin) {
+            if (res.data.stored) {
+              attachementInfo.media = null;
+              attachementInfo.name = res.data.medianame;
+              chatInfo.attachement = attachementInfo;
+              document.getElementById('previewImageName').innerText = "En cours d'envoi'..."
+              document.getElementById('uploadMediaSpinner').style.display = 'none'
+              sendMessage();
+            } else {
+              userInfo.sendHolder = true;
+              return;
+            }
+          } else {
+            if (document.getElementById('modalLogin')) {
+              document.getElementById('modalLogin').style.display = 'block'
+            }
+            userInfo.sendHolder = true;
+            return;
+          }
+
+        })
+        .catch((e) => {
+          if (e.response && e.response.status === 419) {
+            console.error('CSRF token missing or incorrect');
+          } else {
+            console.error('Request failed:', error);
+          }
+          userInfo.sendHolder = true;
+          return;
+        });
+    }
   }
 
   useEffect(() => {
@@ -1106,7 +1202,7 @@ function chatBox() {
                 usersData.push(user);
               });
               document.getElementById('modalChatListe').style.display = 'block'
-              if (window.innerWidth<=992) {
+              if (window.innerWidth <= 992) {
                 document.getElementById('modalChatListe').style.height = (window.innerHeight - 52) + 'px';
               }
             })
@@ -1164,9 +1260,14 @@ function chatBox() {
 
       reader.onload = (readerEvent) => {
         const content = readerEvent.target.result;
+
         document.getElementById("previewImage").style.backgroundImage = `url(${content})`;
         document.getElementById("previewImageName").innerText = file.name;
         document.getElementById("mediaPanel").style.display = 'flex';
+
+        attachementInfo.media = formData;
+        attachementInfo.type = 'image';
+        attachementInfo.name = file.name;
       };
     };
 
@@ -1197,7 +1298,11 @@ function chatBox() {
               <FontAwesomeIcon onClick={cancelEdit} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
             </div>
             <div id='mediaPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingRight: 8, paddingBottom: 16, display: 'none' }}>
-              <div id='previewImage' className='w3-round w3-dark-grey' style={{ width: 42, height: 42,minWidth: 42, minHeight: 42, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
+              <div id='previewImage' className='w3-round w3-dark-grey' style={{ width: 42, height: 42, minWidth: 42, minHeight: 42, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                <div id='uploadMediaSpinner' style={{ display: 'none' }} className='w3-block w3-height w3-flex w3-flex-center black-opacity'>
+                  <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
+                </div>
+              </div>
               <div id='previewImageName' className='w3-margin-left w3-margin-right w3-nowrap w3-overflow' style={{ maxWidth: 260 }}>some text here to reply sdfb sldkhflskdhklsjdhjh sdh </div>
               <FontAwesomeIcon onClick={cancelMedia} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
             </div>
@@ -1208,7 +1313,7 @@ function chatBox() {
               <div className='w3-flex-1'>
                 <textarea id='messageTextarea' style={{ paddingInline: 24, height: 40, resize: 'none' }} type='text' placeholder='Message' className='w3-input w3-border-0 w3-round-xxlarge w3-block w3-dark-grey w3-noscrollbar' />
               </div>
-              <div onClick={sendMessage} className='w3-pointer w3-yellow w3-circle w3-flex w3-flex-center w3-margin-left' style={{ width: 32, height: 32 }}>
+              <div onClick={() => attachementInfo.media ? uploadMedia() : sendMessage()} className='w3-pointer w3-yellow w3-circle w3-flex w3-flex-center w3-margin-left' style={{ width: 32, height: 32 }}>
                 <FontAwesomeIcon icon={faPaperPlane} />
               </div>
             </div>
