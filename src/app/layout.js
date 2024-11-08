@@ -1006,7 +1006,7 @@ export default function RootLayout({ children }) {
         }
 
         if (document.getElementById("mainCore")) {
-          if (window.innerWidth <= 993) {
+          if (window.innerWidth <= 992) {
             document.getElementById("mainCore").style.height = (window.innerHeight - 52) + "px";
           }
         }
@@ -1032,7 +1032,7 @@ export default function RootLayout({ children }) {
   }, []);
 
   return (
-    <html id="htmlCore" style={{ display: 'none' }} content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" className="w3-dark-grey" lang="en">
+    <html id="htmlCore" style={{ display: 'none' }} content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" className="w3-white" lang="en">
       <body id="appCore" className={inter.className}>
 
         <div
@@ -1348,7 +1348,7 @@ export default function RootLayout({ children }) {
 
         <main
           id="mainCore"
-          className="w3-main w3-overflow-scroll w3-noscrollbar w3-100vh w3-display-contenair"
+          className="w3-main w3-noscrollbar w3-100vh w3-display-contenair w3-overflow-scroll"
           style={{ marginLeft: 250, marginRight: 320, padding: 8, position: 'relative' }}
         >
           <div

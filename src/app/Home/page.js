@@ -198,11 +198,9 @@ export default function Home(props) {
 
   return (
     <div
-
       id="coreMain"
       style={{ userSelect: "none", paddingBlock: 8 }}
     >
-
       <main
         className="w3-main"
       >

@@ -1118,6 +1118,7 @@ function chatBox() {
 
   useEffect(() => {
     
+
     if (localStorage.getItem('theme') != 'dark') {
 
       const elementGrey = document.getElementsByClassName('w3-black').length
@@ -1140,6 +1141,12 @@ function chatBox() {
     }
     if (window.innerWidth < 992) {
       document.getElementById('chatMainCore').style.height = (window.innerHeight - 128) + 'px';
+      document.getElementById('chatInputWrapper').style.bottom = 52 + 'px'
+    }
+
+    if (window.innerWidth <= 992) {
+      document.getElementById('modalChatListe').style.height = document.getElementById('coreMain').offsetHeight - 16 + 'px';
+      document.getElementById('chatListeScrollable').style.height = document.getElementById('coreMain').offsetHeight - 132 + 'px';
     }
 
     const xcode = localStorage.getItem('x-code');
@@ -1202,9 +1209,6 @@ function chatBox() {
                 usersData.push(user);
               });
               document.getElementById('modalChatListe').style.display = 'block'
-              if (window.innerWidth <= 992) {
-                document.getElementById('modalChatListe').style.height = (window.innerHeight - 52) + 'px';
-              }
             })
             .catch((e) => {
               console.error("failure", e);
@@ -1285,7 +1289,7 @@ function chatBox() {
             <div style={{ height: 96 }}></div>
           </div>
         </div>
-        <div style={{ maxWidth: 620, margin: "auto", paddingInline: 6, marginBottom: -8 }} className='w3-dark-grey w3-block w3-display-bottommiddle'>
+        <div id='chatInputWrapper' style={{ maxWidth: 620, margin: "auto", paddingInline: 6, marginBottom: 8 }} className='w3-dark-grey w3-block w3-display-bottommiddle- w3-bottom'>
           <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
             <div id='replyPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
               <FontAwesomeIcon icon={faReply} />
@@ -1321,10 +1325,10 @@ function chatBox() {
         </div>
       </div>
       {/* modal forum liste */}
-      <div id="modalChatListe" className="w3-modal w3-round black-opacity" style={{ position: 'absolute', height: 'calc(100vh - 32px)', marginTop: -64 }}>
+      <div id="modalChatListe" className="w3-modal w3-round black-opacity" style={{ position: 'absolute', height: 'calc(100vh - 32px)' }}>
         <div
           className="w3-modal-content w3-card w3-round w3-overflow w3-black"
-          style={{ maxWidth: 420, top: 32 }}
+          style={{ maxWidth: 420, top: 32, marginTop: -64 }}
         >
 
           <div style={{ marginTop: 16 }} className='w3-flex-row w3-flex-center-v'>
@@ -1346,7 +1350,7 @@ function chatBox() {
               style={{ display: 'none' }}
             />
           </div>
-          <div style={{ height: '60vh', paddingInline: 12, marginBottom: 16 }} className="w3-overflow-scroll w3-noscrollbar">
+          <div id='chatListeScrollable' style={{ height: '70vh', paddingInline: 12, marginBottom: 16 }} className="w3-overflow-scroll w3-noscrollbar">
             {
               chatListe
             }
