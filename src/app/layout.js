@@ -818,6 +818,16 @@ export default function RootLayout({ children }) {
       }
     }, 500);
 
+    document.addEventListener('wheel', function (e) {
+      if (e.ctrlKey) {
+        e.preventDefault(); // Prevent zooming with Ctrl+scroll
+      }
+    }, { passive: false });
+
+    document.addEventListener('gesturestart', function (e) {
+      e.preventDefault(); // Prevent pinch-to-zoom on mobile
+    });
+
     const firstPath = location.pathname.split('/')[1]
     if (document.getElementById(firstPath + 'Page')) {
       document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') != 'dark' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow')
@@ -868,7 +878,7 @@ export default function RootLayout({ children }) {
         settingMobile.className = settingMobile.className.replace('w3-show', '');
       }
     })
-    
+
     if (document.getElementById("appCore")) {
 
       // if (
@@ -1032,7 +1042,10 @@ export default function RootLayout({ children }) {
   }, []);
 
   return (
-    <html id="htmlCore" style={{ display: 'none' }} content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" className="w3-white" lang="en">
+    <html id="htmlCore" style={{ display: 'none' }} className="w3-white" lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+      </head>
       <body id="appCore" className={inter.className}>
 
         <div
@@ -1590,7 +1603,7 @@ export default function RootLayout({ children }) {
           </div>
           <div style={{ width: 36, height: 36 }}>
             <div
-                id="settingMobileWrapper"
+              id="settingMobileWrapper"
               className="w3-dropdown-click w3-hover-white"
             >
               <div

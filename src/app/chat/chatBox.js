@@ -392,9 +392,11 @@ function chatBox() {
                       className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div id={index + 'FlashInfo'} className='w3-text-grey w3-small' style={{ padding: 8, display: 'none' }}>Texte copié...</div>
                       <div className='w3-flex-row w3-flex-center-v'>
-                        <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
-                          <FontAwesomeIcon icon={faCopy} />
-                        </div>
+                        {bull.message.length > 0 &&
+                          <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
+                            <FontAwesomeIcon icon={faCopy} />
+                          </div>
+                        }
                         {(!bull.reaction && !replyChecker(index, chatArray) && (Date.now() - (bull.timestamp * 1) < 160000)) &&
                           <>
                             <div title='Supprimer' onClick={() => deletedBull(index)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
@@ -507,7 +509,7 @@ function chatBox() {
                       >
                         {reactExtractor(bull.reaction).map(react => (
                           <>
-                            {react.react}{react.nb > 1 ? <span className='w3-tiny w3-text-grey' style={{ marginLeft: -3, marginRight:3}}>{react.nb}</span> : ''}
+                            {react.react}{react.nb > 1 ? <span className='w3-tiny w3-text-grey' style={{ marginLeft: -3, marginRight: 3 }}>{react.nb}</span> : ''}
                           </>
                         ))}
                       </div>
@@ -660,7 +662,7 @@ function chatBox() {
                       >
                         {reactExtractor(bull.reaction).map(react => (
                           <>
-                            {react.react}{react.nb > 1 ? <span className='w3-tiny w3-text-grey' style={{ marginLeft: -3, marginRight:3}}>{react.nb}</span> : ''}
+                            {react.react}{react.nb > 1 ? <span className='w3-tiny w3-text-grey' style={{ marginLeft: -3, marginRight: 3 }}>{react.nb}</span> : ''}
                           </>
                         ))}
                       </div>
@@ -740,9 +742,11 @@ function chatBox() {
                       className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div id={index + 'FlashInfo'} className='w3-text-grey w3-small' style={{ padding: 8, display: 'none' }}>Texte copié...</div>
                       <div className='w3-flex-row w3-flex-center-v'>
-                        <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
-                          <FontAwesomeIcon icon={faCopy} />
-                        </div>
+                        {bull.message.length > 0 &&
+                          <div title='Copier' onClick={() => copyBullMessage(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
+                            <FontAwesomeIcon icon={faCopy} />
+                          </div>
+                        }
                         {(userInfo.key == bull.key && !bull.reaction && !replyChecker(index, chatArray) && (Date.now() - (bull.timestamp * 1) < 160000)) &&
                           <>
                             <div title='Supprimer' onClick={() => deletedBull(index)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
