@@ -1453,7 +1453,7 @@ function PostCreate(props) {
 
                     <div className="w3-flex-row w3-flex-center-v" style={{ paddingInline: 16, paddingBlock: 24 }}>
                         <input
-                            id="categoryTitle"
+                            id="categoryTitlePost"
                             onChange={(e) => categoryInfo.name = e.target.value}
                             className="w3-border-0 w3-input w3-border w3-round"
                             placeholder="Nom de la catégorie"
@@ -1517,7 +1517,7 @@ function PostCreate(props) {
 
                     <div style={{ paddingInline: 16, paddingBlock: 16 }}>
                         <input
-                            id="searchInput"
+                            id="searchInputPostList"
                             className="input w3-border-0 w3-input w3-border w3-round-xxlarge"
                             placeholder="Chercher un post"
                             type="text"
@@ -1559,7 +1559,7 @@ function PostCreate(props) {
                     <div id="newKeyArea" style={{ display: 'none', paddingBottom: 24 }}>
                         <div className="w3-flex-row w3-flex-center-v" style={{ paddingInline: 16, paddingBlock: 24 }}>
                             <input
-                                id="categoryTitle"
+                                id="categoryTitlePostKey"
                                 onChange={(e) => codeInfo.email = e.target.value}
                                 className="w3-border-0 w3-input w3-border w3-round"
                                 placeholder="E-mail ou clé de reference"
@@ -1579,7 +1579,7 @@ function PostCreate(props) {
                     <div id="keyListArea">
                         <div style={{ paddingInline: 16, paddingBlock: 16 }}>
                             <input
-                                id="searchInput"
+                                id="searchInputPostKey"
                                 className="input w3-border-0 w3-input w3-border w3-round-xxlarge"
                                 placeholder="Chercher un key"
                                 type="text"

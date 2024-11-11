@@ -755,7 +755,7 @@ function postuleRecrutement(props) {
 
           <div style={{ paddingInline: 16, paddingBlock: 16 }}>
             <input
-              id="searchInput"
+              id="searchInputRecrutement"
               className="input w3-border-0 w3-input w3-border w3-round-xxlarge"
               placeholder="Chercher un recrutement"
               type="text"

@@ -981,7 +981,7 @@ function Gestion() {
 
                     <div style={{ paddingInline: 16, paddingBlock: 16 }}>
                         <input
-                            id="searchInput"
+                            id="searchInputProductList"
                             className="input w3-border-0 w3-input w3-border w3-round-xxlarge"
                             placeholder="Chercher un product"
                             type="text"
@@ -1010,7 +1010,7 @@ function Gestion() {
 
                     <div className="w3-flex-row w3-flex-center-v" style={{ paddingInline: 16, paddingBlock: 24 }}>
                         <input
-                            id="categoryTitle"
+                            id="categoryTitleStore"
                             onChange={(e) => categoryInfo.name = e.target.value}
                             className="w3-border-0 w3-input w3-border w3-round"
                             placeholder="Nom de la catégorie"
@@ -1074,7 +1074,7 @@ function Gestion() {
                     <div id="newKeyArea" style={{ display: 'none', paddingBottom: 24 }}>
                         <div className="w3-flex-row w3-flex-center-v" style={{ paddingInline: 16, paddingBlock: 24 }}>
                             <input
-                                id="categoryTitle"
+                                id="categoryTitleStoreKey"
                                 onChange={(e) => codeInfo.email = e.target.value}
                                 className="w3-border-0 w3-input w3-border w3-round"
                                 placeholder="E-mail ou clé de reference"
@@ -1095,7 +1095,7 @@ function Gestion() {
                     <div id="keyListArea">
                         <div style={{ paddingInline: 16, paddingBlock: 16 }}>
                             <input
-                                id="searchInput"
+                                id="searchInputProductKey"
                                 className="input w3-border-0 w3-input w3-border w3-round-xxlarge"
                                 placeholder="Chercher un key"
                                 type="text"

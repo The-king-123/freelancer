@@ -540,7 +540,7 @@ function createForum(props) {
 
           <div style={{ paddingInline: 16, paddingBlock: 16 }}>
             <input
-              id="searchInput"
+              id="searchInputForum"
               className="input w3-border-0 w3-input w3-border w3-round-xxlarge"
               placeholder="Chercher un forum"
               type="text"
