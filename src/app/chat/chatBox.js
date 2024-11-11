@@ -173,7 +173,10 @@ function chatBox() {
             attachementInfo.type = ''
             attachementInfo.link = ''
             attachementInfo.media = null
+
+            document.getElementById('uploadMediaSpinner').style.display = 'none'
             cancelEdit();
+            cancelMedia()
           })
           .catch((error) => {
             console.error('Error writing data:', error);
@@ -1136,7 +1139,6 @@ function chatBox() {
               attachementInfo.link = res.data.medianame;
               chatInfo.attachement = attachementInfo;
               document.getElementById('previewImageName').innerText = "En cours d'envoi..."
-              document.getElementById('uploadMediaSpinner').style.display = 'none'
               sendMessage();
             } else {
               userInfo.sendHolder = false;
@@ -1266,7 +1268,7 @@ function chatBox() {
               if (event.shiftKey) {
                 return;
               } else {
-                sendMessage()
+                attachementInfo.media ? uploadMedia() : sendMessage()
               }
             }
           });
