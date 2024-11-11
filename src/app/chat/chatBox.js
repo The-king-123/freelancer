@@ -478,14 +478,14 @@ function chatBox() {
                       <Image
                         loading="lazy"
                         unoptimized
-                        width={200}
+                        width={240}
                         height={200}
                         src={
                           source + "/images.php?w=320&h=320&zlonk=9733&zlink=" + bull.attachement.link
                         }
                         className="w3-round-large w3-right post-image"
                         alt={bull.attachement.name}
-                        style={{ objectFit: "cover", objectPosition: "center", minHeight: 180, minWidth: 180, maxWidth:200 }}
+                        style={{ objectFit: "cover", objectPosition: "center", minWidth: 240, maxWidth:240 }}
                       />
                     }
                   </div>
@@ -631,14 +631,14 @@ function chatBox() {
                       <Image
                         loading="lazy"
                         unoptimized
-                        width={200}
+                        width={240}
                         height={200}
                         src={
                           source + "/images.php?w=320&h=320&zlonk=9733&zlink=" + bull.attachement.link
                         }
                         className="w3-round-large post-image w3-left"
                         alt={bull.attachement.name}
-                        style={{ objectFit: "cover", objectPosition: "center", minHeight: 180, minWidth: 180, maxWidth:200 }}
+                        style={{ objectFit: "cover", objectPosition: "center", minHeight: 180, minWidth: 240, maxWidth:240 }}
                       />
                     }
                   </div>
