@@ -1093,14 +1093,14 @@ function chatBox() {
               document.getElementById('uploadMediaSpinner').style.display = 'none'
               sendMessage();
             } else {
-              userInfo.sendHolder = true;
+              userInfo.sendHolder = false;
               return;
             }
           } else {
             if (document.getElementById('modalLogin')) {
               document.getElementById('modalLogin').style.display = 'block'
             }
-            userInfo.sendHolder = true;
+            userInfo.sendHolder = false;
             return;
           }
 
