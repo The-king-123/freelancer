@@ -1085,10 +1085,11 @@ function chatBox() {
         .then((res) => {
           if (res.data.logedin) {
             if (res.data.stored) {
+              userInfo.sendHolder = false;
               attachementInfo.media = null;
               attachementInfo.name = res.data.medianame;
               chatInfo.attachement = attachementInfo;
-              document.getElementById('previewImageName').innerText = "En cours d'envoi'..."
+              document.getElementById('previewImageName').innerText = "En cours d'envoi..."
               document.getElementById('uploadMediaSpinner').style.display = 'none'
               sendMessage();
             } else {
