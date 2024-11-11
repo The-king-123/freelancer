@@ -485,7 +485,7 @@ function chatBox() {
                         }
                         className="w3-round-large w3-right post-image"
                         alt={bull.attachement.name}
-                        style={{ objectFit: "cover", objectPosition: "center", minHeight: 48, minWidth: 48 }}
+                        style={{ objectFit: "cover", objectPosition: "center", minHeight: 180, minWidth: 180, maxWidth:200 }}
                       />
                     }
                   </div>
@@ -638,7 +638,7 @@ function chatBox() {
                         }
                         className="w3-round-large post-image w3-left"
                         alt={bull.attachement.name}
-                        style={{ objectFit: "cover", objectPosition: "center", minHeight: 48, minWidth: 48 }}
+                        style={{ objectFit: "cover", objectPosition: "center", minHeight: 180, minWidth: 180, maxWidth:200 }}
                       />
                     }
                   </div>
