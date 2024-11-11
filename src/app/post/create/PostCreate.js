@@ -470,13 +470,13 @@ function PostCreate(props) {
 
     const closeModalCategory = () => {
         singleCategoryInfo.name = ''
-        document.getElementById("categoryTitle").value = "";
+        document.getElementById("categoryTitlePost").value = "";
         document.getElementById("modalCategory").style.display = "none";
     };
 
     const openModalCategory = () => {
         singleCategoryInfo.name = ''
-        document.getElementById("categoryTitle").value = "";
+        document.getElementById("categoryTitlePost").value = "";
         document.getElementById("modalCategory").style.display = "block";
     };
 
@@ -512,7 +512,7 @@ function PostCreate(props) {
                 </div>
             </div>
         ));
-        document.getElementById("categoryTitle").value = "";
+        document.getElementById("categoryTitlePost").value = "";
         setcategoryListe(glitchCategory);
     };
 

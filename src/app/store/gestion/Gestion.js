@@ -71,13 +71,13 @@ function Gestion() {
 
     const openModalCategory = () => {
         singleCategoryInfo.name = ''
-        document.getElementById("categoryTitle").value = "";
+        document.getElementById("categoryTitleStore").value = "";
         document.getElementById("modalCategory").style.display = "block";
     };
 
     const closeModalCategory = () => {
         singleCategoryInfo.name = ''
-        document.getElementById("categoryTitle").value = "";
+        document.getElementById("categoryTitleStore").value = "";
         document.getElementById("modalCategory").style.display = "none";
     };
 
@@ -310,7 +310,7 @@ function Gestion() {
                 </div>
             </div>
         ));
-        document.getElementById("categoryTitle").value = "";
+        document.getElementById("categoryTitleStore").value = "";
         setcategoryListe(glitchCategory);
     };
 
