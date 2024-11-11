@@ -284,3 +284,7 @@ input[type="checkbox"] {
 input, textarea {
   touch-action: manipulation; /* Prevents double-tap to zoom */
 }
+
+.chat-image {
+  height: "auto";
+}

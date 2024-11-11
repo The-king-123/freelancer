@@ -343,13 +343,13 @@ function chatBox() {
                         style={{
                           padding: 20,
                           width: 260,
-                          marginLeft: (bull.responseTo
+                          marginLeft: (bull.attachement ? 0 : (bull.responseTo
                             ? (mostLongTextLine(chatBrut[bull.responseTo].message) > mostLongTextLine(bull.message)
                               ? (mostLongTextLine(chatBrut[bull.responseTo].message) > 26
                                 ? 0
                                 : -180 + mostLongTextLine(chatBrut[bull.responseTo].message) * 8)
                               : mostLongTextLine(bull.message) > 26 ? 0 : -180 + (mostLongTextLine(bull.message) * 8))
-                            : mostLongTextLine(bull.message) > 26 ? 0 : -180 + (mostLongTextLine(bull.message) * 8))
+                            : mostLongTextLine(bull.message) > 26 ? 0 : -180 + (mostLongTextLine(bull.message) * 8)))
                         }}
 
                         className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
@@ -381,13 +381,13 @@ function chatBox() {
                     <FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} />
                     <div style={{
                       maxWidth: 80,
-                      marginLeft: (bull.responseTo
+                      marginLeft:(bull.attachement ? 0 : (bull.responseTo
                         ? (mostLongTextLine(chatBrut[bull.responseTo].message) > mostLongTextLine(bull.message)
                           ? (mostLongTextLine(chatBrut[bull.responseTo].message) > 12
                             ? 0
                             : -120 + mostLongTextLine(chatBrut[bull.responseTo].message) * 8)
                           : mostLongTextLine(bull.message) > 12 ? 0 : -120 + (mostLongTextLine(bull.message) * 8))
-                        : mostLongTextLine(bull.message) > 12 ? 0 : -120 + (mostLongTextLine(bull.message) * 8))
+                        : mostLongTextLine(bull.message) > 12 ? 0 : -120 + (mostLongTextLine(bull.message) * 8)))
                     }}
                       className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div id={index + 'FlashInfo'} className='w3-text-grey w3-small' style={{ padding: 8, display: 'none' }}>Texte copié...</div>
@@ -402,9 +402,11 @@ function chatBox() {
                             <div title='Supprimer' onClick={() => deletedBull(index)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                               <FontAwesomeIcon icon={faTrash} />
                             </div>
-                            <div title='Modifier' onClick={() => editBull(index, bull)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
-                              <FontAwesomeIcon icon={faEdit} />
-                            </div>
+                            {bull.message.length > 0 &&
+                              <div title='Modifier' onClick={() => editBull(index, bull)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
+                                <FontAwesomeIcon icon={faEdit} />
+                              </div>
+                            }
                           </>
                         }
                         <div title='Transférer' onClick={() => transferBull(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
@@ -483,9 +485,9 @@ function chatBox() {
                         src={
                           source + "/images.php?w=320&h=320&zlonk=9733&zlink=" + bull.attachement.link
                         }
-                        className="w3-round-large w3-right post-image"
+                        className="w3-round-large w3-right chat-image"
                         alt={bull.attachement.name}
-                        style={{ objectFit: "cover", objectPosition: "center", minWidth: 180, maxWidth:240 }}
+                        style={{ objectFit: "cover", objectPosition: "center", minWidth: 180, maxWidth: 240 }}
                       />
                     }
                   </div>
@@ -509,7 +511,7 @@ function chatBox() {
                       >
                         {reactExtractor(bull.reaction).map(react => (
                           <>
-                            {react.react}{react.nb > 1 ? <span className='w3-tiny w3-text-grey' style={{ marginLeft: -2, marginRight: 3 }}>{react.nb}</span> : ''}
+                            {react.react}{react.nb > 1 ? <span className='w3-tiny w3-text-grey' style={{ marginLeft: -1, marginRight: 3 }}>{react.nb}</span> : ''}
                           </>
                         ))}
                       </div>
@@ -636,9 +638,9 @@ function chatBox() {
                         src={
                           source + "/images.php?w=320&h=320&zlonk=9733&zlink=" + bull.attachement.link
                         }
-                        className="w3-round-large post-image w3-left"
+                        className="w3-round-large chat-image w3-left"
                         alt={bull.attachement.name}
-                        style={{ objectFit: "cover", objectPosition: "center", minWidth: 180, maxWidth:240 }}
+                        style={{ objectFit: "cover", objectPosition: "center", minWidth: 180, maxWidth: 240 }}
                       />
                     }
                   </div>
@@ -662,7 +664,7 @@ function chatBox() {
                       >
                         {reactExtractor(bull.reaction).map(react => (
                           <>
-                            {react.react}{react.nb > 1 ? <span className='w3-tiny w3-text-grey' style={{ marginLeft: -2, marginRight: 3 }}>{react.nb}</span> : ''}
+                            {react.react}{react.nb > 1 ? <span className='w3-tiny w3-text-grey' style={{ marginLeft: -1, marginRight: 3 }}>{react.nb}</span> : ''}
                           </>
                         ))}
                       </div>
@@ -694,13 +696,13 @@ function chatBox() {
                     <div style={{
                       padding: 20,
                       width: 260,
-                      marginLeft: (bull.responseTo
+                      marginLeft:(bull.attachement ? -240 : (bull.responseTo
                         ? (mostLongTextLine(chatBrut[bull.responseTo].message) > mostLongTextLine(bull.message)
                           ? (mostLongTextLine(chatBrut[bull.responseTo].message) > 26
                             ? -240
                             : - (mostLongTextLine(chatBrut[bull.responseTo].message) * 8))
                           : mostLongTextLine(bull.message) > 26 ? -240 : - (mostLongTextLine(bull.message) * 8))
-                        : mostLongTextLine(bull.message) > 26 ? -240 : - (mostLongTextLine(bull.message) * 8))
+                        : mostLongTextLine(bull.message) > 26 ? -240 : - (mostLongTextLine(bull.message) * 8)))
                     }}
                       className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div className='w3-flex-row w3-flex-center-v'>
@@ -730,14 +732,14 @@ function chatBox() {
                     <FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} />
                     <div style={{
                       maxWidth: 80,
-                      marginLeft: (bull.responseTo
+                      marginLeft: (bull.attachement ? -120 : (bull.responseTo
                         ? (mostLongTextLine(chatBrut[bull.responseTo].message) > mostLongTextLine(bull.message)
                           ? (mostLongTextLine(chatBrut[bull.responseTo].message) > 9
                             ? -140
                             : -60 + mostLongTextLine(chatBrut[bull.responseTo].message) * 8)
                           : mostLongTextLine(bull.message) > 9 ? -140 : - 60 - (mostLongTextLine(bull.message) * 8))
                         : mostLongTextLine(bull.message) > 9 ? -140 : - 60
-                          - (mostLongTextLine(bull.message) * 8))
+                          - (mostLongTextLine(bull.message) * 8)))
                     }}
                       className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div id={index + 'FlashInfo'} className='w3-text-grey w3-small' style={{ padding: 8, display: 'none' }}>Texte copié...</div>
@@ -752,9 +754,11 @@ function chatBox() {
                             <div title='Supprimer' onClick={() => deletedBull(index)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                               <FontAwesomeIcon icon={faTrash} />
                             </div>
-                            <div title='Modifier' onClick={() => editBull(index, bull)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
-                              <FontAwesomeIcon icon={faEdit} />
-                            </div>
+                            {bull.message.length > 0 &&
+                              <div title='Modifier' onClick={() => editBull(index, bull)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
+                                <FontAwesomeIcon icon={faEdit} />
+                              </div>
+                            }
                           </>
                         }
                         <div title='Transférer' onClick={() => transferBull(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
@@ -1330,7 +1334,7 @@ function chatBox() {
             <div style={{ height: 96 }}></div>
           </div>
         </div>
-        <div id='chatInputWrapper' style={{ maxWidth: 620, marginLeft:-8, paddingInline: 6, marginBottom: 8 }} className='w3-dark-grey w3-block w3-display-bottommiddle- w3-bottom'>
+        <div id='chatInputWrapper' style={{ maxWidth: 620, marginLeft: window.innerWidth<620 ? -8 : 0, paddingInline: 6, marginBottom: 8 }} className='w3-dark-grey w3-block w3-display-bottommiddle- w3-bottom'>
           <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
             <div id='replyPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
               <FontAwesomeIcon icon={faReply} />
