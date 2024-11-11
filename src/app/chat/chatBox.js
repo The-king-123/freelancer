@@ -478,7 +478,7 @@ function chatBox() {
                         width={200}
                         height={200}
                         src={
-                          source + "/images.php?w=320&h=320&zlonk=2733&zlink=" + user.key
+                          source + "/images.php?w=320&h=320&zlonk=2733&zlink=" + bull.attachement.link
                         }
                         className="w3-round-large  post-image"
                         alt={bull.attachement.name}
