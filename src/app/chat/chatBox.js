@@ -384,7 +384,7 @@ function chatBox() {
                     <FontAwesomeIcon className='w3-large w3-text-grey' icon={faEllipsisH} />
                     <div style={{
                       maxWidth: 80,
-                      marginLeft:(bull.attachement ? 0 : (bull.responseTo
+                      marginLeft: (bull.attachement ? 0 : (bull.responseTo
                         ? (mostLongTextLine(chatBrut[bull.responseTo].message) > mostLongTextLine(bull.message)
                           ? (mostLongTextLine(chatBrut[bull.responseTo].message) > 12
                             ? 0
@@ -438,19 +438,36 @@ function chatBox() {
                         inline: 'nearest'
                       }
                     ); toggleBlink(bull.responseTo)
-                  }} className='w3-container' style={{ padding: 0 }}>
-                    <div
-                      className={(themeLight ? "w3-opacity" : "w3-opacity-max") + " w3-yellow chatbull w3-round-xlarge w3-right w3-nowrap w3-overflow"}
-                      style={{
-                        paddingInline: 16,
-                        paddingBlock: 10,
-                        borderTopRightRadius: 4,
-                        borderBottomRightRadius: 4,
-                        fontSize: 14,
-                      }}
-                    >
-                      {chatBrut[bull.responseTo].message}
-                    </div>
+                  }} className='w3-container' style={{ position: 'relative', padding: 0, zIndex:0 }}>
+                    {!chatBrut[bull.responseTo].attachement &&
+                      <div
+                        className={(themeLight ? "w3-opacity" : "w3-opacity-max") + " w3-yellow chatbull w3-round-xlarge w3-right w3-nowrap w3-overflow"}
+                        style={{
+                          paddingInline: 16,
+                          paddingBlock: 10,
+                          borderTopRightRadius: 4,
+                          borderBottomRightRadius: 4,
+                          fontSize: 14,
+                        }}
+                      >
+                        {chatBrut[bull.responseTo].message}
+                      </div>
+                    }
+                    {chatBrut[bull.responseTo].attachement &&
+                      <Image
+                        loading="lazy"
+                        unoptimized
+                        layout="intrinsic"
+                        width={80}
+                        height={80}
+                        src={
+                          source + "/images.php?w=80&h=80&zlonk=9733&zlink=" + chatBrut[bull.responseTo].attachement.link
+                        }
+                        className={(themeLight ? "w3-opacity" : "w3-opacity-max") + " w3-round-large w3-right chat-image"}
+                        alt={chatBrut[bull.responseTo].attachement.name}
+                        style={{ objectFit: "cover", objectPosition: "center", minWidth: 80, maxWidth: 80 }}
+                      />
+                    }
                   </div>
                 }
 
@@ -458,9 +475,10 @@ function chatBox() {
                 {bull.message.length > 0 &&
                   <div
                     id={index}
-                    className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap"
+                    className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap w3-opacity-off"
                     style={{
                       paddingInline: 16,
+                      position: 'relative',
                       paddingBlock: 10,
                       borderTopRightRadius: 4,
                       borderBottomRightRadius:
@@ -589,19 +607,36 @@ function chatBox() {
                         inline: 'nearest'
                       }
                     ); toggleBlink(bull.responseTo)
-                  }} className='w3-container' style={{ padding: 0 }}>
-                    <div
-                      className={(themeLight ? "w3-light-grey w3-opacity" : "w3-black w3-opacity-max") + " chatbull w3-round-xlarge w3-left w3-nowrap w3-overflow"}
-                      style={{
-                        paddingInline: 16,
-                        paddingBlock: 10,
-                        borderTopLeftRadius: 4,
-                        borderBottomLeftRadius: 4,
-                        fontSize: 14,
-                      }}
-                    >
-                      {chatBrut[bull.responseTo].message}
-                    </div>
+                  }} className='w3-container' style={{ padding: 0, zIndex: 0, position: 'relative' }}>
+                    {!chatBrut[bull.responseTo].attachement &&
+                      <div
+                        className={(themeLight ? "w3-light-grey w3-opacity" : "w3-black w3-opacity-max") + " chatbull w3-round-xlarge w3-left w3-nowrap w3-overflow"}
+                        style={{
+                          paddingInline: 16,
+                          paddingBlock: 10,
+                          borderTopLeftRadius: 4,
+                          borderBottomLeftRadius: 4,
+                          fontSize: 14,
+                        }}
+                      >
+                        {chatBrut[bull.responseTo].message}
+                      </div>
+                    }
+                    {chatBrut[bull.responseTo].attachement &&
+                      <Image
+                        loading="lazy"
+                        unoptimized
+                        layout="intrinsic"
+                        width={80}
+                        height={80}
+                        src={
+                          source + "/images.php?w=80&h=80&zlonk=9733&zlink=" + chatBrut[bull.responseTo].attachement.link
+                        }
+                        className={(themeLight ? "w3-opacity" : "w3-opacity-max") + " w3-round-large w3-left chat-image"}
+                        alt={chatBrut[bull.responseTo].attachement.name}
+                        style={{ objectFit: "cover", objectPosition: "center", minWidth: 80, maxWidth: 80 }}
+                      />
+                    }
                   </div>
                 }
 
@@ -609,9 +644,10 @@ function chatBox() {
                 {bull.message.length > 0 &&
                   <div
                     id={index}
-                    className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-left w3-nowrap"}
+                    className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-opacity-off w3-round-xlarge w3-left w3-nowrap"}
                     style={{
                       paddingInline: 16,
+                      position: 'relative',
                       paddingBlock: 10,
                       borderTopLeftRadius: 4,
                       borderBottomLeftRadius:
@@ -701,7 +737,7 @@ function chatBox() {
                     <div style={{
                       padding: 20,
                       width: 260,
-                      marginLeft:(bull.attachement ? -240 : (bull.responseTo
+                      marginLeft: (bull.attachement ? -240 : (bull.responseTo
                         ? (mostLongTextLine(chatBrut[bull.responseTo].message) > mostLongTextLine(bull.message)
                           ? (mostLongTextLine(chatBrut[bull.responseTo].message) > 26
                             ? -240
@@ -1003,8 +1039,15 @@ function chatBox() {
 
   const reply = (idBull, bull) => {
     chatInfo.responseTo = idBull
-    document.getElementById('replyPanelText').innerText = bull.message.replace(/\n/g, " ")
-    document.getElementById('replyPanel').style.display = 'flex'
+    if (bull.attachement) {
+      document.getElementById('replyPanelImage').style.backgroundImage = `url(${source}/images.php?w=320&h=320&zlonk=9733&zlink=${bull.attachement.link})`;
+      document.getElementById('replyPanelText').innerText = bull.message.replace(/\n/g, " ")
+      document.getElementById('replyPanel').style.display = 'flex'
+    } else {
+      document.getElementById('replyPanelText').innerText = bull.message.replace(/\n/g, " ")
+      document.getElementById('replyPanel').style.display = 'flex'
+
+    }
   }
 
   const reloadChatsList = (data, type) => {
@@ -1325,7 +1368,7 @@ function chatBox() {
     };
 
     document.getElementById('imageSelector').addEventListener('click', () => imageSelector.click())
-    if (window.innerWidth <620) {
+    if (window.innerWidth < 620) {
       document.getElementById('chatInputWrapper').style.marginLeft = '-8px'
     }
 
@@ -1345,6 +1388,8 @@ function chatBox() {
           <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
             <div id='replyPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
               <FontAwesomeIcon icon={faReply} />
+              <div id='replyPanelImage' className='w3-round w3-dark-grey' style={{ width: 42, height: 42, minWidth: 42, minHeight: 42, backgroundPosition: 'center', backgroundSize: 'cover', marginLeft: 8 }}>
+              </div>
               <div id='replyPanelText' className='w3-margin-left w3-margin-right w3-nowrap w3-overflow' style={{ maxWidth: 260 }}>some text here to reply sdfb sldkhflskdhklsjdhjh sdh </div>
               <FontAwesomeIcon onClick={cancelReply} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
             </div>
