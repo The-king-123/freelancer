@@ -431,13 +431,14 @@ function chatBox() {
                 {/* Reply bull here */}
                 {bull.responseTo &&
                   <div onClick={() => {
-                    document.getElementById(bull.responseTo).scrollIntoView(
+                    document.getElementById(bull.responseTo + (chatBrut[bull.responseTo].attachement ? 'Image' : '')).scrollIntoView(
                       {
                         behavior: 'smooth',
                         block: 'center',
                         inline: 'nearest'
                       }
-                    ); toggleBlink(bull.responseTo)
+                    ); 
+                    toggleBlink(bull.responseTo)
                   }} className='w3-container' style={{ position: 'relative', padding: 0, zIndex:0 }}>
                     {!chatBrut[bull.responseTo].attachement &&
                       <div
@@ -496,7 +497,7 @@ function chatBox() {
                 }
                 {/* Bull media */}
                 {bull.attachement &&
-                  <div className='w3-container' style={{ padding: 0 }}>
+                  <div id={index+'Image'} className='w3-container' style={{ padding: 0 }}>
                     {bull.attachement.type == 'image' &&
                       <Image
                         loading="lazy"
@@ -600,7 +601,7 @@ function chatBox() {
                 {/* Reply bull here */}
                 {bull.responseTo &&
                   <div onClick={() => {
-                    document.getElementById(bull.responseTo).scrollIntoView(
+                    document.getElementById(bull.responseTo + (chatBrut[bull.responseTo].attachement ? 'Image' : '')).scrollIntoView(
                       {
                         behavior: 'smooth',
                         block: 'center',
@@ -668,7 +669,7 @@ function chatBox() {
 
                 {/* Bull media */}
                 {bull.attachement &&
-                  <div className='w3-container' style={{ padding: 0 }}>
+                  <div id={index+'Image'} className='w3-container' style={{ padding: 0 }}>
                     {bull.attachement.type == 'image' &&
                       <Image
                         loading="lazy"
@@ -1042,9 +1043,11 @@ function chatBox() {
     if (bull.attachement) {
       document.getElementById('replyPanelImage').style.backgroundImage = `url(${source}/images.php?w=320&h=320&zlonk=9733&zlink=${bull.attachement.link})`;
       document.getElementById('replyPanelText').innerText = bull.message.replace(/\n/g, " ")
+      document.getElementById('replyPanelImage').style.display = 'inline-block'
       document.getElementById('replyPanel').style.display = 'flex'
     } else {
       document.getElementById('replyPanelText').innerText = bull.message.replace(/\n/g, " ")
+      document.getElementById('replyPanelImage').style.display = 'none'
       document.getElementById('replyPanel').style.display = 'flex'
 
     }
@@ -1388,7 +1391,7 @@ function chatBox() {
           <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
             <div id='replyPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
               <FontAwesomeIcon icon={faReply} />
-              <div id='replyPanelImage' className='w3-round w3-dark-grey' style={{ width: 42, height: 42, minWidth: 42, minHeight: 42, backgroundPosition: 'center', backgroundSize: 'cover', marginLeft: 8 }}>
+              <div id='replyPanelImage' className='w3-round w3-dark-grey' style={{ width: 42, height: 42, display:'none', minWidth: 42, minHeight: 42, backgroundPosition: 'center', backgroundSize: 'cover', marginLeft: 8 }}>
               </div>
               <div id='replyPanelText' className='w3-margin-left w3-margin-right w3-nowrap w3-overflow' style={{ maxWidth: 260 }}>some text here to reply sdfb sldkhflskdhklsjdhjh sdh </div>
               <FontAwesomeIcon onClick={cancelReply} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
