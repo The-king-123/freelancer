@@ -509,7 +509,7 @@ function chatBox() {
                       >
                         {reactExtractor(bull.reaction).map(react => (
                           <>
-                            {react.react}{react.nb > 1 ? <span className='w3-tiny w3-text-grey' style={{ marginLeft: -3, marginRight: 3 }}>{react.nb}</span> : ''}
+                            {react.react}{react.nb > 1 ? <span className='w3-tiny w3-text-grey' style={{ marginLeft: -2, marginRight: 3 }}>{react.nb}</span> : ''}
                           </>
                         ))}
                       </div>
@@ -662,7 +662,7 @@ function chatBox() {
                       >
                         {reactExtractor(bull.reaction).map(react => (
                           <>
-                            {react.react}{react.nb > 1 ? <span className='w3-tiny w3-text-grey' style={{ marginLeft: -3, marginRight: 3 }}>{react.nb}</span> : ''}
+                            {react.react}{react.nb > 1 ? <span className='w3-tiny w3-text-grey' style={{ marginLeft: -2, marginRight: 3 }}>{react.nb}</span> : ''}
                           </>
                         ))}
                       </div>
