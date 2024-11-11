@@ -448,26 +448,27 @@ function chatBox() {
                 }
 
                 {/* Bull core */}
-                <div
-                  id={index}
-                  className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap"
-                  style={{
-                    paddingInline: 16,
-                    paddingBlock: 10,
-                    borderTopRightRadius: 4,
-                    borderBottomRightRadius:
-                      key < chatArray.length - 1
-                        ? (chatArray[key + 1][1].key == userInfo.key ? 4 : 16)
-                        : 16,
-                    whiteSpace: "normal",
-                    marginTop: key > 0
-                      ? (chatArray[key - 1][1].key == userInfo.key ? (bull.responseTo ? -8 : 0) : (bull.responseTo ? -8 : 0))
-                      : 0,
-                  }}
-                >
-                  {/\n.+/.test(bull.message) ? parse(bull.message.replace(/\n/g, "<br/>")) : bull.message}
-                </div>
-
+                {bull.message.length > 0 &&
+                  <div
+                    id={index}
+                    className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap"
+                    style={{
+                      paddingInline: 16,
+                      paddingBlock: 10,
+                      borderTopRightRadius: 4,
+                      borderBottomRightRadius:
+                        key < chatArray.length - 1
+                          ? (chatArray[key + 1][1].key == userInfo.key ? 4 : 16)
+                          : 16,
+                      whiteSpace: "normal",
+                      marginTop: key > 0
+                        ? (chatArray[key - 1][1].key == userInfo.key ? (bull.responseTo ? -8 : 0) : (bull.responseTo ? -8 : 0))
+                        : 0,
+                    }}
+                  >
+                    {/\n.+/.test(bull.message) ? parse(bull.message.replace(/\n/g, "<br/>")) : bull.message}
+                  </div>
+                }
                 {/* Bull media */}
                 {bull.attachement &&
                   <>
@@ -593,27 +594,49 @@ function chatBox() {
                 }
 
                 {/* Bull core here */}
-                <div
-                  id={index}
-                  className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-left w3-nowrap"}
-                  style={{
-                    paddingInline: 16,
-                    paddingBlock: 10,
-                    borderTopLeftRadius: 4,
-                    borderBottomLeftRadius:
-                      key < chatArray.length - 1
-                        ? (chatArray[key + 1][1].key != userInfo.key ? 4 : 16)
-                        : 16,
-                    whiteSpace: "normal",
-                    marginTop:
-                      key > 0
-                        ? (chatArray[key - 1][1].key != userInfo.key ? (bull.responseTo ? -8 : 0) : (bull.responseTo ? -8 : -4))
-                        : -4,
-                  }}
-                >
-                  {/\n.+/.test(bull.message) ? parse(bull.message.replace(/\n/g, "<br/>")) : bull.message}
+                {bull.message.length > 0 &&
+                  <div
+                    id={index}
+                    className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-round-xlarge w3-left w3-nowrap"}
+                    style={{
+                      paddingInline: 16,
+                      paddingBlock: 10,
+                      borderTopLeftRadius: 4,
+                      borderBottomLeftRadius:
+                        key < chatArray.length - 1
+                          ? (chatArray[key + 1][1].key != userInfo.key ? 4 : 16)
+                          : 16,
+                      whiteSpace: "normal",
+                      marginTop:
+                        key > 0
+                          ? (chatArray[key - 1][1].key != userInfo.key ? (bull.responseTo ? -8 : 0) : (bull.responseTo ? -8 : -4))
+                          : -4,
+                    }}
+                  >
+                    {/\n.+/.test(bull.message) ? parse(bull.message.replace(/\n/g, "<br/>")) : bull.message}
 
-                </div>
+                  </div>
+                }
+
+                {/* Bull media */}
+                {bull.attachement &&
+                  <>
+                    {bull.attachement.type == 'image' &&
+                      <Image
+                        loading="lazy"
+                        unoptimized
+                        width={200}
+                        height={200}
+                        src={
+                          source + "/images.php?w=320&h=320&zlonk=9733&zlink=" + bull.attachement.link
+                        }
+                        className="w3-round-large  post-image"
+                        alt={bull.attachement.name}
+                        style={{ objectFit: "cover", objectPosition: "center", minHeight: 48, minWidth: 48 }}
+                      />
+                    }
+                  </>
+                }
 
                 {/* Bull reaction */}
                 {bull.reaction &&
@@ -1118,7 +1141,7 @@ function chatBox() {
   }
 
   useEffect(() => {
-    
+
 
     if (localStorage.getItem('theme') != 'dark') {
 
