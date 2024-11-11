@@ -438,7 +438,7 @@ function chatBox() {
                         inline: 'nearest'
                       }
                     ); 
-                    toggleBlink(bull.responseTo)
+                    toggleBlink(bull.responseTo + (chatBrut[bull.responseTo].attachement ? 'Image' : ''))
                   }} className='w3-container' style={{ position: 'relative', padding: 0, zIndex:0 }}>
                     {!chatBrut[bull.responseTo].attachement &&
                       <div
@@ -607,7 +607,7 @@ function chatBox() {
                         block: 'center',
                         inline: 'nearest'
                       }
-                    ); toggleBlink(bull.responseTo)
+                    ); toggleBlink(bull.responseTo + (chatBrut[bull.responseTo].attachement ? 'Image' : ''))
                   }} className='w3-container' style={{ padding: 0, zIndex: 0, position: 'relative' }}>
                     {!chatBrut[bull.responseTo].attachement &&
                       <div
