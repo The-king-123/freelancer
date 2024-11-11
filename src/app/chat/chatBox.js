@@ -480,6 +480,7 @@ function chatBox() {
                       <Image
                         loading="lazy"
                         unoptimized
+                        layout="intrinsic"
                         width={240}
                         height={200}
                         src={
@@ -633,6 +634,7 @@ function chatBox() {
                       <Image
                         loading="lazy"
                         unoptimized
+                        layout="intrinsic"
                         width={240}
                         height={200}
                         src={
