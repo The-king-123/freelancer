@@ -505,7 +505,11 @@ function chatBox() {
                           marginInline: 8
                         }}
                       >
-                        {reactExtractor(bull.reaction).map(react => react.react)}
+                        {reactExtractor(bull.reaction).map(react => (
+                          <>
+                            {react.react}{react.nb > 1 ? <span className='w3-tiny w3-text-grey' style={{ marginLeft: -3, marginRight:3}}>{react.nb}</span> : ''}
+                          </>
+                        ))}
                       </div>
                       <div style={{
                         maxWidth: 80,
@@ -514,10 +518,10 @@ function chatBox() {
                         className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                         <div className='w3-flex-column'>
                           {
-                            reactExtractor(bull.reaction).map(react => (
-                              <div onClick={() => react.key == userInfo.key ? removeMyReaction(index) : false} className='w3-button w3-flex-row w3-flex-center' style={{ paddingInline: 8 }}>
-                                {react.react}
-                                <div className='w3-flex-1 w3-right-align'>{react.key == userInfo.key ? 'Vous' : ''}</div>
+                            Object.entries(bull.reaction).sort(([, a], [, b]) => a.timestamp - b.timestamp).map(([idx, react]) => (
+                              <div onClick={() => idx == userInfo.key ? removeMyReaction(index) : false} className='w3-button w3-flex-row w3-flex-center' style={{ paddingInline: 8 }}>
+                                {reactionListe[react.reaction]}
+                                <div className='w3-flex-1 w3-right-align'>{idx == userInfo.key ? 'Vous' : ''}</div>
                               </div>
                             ))
                           }
@@ -654,7 +658,11 @@ function chatBox() {
                           marginInline: 8
                         }}
                       >
-                        {reactExtractor(bull.reaction).map(react => react.react)}
+                        {reactExtractor(bull.reaction).map(react => (
+                          <>
+                            {react.react}{react.nb > 1 ? <span className='w3-tiny w3-text-grey' style={{ marginLeft: -3, marginRight:3}}>{react.nb}</span> : ''}
+                          </>
+                        ))}
                       </div>
                       <div style={{
                         maxWidth: 80,
@@ -663,10 +671,10 @@ function chatBox() {
                         className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                         <div className='w3-flex-column'>
                           {
-                            reactExtractor(bull.reaction).map(react => (
-                              <div onClick={() => react.key == userInfo.key ? removeMyReaction(index) : false} className='w3-button w3-flex-row w3-flex-center' style={{ paddingInline: 8 }}>
-                                {react.react}
-                                <div className='w3-flex-1 w3-right-align'>{react.key == userInfo.key ? 'Vous' : ''}</div>
+                            Object.entries(bull.reaction).sort(([, a], [, b]) => a.timestamp - b.timestamp).map(([idx, react]) => (
+                              <div onClick={() => idx == userInfo.key ? removeMyReaction(index) : false} className='w3-button w3-flex-row w3-flex-center' style={{ paddingInline: 8 }}>
+                                {reactionListe[react.reaction]}
+                                <div className='w3-flex-1 w3-right-align'>{idx == userInfo.key ? 'Vous' : ''}</div>
                               </div>
                             ))
                           }
@@ -834,17 +842,22 @@ function chatBox() {
     const reactArray = []
     Object.entries(reactions).sort(([, a], [, b]) => a.timestamp - b.timestamp).map(([index, react]) => {
       var counter = 0
+      var idx
       for (let i = 0; i < reactArray.length; i++) {
         const element = reactArray[i].react;
         if (element == reactionListe[react.reaction]) {
           counter++
+          idx = i
         }
       }
       if (counter <= 0) {
         reactArray.push({
           react: reactionListe[react.reaction],
           key: index,
+          nb: 1,
         })
+      } else {
+        reactArray[idx].nb++
       }
     });
 
