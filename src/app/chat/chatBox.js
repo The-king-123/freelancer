@@ -1330,7 +1330,7 @@ function chatBox() {
             <div style={{ height: 96 }}></div>
           </div>
         </div>
-        <div id='chatInputWrapper' style={{ maxWidth: 620, margin: "auto", paddingInline: 6, marginBottom: 8 }} className='w3-dark-grey w3-block w3-display-bottommiddle- w3-bottom'>
+        <div id='chatInputWrapper' style={{ maxWidth: 620, marginLeft:-8, paddingInline: 6, marginBottom: 8 }} className='w3-dark-grey w3-block w3-display-bottommiddle- w3-bottom'>
           <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
             <div id='replyPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
               <FontAwesomeIcon icon={faReply} />
