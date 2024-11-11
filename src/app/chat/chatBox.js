@@ -471,7 +471,7 @@ function chatBox() {
                 }
                 {/* Bull media */}
                 {bull.attachement &&
-                  <>
+                  <div className='w3-container' style={{ padding: 0 }}>
                     {bull.attachement.type == 'image' &&
                       <Image
                         loading="lazy"
@@ -481,12 +481,12 @@ function chatBox() {
                         src={
                           source + "/images.php?w=320&h=320&zlonk=9733&zlink=" + bull.attachement.link
                         }
-                        className="w3-round-large  post-image"
+                        className="w3-round-large w3-right post-image"
                         alt={bull.attachement.name}
                         style={{ objectFit: "cover", objectPosition: "center", minHeight: 48, minWidth: 48 }}
                       />
                     }
-                  </>
+                  </div>
                 }
 
                 {/* Bull reaction */}
@@ -620,7 +620,7 @@ function chatBox() {
 
                 {/* Bull media */}
                 {bull.attachement &&
-                  <>
+                  <div className='w3-container' style={{ padding: 0 }}>
                     {bull.attachement.type == 'image' &&
                       <Image
                         loading="lazy"
@@ -630,12 +630,12 @@ function chatBox() {
                         src={
                           source + "/images.php?w=320&h=320&zlonk=9733&zlink=" + bull.attachement.link
                         }
-                        className="w3-round-large  post-image"
+                        className="w3-round-large post-image w3-left"
                         alt={bull.attachement.name}
                         style={{ objectFit: "cover", objectPosition: "center", minHeight: 48, minWidth: 48 }}
                       />
                     }
-                  </>
+                  </div>
                 }
 
                 {/* Bull reaction */}
