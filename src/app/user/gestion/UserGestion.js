@@ -172,6 +172,15 @@ function UserGestion() {
     }
 
     useEffect(() => {
+
+        document.getElementById('backButtonUsergestion').addEventListener('click', () => {
+            if (window.history.length > 0) {
+                window.history.back();
+            } else {
+                window.location = '/'
+            }
+        })
+
         axios
             .get(source + "/_auth/create")
             .then((res) => {
@@ -204,7 +213,7 @@ function UserGestion() {
                 <div onClick={() => {
                     document.getElementById('usersListeWrapper').style.display = 'block'
                     document.getElementById('singleUserWrapper').style.display = 'none'
-                }} id="backButton" className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large" style={{ paddingInline: 4, marginTop: 10 }}>
+                }} id="backButtonUsergestion" className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large" style={{ paddingInline: 4, marginTop: 10 }}>
                     <FontAwesomeIcon
                         icon={faArrowLeft}
                         style={{ width: 24 }}

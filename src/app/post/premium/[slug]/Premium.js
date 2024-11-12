@@ -79,10 +79,12 @@ export default function Premium({ content, owner, slug }) {
       document.getElementById("postImageMedia").style.height = "auto";
     }
 
-    if (document.getElementById('backButton')) {
-      document.getElementById('backButton').addEventListener('click', () => {
+    if (document.getElementById('backButtonPremiumPost')) {
+      document.getElementById('backButtonPremiumPost').addEventListener('click', () => {
         if (window.history.length > 0) {
           window.history.back();
+        } else {
+          window.location = '/'
         }
       })
 
@@ -90,6 +92,16 @@ export default function Premium({ content, owner, slug }) {
   }
 
   useEffect(() => {
+
+    if (document.getElementById('backButtonPremiumPost')) {
+      document.getElementById('backButtonPremiumPost').addEventListener('click', () => {
+        if (window.history.length > 0) {
+          window.history.back();
+        } else {
+          window.location = '/'
+        }
+      })
+    }
 
     if (!content) {
       const xcode = localStorage.getItem('x-code')
@@ -145,17 +157,21 @@ export default function Premium({ content, owner, slug }) {
         document.getElementById("postImageMedia").style.transition = "1s";
         document.getElementById("postImageMedia").style.height = "auto";
       }
+    }
 
-      if (document.getElementById('backButton')) {
-        document.getElementById('backButton').addEventListener('click', () => {
+    const backButtonInterval = setInterval(() => {
+      if (document.getElementById('backButtonPremiumPost')) {
+        document.getElementById('backButtonPremiumPost').addEventListener('click', () => {
           if (window.history.length > 0) {
             window.history.back();
+          } else {
+            window.location = '/'
           }
         })
-
+        clearInterval(backButtonInterval)
       }
+    }, 500);
 
-    }
   }, []);
 
   return (
@@ -164,7 +180,7 @@ export default function Premium({ content, owner, slug }) {
 
     <div>
       <h3 className="w3-wide w3-flex-row w3-flex-center-v w3-large">
-        <div id="backButton" className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large" style={{ paddingInline: 4 }}>
+        <div id="backButtonPremiumPost" className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large" style={{ paddingInline: 4 }}>
           <FontAwesomeIcon
             icon={faArrowLeft}
             style={{ width: 24 }}
@@ -280,7 +296,7 @@ export default function Premium({ content, owner, slug }) {
           </div>
           {
             extractDetails(singlePostInfo.title).length >= 3 &&
-            <div style={{marginTop:8}}>
+            <div style={{ marginTop: 8 }}>
               <div className="w3-medium w3-text-grey">{extractDetails(singlePostInfo.title)[0]} - Module {extractDetails(singlePostInfo.title)[1]} :</div>
               <div className="w3-large w3-big">
                 {extractDetails(singlePostInfo.title)[2]}

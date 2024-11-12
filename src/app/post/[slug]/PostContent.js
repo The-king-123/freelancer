@@ -95,6 +95,14 @@ export default function PostContent({ content }) {
       document.getElementById('singlePost').style.display = 'block'
     }
 
+    document.getElementById('backButtonSinglePost').addEventListener('click', () => {
+      if (window.history.length > 0) {
+        window.history.back();
+      } else {
+        window.location = '/'
+      }
+    })
+
     audioBox.chaine = document.getElementById("audioBox");
     audioBox.chaine.src =
       source + "/audios.php?zlonk=1733&zlink=" + content.data.link;
@@ -109,17 +117,12 @@ export default function PostContent({ content }) {
       document.getElementById("postImageMedia").style.height = "auto";
     }
 
-    document.getElementById('backButton').addEventListener('click', () => {
-      if (window.history.length > 0) {
-        window.history.back();
-      }
-    })
   }, []);
 
   return (
-    <div id="singlePost" style={{display:'none'}}>
+    <div id="singlePost" style={{ display: 'none' }}>
       <h3 className="w3-wide w3-flex-row w3-flex-center-v w3-large">
-        <div id="backButton" className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large" style={{ paddingInline: 4 }}>
+        <div id="backButtonSinglePost" className="w3-wide w3-pointer w3-flex-row w3-flex-center-v w3-large" style={{ paddingInline: 4 }}>
           <FontAwesomeIcon
             icon={faArrowLeft}
             style={{ width: 24 }}
