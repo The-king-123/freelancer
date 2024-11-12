@@ -1356,16 +1356,19 @@ function chatBox() {
 
     var imageSelector = document.createElement("input");
     imageSelector.type = "file";
-    imageSelector.accept = "image/*";
+    imageSelector.accept = "image/*, video/*";
 
     imageSelector.onchange = (e) => {
       const file = e.target.files[0];
-      const maxFileSize = 5 * 1024 * 1024;
 
-      if (file.size > maxFileSize) {
-        alert("L'image dépasse la taille maximale autorisée de 5 Mo.");
+      if (file.size > (10 * 1024 * 1024) && file.type.split('/')[0]=='image') {
+        alert("L'image dépasse la taille maximale autorisée de 10 Mo.");
         return;
-      }
+      }   
+      if (file.size > (25 * 1024 * 1024) && file.type.split('/')[0]=='video') {
+        alert("La video dépasse la taille maximale autorisée de 25 Mo.");
+        return;
+      }   
 
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -1381,7 +1384,7 @@ function chatBox() {
         document.getElementById("mediaPanel").style.display = 'flex';
 
         attachementInfo.media = formData;
-        attachementInfo.type = 'image';
+        attachementInfo.type = file.type.split('/')[0];
         attachementInfo.name = file.name;
       };
     };
