@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faCheck, faCheckDouble, faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faImage, faPaperPlane, faPlay, faReply, faShare, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCheck, faCheckDouble, faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faFile, faImage, faPaperclip, faPaperPlane, faPlay, faPlus, faReply, faShare, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import parse from "html-react-parser";
 import axios from 'axios';
 import { console_source as source } from '../data';
@@ -1432,35 +1432,43 @@ function chatBox() {
                 className="w3-dropdown-hover"
               >
                 <div
-                  id="switchPannel"
-                  onClick={() => removePannelFirstPassed()}
+                  id='selectorWrapper'
                   className="w3-dropdown-content w3-bar-block w3-card w3-round"
-                  style={{ right: -16, minWidth: 230, marginTop: 8, paddingBottom: 4, bottom: 42 }}
+                  style={{ minWidth: 230, marginTop: 8, paddingBottom: 4, bottom: 42, paddingTop: 6, paddingInline: 6 }}
                 >
-
                   <div
-                    className="w3-bar-item w3-button"
-                    style={{ marginTop: 4, fontSize: 12.5 }}
+                    id='imageSelector'
+                    className="w3-bar-item w3-button w3-round"
                   >
-                    <div className="w3-container" style={{ padding: 0 }}>
-                      <FontAwesomeIcon icon={faTimesCircle} className="w3-text-red w3-opacity" />
-                    </div>
-                    <div>
-                      Cliquer sur le bouton ci-dessous pour intervertir les contenus gratuit et premium.
-                    </div>
+                    <FontAwesomeIcon
+                      id="logoutIcon"
+                      className="w3-margin-right"
+                      icon={faImage}
+                    />
+                    Photo / Video
+                  </div>
+                  <div
+                    className="w3-bar-item w3-button w3-round"
+                  >
+                    <FontAwesomeIcon
+                      id="logoutIcon"
+                      className="w3-margin-right"
+                      icon={faPaperclip}
+                    />
+                    Fichier
                   </div>
                   {/* / arrow marker / */}
                   <div style={{ height: 2 }}>
                     <FontAwesomeIcon
                       icon={faPlay}
                       className="rotate90 w3-text-white"
-                      style={{ marginBottom: -12 }}
+                      style={{ marginTop: -4, marginLeft: 4 }}
                     />
                   </div>
                   {/* / arrow marker / */}
                 </div>
-                <div id='imageSelector' className='w3-pointer w3-yellow w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
-                  <FontAwesomeIcon icon={faImage} />
+                <div className='w3-pointer w3-yellow w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
+                  <FontAwesomeIcon icon={faPlus} />
                 </div>
               </div>
               {/* End dropdown attachement */}

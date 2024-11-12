@@ -12,7 +12,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import parse from "html-react-parser";
 
-yuigv kg khjg 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
