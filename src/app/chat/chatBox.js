@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faCheck, faCheckDouble, faComment, faComments, faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faImage, faPaperPlane, faReply, faShare, faSmile, faSmileBeam, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCheck, faCheckDouble, faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faImage, faPaperPlane, faPlay, faReply, faShare, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import parse from "html-react-parser";
 import axios from 'axios';
 import { console_source as source } from '../data';
@@ -151,7 +151,7 @@ function chatBox() {
               state: 'sent',
               lastmessage: {
                 key: userInfo.key,
-                message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.message : chatInfo.message
+                message: chatInfo.responseTo ? 'A répondu: ' + chatInfo.message : chatInfo.message
               }
             }).then(async () => {
               await set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
@@ -161,7 +161,7 @@ function chatBox() {
                 state: 'sent',
                 lastmessage: {
                   key: userInfo.key,
-                  message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.message : chatInfo.message
+                  message: chatInfo.responseTo ? 'A répondu: ' + chatInfo.message : chatInfo.message
                 }
               }).then(() => {
                 chatInfo.message = '';
@@ -308,6 +308,22 @@ function chatBox() {
     }, 2000);
   }
 
+  const reactionNotifyMessage = (index, bull) => {
+    if (bull.attachement) {
+      if (bull.attachement.type == 'image') {
+        return 'une photo'
+      }
+      if (bull.attachement.type == 'video') {
+        return 'une video'
+      }
+      if (bull.attachement.type == 'attachement') {
+        return 'un fichier'
+      }
+    } else {
+      return bull.message;
+    }
+  }
+
   const displayMessage = async (chat, chatBrut, UI) => {
 
     const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
@@ -357,22 +373,22 @@ function chatBox() {
 
                         className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                         <div className='w3-flex-row w3-flex-center-v'>
-                          <div onClick={() => reaction('heart', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          <div onClick={() => reaction('heart', index, reactionNotifyMessage(bull.key, bull))} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                             {reactionListe.heart}
                           </div>
-                          <div onClick={() => reaction('laugh', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          <div onClick={() => reaction('laugh', index, reactionNotifyMessage(bull.key, bull))} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                             {reactionListe.laugh}
                           </div>
-                          <div onClick={() => reaction('sad', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          <div onClick={() => reaction('sad', index, reactionNotifyMessage(bull.key, bull))} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                             {reactionListe.sad}
                           </div>
-                          <div onClick={() => reaction('socked', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          <div onClick={() => reaction('socked', index, reactionNotifyMessage(bull.key, bull))} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                             {reactionListe.socked}
                           </div>
-                          <div onClick={() => reaction('angry', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          <div onClick={() => reaction('angry', index, reactionNotifyMessage(bull.key, bull))} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                             {reactionListe.angry}
                           </div>
-                          <div onClick={() => reaction('fire', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                          <div onClick={() => reaction('fire', index, reactionNotifyMessage(bull.key, bull))} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                             {reactionListe.fire}
                           </div>
                         </div>
@@ -437,9 +453,9 @@ function chatBox() {
                         block: 'center',
                         inline: 'nearest'
                       }
-                    ); 
+                    );
                     toggleBlink(bull.responseTo + (chatBrut[bull.responseTo].attachement ? 'Image' : ''))
-                  }} className='w3-container' style={{ position: 'relative', padding: 0, zIndex:0 }}>
+                  }} className='w3-container' style={{ position: 'relative', padding: 0, zIndex: 0 }}>
                     {!chatBrut[bull.responseTo].attachement &&
                       <div
                         className={(themeLight ? "w3-opacity" : "w3-opacity-max") + " w3-yellow chatbull w3-round-xlarge w3-right w3-nowrap w3-overflow"}
@@ -497,7 +513,7 @@ function chatBox() {
                 }
                 {/* Bull media */}
                 {bull.attachement &&
-                  <div id={index+'Image'} className='w3-container' style={{ padding: 0 }}>
+                  <div id={index + 'Image'} className='w3-container' style={{ padding: 0 }}>
                     {bull.attachement.type == 'image' &&
                       <Image
                         loading="lazy"
@@ -669,7 +685,7 @@ function chatBox() {
 
                 {/* Bull media */}
                 {bull.attachement &&
-                  <div id={index+'Image'} className='w3-container' style={{ padding: 0 }}>
+                  <div id={index + 'Image'} className='w3-container' style={{ padding: 0 }}>
                     {bull.attachement.type == 'image' &&
                       <Image
                         loading="lazy"
@@ -748,22 +764,22 @@ function chatBox() {
                     }}
                       className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-card w3-round-large w3-overflow"}>
                       <div className='w3-flex-row w3-flex-center-v'>
-                        <div onClick={() => reaction('heart', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                        <div onClick={() => reaction('heart', index, reactionNotifyMessage(bull.key, bull))} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                           {reactionListe.heart}
                         </div>
-                        <div onClick={() => reaction('laugh', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                        <div onClick={() => reaction('laugh', index, reactionNotifyMessage(bull.key, bull))} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                           {reactionListe.laugh}
                         </div>
-                        <div onClick={() => reaction('sad', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                        <div onClick={() => reaction('sad', index, reactionNotifyMessage(bull.key, bull))} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                           {reactionListe.sad}
                         </div>
-                        <div onClick={() => reaction('socked', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                        <div onClick={() => reaction('socked', index, reactionNotifyMessage(bull.key, bull))} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                           {reactionListe.socked}
                         </div>
-                        <div onClick={() => reaction('angry', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                        <div onClick={() => reaction('angry', index, reactionNotifyMessage(bull.key, bull))} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                           {reactionListe.angry}
                         </div>
-                        <div onClick={() => reaction('fire', index, bull.message)} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
+                        <div onClick={() => reaction('fire', index, reactionNotifyMessage(bull.key, bull))} className='w3-flex-1 w3-center w3-xlarge w3-pointer'>
                           {reactionListe.fire}
                         </div>
                       </div>
@@ -1391,7 +1407,7 @@ function chatBox() {
           <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
             <div id='replyPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
               <FontAwesomeIcon icon={faReply} />
-              <div id='replyPanelImage' className='w3-round w3-dark-grey' style={{ width: 42, height: 42, display:'none', minWidth: 42, minHeight: 42, backgroundPosition: 'center', backgroundSize: 'cover', marginLeft: 8 }}>
+              <div id='replyPanelImage' className='w3-round w3-dark-grey' style={{ width: 42, height: 42, display: 'none', minWidth: 42, minHeight: 42, backgroundPosition: 'center', backgroundSize: 'cover', marginLeft: 8 }}>
               </div>
               <div id='replyPanelText' className='w3-margin-left w3-margin-right w3-nowrap w3-overflow' style={{ maxWidth: 260 }}>some text here to reply sdfb sldkhflskdhklsjdhjh sdh </div>
               <FontAwesomeIcon onClick={cancelReply} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
@@ -1411,9 +1427,44 @@ function chatBox() {
               <FontAwesomeIcon onClick={cancelMedia} className='w3-text-red w3-opacity w3-pointer' icon={faTimesCircle} />
             </div>
             <div className='w3-flex-row w3-flex-center-v'>
-              <div id='imageSelector' className='w3-pointer w3-yellow w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
-                <FontAwesomeIcon icon={faImage} />
+              {/* Dropdown for attachement */}
+              <div
+                className="w3-dropdown-hover"
+              >
+                <div
+                  id="switchPannel"
+                  onClick={() => removePannelFirstPassed()}
+                  className="w3-dropdown-content w3-bar-block w3-card w3-round"
+                  style={{ right: -16, minWidth: 230, marginTop: 8, paddingBottom: 4, bottom: 42 }}
+                >
+
+                  <div
+                    className="w3-bar-item w3-button"
+                    style={{ marginTop: 4, fontSize: 12.5 }}
+                  >
+                    <div className="w3-container" style={{ padding: 0 }}>
+                      <FontAwesomeIcon icon={faTimesCircle} className="w3-text-red w3-opacity" />
+                    </div>
+                    <div>
+                      Cliquer sur le bouton ci-dessous pour intervertir les contenus gratuit et premium.
+                    </div>
+                  </div>
+                  {/* / arrow marker / */}
+                  <div style={{ height: 2 }}>
+                    <FontAwesomeIcon
+                      icon={faPlay}
+                      className="rotate90 w3-text-white"
+                      style={{ marginBottom: -12 }}
+                    />
+                  </div>
+                  {/* / arrow marker / */}
+                </div>
+                <div id='imageSelector' className='w3-pointer w3-yellow w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
+                  <FontAwesomeIcon icon={faImage} />
+                </div>
               </div>
+              {/* End dropdown attachement */}
+
               <div className='w3-flex-1'>
                 <textarea id='messageTextarea' style={{ paddingInline: 24, height: 40, resize: 'none' }} type='text' placeholder='Message' className='w3-input w3-border-0 w3-round-xxlarge w3-block w3-dark-grey w3-noscrollbar' />
               </div>

@@ -1044,7 +1044,7 @@ export default function RootLayout({ children }) {
   return (
     <html id="htmlCore" style={{ display: 'none' }} className="w3-dark-grey" lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </head>
       <body id="appCore" className={inter.className}>
 
@@ -1782,7 +1782,12 @@ export default function RootLayout({ children }) {
                   className="w3-bar-item w3-button"
                   style={{ marginTop: 4, fontSize: 12.5 }}
                 >
-                  Cliquer sur le bouton ci-dessous pour intervertir les contenus gratuit et premium.
+                  <div className="w3-container" style={{ padding: 0 }}>
+                    <FontAwesomeIcon icon={faTimesCircle} className="w3-text-red w3-opacity" />
+                  </div>
+                  <div>
+                    Cliquer sur le bouton ci-dessous pour intervertir les contenus gratuit et premium.
+                  </div>
                 </div>
                 {/* / arrow marker / */}
                 <div style={{ height: 2 }}>
