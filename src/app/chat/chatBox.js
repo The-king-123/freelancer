@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faCheck, faCheckDouble, faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faFile, faImage, faPaperclip, faPaperPlane, faPlay, faPlus, faReply, faShare, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCheck, faCheckDouble, faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faFile, faImage, faMicrophone, faMusic, faPaperclip, faPaperPlane, faPlay, faPlus, faReply, faShare, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import parse from "html-react-parser";
 import axios from 'axios';
 import { console_source as source } from '../data';
@@ -1354,6 +1354,7 @@ function chatBox() {
       }
     });
 
+    // image input selector
     var imageSelector = document.createElement("input");
     imageSelector.type = "file";
     imageSelector.accept = "image/*, video/*";
@@ -1361,14 +1362,14 @@ function chatBox() {
     imageSelector.onchange = (e) => {
       const file = e.target.files[0];
 
-      if (file.size > (10 * 1024 * 1024) && file.type.split('/')[0]=='image') {
+      if (file.size > (10 * 1024 * 1024) && file.type.split('/')[0] == 'image') {
         alert("L'image dépasse la taille maximale autorisée de 10 Mo.");
         return;
-      }   
-      if (file.size > (25 * 1024 * 1024) && file.type.split('/')[0]=='video') {
+      }
+      if (file.size > (25 * 1024 * 1024) && file.type.split('/')[0] == 'video') {
         alert("La video dépasse la taille maximale autorisée de 25 Mo.");
         return;
-      }   
+      }
 
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -1390,6 +1391,75 @@ function chatBox() {
     };
 
     document.getElementById('imageSelector').addEventListener('click', () => imageSelector.click())
+
+    // audio input selector
+    var audioSelector = document.createElement("input");
+    audioSelector.type = "file";
+    audioSelector.accept = "audio/*";
+
+    audioSelector.onchange = (e) => {
+      const file = e.target.files[0];
+
+      if (file.size > (10 * 1024 * 1024)) {
+        alert("L'audio dépasse la taille maximale autorisée de 10 Mo.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      const formData = new FormData();
+      formData.append("media", file);
+
+      reader.onload = (readerEvent) => {
+        const content = readerEvent.target.result;
+
+        document.getElementById("previewImage").style.backgroundImage = `url(${content})`;
+        document.getElementById("previewImageName").innerText = file.name;
+        document.getElementById("mediaPanel").style.display = 'flex';
+
+        attachementInfo.media = formData;
+        attachementInfo.type = file.type.split('/')[0];
+        attachementInfo.name = file.name;
+      };
+    };
+
+    document.getElementById('audioSelector').addEventListener('click', () => audioSelector.click())
+
+    // file input selector
+    var fileSelector = document.createElement("input");
+    fileSelector.type = "file";
+    fileSelector.accept = "application/*, text/*";
+
+    fileSelector.onchange = (e) => {
+      const file = e.target.files[0];
+
+      if (file.size > (25 * 1024 * 1024)) {
+        alert("Le fichier dépasse la taille maximale autorisée de 25 Mo.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      const formData = new FormData();
+      formData.append("media", file);
+
+      reader.onload = (readerEvent) => {
+        const content = readerEvent.target.result;
+
+        document.getElementById("previewImage").style.backgroundImage = `url(${content})`;
+        document.getElementById("previewImageName").innerText = file.name;
+        document.getElementById("mediaPanel").style.display = 'flex';
+
+        attachementInfo.media = formData;
+        attachementInfo.type = file.type.split('/')[0];
+        attachementInfo.name = file.name;
+      };
+    };
+
+    document.getElementById('fileSelector').addEventListener('click', () => fileSelector.click())
+
     if (window.innerWidth < 620) {
       document.getElementById('chatInputWrapper').style.marginLeft = '-8px'
     }
@@ -1449,8 +1519,20 @@ function chatBox() {
                       icon={faImage}
                     />
                     Photo / Video
+                  </div>                  
+                  <div
+                    id='audioSelector'
+                    className="w3-bar-item w3-button w3-round"
+                  >
+                    <FontAwesomeIcon
+                      id="logoutIcon"
+                      className="w3-margin-right"
+                      icon={faMusic}
+                    />
+                    Audio
                   </div>
                   <div
+                    id='fileSelector'
                     className="w3-bar-item w3-button w3-round"
                   >
                     <FontAwesomeIcon
