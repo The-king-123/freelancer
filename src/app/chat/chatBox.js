@@ -100,7 +100,7 @@ function chatBox() {
         const chat = snapshot.val()
         const chatCopie = { ...chat }
         delete chat.userInfo;
-        if (document.getElementById('modalChatListe').style.display != 'block') {
+        if (document.getElementById('chatListeCore').style.display != 'block') {
           displayMessage(Object.entries(chat).sort(([, a], [, b]) => a.timestamp - b.timestamp), chat, chatCopie.userInfo);
         }
       } else {
@@ -495,8 +495,8 @@ function chatBox() {
                     className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap w3-opacity-off"
                     style={{
                       paddingInline: 16,
-                      wordWrap:'break-word',
-                      overflowWrap:'break-word',
+                      wordWrap: 'break-word',
+                      overflowWrap: 'break-word',
                       position: 'relative',
                       paddingBlock: 10,
                       borderTopRightRadius: 4,
@@ -534,10 +534,10 @@ function chatBox() {
                     {bull.attachement.type == 'video' &&
                       <video
                         style={{
-                          width:240,
-                          maxWidth:240,
+                          width: 240,
+                          maxWidth: 240,
                         }}
-                        
+
                         className="w3-overflow w3-block w3-light-grey"
                         controls
                       >
@@ -683,8 +683,8 @@ function chatBox() {
                     className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-opacity-off w3-round-xlarge w3-left w3-nowrap"}
                     style={{
                       paddingInline: 16,
-                      wordWrap:'break-word',
-                      overflowWrap:'break-word',
+                      wordWrap: 'break-word',
+                      overflowWrap: 'break-word',
                       position: 'relative',
                       paddingBlock: 10,
                       borderTopLeftRadius: 4,
@@ -725,15 +725,15 @@ function chatBox() {
                     {bull.attachement.type == 'video' &&
                       <video
                         style={{
-                          width:240,
-                          maxWidth:240,
+                          width: 240,
+                          maxWidth: 240,
                         }}
-                        
+
                         className="w3-overflow w3-block w3-light-grey"
                         controls
                       >
                         <source
-                          src={source + '/videos.php?zlonk=4733&zlink='+bull.attachement.link}
+                          src={source + '/videos.php?zlonk=4733&zlink=' + bull.attachement.link}
                           type="video/*"
                         />
                         Your browser does not support the video tag.
@@ -1198,7 +1198,7 @@ function chatBox() {
     userInfo.des_fullname = user.fullname
     userInfo.des_key = user.key
 
-    document.getElementById('modalChatListe').style.display = 'none'
+    document.getElementById('chatListeCore').style.display = 'none'
     document.getElementById('chattingCore').style.display = 'flex';
     document.getElementById('bullField').style.scrollBehavior = 'unset';
     document.getElementById('bullField').style.display = 'flex';
@@ -1288,13 +1288,9 @@ function chatBox() {
 
       document.getElementById('htmlCore').style.display = 'block'
     }
-    if (window.innerWidth < 992) {
-      document.getElementById('chatMainCore').style.height = (window.innerHeight - 128) + 'px';
-      document.getElementById('chatInputWrapper').style.bottom = 52 + 'px'
-    }
 
     if (window.innerWidth <= 992) {
-      document.getElementById('modalChatListe').style.height = document.getElementById('coreMain').offsetHeight + 'px';
+      document.getElementById('chatListeCore').style.height = document.getElementById('coreMain').offsetHeight + 'px';
       document.getElementById('chatListeScrollable').style.height = document.getElementById('coreMain').offsetHeight - 132 + 'px';
     }
 
@@ -1357,7 +1353,7 @@ function chatBox() {
               res.data.data.forEach(user => {
                 usersData.push(user);
               });
-              document.getElementById('modalChatListe').style.display = 'block'
+              document.getElementById('chatListeCore').style.display = 'block'
             })
             .catch((e) => {
               console.error("failure", e);
@@ -1505,7 +1501,7 @@ function chatBox() {
   }, [])
 
   return (
-    <div id='chatMainCore' style={{ position: 'relative', height: 'calc(100vh - 32px)' }}>
+    <div id='chatMainCore' style={{ position: 'relative' }}>
       <div id='chattingCore' style={{ display: 'none' }}>
         <div id='bullField' className='w3-noscrollbar w3-overflow-scroll w3-block' style={{ padding: 8, display: 'flex', flexDirection: 'column-reverse' }}>
           <div className='w3-block'>
@@ -1606,41 +1602,32 @@ function chatBox() {
           </div>
         </div>
       </div>
-      {/* modal forum liste */}
-      <div id="modalChatListe" className="w3-modal w3-round black-opacity" style={{ position: 'absolute', height: 'calc(100vh - 32px)' }}>
-        <div
-          className="w3-modal-content w3-card w3-round w3-overflow w3-black"
-          style={{ maxWidth: 420, top: 32, marginTop: -64 }}
-        >
-
-          <div style={{ marginTop: 16 }} className='w3-flex-row w3-flex-center-v'>
-            <div id='chatListeCloseButton' onClick={() => { document.getElementById('modalChatListe').style.display = 'none'; reloadChat() }} className="w3-circle w3-dark-grey w3-flex w3-flex-center" style={{ width: 24, height: 24, marginLeft: 16, display: 'none' }}>
-              <FontAwesomeIcon icon={faArrowLeft} />
-            </div>
-            <div className='w3-flex-1 w3-big w3-large' style={{ marginLeft: 16 }}>
-              ChatBox
-            </div>
+      <div id='chatListeCore'>
+        <div style={{ marginTop: 16 }} className='w3-flex-row w3-flex-center-v'>
+          <div id='chatListeCloseButton' onClick={() => { document.getElementById('chatListeCore').style.display = 'none'; reloadChat() }} className="w3-circle w3-dark-grey w3-flex w3-flex-center" style={{ width: 24, height: 24, marginLeft: 16, display: 'none' }}>
+            <FontAwesomeIcon icon={faArrowLeft} />
           </div>
-
-          <div style={{ paddingInline: 16, paddingBlock: 16 }}>
-            <input
-              id="searchUserInput"
-              onChange={(e) => search.keyword = e.target.value}
-              className="input w3-border-0 w3-input w3-border-0 w3-round-xxlarge w3-dark-grey "
-              placeholder="Chercher un contact"
-              type="text"
-              style={{ display: 'none' }}
-            />
+          <div className='w3-flex-1 w3-big w3-large' style={{ marginLeft: 16 }}>
+            ChatBox
           </div>
-          <div id='chatListeScrollable' style={{ height: '70vh', paddingInline: 12, marginBottom: 16 }} className="w3-overflow-scroll w3-noscrollbar">
-            {
-              chatListe
-            }
-          </div>
+        </div>
 
+        <div style={{ paddingInline: 16, paddingBlock: 16 }}>
+          <input
+            id="searchUserInput"
+            onChange={(e) => search.keyword = e.target.value}
+            className="input w3-border-0 w3-input w3-border-0 w3-round-xxlarge w3-dark-grey "
+            placeholder="Chercher un contact"
+            type="text"
+            style={{ display: 'none' }}
+          />
+        </div>
+        <div id='chatListeScrollable' style={{ paddingInline: 12, marginBottom: 16 }}>
+          {
+            chatListe
+          }
         </div>
       </div>
-      {/* end modal forum liste */}
     </div>
   )
 }
