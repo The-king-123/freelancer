@@ -1138,7 +1138,7 @@ function chatBox() {
               src={
                 source + "/images.php?w=80&h=80&zlonk=3733&zlink=" + user.key
               }
-              className="w3-circle w3-margin-right"
+              className={"w3-circle w3-margin-right " + (themeLight ? "w3-light-grey" : "w3-black")}
               alt={user.fullname}
               style={{ objectFit: "cover", objectPosition: "center", minHeight: 48, minWidth: 48 }}
             />
@@ -1192,8 +1192,6 @@ function chatBox() {
   }
 
   const displayDiscution = (user) => {
-
-    document.getElementById('chatListeCloseButton').style.display = 'flex'
 
     userInfo.des_fullname = user.fullname
     userInfo.des_key = user.key
@@ -1604,9 +1602,6 @@ function chatBox() {
       </div>
       <div id='chatListeCore'>
         <div style={{ marginTop: 16 }} className='w3-flex-row w3-flex-center-v'>
-          <div id='chatListeCloseButton' onClick={() => { document.getElementById('chatListeCore').style.display = 'none'; reloadChat() }} className="w3-circle w3-dark-grey w3-flex w3-flex-center" style={{ width: 24, height: 24, marginLeft: 16, display: 'none' }}>
-            <FontAwesomeIcon icon={faArrowLeft} />
-          </div>
           <div className='w3-flex-1 w3-big w3-large' style={{ marginLeft: 16 }}>
             ChatBox
           </div>
@@ -1616,7 +1611,7 @@ function chatBox() {
           <input
             id="searchUserInput"
             onChange={(e) => search.keyword = e.target.value}
-            className="input w3-border-0 w3-input w3-border-0 w3-round-xxlarge w3-dark-grey "
+            className="input w3-border-0 w3-input w3-border-0 w3-round-xxlarge w3-black "
             placeholder="Chercher un contact"
             type="text"
             style={{ display: 'none' }}
