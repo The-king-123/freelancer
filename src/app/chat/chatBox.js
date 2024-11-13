@@ -461,8 +461,6 @@ function chatBox() {
                         className={(themeLight ? "w3-opacity" : "w3-opacity-max") + " w3-yellow chatbull w3-round-xlarge w3-right w3-nowrap w3-overflow"}
                         style={{
                           paddingInline: 16,
-                          wordWrap:'break-word',
-                          overflowWrap:'break-word',
                           paddingBlock: 10,
                           borderTopRightRadius: 4,
                           borderBottomRightRadius: 4,
@@ -685,6 +683,8 @@ function chatBox() {
                     className={(themeLight ? "w3-light-grey" : "w3-black") + " chatbull w3-opacity-off w3-round-xlarge w3-left w3-nowrap"}
                     style={{
                       paddingInline: 16,
+                      wordWrap:'break-word',
+                      overflowWrap:'break-word',
                       position: 'relative',
                       paddingBlock: 10,
                       borderTopLeftRadius: 4,
