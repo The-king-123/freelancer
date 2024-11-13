@@ -1263,6 +1263,12 @@ function chatBox() {
     }
   }
 
+  function syncWidths() {
+    let element1 = document.getElementById('chatListeCore');
+    let element2 = document.getElementById('chatHeadSearch');
+    element2.style.width = `${element1.offsetWidth}px`;
+  }
+
   useEffect(() => {
 
 
@@ -1291,6 +1297,14 @@ function chatBox() {
       document.getElementById('chatListeCore').style.height = document.getElementById('coreMain').offsetHeight + 'px';
       document.getElementById('chatListeScrollable').style.height = document.getElementById('coreMain').offsetHeight - 132 + 'px';
     }
+
+    syncWidths(); 
+
+    const element1 = document.getElementById('chatListeCore');
+    const resizeObserver = new MutationObserver(syncWidths);
+
+    window.addEventListener('resize', syncWidths);
+
 
     const xcode = localStorage.getItem('x-code');
     axios
@@ -1499,7 +1513,7 @@ function chatBox() {
   }, [])
 
   return (
-    <div id='chatMainCore' style={{ position: 'relative' }}>
+    <div id='chatMainCore'>
       <div id='chattingCore' style={{ display: 'none' }}>
         <div id='bullField' className='w3-noscrollbar w3-overflow-scroll w3-block' style={{ padding: 8, display: 'flex', flexDirection: 'column-reverse' }}>
           <div className='w3-block'>
@@ -1508,7 +1522,7 @@ function chatBox() {
             <div style={{ height: 96 }}></div>
           </div>
         </div>
-        <div id='chatInputWrapper' style={{ maxWidth: 620, paddingInline: 6, marginBottom: 8 }} className='w3-dark-grey w3-block w3-display-bottommiddle- w3-bottom'>
+        <div id='chatInputWrapper' style={{ maxWidth: 620, paddingInline: 6, marginBottom: 8 }} className='w3-dark-grey w3-block w3-bottom'>
           <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
             <div id='replyPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
               <FontAwesomeIcon icon={faReply} />
@@ -1601,23 +1615,26 @@ function chatBox() {
         </div>
       </div>
       <div id='chatListeCore'>
-        <div style={{ marginTop: 16 }} className='w3-flex-row w3-flex-center-v'>
-          <div className='w3-flex-1 w3-big w3-large' style={{ marginLeft: 16 }}>
-            ChatBox
+        <div id='chatHeadSearch' className='w3-dark-grey w3-top w3-block'>
+          <div style={{ marginTop: 16 }}>
+            <div className='w3-big w3-large' style={{ marginLeft: 16 }}>
+              ChatBox
+            </div>
+          </div>
+
+          <div style={{ paddingInline: 16, paddingBlock: 16 }}>
+            <input
+              id="searchUserInput"
+              onChange={(e) => search.keyword = e.target.value}
+              className="input w3-border-0 w3-input w3-border-0 w3-round-xxlarge w3-black "
+              placeholder="Chercher un contact"
+              type="text"
+              style={{ display: 'none' }}
+            />
           </div>
         </div>
-
-        <div style={{ paddingInline: 16, paddingBlock: 16 }}>
-          <input
-            id="searchUserInput"
-            onChange={(e) => search.keyword = e.target.value}
-            className="input w3-border-0 w3-input w3-border-0 w3-round-xxlarge w3-black "
-            placeholder="Chercher un contact"
-            type="text"
-            style={{ display: 'none' }}
-          />
-        </div>
         <div id='chatListeScrollable' style={{ paddingInline: 12, marginBottom: 16 }}>
+        <div style={{ height: 96 }}></div>
           {
             chatListe
           }
