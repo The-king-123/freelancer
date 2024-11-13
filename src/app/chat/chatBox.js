@@ -1128,7 +1128,7 @@ function chatBox() {
           <div
             onClick={() => displayDiscution(user)}
             className={"w3-flex w3-flex-row w3-flex-center w3-round " + (themeLight ? "w3-white" : "w3-dark-grey")}
-            style={{ padding: 12 }}
+            style={{ paddingBlock: 8 }}
           >
             <Image
               loading="lazy"
@@ -1271,7 +1271,6 @@ function chatBox() {
 
   useEffect(() => {
 
-
     if (localStorage.getItem('theme') != 'dark') {
 
       const elementGrey = document.getElementsByClassName('w3-black').length
@@ -1294,14 +1293,13 @@ function chatBox() {
     }
 
     if (window.innerWidth <= 992) {
+      document.getElementById('chatInputWrapper').style.marginBottom = '52px'
+      document.getElementById('chatHeadSearch').style.marginTop = '48px'
       document.getElementById('chatListeCore').style.height = document.getElementById('coreMain').offsetHeight + 'px';
       document.getElementById('chatListeScrollable').style.height = document.getElementById('coreMain').offsetHeight - 132 + 'px';
     }
 
     syncWidths(); 
-
-    const element1 = document.getElementById('chatListeCore');
-    const resizeObserver = new MutationObserver(syncWidths);
 
     window.addEventListener('resize', syncWidths);
 
@@ -1522,7 +1520,7 @@ function chatBox() {
             <div style={{ height: 96 }}></div>
           </div>
         </div>
-        <div id='chatInputWrapper' style={{ maxWidth: 620, paddingInline: 6, marginBottom: 8 }} className='w3-dark-grey w3-block w3-bottom'>
+        <div id='chatInputWrapper' style={{ maxWidth: 620, paddingInline: 6, paddingBottom:6, marginBottom: 8 }} className='w3-dark-grey w3-block w3-bottom'>
           <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
             <div id='replyPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
               <FontAwesomeIcon icon={faReply} />
