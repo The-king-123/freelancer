@@ -461,6 +461,8 @@ function chatBox() {
                         className={(themeLight ? "w3-opacity" : "w3-opacity-max") + " w3-yellow chatbull w3-round-xlarge w3-right w3-nowrap w3-overflow"}
                         style={{
                           paddingInline: 16,
+                          wordWrap:'break-word',
+                          overflowWrap:'break-word',
                           paddingBlock: 10,
                           borderTopRightRadius: 4,
                           borderBottomRightRadius: 4,
@@ -495,6 +497,8 @@ function chatBox() {
                     className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap w3-opacity-off"
                     style={{
                       paddingInline: 16,
+                      wordWrap:'break-word',
+                      overflowWrap:'break-word',
                       position: 'relative',
                       paddingBlock: 10,
                       borderTopRightRadius: 4,
@@ -528,6 +532,23 @@ function chatBox() {
                         alt={bull.attachement.name}
                         style={{ objectFit: "cover", objectPosition: "center", minWidth: 180, maxWidth: 240 }}
                       />
+                    }
+                    {bull.attachement.type == 'video' &&
+                      <video
+                        style={{
+                          width:240,
+                          maxWidth:240,
+                        }}
+                        
+                        className="w3-overflow w3-block w3-light-grey"
+                        controls
+                      >
+                        <source
+                          src={source + '/videos.php?zlonk=4733&zlink=' + bull.attachement.link}
+                          type="video/*"
+                        />
+                        Your browser does not support the video tag.
+                      </video>
                     }
                   </div>
                 }
@@ -700,6 +721,23 @@ function chatBox() {
                         alt={bull.attachement.name}
                         style={{ objectFit: "cover", objectPosition: "center", minWidth: 180, maxWidth: 240 }}
                       />
+                    }
+                    {bull.attachement.type == 'video' &&
+                      <video
+                        style={{
+                          width:240,
+                          maxWidth:240,
+                        }}
+                        
+                        className="w3-overflow w3-block w3-light-grey"
+                        controls
+                      >
+                        <source
+                          src={source + '/videos.php?zlonk=4733&zlink='+bull.attachement.link}
+                          type="video/*"
+                        />
+                        Your browser does not support the video tag.
+                      </video>
                     }
                   </div>
                 }
@@ -1519,7 +1557,7 @@ function chatBox() {
                       icon={faImage}
                     />
                     Photo / Video
-                  </div>                  
+                  </div>
                   <div
                     id='audioSelector'
                     className="w3-bar-item w3-button w3-round"
