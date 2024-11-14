@@ -1,35 +1,37 @@
+'use client'
 import { useEffect, useRef } from 'react';
 import cloudinary from 'cloudinary-video-player';
-import 'cloudinary-video-player/cld-video-player.min.css';
+import "cloudinary-video-player/cld-video-player.min.css";
 
-const source = ({ id, publicId, ...props }) => {
-  
-  const cloudinaryRef = useRef();
+const VideoPlayer = ({ id, publicId }) => {
   const playerRef = useRef();
+  const cloudinaryPlayerRef = useRef();  // Ref for the Cloudinary player instance
 
   useEffect(() => {
-    if (cloudinaryRef.current) return;
+    if (cloudinaryPlayerRef.current) return;
 
-    cloudinaryRef.current = cloudinary;
+    const videoElement = playerRef.current;
 
-    const player = cloudinaryRef.current.videoPlayer(playerRef.current, {
-      cloud_name: 'freelancer.mg',
-      sourceTypes: ['mp4', 'webm', 'ogv', 'flv', 'mov', 'mkv', 'avi', '3gp', 'm4v'],
-      secure: true,
-      controls: true,
-    });
+    if (videoElement) {
+      cloudinaryPlayerRef.current = cloudinary.videoPlayer(videoElement, {
+        cloud_name: 'freelancer.mg',
+        sourceTypes: ['mp4', 'webm', 'ogv', 'flv', 'mov', 'mkv', 'avi', '3gp', 'm4v'],
+        controls: false,
+      });
 
-    player.source(publicId);
-  }, []);
+      // Set the video source
+      cloudinaryPlayerRef.current.source(publicId); // Set the Cloudinary video source
+    }
+
+  }, []); // Re-run the effect if publicId changes
 
   return (
     <video
-      ref={playerRef}
       id={id}
+      ref={playerRef}
       className="cld-video-player cld-fluid"
-      {...props}
     />
   );
 };
 
-export default source;
+export default VideoPlayer;

@@ -1852,8 +1852,9 @@ export default function RootLayout({ children }) {
           <Link
             onClick={() => {
               if (location.pathname.split('/')[1] == 'chat') {
-                if (document.getElementById('modalChatListe')) {
-                  document.getElementById('modalChatListe').style.display = 'block'
+                if (document.getElementById('chatListeCore')) {
+                  document.getElementById('chatListeCore').style.display = 'block';
+                  document.getElementById('chattingCore').style.display = 'none'
                 }
               }
             }}

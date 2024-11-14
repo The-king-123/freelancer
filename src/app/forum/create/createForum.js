@@ -441,7 +441,7 @@ function createForum(props) {
             minWidth: "100%",
             marginTop: 16,
           }}
-        >Que pensez-vous?</div>
+        ></div>
         <div className="w3-container" style={{ padding: 0 }}>
           <div
             id="inputImage"

@@ -1186,7 +1186,7 @@ function PostCreate(props) {
                         minWidth: "100%",
                         marginTop: 16,
                     }}
-                >Qu'est-ce que vous pensez ?</div>
+                ></div>
                 <div className="w3-container" style={{ padding: 0 }}>
 
                     <div

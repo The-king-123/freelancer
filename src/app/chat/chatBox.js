@@ -8,6 +8,7 @@ import parse from "html-react-parser";
 import axios from 'axios';
 import { console_source as source } from '../data';
 import Image from 'next/image';
+import VideoPlayer from '@/app/Home/source';
 
 function chatBox() {
 
@@ -535,15 +536,13 @@ function chatBox() {
                       <video
                         style={{
                           width: 240,
-                          maxWidth: 240,
                         }}
-
-                        className="w3-overflow w3-block w3-light-grey"
+                        className="w3-overflow w3-block w3-light-grey w3-round-large"
                         controls
                       >
                         <source
                           src={source + '/videos.php?zlonk=4733&zlink=' + bull.attachement.link}
-                          type="video/*"
+                          type="video/mp4"
                         />
                         Your browser does not support the video tag.
                       </video>
@@ -724,20 +723,18 @@ function chatBox() {
                     }
                     {bull.attachement.type == 'video' &&
                       <video
-                        style={{
-                          width: 240,
-                          maxWidth: 240,
-                        }}
-
-                        className="w3-overflow w3-block w3-light-grey"
-                        controls
-                      >
-                        <source
-                          src={source + '/videos.php?zlonk=4733&zlink=' + bull.attachement.link}
-                          type="video/*"
-                        />
-                        Your browser does not support the video tag.
-                      </video>
+                      style={{
+                        width: 240,
+                      }}
+                      className="w3-overflow w3-block w3-light-grey w3-round-large"
+                      controls
+                    >
+                      <source
+                        src={source + '/videos.php?zlonk=4733&zlink=' + bull.attachement.link}
+                        type="video/mp4"
+                      />
+                      Your browser does not support the video tag.
+                    </video>
                     }
                   </div>
                 }
@@ -881,6 +878,7 @@ function chatBox() {
       }
     }
 
+    document.getElementById('chatListeCore').style.display = 'none'
     setdisplayChat(glitchChat);
 
     if (chat.length > userInfo.messageCounter) {
@@ -1299,7 +1297,7 @@ function chatBox() {
       document.getElementById('chatListeScrollable').style.height = document.getElementById('coreMain').offsetHeight - 132 + 'px';
     }
 
-    syncWidths(); 
+    syncWidths();
 
     window.addEventListener('resize', syncWidths);
 
@@ -1520,7 +1518,7 @@ function chatBox() {
             <div style={{ height: 96 }}></div>
           </div>
         </div>
-        <div id='chatInputWrapper' style={{ maxWidth: 620, paddingInline: 6, paddingBottom:6, marginBottom: 8 }} className='w3-dark-grey w3-block w3-bottom'>
+        <div id='chatInputWrapper' style={{ maxWidth: 620, paddingInline: 6, paddingBottom: 6, marginBottom: 8 }} className='w3-dark-grey w3-block w3-bottom'>
           <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
             <div id='replyPanel' className='w3-flex-row w3-flex-center-v' style={{ paddingInline: 8, paddingBottom: 16, display: 'none' }}>
               <FontAwesomeIcon icon={faReply} />
@@ -1632,7 +1630,7 @@ function chatBox() {
           </div>
         </div>
         <div id='chatListeScrollable' style={{ paddingInline: 12, marginBottom: 16 }}>
-        <div style={{ height: 96 }}></div>
+          <div style={{ height: 96 }}></div>
           {
             chatListe
           }
