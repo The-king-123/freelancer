@@ -731,7 +731,7 @@ function chatBox() {
                     >
                       <source
                         src={source + '/videos.php?zlonk=4733&zlink=' + bull.attachement.link}
-                        type="video/mp4"
+                        type="video/*"
                       />
                       Your browser does not support the video tag.
                     </video>
