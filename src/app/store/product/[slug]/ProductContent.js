@@ -53,7 +53,7 @@ export default function ProductContent({ content }) {
         .then((res) => {
           if (res.data.exist) {
 
-            const url = `${source}/download.php?zlink=${atob(res.data.file)}`;
+            const url = `${source}/download.php?zlonk=1733&zlink=${atob(res.data.file)}`;
             const link = document.createElement('a');
 
             link.href = url;
@@ -90,7 +90,7 @@ export default function ProductContent({ content }) {
         .then((res) => {
           if (res.data.exist) {
 
-            const url = `${source}/download.php?zlink=${atob(res.data.file)}`;
+            const url = `${source}/download.php?zlonk=1733&zlink=${atob(res.data.file)}`;
             const link = document.createElement('a');
 
             link.href = url;

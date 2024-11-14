@@ -95,6 +95,18 @@ function chatBox() {
     }
   }
 
+  const download = (bull) => {
+    const url = source + '/download.php?zlonk=2733&zlink=' + bull.attachement.link;
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download = bull.attachement.name;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   const reloadChat = () => {
     onValue(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key), (snapshot) => {
       if (snapshot.exists()) {
@@ -549,6 +561,7 @@ function chatBox() {
                     }
                     {bull.attachement.type == 'application' &&
                       <div
+                        onClick={() => download(bull)}
                         style={{
                           width: 200,
                           height: 200,
@@ -557,7 +570,7 @@ function chatBox() {
                         className="w3-overflow w3-block w3-light-grey w3-round-large w3-flex-column w3-flex-center"
                       >
                         <FontAwesomeIcon icon={faFileDownload} className='w3-xxlarge w3-margin-bottom' />
-                        <div className='w3-block w3-nowrap-multiline w3-overflow'><FontAwesomeIcon style={{ marginRight: 8 }} icon={faPaperclip} />{bull.attachement.name}</div>
+                        <div className='w3-block w3-nowrap-multiline w3-overflow w3-center'><FontAwesomeIcon style={{ marginRight: 8 }} icon={faPaperclip} />{bull.attachement.name}</div>
                       </div>
                     }
                   </div>
@@ -750,9 +763,8 @@ function chatBox() {
                       </video>
                     }
                     {bull.attachement.type == 'application' &&
-                      <Link
-                        href={source + '/videos.php?zlonk=4733&zlink=' + bull.attachement.link}
-                        download={true}
+                      <div
+                        onClick={() => download(bull)}
                         style={{
                           width: 200,
                           height: 200,
@@ -761,8 +773,8 @@ function chatBox() {
                         className="w3-overflow w3-block w3-light-grey w3-round-large w3-flex-column w3-flex-center"
                       >
                         <FontAwesomeIcon icon={faFileDownload} className='w3-xxlarge w3-margin-bottom' />
-                        <div className='w3-block w3-nowrap-multiline w3-overflow'><FontAwesomeIcon style={{ marginRight: 8 }} icon={faPaperclip} />{bull.attachement.name}</div>
-                      </Link>
+                        <div className='w3-block w3-nowrap-multiline w3-overflow w3-center'><FontAwesomeIcon style={{ marginRight: 8 }} icon={faPaperclip} />{bull.attachement.name}</div>
+                      </div>
                     }
                   </div>
                 }
