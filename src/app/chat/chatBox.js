@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faCheck, faCheckDouble, faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faFile, faImage, faMicrophone, faMusic, faPaperclip, faPaperPlane, faPlay, faPlus, faReply, faShare, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCheck, faCheckDouble, faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faFile, faFileDownload, faImage, faMicrophone, faMusic, faPaperclip, faPaperPlane, faPlay, faPlus, faReply, faShare, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import parse from "html-react-parser";
 import axios from 'axios';
 import { console_source as source } from '../data';
 import Image from 'next/image';
-import VideoPlayer from '@/app/Home/source';
+import Link from 'next/link';
 
 function chatBox() {
 
@@ -547,6 +547,19 @@ function chatBox() {
                         Your browser does not support the video tag.
                       </video>
                     }
+                    {bull.attachement.type == 'application' &&
+                      <div
+                        style={{
+                          width: 200,
+                          height: 200,
+                          padding: 24,
+                        }}
+                        className="w3-overflow w3-block w3-light-grey w3-round-large w3-flex-column w3-flex-center"
+                      >
+                        <FontAwesomeIcon icon={faFileDownload} className='w3-xxlarge w3-margin-bottom' />
+                        <div className='w3-block w3-nowrap-multiline w3-overflow'><FontAwesomeIcon style={{ marginRight: 8 }} icon={faPaperclip} />{bull.attachement.name}</div>
+                      </div>
+                    }
                   </div>
                 }
 
@@ -723,18 +736,33 @@ function chatBox() {
                     }
                     {bull.attachement.type == 'video' &&
                       <video
-                      style={{
-                        width: 240,
-                      }}
-                      className="w3-overflow w3-block w3-light-grey w3-round-large"
-                      controls
-                    >
-                      <source
-                        src={source + '/videos.php?zlonk=4733&zlink=' + bull.attachement.link}
-                        type="video/*"
-                      />
-                      Your browser does not support the video tag.
-                    </video>
+                        style={{
+                          width: 240,
+                        }}
+                        className="w3-overflow w3-block w3-light-grey w3-round-large"
+                        controls
+                      >
+                        <source
+                          src={source + '/videos.php?zlonk=4733&zlink=' + bull.attachement.link}
+                          type="video/*"
+                        />
+                        Your browser does not support the video tag.
+                      </video>
+                    }
+                    {bull.attachement.type == 'application' &&
+                      <Link
+                        href={source + '/videos.php?zlonk=4733&zlink=' + bull.attachement.link}
+                        download={true}
+                        style={{
+                          width: 200,
+                          height: 200,
+                          padding: 24,
+                        }}
+                        className="w3-overflow w3-block w3-light-grey w3-round-large w3-flex-column w3-flex-center"
+                      >
+                        <FontAwesomeIcon icon={faFileDownload} className='w3-xxlarge w3-margin-bottom' />
+                        <div className='w3-block w3-nowrap-multiline w3-overflow'><FontAwesomeIcon style={{ marginRight: 8 }} icon={faPaperclip} />{bull.attachement.name}</div>
+                      </Link>
                     }
                   </div>
                 }
