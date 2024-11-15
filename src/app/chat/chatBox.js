@@ -189,7 +189,7 @@ function chatBox() {
 
             document.getElementById('uploadMediaSpinner').style.display = 'none'
             cancelEdit();
-            cancelMedia()
+            cancelMedia();
           })
           .catch((error) => {
             console.error('Error writing data:', error);
@@ -1323,7 +1323,6 @@ function chatBox() {
               attachementInfo.media = null;
               attachementInfo.link = res.data.medianame;
               chatInfo.attachement = attachementInfo;
-              cancelMedia()
               sendMessage();
             } else {
               userInfo.sendHolder = false;
