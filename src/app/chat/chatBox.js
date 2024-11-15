@@ -149,7 +149,7 @@ function chatBox() {
             if (document.getElementById('messageTextarea')) {
               document.getElementById('messageTextarea').value = '';
             }
-          
+
             userInfo.sendHolder = false;
             chatInfo.key = '';
             chatInfo.des_key = '';
@@ -187,7 +187,7 @@ function chatBox() {
             if (document.getElementById('mediaPanel')) {
               document.getElementById('mediaPanel').style.display = 'none'
             }
-            
+
             attachementInfo.name = ''
             attachementInfo.type = ''
             attachementInfo.link = ''
@@ -196,7 +196,7 @@ function chatBox() {
             if (document.getElementById('uploadMediaSpinner')) {
               document.getElementById('uploadMediaSpinner').style.display = 'none'
             }
-            
+
             cancelMedia();
             cancelReply();
             cancelEdit();
@@ -1118,7 +1118,7 @@ function chatBox() {
     if (document.getElementById('messageTextarea')) {
       document.getElementById('messageTextarea').value = ''
     }
-       
+
   }
 
   const editBull = (idBull, bull) => {
@@ -1316,7 +1316,7 @@ function chatBox() {
       if (document.getElementById('uploadMediaSpinner')) {
         document.getElementById('uploadMediaSpinner').style.display = 'none'
       }
-      
+
       attachementInfo.name = ''
       attachementInfo.type = ''
       attachementInfo.link = ''
@@ -1418,13 +1418,13 @@ function chatBox() {
       .then((res) => {
         if (res.data.logedin) {
 
-
-          document.getElementById('chatListeCore').style.display = 'block'
-
           userInfo.key = res.data.user.key;
           userInfo.fullname = res.data.user.fullname;
 
-          if (res.data.user.designation == 'Admin') document.getElementById('searchUserInput').style.display = 'block'
+          if (res.data.user.designation == 'Admin') {
+            document.getElementById('searchUserInput').style.display = 'block'
+            document.getElementById('listeChatSpacer').style.height = '96px'
+          } 
 
           document.getElementById('bullField').style.height = (window.innerHeight - 32 - (window.innerWidth < 992 ? 96 : 0)) + 'px';
 
@@ -1489,6 +1489,7 @@ function chatBox() {
           });
 
         } else {
+          document.getElementById('chatListeCore').style.display = 'none'
           if (document.getElementById('modalNotLogedIn')) {
             document.getElementById('modalNotLogedIn').style.display = 'block'
           }
@@ -1721,7 +1722,7 @@ function chatBox() {
           </div>
         </div>
       </div>
-      <div id='chatListeCore' style={{ display: 'none' }}>
+      <div id='chatListeCore'>
         <div id='chatHeadSearch' className='w3-dark-grey w3-top w3-block'>
           <div style={{ marginTop: 16 }}>
             <div className='w3-big w3-large' style={{ marginLeft: 16 }}>
@@ -1741,7 +1742,7 @@ function chatBox() {
           </div>
         </div>
         <div id='chatListeScrollable' style={{ paddingInline: 12, marginBottom: 16 }}>
-          <div style={{ height: 96 }}></div>
+          <div id='listeChatSpacer' style={{ height: 48 }}></div>
           {
             chatListe
           }
