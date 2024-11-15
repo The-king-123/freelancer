@@ -554,7 +554,7 @@ function chatBox() {
                       >
                         <source
                           src={source + '/videos.php?zlonk=4733&zlink=' + bull.attachement.link}
-                          type="video/mp4"
+                          type={"video/" + bull.attachement.link.split('.')[1]}
                         />
                         Your browser does not support the video tag.
                       </video>
@@ -757,7 +757,7 @@ function chatBox() {
                       >
                         <source
                           src={source + '/videos.php?zlonk=4733&zlink=' + bull.attachement.link}
-                          type="video/*"
+                          type={"video/" + bull.attachement.link.split('.')[1]}
                         />
                         Your browser does not support the video tag.
                       </video>
