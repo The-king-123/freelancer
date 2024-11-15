@@ -1401,7 +1401,6 @@ function chatBox() {
               res.data.data.forEach(user => {
                 usersData.push(user);
               });
-              document.getElementById('chatListeCore').style.display = 'block'
             })
             .catch((e) => {
               console.error("failure", e);
