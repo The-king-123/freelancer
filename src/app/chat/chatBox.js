@@ -549,7 +549,7 @@ function chatBox() {
                         style={{
                           width: 240,
                         }}
-                        className="w3-overflow w3-block w3-light-grey w3-round-large"
+                        className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow w3-block w3-round-large"}
                         controls
                       >
                         <source
@@ -563,11 +563,11 @@ function chatBox() {
                       <div
                         onClick={() => download(bull)}
                         style={{
-                          width: 200,
+                          width: 240,
                           height: 200,
                           padding: 24,
                         }}
-                        className="w3-overflow w3-block w3-light-grey w3-round-large w3-flex-column w3-flex-center"
+                        className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow w3-block w3-round-large w3-flex-column w3-flex-center"}
                       >
                         <FontAwesomeIcon icon={faFileDownload} className='w3-xxlarge w3-margin-bottom' />
                         <div className='w3-block w3-nowrap-multiline w3-overflow w3-center'><FontAwesomeIcon style={{ marginRight: 8 }} icon={faPaperclip} />{bull.attachement.name}</div>
@@ -752,7 +752,7 @@ function chatBox() {
                         style={{
                           width: 240,
                         }}
-                        className="w3-overflow w3-block w3-light-grey w3-round-large"
+                        className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow w3-block w3-round-large"}
                         controls
                       >
                         <source
@@ -766,11 +766,11 @@ function chatBox() {
                       <div
                         onClick={() => download(bull)}
                         style={{
-                          width: 200,
+                          width: 240,
                           height: 200,
                           padding: 24,
                         }}
-                        className="w3-overflow w3-block w3-light-grey w3-round-large w3-flex-column w3-flex-center"
+                        className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow w3-block w3-round-large w3-flex-column w3-flex-center"}
                       >
                         <FontAwesomeIcon icon={faFileDownload} className='w3-xxlarge w3-margin-bottom' />
                         <div className='w3-block w3-nowrap-multiline w3-overflow w3-center'><FontAwesomeIcon style={{ marginRight: 8 }} icon={faPaperclip} />{bull.attachement.name}</div>
@@ -1246,6 +1246,7 @@ function chatBox() {
   const cancelMedia = () => {
     if (!userInfo.sendHolder) {
       document.getElementById('mediaPanel').style.display = 'none'
+      document.getElementById('uploadMediaSpinner').style.display = 'none'
       attachementInfo.name = ''
       attachementInfo.type = ''
       attachementInfo.link = ''
@@ -1274,7 +1275,7 @@ function chatBox() {
               attachementInfo.media = null;
               attachementInfo.link = res.data.medianame;
               chatInfo.attachement = attachementInfo;
-              document.getElementById('previewImageName').innerText = "En cours d'envoi..."
+              cancelMedia()
               sendMessage();
             } else {
               userInfo.sendHolder = false;
