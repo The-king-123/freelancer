@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faCheck, faCheckDouble, faCopy, faDownload, faEdit, faEllipsisH, faFaceSmileBeam, faFile, faFileDownload, faImage, faMicrophone, faMusic, faPaperclip, faPaperPlane, faPlay, faPlus, faReply, faShare, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faCheck, faCheckDouble, faCopy, faDownload, faEdit, faEllipsisH, faFaceSmileBeam, faFile, faFileDownload, faImage, faMicrophone, faMusic, faPaperclip, faPaperPlane, faPlay, faPlus, faReply, faShare, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import parse from "html-react-parser";
 import axios from 'axios';
 import { console_source as source } from '../data';
@@ -1226,6 +1226,40 @@ function chatBox() {
         </div>
       )
     }
+
+    if (window.location.search.length > 0) {
+      let urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("to")) {
+        if (data.length > 0) {
+          var searchFound = false;
+          data.forEach(user => {
+            if (user.key == urlParams.get("to")) {
+              searchFound = true;
+              displayDiscution(user)
+            }
+          });
+          if (!searchFound) {
+            const baseUrl = window.location.origin;
+            const newUrl = `${baseUrl}/chat`;
+
+            document.getElementById('chatListeCore').style.display = 'block'
+            document.getElementById('chattingCore').style.display = 'none';
+
+            history.pushState({}, "", newUrl);
+          }
+        }
+      } else {
+        const baseUrl = window.location.origin;
+        const newUrl = `${baseUrl}/chat`;
+
+        document.getElementById('chatListeCore').style.display = 'block'
+        document.getElementById('chattingCore').style.display = 'none';
+
+        history.pushState({}, "", newUrl);
+      }
+    };
+
+
     setchatListe(glitchChat)
   }
 
@@ -1362,12 +1396,12 @@ function chatBox() {
       .get(source + "/_auth?xcode=" + xcode)
       .then((res) => {
         if (res.data.logedin) {
+
+
+          document.getElementById('chatListeCore').style.display = 'block'
+
           userInfo.key = res.data.user.key;
           userInfo.fullname = res.data.user.fullname;
-
-          if (res.data.user.key == '160471339156947') {
-            document.getElementById('searchUserInput').style.display = 'block'
-          }
 
           document.getElementById('bullField').style.height = (window.innerHeight - 32 - (window.innerWidth < 992 ? 96 : 0)) + 'px';
 
@@ -1432,8 +1466,8 @@ function chatBox() {
           });
 
         } else {
-          if (document.getElementById('modalLogin')) {
-            document.getElementById('modalLogin').style.display = 'block'
+          if (document.getElementById('modalNotLogedIn')) {
+            document.getElementById('modalNotLogedIn').style.display = 'block'
           }
           document.getElementById('profilCore').innerHTML = '';
 
@@ -1664,7 +1698,7 @@ function chatBox() {
           </div>
         </div>
       </div>
-      <div id='chatListeCore'>
+      <div id='chatListeCore' style={{ display: 'none' }}>
         <div id='chatHeadSearch' className='w3-dark-grey w3-top w3-block'>
           <div style={{ marginTop: 16 }}>
             <div className='w3-big w3-large' style={{ marginLeft: 16 }}>
@@ -1690,6 +1724,78 @@ function chatBox() {
           }
         </div>
       </div>
+      {/* modal not logedin */}
+      <div
+        id="modalNotLogedIn"
+        className="w3-modal w3-noscrollbar"
+        style={{ padding: 24, zIndex: 999999 }}
+      >
+        <div
+          className="w3-dark-grey w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
+          style={{
+            minHeight: 240,
+            paddingBlock: 8,
+            paddingInline: 0,
+            maxWidth: 320,
+          }}
+        >
+          <div
+            style={{ paddingBlock: 0, paddingInline: 8 }}
+          >
+            <div
+              onClick={() => {
+                if (document.getElementById('modalLogin')) {
+                  document.getElementById('modalLogin').style.display = 'block'
+                  document.getElementById('modalNotLogedIn').style.display = 'none'
+                }
+              }
+              }
+              className="w3-pointer w3-right w3-flex w3-flex-center"
+              style={{ width: 32, height: 32 }}
+            >
+              <FontAwesomeIcon
+                className='w3-text-light-grey w3-hover-text-black'
+                icon={faTimesCircle}
+                style={{ width: 20, height: 20 }}
+              />
+            </div>
+          </div>
+          <div className="w3-block w3-flex-column w3-flex-center">
+            <div className="w3-block">
+              <div style={{ padding: 24 }} id='cardNotPremiumText'>
+                Vous devez vous connecter pour voir les messages, ou bien utiliser votre numéro mobile.
+              </div>
+              <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
+                <div className="w3-margin w3-block" style={{ paddingInline: 16 }}>
+                  <input style={{ paddingInline: 16 }} className='w3-input w3-border-0 w3-block w3-round-xxlarge w3-black w3-margin-bottom' placeholder='Numéro de téléphone' type='text' />
+                  <div
+                    id='versMonTarifs'
+                    className="transition w3-medium w3-yellow w3-button w3-block w3-round-xxlarge"
+                  >
+                    <span id='buttonContactText'>Envoyer</span>
+                    <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />
+                  </div>
+                  <div style={{ paddingBlock: 16 }}>
+                    <div
+                      onClick={() => {
+                        if (document.getElementById('modalLogin')) {
+                          document.getElementById('modalLogin').style.display = 'block'
+                          document.getElementById('modalNotLogedIn').style.display = 'none'
+                        }
+                      }
+                      }
+                      className="w3-small w3-center w3-pointer"
+                    >
+                      Vous avez un compte: <u>Se connecter</u>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/*end modal logedin */}
     </div>
   )
 }

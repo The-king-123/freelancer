@@ -2003,7 +2003,7 @@ export default function RootLayout({ children }) {
                       onClick={() => window.location = "/signup"}
                       className="w3-small w3-center w3-pointer"
                     >
-                      Vous n'avez pas de comptre: <u>S'inscrire</u>
+                      Vous n'avez pas de compte: <u>S'inscrire</u>
                     </div>
                   </div>
                 </div>
