@@ -1424,6 +1424,8 @@ function chatBox() {
           userInfo.key = res.data.user.key;
           userInfo.fullname = res.data.user.fullname;
 
+          if (res.data.user.designation == 'Admin') document.getElementById('searchUserInput').style.display = 'block'
+
           document.getElementById('bullField').style.height = (window.innerHeight - 32 - (window.innerWidth < 992 ? 96 : 0)) + 'px';
 
           onValue(ref(database, 'chatcase/' + res.data.user.key), (snapshot) => {
