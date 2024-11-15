@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faCheck, faCheckDouble, faCopy, faEdit, faEllipsisH, faFaceSmileBeam, faFile, faFileDownload, faImage, faMicrophone, faMusic, faPaperclip, faPaperPlane, faPlay, faPlus, faReply, faShare, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCheck, faCheckDouble, faCopy, faDownload, faEdit, faEllipsisH, faFaceSmileBeam, faFile, faFileDownload, faImage, faMicrophone, faMusic, faPaperclip, faPaperPlane, faPlay, faPlus, faReply, faShare, faSpinner, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import parse from "html-react-parser";
 import axios from 'axios';
 import { console_source as source } from '../data';
@@ -440,6 +440,11 @@ function chatBox() {
                               </div>
                             }
                           </>
+                        }
+                        {bull.attachement &&
+                          <div title='Télécharger' onClick={() => download(bull)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
+                            <FontAwesomeIcon icon={faDownload} />
+                          </div>
                         }
                         <div title='Transférer' onClick={() => transferBull(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                           <FontAwesomeIcon icon={faShare} />
@@ -894,6 +899,11 @@ function chatBox() {
                             }
                           </>
                         }
+                        {bull.attachement &&
+                          <div title='Télécharger' onClick={() => download(bull)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
+                            <FontAwesomeIcon icon={faDownload} />
+                          </div>
+                        }
                         <div title='Transférer' onClick={() => transferBull(index, bull.message)} className='w3-button w3-flex-1 w3-flex-center' style={{ paddingInline: 0 }}>
                           <FontAwesomeIcon icon={faShare} />
                         </div>
@@ -909,7 +919,6 @@ function chatBox() {
       </div>
     ));
 
-
     if (UI) {
       if (UI.lastmessage.key * 1 != userInfo.key * 1) {
         await set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo/state'), 'read').then(async () => {
@@ -917,8 +926,9 @@ function chatBox() {
         })
       }
     }
-
-    document.getElementById('chatListeCore').style.display = 'none'
+    setTimeout(() => {
+      document.getElementById('chattingCore').style.display = 'flex';
+    }, 100);
     setdisplayChat(glitchChat);
 
     if (chat.length > userInfo.messageCounter) {
@@ -1234,11 +1244,15 @@ function chatBox() {
     userInfo.des_fullname = user.fullname
     userInfo.des_key = user.key
 
+    //change the url to the chat url
+    const baseUrl = window.location.origin;
+    const newUrl = `${baseUrl}/chat?to=${user.key}`;
+
     document.getElementById('chatListeCore').style.display = 'none'
-    document.getElementById('chattingCore').style.display = 'flex';
     document.getElementById('bullField').style.scrollBehavior = 'unset';
     document.getElementById('bullField').style.display = 'flex';
 
+    history.pushState({}, "", newUrl);
     reloadChat()
 
   }
