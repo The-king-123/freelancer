@@ -574,8 +574,8 @@ function chatBox() {
                         }}
                         className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow w3-block w3-round-large w3-flex-column w3-flex-center"}
                       >
-                        <FontAwesomeIcon icon={faFileDownload} className='w3-xxlarge w3-margin-bottom' />
-                        <div className='w3-block w3-nowrap-multiline w3-overflow w3-center'><FontAwesomeIcon style={{ marginRight: 8 }} icon={faPaperclip} />{bull.attachement.name}</div>
+                        <FontAwesomeIcon icon={faPaperclip} className='w3-xxlarge w3-margin-bottom' />
+                        <div className='w3-block w3-nowrap-multiline w3-overflow w3-center'>{bull.attachement.name}</div>
                       </div>
                     }
                   </div>
@@ -777,8 +777,8 @@ function chatBox() {
                         }}
                         className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow w3-block w3-round-large w3-flex-column w3-flex-center"}
                       >
-                        <FontAwesomeIcon icon={faFileDownload} className='w3-xxlarge w3-margin-bottom' />
-                        <div className='w3-block w3-nowrap-multiline w3-overflow w3-center'><FontAwesomeIcon style={{ marginRight: 8 }} icon={faPaperclip} />{bull.attachement.name}</div>
+                        <FontAwesomeIcon icon={faPaperclip} className='w3-xxlarge w3-margin-bottom' />
+                        <div className='w3-block w3-nowrap-multiline w3-overflow w3-center'>{bull.attachement.name}</div>
                       </div>
                     }
                   </div>
