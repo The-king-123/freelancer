@@ -146,8 +146,10 @@ function chatBox() {
         await set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + userInfo.editBull + '/edited'), true)
           .then(async () => {
             userInfo.editBull = false
-            document.getElementById('messageTextarea').value = ''
-
+            if (document.getElementById('messageTextarea')) {
+              document.getElementById('messageTextarea').value = '';
+            }
+          
             userInfo.sendHolder = false;
             chatInfo.key = '';
             chatInfo.des_key = '';
@@ -181,15 +183,23 @@ function chatBox() {
                 chatInfo.responseTo = null;
               })
             })
-            document.getElementById('mediaPanel').style.display = 'none'
+
+            if (document.getElementById('mediaPanel')) {
+              document.getElementById('mediaPanel').style.display = 'none'
+            }
+            
             attachementInfo.name = ''
             attachementInfo.type = ''
             attachementInfo.link = ''
             attachementInfo.media = null
 
-            document.getElementById('uploadMediaSpinner').style.display = 'none'
-            cancelEdit();
+            if (document.getElementById('uploadMediaSpinner')) {
+              document.getElementById('uploadMediaSpinner').style.display = 'none'
+            }
+            
             cancelMedia();
+            cancelReply();
+            cancelEdit();
           })
           .catch((error) => {
             console.error('Error writing data:', error);
@@ -1102,8 +1112,13 @@ function chatBox() {
   const cancelEdit = () => {
     userInfo.editBull = false
     chatInfo.responseTo = null
-    document.getElementById('editPanel').style.display = 'none'
-    document.getElementById('messageTextarea').value = ''
+    if (document.getElementById('editPanel')) {
+      document.getElementById('editPanel').style.display = 'none'
+    }
+    if (document.getElementById('messageTextarea')) {
+      document.getElementById('messageTextarea').value = ''
+    }
+       
   }
 
   const editBull = (idBull, bull) => {
@@ -1137,7 +1152,9 @@ function chatBox() {
 
   const cancelReply = () => {
     chatInfo.responseTo = null
-    document.getElementById('replyPanel').style.display = 'none'
+    if (document.getElementById('replyPanel')) {
+      document.getElementById('replyPanel').style.display = 'none'
+    }
   }
 
   const reply = (idBull, bull) => {
@@ -1293,8 +1310,13 @@ function chatBox() {
 
   const cancelMedia = () => {
     if (!userInfo.sendHolder) {
-      document.getElementById('mediaPanel').style.display = 'none'
-      document.getElementById('uploadMediaSpinner').style.display = 'none'
+      if (document.getElementById('mediaPanel')) {
+        document.getElementById('mediaPanel').style.display = 'none'
+      }
+      if (document.getElementById('uploadMediaSpinner')) {
+        document.getElementById('uploadMediaSpinner').style.display = 'none'
+      }
+      
       attachementInfo.name = ''
       attachementInfo.type = ''
       attachementInfo.link = ''
