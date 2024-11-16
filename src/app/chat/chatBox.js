@@ -38,6 +38,7 @@ function chatBox() {
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
   const auth = getAuth(app);
+  auth.settings.appVerificationDisabledForTesting = true;
   auth.useDeviceLanguage();
   // Firebase configuration
 
@@ -63,7 +64,8 @@ function chatBox() {
     </div>
   )
   const [authPhoneNumber, setauthPhoneNumber] = useState({
-    phoneNumber: ''
+    phoneNumber: '',
+    code: null,
   })
   const [usersData, setusersData] = useState([])
 
@@ -1386,18 +1388,43 @@ function chatBox() {
     }
   }
 
-  const SignInWithPhoneNumber = () => {
+  const resendCo = () => {
 
-    if (authPhoneNumber.phoneNumber.length >= 9 && formatPhoneNumber(authPhoneNumber.phoneNumber)) {
-      const appVerifier = window.recaptchaVerifier;
-      signInWithPhoneNumber(auth, formatPhoneNumber(authPhoneNumber.phoneNumber), appVerifier)
+  }
+
+  function setupRecaptcha(containerId) {
+    const recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
+      size: "invisible", // Or 'normal' for visible reCAPTCHA
+      callback: (response) => {
+        console.log("reCAPTCHA verified:", response);
+      },
+    });
+    return recaptchaVerifier;
+  }
+
+  function signInWithPhone() {
+    const containerId = 'recaptchaContainer'
+    const phoneNumber = authPhoneNumber.phoneNumber;
+    if (formatPhoneNumber(phoneNumber)) {
+      const recaptchaVerifier = setupRecaptcha(containerId);
+      signInWithPhoneNumber(auth, formatPhoneNumber(phoneNumber), recaptchaVerifier)
         .then((confirmationResult) => {
-          console.log('signinphone');
-          window.confirmationResult = confirmationResult;
-          // ...
-        }).catch((error) => {
-          grecaptcha.reset(window.recaptchaWidgetId);
+          if (document.getElementById('smsCodeConfirmation')) {
+            document.getElementById('smsCodeConfirmation').innerText = "Un code a été envoyé au numéro ********" + phoneNumber.slice(-2) + ". Veuillez le saisir ci-dessous pour confirmer."
+            document.getElementById('modalCodeConfirmation').style.display = 'block'
+            document.getElementById('modalNotLogedIn').style.display = 'none'
+          }
+
+          window.confirmationResult = confirmationResult; // Store to confirm the code
+        })
+        .catch((error) => {
+          console.error("Error during sign-in:", error);
         });
+    } else {
+      document.getElementById('textErrorPN').style.display = 'block'
+      setTimeout(() => {
+        document.getElementById('textErrorPN').style.display = 'none'
+      }, 3000);
     }
 
   }
@@ -1414,6 +1441,17 @@ function chatBox() {
       return sanitizedPhoneNumber;
     }
     return false;
+  }
+
+  const confirmCode = () => {
+    if (authPhoneNumber.code.length > 5) {
+      confirmationResult.confirm(authPhoneNumber.code).then((result) => {
+        const user = result.user;
+      }).catch((error) => {
+
+      });
+    }
+
   }
 
   useEffect(() => {
@@ -1448,13 +1486,6 @@ function chatBox() {
 
     syncWidths();
     window.addEventListener('resize', syncWidths);
-
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptchaContainer', {
-      'size': 'normal',
-      'callback': (response) => {
-        SignInWithPhoneNumber()
-      }
-    });
 
     const xcode = localStorage.getItem('x-code');
     axios
@@ -1533,11 +1564,6 @@ function chatBox() {
           });
 
         } else {
-
-          window.recaptchaVerifier.render().then((widgetId) => {
-            window.recaptchaWidgetId = widgetId;
-          });
-
           document.getElementById('chatListeCore').style.display = 'none'
           if (document.getElementById('modalNotLogedIn')) {
             document.getElementById('modalNotLogedIn').style.display = 'block'
@@ -1834,24 +1860,27 @@ function chatBox() {
               />
             </div>
           </div>
-          <div className="w3-block w3-flex-column w3-flex-center">
+          <div className="w3-block w3-flex-column w3-flex-center" style={{ paddingInline: 8 }}>
             <div className="w3-block">
-              <div style={{ paddingInline: 24, paddingBlock:8 }} id='cardNotPremiumText'>
+              <div style={{ paddingInline: 24, paddingBlock: 8 }} id='cardNotPremiumText'>
                 Vous devez vous connecter pour voir les messages, ou bien utiliser votre numéro mobile.
+              </div>
+              <div id='textErrorPN' style={{ paddingInline: 24, paddingBlock: 8, display: 'none' }} className='w3-text-red w3-small'>
+                Veuillez vérifier votre numéro de téléphone.
               </div>
               <div className="w3-center w3-dark-grey w3-flex-column w3-flex-center">
                 <div className="w3-margin w3-block" style={{ paddingInline: 16 }}>
                   <input onChange={(e) => authPhoneNumber.phoneNumber = e.target.value} style={{ paddingInline: 16 }} className='w3-input w3-border-0 w3-block w3-round-xxlarge w3-black w3-margin-bottom' placeholder='Numéro de téléphone' type='text' />
                   <div
                     id='sendCode'
-                    onClick={SignInWithPhoneNumber}
+                    onClick={signInWithPhone}
                     className="transition w3-medium w3-yellow w3-hover-yellow w3-button w3-block w3-round-xxlarge"
                   >
                     <span id='buttonContactText'>Envoyer</span>
                     <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />
                   </div>
                   <div
-                    style={{paddingTop:16}}
+                    style={{ paddingTop: 16 }}
                     onClick={() => {
                       if (document.getElementById('modalLogin')) {
                         document.getElementById('modalLogin').style.display = 'block'
@@ -1864,89 +1893,86 @@ function chatBox() {
                     Vous avez un compte: <u>Se connecter</u>
                   </div>
                 </div>
-                <div id='recaptchaContainer' style={{paddingInline: 8}}></div>
+
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-      {/*end modal logedin */ }
+      {/*end modal logedin */}
 
-  {/* modal code confirmation */ }
-  <div
-    id="modalCodeConfirmation"
-    className="w3-modal w3-noscrollbar"
-    style={{ padding: 24, zIndex: 999999 }}
-  >
-    <div
-      className="w3-dark-grey w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
-      style={{
-        minHeight: 240,
-        paddingBlock: 8,
-        paddingInline: 0,
-        maxWidth: 320,
-      }}
-    >
+      {/* modal code confirmation */}
       <div
-        style={{ paddingBlock: 0, paddingInline: 8 }}
+        id="modalCodeConfirmation"
+        className="w3-modal w3-noscrollbar w3-show"
+        style={{ padding: 24, zIndex: 999999 }}
       >
         <div
-          onClick={() => {
-            if (document.getElementById('modalNotLogedIn')) {
-              document.getElementById('modalNotLogedIn').style.display = 'block'
-              document.getElementById('modalCodeConfirmation').style.display = 'none'
-            }
-          }
-          }
-          className="w3-pointer w3-left w3-flex w3-flex-center"
-          style={{ width: 32, height: 32 }}
+          className="w3-dark-grey w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
+          style={{
+            minHeight: 240,
+            paddingBlock: 8,
+            paddingInline: 0,
+            maxWidth: 320,
+          }}
         >
-          <FontAwesomeIcon
-            className='w3-text-light-grey w3-hover-text-black'
-            icon={faArrowLeft}
-            style={{ width: 20, height: 20 }}
-          />
-        </div>
-      </div>
-      <div className="w3-block w3-flex-column w3-flex-center">
-        <div className="w3-block">
-          <div style={{ padding: 24 }} id='cardNotPremiumText'>
-            Vous devez vous connecter pour voir les messages, ou bien utiliser votre numéro mobile.
+          <div
+            style={{ paddingBlock: 0, paddingInline: 8 }}
+          >
+            <div
+              onClick={() => {
+                if (document.getElementById('modalNotLogedIn')) {
+                  document.getElementById('modalNotLogedIn').style.display = 'block'
+                  document.getElementById('modalCodeConfirmation').style.display = 'none'
+                }
+              }
+              }
+              className="w3-pointer w3-left w3-flex w3-flex-center"
+              style={{ width: 32, height: 32 }}
+            >
+              <FontAwesomeIcon
+                className='w3-hover-text-black'
+                icon={faArrowLeft}
+                style={{ width: 20, height: 20 }}
+              />
+            </div>
           </div>
-          <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
-            <div className="w3-margin w3-block" style={{ paddingInline: 16 }}>
-              <input onChange={(e) => authPhoneNumber.phoneNumber = e.target.value} style={{ paddingInline: 16 }} className='w3-input w3-border-0 w3-block w3-round-xxlarge w3-black w3-margin-bottom' placeholder='Numéro de téléphone' type='text' />
-              <div
-                id='sendCode'
-                onClick={SignInWithPhoneNumber}
-                className="transition w3-medium w3-yellow w3-hover-yellow w3-button w3-block w3-round-xxlarge"
-              >
-                <span id='buttonContactText'>Envoyer</span>
-                <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />
+          <div className="w3-block w3-flex-column w3-flex-center">
+            <div className="w3-block">
+              <div style={{ paddingInline: 24, paddingBlock: 8 }} id='smsCodeConfirmation'>
+                Un code a été envoyé au numéro ********. Veuillez le saisir ci-dessous pour confirmer.
               </div>
+              <div id='textErrorPN' style={{ paddingInline: 24, paddingBlock: 8, display: 'none' }} className='w3-text-red w3-small'>
+                Veuillez vérifier votre numéro de téléphone.
+              </div>
+              <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
+                <div className="w3-margin w3-block" style={{ paddingInline: 8 }}>
+                  <input onChange={(e) => authPhoneNumber.code = e.target.value} style={{ paddingInline: 16 }} className='w3-input w3-border-0 w3-block w3-round-xxlarge w3-black w3-margin-bottom' placeholder='Code de confirmation' type='text' />
+                  <div
+                    id='confirmCode'
+                    onClick={confirmCode}
+                    className="transition w3-medium w3-yellow w3-hover-yellow w3-button w3-block w3-round-xxlarge"
+                  >
+                    <span id='buttonContactText'>Confirmer</span>
+                    <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />
+                  </div>
 
-              <div style={{ paddingBlock: 16 }}>
-                <div
-                  onClick={() => {
-                    if (document.getElementById('modalLogin')) {
-                      document.getElementById('modalLogin').style.display = 'block'
-                      document.getElementById('modalNotLogedIn').style.display = 'none'
-                    }
-                  }
-                  }
-                  className="w3-small w3-center w3-pointer"
-                >
-                  Vous avez un compte: <u>Se connecter</u>
+                  <div style={{ paddingBlock: 16 }}>
+                    <div
+                      onClick={resendCo}
+                      className="w3-small w3-center w3-pointer"
+                    >
+                      Vous n'avez pas reçu de code ?<u>&nbsp;Réessayez.</u>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  {/*end modal code cofirmation */ }
-      
+      {/*end modal code cofirmation */}
+      <div id='recaptchaContainer' style={{ paddingInline: 8 }}></div>
     </div >
   )
 }
