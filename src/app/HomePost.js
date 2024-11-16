@@ -109,7 +109,7 @@ export default function PostContent({ posts }) {
                 </div>
                 <div
                   title="Premium"
-                  className="w3-yellow w3-circle"
+                  className="w3-yellow w3-hover-yellow w3-circle"
                   style={{ width: 26, height: 26, marginRight: 4 }}
                 >
                   <div className="w3-block w3-height w3-flex w3-flex-center">

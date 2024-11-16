@@ -701,7 +701,7 @@ function postuleRecrutement(props) {
           <div style={{ marginTop: 24 }}>
             <button
               onClick={() => save("public")}
-              className="w3-button w3-yellow w3-round-xxlarge w3-block w3-flex w3-flex-center"
+              className="w3-button w3-yellow w3-hover-yellow w3-round-xxlarge w3-block w3-flex w3-flex-center"
             >
               Postulez votre candidature{" "}
               <FontAwesomeIcon

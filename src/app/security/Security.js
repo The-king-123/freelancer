@@ -168,7 +168,7 @@ function Security() {
                             required
                         />
                         <div
-                            className="w3-yellow input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            className="w3-yellow w3-hover-yellow input-icon w3-display-right w3-circle w3-flex w3-flex-center"
                             style={{ marginRight: 3 }}
                         >
                             <span>
@@ -204,7 +204,7 @@ function Security() {
                             required
                         />
                         <div
-                            className="w3-yellow input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            className="w3-yellow w3-hover-yellow input-icon w3-display-right w3-circle w3-flex w3-flex-center"
                             style={{ marginRight: 3 }}
                         >
                             <span>
@@ -242,7 +242,7 @@ function Security() {
                             required
                         />
                         <div
-                            className="w3-yellow input-icon w3-display-right w3-circle w3-flex w3-flex-center"
+                            className="w3-yellow w3-hover-yellow input-icon w3-display-right w3-circle w3-flex w3-flex-center"
                             style={{ marginRight: 3 }}
                         >
                             <span>
@@ -255,7 +255,7 @@ function Security() {
                             <div
                                 style={{ paddingInline: 32 }}
                                 onClick={() => updatePassword()}
-                                className="transition w3-medium w3-button w3-round-xxlarge w3-yellow w3-margin-bottom"
+                                className="transition w3-medium w3-button w3-round-xxlarge w3-yellow w3-hover-yellow w3-margin-bottom"
                             >
                                 Changer le mot de passe
 

@@ -493,7 +493,7 @@ function chatBox() {
                   }} className='w3-container' style={{ position: 'relative', padding: 0, zIndex: 0 }}>
                     {!chatBrut[bull.responseTo].attachement &&
                       <div
-                        className={(themeLight ? "w3-opacity" : "w3-opacity-max") + " w3-yellow chatbull w3-round-xlarge w3-right w3-nowrap w3-overflow"}
+                        className={(themeLight ? "w3-opacity" : "w3-opacity-max") + " w3-yellow w3-hover-yellow chatbull w3-round-xlarge w3-right w3-nowrap w3-overflow"}
                         style={{
                           paddingInline: 16,
                           paddingBlock: 10,
@@ -527,7 +527,7 @@ function chatBox() {
                 {bull.message.length > 0 &&
                   <div
                     id={index}
-                    className="chatbull w3-yellow w3-round-xlarge w3-right w3-nowrap w3-opacity-off"
+                    className="chatbull w3-yellow w3-hover-yellow w3-round-xlarge w3-right w3-nowrap w3-opacity-off"
                     style={{
                       paddingInline: 16,
                       wordWrap: 'break-word',
@@ -1757,7 +1757,7 @@ function chatBox() {
                   </div>
                   {/* / arrow marker / */}
                 </div>
-                <div className='w3-pointer w3-yellow w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
+                <div className='w3-pointer w3-yellow w3-hover-yellow w3-circle w3-flex w3-flex-center w3-margin-right' style={{ width: 32, height: 32 }}>
                   <FontAwesomeIcon icon={faPlus} />
                 </div>
               </div>
@@ -1766,7 +1766,7 @@ function chatBox() {
               <div className='w3-flex-1'>
                 <textarea id='messageTextarea' style={{ paddingInline: 24, height: 40, resize: 'none' }} type='text' placeholder='Message' className='w3-input w3-border-0 w3-round-xxlarge w3-block w3-dark-grey w3-noscrollbar' />
               </div>
-              <div onClick={() => attachementInfo.media ? uploadMedia() : sendMessage()} className='w3-pointer w3-yellow w3-circle w3-flex w3-flex-center w3-margin-left' style={{ width: 32, height: 32 }}>
+              <div onClick={() => attachementInfo.media ? uploadMedia() : sendMessage()} className='w3-pointer w3-yellow w3-hover-yellow w3-circle w3-flex w3-flex-center w3-margin-left' style={{ width: 32, height: 32 }}>
                 <FontAwesomeIcon icon={faPaperPlane} />
               </div>
             </div>
@@ -1846,7 +1846,7 @@ function chatBox() {
                   <div
                     id='sendCode'
                     onClick={SignInWithPhoneNumber}
-                    className="transition w3-medium w3-yellow w3-button w3-block w3-round-xxlarge"
+                    className="transition w3-medium w3-yellow w3-hover-yellow w3-button w3-block w3-round-xxlarge"
                   >
                     <span id='buttonContactText'>Envoyer</span>
                     <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />
@@ -1865,7 +1865,7 @@ function chatBox() {
                     Vous avez un compte: <u>Se connecter</u>
                   </div>
                 </div>
-                <div id='recaptchaContainer' style={{padding: 8}}></div>
+                <div id='recaptchaContainer' style={{paddingInline: 8}}></div>
             </div>
           </div>
         </div>
@@ -1920,7 +1920,7 @@ function chatBox() {
               <div
                 id='sendCode'
                 onClick={SignInWithPhoneNumber}
-                className="transition w3-medium w3-yellow w3-button w3-block w3-round-xxlarge"
+                className="transition w3-medium w3-yellow w3-hover-yellow w3-button w3-block w3-round-xxlarge"
               >
                 <span id='buttonContactText'>Envoyer</span>
                 <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />

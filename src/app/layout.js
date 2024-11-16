@@ -829,7 +829,7 @@ export default function RootLayout({ children }) {
 
     const firstPath = location.pathname.split('/')[1]
     if (document.getElementById(firstPath + 'Page')) {
-      document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') != 'dark' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow')
+      document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') != 'dark' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow w3-hover-yellow')
     }
     if (document.getElementById(firstPath + 'Screen')) {
       document.getElementById(firstPath + 'Screen').className = document.getElementById(firstPath + 'Screen').className.replace('whiteBlackYellow', 'w3-text-yellow')
@@ -1073,7 +1073,7 @@ export default function RootLayout({ children }) {
               <div id="beastWrapper" className="w3-flex-column">
                 <div className="btn3_container w3-dark-grey w3-border-dark-grey" style={{ marginInline: 'auto' }}>
                   <span className="main w3-pointer">
-                    <div id="freeSwitch" className="btn w3-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
+                    <div id="freeSwitch" className="btn w3-yellow w3-hover-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
                       <FontAwesomeIcon icon={faDollarSign} />
                     </div>
                     <div id="premiumSwitch" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36, display: 'none' }}>
@@ -1564,7 +1564,7 @@ export default function RootLayout({ children }) {
               <div className="w3-flex-row w3-flex-center-v">
                 <div
                   onClick={() => expand()}
-                  className="w3-button w3-hover-grey w3-yellow w3-flex-1 w3-round-xxlarge w3-flex-row w3-flex-center-v"
+                  className="w3-button w3-hover-grey w3-yellow w3-hover-yellow w3-flex-1 w3-round-xxlarge w3-flex-row w3-flex-center-v"
                   style={{ marginTop: 12 }}
                 >
                   <span className="w3-center w3-flex-1">Des questions !?</span>{" "}
@@ -1810,7 +1810,7 @@ export default function RootLayout({ children }) {
                   }
                 }} style={{ marginInline: 'auto', zIndex: 1 }}>
                   <span className="main1 w3-pointer">
-                    <div id="freeSwitch1" className="btn1 w3-yellow w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28 }}>
+                    <div id="freeSwitch1" className="btn1 w3-yellow w3-hover-yellow w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28 }}>
                       <FontAwesomeIcon icon={faDollarSign} />
                     </div>
                     <div id="premiumSwitch1" className="btn1 w3-green w3-circle w3-flex w3-flex-center" style={{ height: 28, width: 28, display: 'none' }}>
@@ -1980,7 +1980,7 @@ export default function RootLayout({ children }) {
                       id="buttonConnexion"
                       disabled={false}
                       onClick={() => login()}
-                      className="transition w3-medium w3-block w3-button w3-round-xxlarge w3-yellow"
+                      className="transition w3-medium w3-block w3-button w3-round-xxlarge w3-yellow w3-hover-yellow"
                     >
                       Se connecter
                       <span

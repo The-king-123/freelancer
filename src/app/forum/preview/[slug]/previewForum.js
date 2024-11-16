@@ -211,7 +211,7 @@ function previewForum({ forum }) {
             style={{ borderBottomLeftRadius: 32, borderTopLeftRadius: 32 }}
             placeholder="Laisser un commentaire"
           />
-          <button onClick={() => comment(forum, 0)} className="w3-button w3-border-0 w3-yellow w3-pointer" style={{ minWidth: 80 }}>
+          <button onClick={() => comment(forum, 0)} className="w3-button w3-border-0 w3-yellow w3-hover-yellow w3-pointer" style={{ minWidth: 80 }}>
             <span id={"comentTextSpinner0"}>Envoyer</span>
             <FontAwesomeIcon id={"comentButtonSpinner0"} icon={faSpinner} className="w3-spin" style={{ display: 'none' }} />
           </button>

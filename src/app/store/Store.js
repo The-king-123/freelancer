@@ -31,7 +31,7 @@ function Store() {
 
               <div
                 title="Gratuit"
-                className={"w3-circle " + (product.type == 'free' ? 'w3-green' : 'w3-yellow')}
+                className={"w3-circle " + (product.type == 'free' ? 'w3-green' : 'w3-yellow w3-hover-yellow')}
                 style={{ width: 24, height: 24, marginRight: 4 }}
               >
                 <div className="w3-block w3-height w3-flex w3-flex-center">

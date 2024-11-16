@@ -82,7 +82,7 @@ function Tarifs({ tarif }) {
     return (
         <div>
             <div className='w3-medium' style={{ padding: 8 }}>
-                <div className='w3-flex w3-flex-center w3-circle w3-yellow' style={{ width: 32, height: 32, marginBottom: 16 }}>
+                <div className='w3-flex w3-flex-center w3-circle w3-yellow w3-hover-yellow' style={{ width: 32, height: 32, marginBottom: 16 }}>
                     <FontAwesomeIcon icon={faMoneyBill1} className='w3-large' />
 
                 </div>

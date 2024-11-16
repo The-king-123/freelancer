@@ -539,7 +539,7 @@ function Profile() {
         </div>
         <div
           onClick={updateUserinfo}
-          className="w3-block transition w3-medium w3-button w3-round-xxlarge w3-yellow w3-margin-bottom"
+          className="w3-block transition w3-medium w3-button w3-round-xxlarge w3-yellow w3-hover-yellow w3-margin-bottom"
         >
           Sauvegarder
           <span

@@ -372,7 +372,7 @@ function page() {
                             <button
                                 disabled={false}
                                 onClick={signup}
-                                className="transition w3-medium w3-block w3-button w3-round-xxlarge w3-yellow"
+                                className="transition w3-medium w3-block w3-button w3-round-xxlarge w3-yellow w3-hover-yellow"
                             >
                                 Créer mon compte
                                 <span
