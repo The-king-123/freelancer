@@ -8,7 +8,7 @@ import parse from "html-react-parser";
 import axios from 'axios';
 import { console_source as source } from '../data';
 import Image from 'next/image';
-import Link from 'next/link';
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 
 function chatBox() {
 
@@ -24,6 +24,7 @@ function chatBox() {
     fire: '🔥',
   }
 
+  // Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyBI0egg-gSu_99VAcprwtbgRguW9GxrGIs",
     authDomain: "freelancer-chatbox.firebaseapp.com",
@@ -34,9 +35,12 @@ function chatBox() {
     measurementId: "G-VTQ7112MF2",
     databaseURL: "https://freelancer-chatbox-default-rtdb.europe-west1.firebasedatabase.app/"
   };
-
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
+  const auth = getAuth(app);
+  auth.useDeviceLanguage();
+  // Firebase configuration
+
   const [search, setsearch] = useState({ keyword: '' })
   const [discutionsData, setdiscutionsData] = useState([
     {
@@ -58,6 +62,9 @@ function chatBox() {
       <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
     </div>
   )
+  const [authPhoneNumber, setauthPhoneNumber] = useState({
+    phoneNumber: ''
+  })
   const [usersData, setusersData] = useState([])
 
   const [userInfo, setuserInfo] = useState({
@@ -1372,9 +1379,42 @@ function chatBox() {
   }
 
   function syncWidths() {
-    let element1 = document.getElementById('chatListeCore');
-    let element2 = document.getElementById('chatHeadSearch');
-    element2.style.width = `${element1.offsetWidth}px`;
+    if (document.getElementById('chatListeCore') && document.getElementById('chatHeadSearch')) {
+      let element1 = document.getElementById('chatListeCore');
+      let element2 = document.getElementById('chatHeadSearch');
+      element2.style.width = `${element1.offsetWidth}px`;
+    }
+  }
+
+  const SignInWithPhoneNumber = () => {
+
+    if (authPhoneNumber.phoneNumber.length >= 9) {
+      const appVerifier = window.recaptchaVerifier;
+      signInWithPhoneNumber(auth, formatPhoneNumber(authPhoneNumber.phoneNumber), appVerifier)
+        .then((confirmationResult) => {
+          console.log('signinphone');
+          window.confirmationResult = confirmationResult;
+          // ...
+        }).catch((error) => {
+          // Error; SMS not sent
+          // ...
+        });
+    }
+
+  }
+
+  function formatPhoneNumber(phoneNumber) {
+    const sanitizedPhoneNumber = phoneNumber.replace(/[^0-9+]/g, '');
+    if (sanitizedPhoneNumber !== phoneNumber) {
+      return false;
+    }
+    if (sanitizedPhoneNumber.startsWith('0')) {
+      return '+261' + sanitizedPhoneNumber.slice(1);
+    }
+    if (sanitizedPhoneNumber.startsWith('+')) {
+      return sanitizedPhoneNumber;
+    }
+    return false;
   }
 
   useEffect(() => {
@@ -1408,9 +1448,15 @@ function chatBox() {
     }
 
     syncWidths();
-
     window.addEventListener('resize', syncWidths);
 
+    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptchaContainer', {
+      'size': 'invisible',
+      'callback': (response) => {
+        console.log('verified');
+        SignInWithPhoneNumber();
+      }
+    });
 
     const xcode = localStorage.getItem('x-code');
     axios
@@ -1424,7 +1470,7 @@ function chatBox() {
           if (res.data.user.designation == 'Admin') {
             document.getElementById('searchUserInput').style.display = 'block'
             document.getElementById('listeChatSpacer').style.height = '96px'
-          } 
+          }
 
           document.getElementById('bullField').style.height = (window.innerHeight - 32 - (window.innerWidth < 992 ? 96 : 0)) + 'px';
 
@@ -1489,11 +1535,17 @@ function chatBox() {
           });
 
         } else {
+
+          window.recaptchaVerifier.render().then((widgetId) => {
+            window.recaptchaWidgetId = widgetId;
+          });
+
           document.getElementById('chatListeCore').style.display = 'none'
           if (document.getElementById('modalNotLogedIn')) {
             document.getElementById('modalNotLogedIn').style.display = 'block'
           }
-          document.getElementById('profilCore').innerHTML = '';
+          document.getElementById('chattingCore').innerHTML = '';
+          document.getElementById('chatListeCore').innerHTML = '';
 
         }
       })
@@ -1791,14 +1843,16 @@ function chatBox() {
               </div>
               <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
                 <div className="w3-margin w3-block" style={{ paddingInline: 16 }}>
-                  <input style={{ paddingInline: 16 }} className='w3-input w3-border-0 w3-block w3-round-xxlarge w3-black w3-margin-bottom' placeholder='Numéro de téléphone' type='text' />
+                  <input onChange={(e) => authPhoneNumber.phoneNumber = e.target.value} style={{ paddingInline: 16 }} className='w3-input w3-border-0 w3-block w3-round-xxlarge w3-black w3-margin-bottom' placeholder='Numéro de téléphone' type='text' />
                   <div
-                    id='versMonTarifs'
+                    id='sendCode'
+                    onClick={SignInWithPhoneNumber}
                     className="transition w3-medium w3-yellow w3-button w3-block w3-round-xxlarge"
                   >
                     <span id='buttonContactText'>Envoyer</span>
                     <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />
                   </div>
+
                   <div style={{ paddingBlock: 16 }}>
                     <div
                       onClick={() => {
@@ -1820,6 +1874,82 @@ function chatBox() {
         </div>
       </div>
       {/*end modal logedin */}
+
+      {/* modal code confirmation */}
+      <div
+        id="modalCodeConfirmation"
+        className="w3-modal w3-noscrollbar"
+        style={{ padding: 24, zIndex: 999999 }}
+      >
+        <div
+          className="w3-dark-grey w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
+          style={{
+            minHeight: 240,
+            paddingBlock: 8,
+            paddingInline: 0,
+            maxWidth: 320,
+          }}
+        >
+          <div
+            style={{ paddingBlock: 0, paddingInline: 8 }}
+          >
+            <div
+              onClick={() => {
+                if (document.getElementById('modalNotLogedIn')) {
+                  document.getElementById('modalNotLogedIn').style.display = 'block'
+                  document.getElementById('modalCodeConfirmation').style.display = 'none'
+                }
+              }
+              }
+              className="w3-pointer w3-left w3-flex w3-flex-center"
+              style={{ width: 32, height: 32 }}
+            >
+              <FontAwesomeIcon
+                className='w3-text-light-grey w3-hover-text-black'
+                icon={faArrowLeft}
+                style={{ width: 20, height: 20 }}
+              />
+            </div>
+          </div>
+          <div className="w3-block w3-flex-column w3-flex-center">
+            <div className="w3-block">
+              <div style={{ padding: 24 }} id='cardNotPremiumText'>
+                Vous devez vous connecter pour voir les messages, ou bien utiliser votre numéro mobile.
+              </div>
+              <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
+                <div className="w3-margin w3-block" style={{ paddingInline: 16 }}>
+                  <input onChange={(e) => authPhoneNumber.phoneNumber = e.target.value} style={{ paddingInline: 16 }} className='w3-input w3-border-0 w3-block w3-round-xxlarge w3-black w3-margin-bottom' placeholder='Numéro de téléphone' type='text' />
+                  <div
+                    id='sendCode'
+                    onClick={SignInWithPhoneNumber}
+                    className="transition w3-medium w3-yellow w3-button w3-block w3-round-xxlarge"
+                  >
+                    <span id='buttonContactText'>Envoyer</span>
+                    <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />
+                  </div>
+
+                  <div style={{ paddingBlock: 16 }}>
+                    <div
+                      onClick={() => {
+                        if (document.getElementById('modalLogin')) {
+                          document.getElementById('modalLogin').style.display = 'block'
+                          document.getElementById('modalNotLogedIn').style.display = 'none'
+                        }
+                      }
+                      }
+                      className="w3-small w3-center w3-pointer"
+                    >
+                      Vous avez un compte: <u>Se connecter</u>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/*end modal code cofirmation */}
+      <div id='recaptchaContainer'></div>
     </div>
   )
 }
