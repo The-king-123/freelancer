@@ -1451,10 +1451,9 @@ function chatBox() {
     window.addEventListener('resize', syncWidths);
 
     window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptchaContainer', {
-      'size': 'invisible',
+      'size': 'normal',
       'callback': (response) => {
         console.log('verified');
-        SignInWithPhoneNumber();
       }
     });
 
@@ -1830,7 +1829,7 @@ function chatBox() {
               style={{ width: 32, height: 32 }}
             >
               <FontAwesomeIcon
-                className='w3-text-light-grey w3-hover-text-black'
+                className='w3-white w3-hover-text-black'
                 icon={faTimesCircle}
                 style={{ width: 20, height: 20 }}
               />
@@ -1838,10 +1837,10 @@ function chatBox() {
           </div>
           <div className="w3-block w3-flex-column w3-flex-center">
             <div className="w3-block">
-              <div style={{ padding: 24 }} id='cardNotPremiumText'>
+              <div style={{ paddingInline: 24, paddingBlock:8 }} id='cardNotPremiumText'>
                 Vous devez vous connecter pour voir les messages, ou bien utiliser votre numéro mobile.
               </div>
-              <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
+              <div className="w3-center w3-dark-grey w3-flex-column w3-flex-center">
                 <div className="w3-margin w3-block" style={{ paddingInline: 16 }}>
                   <input onChange={(e) => authPhoneNumber.phoneNumber = e.target.value} style={{ paddingInline: 16 }} className='w3-input w3-border-0 w3-block w3-round-xxlarge w3-black w3-margin-bottom' placeholder='Numéro de téléphone' type='text' />
                   <div
@@ -1852,105 +1851,104 @@ function chatBox() {
                     <span id='buttonContactText'>Envoyer</span>
                     <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />
                   </div>
-
-                  <div style={{ paddingBlock: 16 }}>
-                    <div
-                      onClick={() => {
-                        if (document.getElementById('modalLogin')) {
-                          document.getElementById('modalLogin').style.display = 'block'
-                          document.getElementById('modalNotLogedIn').style.display = 'none'
-                        }
+                  <div
+                    style={{paddingTop:16}}
+                    onClick={() => {
+                      if (document.getElementById('modalLogin')) {
+                        document.getElementById('modalLogin').style.display = 'block'
+                        document.getElementById('modalNotLogedIn').style.display = 'none'
                       }
-                      }
-                      className="w3-small w3-center w3-pointer"
-                    >
-                      Vous avez un compte: <u>Se connecter</u>
-                    </div>
+                    }
+                    }
+                    className="w3-small w3-center w3-pointer"
+                  >
+                    Vous avez un compte: <u>Se connecter</u>
                   </div>
                 </div>
-              </div>
+                <div id='recaptchaContainer' style={{padding: 8}}></div>
             </div>
           </div>
         </div>
       </div>
-      {/*end modal logedin */}
+    </div>
+      {/*end modal logedin */ }
 
-      {/* modal code confirmation */}
+  {/* modal code confirmation */ }
+  <div
+    id="modalCodeConfirmation"
+    className="w3-modal w3-noscrollbar"
+    style={{ padding: 24, zIndex: 999999 }}
+  >
+    <div
+      className="w3-dark-grey w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
+      style={{
+        minHeight: 240,
+        paddingBlock: 8,
+        paddingInline: 0,
+        maxWidth: 320,
+      }}
+    >
       <div
-        id="modalCodeConfirmation"
-        className="w3-modal w3-noscrollbar"
-        style={{ padding: 24, zIndex: 999999 }}
+        style={{ paddingBlock: 0, paddingInline: 8 }}
       >
         <div
-          className="w3-dark-grey w3-display-middle w3-block w3-noscrollbar w3-container w3-round-large w3-content w3-overflow"
-          style={{
-            minHeight: 240,
-            paddingBlock: 8,
-            paddingInline: 0,
-            maxWidth: 320,
-          }}
+          onClick={() => {
+            if (document.getElementById('modalNotLogedIn')) {
+              document.getElementById('modalNotLogedIn').style.display = 'block'
+              document.getElementById('modalCodeConfirmation').style.display = 'none'
+            }
+          }
+          }
+          className="w3-pointer w3-left w3-flex w3-flex-center"
+          style={{ width: 32, height: 32 }}
         >
-          <div
-            style={{ paddingBlock: 0, paddingInline: 8 }}
-          >
-            <div
-              onClick={() => {
-                if (document.getElementById('modalNotLogedIn')) {
-                  document.getElementById('modalNotLogedIn').style.display = 'block'
-                  document.getElementById('modalCodeConfirmation').style.display = 'none'
-                }
-              }
-              }
-              className="w3-pointer w3-left w3-flex w3-flex-center"
-              style={{ width: 32, height: 32 }}
-            >
-              <FontAwesomeIcon
-                className='w3-text-light-grey w3-hover-text-black'
-                icon={faArrowLeft}
-                style={{ width: 20, height: 20 }}
-              />
-            </div>
+          <FontAwesomeIcon
+            className='w3-text-light-grey w3-hover-text-black'
+            icon={faArrowLeft}
+            style={{ width: 20, height: 20 }}
+          />
+        </div>
+      </div>
+      <div className="w3-block w3-flex-column w3-flex-center">
+        <div className="w3-block">
+          <div style={{ padding: 24 }} id='cardNotPremiumText'>
+            Vous devez vous connecter pour voir les messages, ou bien utiliser votre numéro mobile.
           </div>
-          <div className="w3-block w3-flex-column w3-flex-center">
-            <div className="w3-block">
-              <div style={{ padding: 24 }} id='cardNotPremiumText'>
-                Vous devez vous connecter pour voir les messages, ou bien utiliser votre numéro mobile.
+          <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
+            <div className="w3-margin w3-block" style={{ paddingInline: 16 }}>
+              <input onChange={(e) => authPhoneNumber.phoneNumber = e.target.value} style={{ paddingInline: 16 }} className='w3-input w3-border-0 w3-block w3-round-xxlarge w3-black w3-margin-bottom' placeholder='Numéro de téléphone' type='text' />
+              <div
+                id='sendCode'
+                onClick={SignInWithPhoneNumber}
+                className="transition w3-medium w3-yellow w3-button w3-block w3-round-xxlarge"
+              >
+                <span id='buttonContactText'>Envoyer</span>
+                <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />
               </div>
-              <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
-                <div className="w3-margin w3-block" style={{ paddingInline: 16 }}>
-                  <input onChange={(e) => authPhoneNumber.phoneNumber = e.target.value} style={{ paddingInline: 16 }} className='w3-input w3-border-0 w3-block w3-round-xxlarge w3-black w3-margin-bottom' placeholder='Numéro de téléphone' type='text' />
-                  <div
-                    id='sendCode'
-                    onClick={SignInWithPhoneNumber}
-                    className="transition w3-medium w3-yellow w3-button w3-block w3-round-xxlarge"
-                  >
-                    <span id='buttonContactText'>Envoyer</span>
-                    <FontAwesomeIcon className='w3-margin-left' icon={faArrowRight} />
-                  </div>
 
-                  <div style={{ paddingBlock: 16 }}>
-                    <div
-                      onClick={() => {
-                        if (document.getElementById('modalLogin')) {
-                          document.getElementById('modalLogin').style.display = 'block'
-                          document.getElementById('modalNotLogedIn').style.display = 'none'
-                        }
-                      }
-                      }
-                      className="w3-small w3-center w3-pointer"
-                    >
-                      Vous avez un compte: <u>Se connecter</u>
-                    </div>
-                  </div>
+              <div style={{ paddingBlock: 16 }}>
+                <div
+                  onClick={() => {
+                    if (document.getElementById('modalLogin')) {
+                      document.getElementById('modalLogin').style.display = 'block'
+                      document.getElementById('modalNotLogedIn').style.display = 'none'
+                    }
+                  }
+                  }
+                  className="w3-small w3-center w3-pointer"
+                >
+                  Vous avez un compte: <u>Se connecter</u>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      {/*end modal code cofirmation */}
-      <div id='recaptchaContainer'></div>
     </div>
+  </div>
+  {/*end modal code cofirmation */ }
+      
+    </div >
   )
 }
 
