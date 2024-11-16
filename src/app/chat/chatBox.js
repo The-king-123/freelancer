@@ -1388,7 +1388,7 @@ function chatBox() {
 
   const SignInWithPhoneNumber = () => {
 
-    if (authPhoneNumber.phoneNumber.length >= 9) {
+    if (authPhoneNumber.phoneNumber.length >= 9 && formatPhoneNumber(authPhoneNumber.phoneNumber)) {
       const appVerifier = window.recaptchaVerifier;
       signInWithPhoneNumber(auth, formatPhoneNumber(authPhoneNumber.phoneNumber), appVerifier)
         .then((confirmationResult) => {
@@ -1396,8 +1396,7 @@ function chatBox() {
           window.confirmationResult = confirmationResult;
           // ...
         }).catch((error) => {
-          // Error; SMS not sent
-          // ...
+          grecaptcha.reset(window.recaptchaWidgetId);
         });
     }
 
@@ -1453,7 +1452,7 @@ function chatBox() {
     window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptchaContainer', {
       'size': 'normal',
       'callback': (response) => {
-        console.log('verified');
+        SignInWithPhoneNumber()
       }
     });
 
