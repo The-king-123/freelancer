@@ -1904,7 +1904,7 @@ function chatBox() {
       {/* modal code confirmation */}
       <div
         id="modalCodeConfirmation"
-        className="w3-modal w3-noscrollbar w3-show"
+        className="w3-modal w3-noscrollbar"
         style={{ padding: 24, zIndex: 999999 }}
       >
         <div
