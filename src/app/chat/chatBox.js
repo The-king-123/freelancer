@@ -1478,6 +1478,47 @@ function chatBox() {
 
   }
 
+  const fetchChatListe = () => {
+    onValue(ref(database, 'chatcase/' + userInfo.key), (snapshot) => {
+
+      if (snapshot.exists()) {
+        const chats = snapshot.val();
+        const discutions = [
+          {
+            fullname: 'FREELANCER.MG',
+            key: '160471339156947',
+            new: true,
+          }
+        ]
+        var uicounter = 0;
+        discutionsData.splice(1, discutionsData.length);
+        const sortedChats = Object.entries(chats).sort(([, a], [, b]) => b.userInfo.timestamp - a.userInfo.timestamp)
+        sortedChats.map(([index, chat]) => {
+          if (chat.userInfo) {
+            if (chat.userInfo.key == '160471339156947') {
+              discutions[0] = chat.userInfo
+              discutionsData[0] = chat.userInfo
+            } else {
+              discutions.push(chat.userInfo);
+              discutionsData.push(chat.userInfo)
+            }
+          } else {
+            uicounter++
+          }
+
+        });
+        if (uicounter <= 0) {
+          reloadChatsList(discutions, 'discution')
+        }
+
+      } else {
+        reloadChatsList(discutionsData, 'discution')
+      }
+    }, (error) => {
+      console.error("Error reading data:", error);
+    });
+  }
+
   useEffect(() => {
 
     if (localStorage.getItem('theme') != 'dark') {
@@ -1527,44 +1568,7 @@ function chatBox() {
 
           document.getElementById('bullField').style.height = (window.innerHeight - 32 - (window.innerWidth < 992 ? 96 : 0)) + 'px';
 
-          onValue(ref(database, 'chatcase/' + res.data.user.key), (snapshot) => {
-
-            if (snapshot.exists()) {
-              const chats = snapshot.val();
-              const discutions = [
-                {
-                  fullname: 'FREELANCER.MG',
-                  key: '160471339156947',
-                  new: true,
-                }
-              ]
-              var uicounter = 0;
-              discutionsData.splice(1, discutionsData.length);
-              const sortedChats = Object.entries(chats).sort(([, a], [, b]) => b.userInfo.timestamp - a.userInfo.timestamp)
-              sortedChats.map(([index, chat]) => {
-                if (chat.userInfo) {
-                  if (chat.userInfo.key == '160471339156947') {
-                    discutions[0] = chat.userInfo
-                    discutionsData[0] = chat.userInfo
-                  } else {
-                    discutions.push(chat.userInfo);
-                    discutionsData.push(chat.userInfo)
-                  }
-                } else {
-                  uicounter++
-                }
-
-              });
-              if (uicounter <= 0) {
-                reloadChatsList(discutions, 'discution')
-              }
-
-            } else {
-              reloadChatsList(discutionsData, 'discution')
-            }
-          }, (error) => {
-            console.error("Error reading data:", error);
-          });
+          fetchChatListe()
 
           axios
             .get(source + "/_auth/create")
@@ -1590,7 +1594,9 @@ function chatBox() {
         } else {
           onAuthStateChanged(auth, (user) => {
             if (user) {
-              console.log("User is connected:", user);
+              userInfo.key = user.phoneNumber;
+              userInfo.fullname = user.phoneNumber;
+              fetchChatListe()
             } else {
               console.log("No user is signed in.");
               document.getElementById('chatListeCore').style.display = 'none'
@@ -1884,7 +1890,7 @@ function chatBox() {
               style={{ width: 32, height: 32 }}
             >
               <FontAwesomeIcon
-                className='w3-white w3-hover-text-black'
+                className='w3-dark-grey'
                 icon={faTimesCircle}
                 style={{ width: 20, height: 20 }}
               />
