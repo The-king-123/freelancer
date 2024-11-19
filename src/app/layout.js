@@ -781,19 +781,19 @@ export default function RootLayout({ children }) {
       })
       .catch((e) => {
         localStorage.removeItem('userPhoneNumber')
-        signOut(auth).then(() => {
-          document.getElementById("logoutSpinner").style.display =
-            "none";
-          document.getElementById("logoutIcon").style.display =
-            "inline-block";
-          openDropdown("setting");
-          document.location = "/";
-        }).catch((error) => {
-          document.getElementById("logoutSpinner").style.display =
-            "none";
-          document.getElementById("logoutIcon").style.display =
-            "inline-block";
-        });
+        // signOut(auth).then(() => {
+        //   document.getElementById("logoutSpinner").style.display =
+        //     "none";
+        //   document.getElementById("logoutIcon").style.display =
+        //     "inline-block";
+        //   openDropdown("setting");
+        //   document.location = "/";
+        // }).catch((error) => {
+        //   document.getElementById("logoutSpinner").style.display =
+        //     "none";
+        //   document.getElementById("logoutIcon").style.display =
+        //     "inline-block";
+        // });
       });
   };
 
