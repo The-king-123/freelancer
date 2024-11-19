@@ -824,10 +824,23 @@ export default function RootLayout({ children }) {
         discutionsData.splice(1, discutionsData.length);
         const sortedChats = Object.entries(chats).sort(([, a], [, b]) => b.userInfo.timestamp - a.userInfo.timestamp)
         sortedChats.map(([index, chat]) => {
-          if (chat.userInfo.state != 'read') {
+          if (chat.userInfo.state != 'read' && chat.userInfo.lastmessage.key != userInfo.key) {
             uicounter++;
           }
         });
+
+        if (document.getElementById('chatSpanPage')) {
+          if (uicounter > 0) {
+            document.getElementById('chatSpanPage').innerText = uicounter;
+            document.getElementById('chatSpanPage').style.display = 'flex';
+          }
+        }
+        if (document.getElementById('chatSpanScreen')) {
+          if (uicounter > 0) {
+            document.getElementById('chatSpanScreen').innerText = uicounter;
+            document.getElementById('chatSpanScreen').style.display = 'flex';
+          }
+        }
 
       }
     }, (error) => {
@@ -1338,7 +1351,8 @@ export default function RootLayout({ children }) {
                   width={20}
                   height={20}
                 />
-                <div className="w3-margin-left w3-medium">Message</div>
+                <div className="w3-margin-left w3-medium w3-flex-1">Message</div>
+                <div id="chatSpanPage" className="w3-red w3-round-xxlarge w3-flex w3-small w3-flex-center" style={{ paddingInline: 6, display: 'none' }}></div>
               </Link>
 
               <div style={{ height: 40 }}>
@@ -1971,7 +1985,7 @@ export default function RootLayout({ children }) {
           >
             <div
               id="chatScreen"
-              className="menuItemBottom w3-flex w3-flex-center w3-overflow w3-black w3-round whiteBlackYellow"
+              className="menuItemBottom w3-flex-row w3-flex-center w3-black w3-round whiteBlackYellow"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
@@ -1979,6 +1993,7 @@ export default function RootLayout({ children }) {
                 width={20}
                 height={20}
               />
+              <div id="chatSpanScreen" className="w3-red w3-round-xxlarge w3-flex w3-small w3-flex-center" style={{ paddingInline: 6, marginRight:-14,marginLeft:-4,marginTop:-24, display:'none' }}></div>
             </div>
           </Link>
         </div>
