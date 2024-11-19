@@ -13,14 +13,12 @@ import Link from "next/link";
 import parse from "html-react-parser";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase";
+import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { getAuth, signOut } from "firebase/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
 
   axios.defaults.withCredentials = true;
   const [freeLink, setfreeLink] = useState(<Link id="freeLink" style={{ display: 'none' }} href={"/forum"} >freeLink</Link>)
@@ -47,7 +45,14 @@ export default function RootLayout({ children }) {
       icon: <FontAwesomeIcon className="w3-margin-right" icon={faUsers} />
     }
   ]
+  // Firebase configuration
 
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+  const auth = getAuth(app);
+  auth.settings.appVerificationDisabledForTesting = true;
+  auth.useDeviceLanguage();
+  // Firebase configuration
   const [adminCore, setadminCore] = useState('')
   const [fullPath, setfullPath] = useState({ path: "" });
   const [imagePDP, setimagePDP] = useState(null);
@@ -56,6 +61,13 @@ export default function RootLayout({ children }) {
     whatsapp: null,
     messenger: null,
   });
+  const [discutionsData, setdiscutionsData] = useState([
+    {
+      fullname: 'FREELANCER.MG',
+      key: '160471339156947',
+      new: true,
+    }
+  ])
 
   const [height, setHeight] = useState(0);
   const [displayChat, setdisplayChat] = useState(
@@ -803,6 +815,26 @@ export default function RootLayout({ children }) {
     openDropdown("switchPannel")
   }
 
+  const fetchChatListe = () => {
+    onValue(ref(database, 'chatcase/' + userInfo.key), (snapshot) => {
+
+      if (snapshot.exists()) {
+        const chats = snapshot.val();
+        var uicounter = 0;
+        discutionsData.splice(1, discutionsData.length);
+        const sortedChats = Object.entries(chats).sort(([, a], [, b]) => b.userInfo.timestamp - a.userInfo.timestamp)
+        sortedChats.map(([index, chat]) => {
+          if (chat.userInfo.state != 'read') {
+            uicounter++;
+          }
+        });
+
+      }
+    }, (error) => {
+      console.error("Error reading data:", error);
+    });
+  }
+
   useEffect(() => {
 
     if (localStorage.getItem('theme') != 'dark') {
@@ -818,21 +850,21 @@ export default function RootLayout({ children }) {
         if (element) {
           element.className = element.className.replace('w3-black', 'w3-light-grey')
         }
-        
+
       }
       for (let i = 0; i < elementWhite; i++) {
         const element = document.getElementsByClassName('w3-dark-grey')[0];
         if (element) {
           element.className = element.className.replace('w3-dark-grey', 'w3-white')
         }
-        
+
       }
       for (let i = 0; i < borderWhite; i++) {
         const element = document.getElementsByClassName('w3-border-dark-grey')[0];
         if (element) {
           element.className = element.className.replace('w3-border-dark-grey', 'w3-border-white')
         }
-        
+
       }
 
       document.getElementById('htmlCore').style.display = 'block'
@@ -842,6 +874,43 @@ export default function RootLayout({ children }) {
       document.getElementById('lightModeCheckTop').style.display = 'inline-block';
       document.getElementById('htmlCore').style.display = 'block'
     }
+
+    const xcode = localStorage.getItem('x-code');
+    axios
+      .get(source + "/_auth?xcode=" + xcode)
+      .then((res) => {
+        if (res.data.logedin) {
+          userInfo.key = res.data.user.key;
+          userInfo.fullname = res.data.user.fullname;
+          fetchChatListe()
+        } else {
+          // onAuthStateChanged(auth, (user) => {
+          //   if (user) {
+          //     userInfo.key = user.phoneNumber;
+          //     userInfo.fullname = user.phoneNumber;
+          //     fetchChatListe()
+          //   } else {
+          //     console.log("No user is signed in.");
+          //     document.getElementById('chatListeCore').style.display = 'none'
+          //     if (document.getElementById('modalNotLogedIn')) {
+          //       document.getElementById('modalNotLogedIn').style.display = 'block'
+          //     }
+          //     document.getElementById('chattingCore').innerHTML = '';
+          //     document.getElementById('chatListeCore').innerHTML = '';
+          //   }
+          // });
+
+          if (localStorage.getItem('userPhoneNumber')) {
+            userInfo.key = localStorage.getItem('userPhoneNumber');
+            userInfo.fullname = localStorage.getItem('userPhoneNumber');
+            fetchChatListe()
+          }
+        }
+      })
+      .catch((e) => {
+        console.error("failure", e);
+        //
+      });
 
     setInterval(() => {
       if (document.getElementById("appCore")) {
