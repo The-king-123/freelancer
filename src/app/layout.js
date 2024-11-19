@@ -815,15 +815,24 @@ export default function RootLayout({ children }) {
       const borderWhite = document.getElementsByClassName('w3-border-dark-grey').length
       for (let i = 0; i < elementGrey; i++) {
         const element = document.getElementsByClassName('w3-black')[0];
-        element.className = element.className.replace('w3-black', 'w3-light-grey')
+        if (element) {
+          element.className = element.className.replace('w3-black', 'w3-light-grey')
+        }
+        
       }
       for (let i = 0; i < elementWhite; i++) {
         const element = document.getElementsByClassName('w3-dark-grey')[0];
-        element.className = element.className.replace('w3-dark-grey', 'w3-white')
+        if (element) {
+          element.className = element.className.replace('w3-dark-grey', 'w3-white')
+        }
+        
       }
       for (let i = 0; i < borderWhite; i++) {
         const element = document.getElementsByClassName('w3-border-dark-grey')[0];
-        element.className = element.className.replace('w3-border-dark-grey', 'w3-border-white')
+        if (element) {
+          element.className = element.className.replace('w3-border-dark-grey', 'w3-border-white')
+        }
+        
       }
 
       document.getElementById('htmlCore').style.display = 'block'

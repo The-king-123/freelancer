@@ -1534,15 +1534,24 @@ function chatBox() {
       const backTransparent = document.getElementsByClassName('black-opacity').length
       for (let i = 0; i < elementGrey; i++) {
         const element = document.getElementsByClassName('w3-black')[0];
-        element.className = element.className.replace('w3-black', 'w3-light-grey')
+        if (element) {
+          element.className = element.className.replace('w3-black', 'w3-light-grey')
+        }
+        
       }
       for (let i = 0; i < elementWhite; i++) {
         const element = document.getElementsByClassName('w3-dark-grey')[0];
-        element.className = element.className.replace('w3-dark-grey', 'w3-white')
+        if (element) {
+          element.className = element.className.replace('w3-dark-grey', 'w3-white')
+        }
+        
       }
       for (let i = 0; i < backTransparent; i++) {
         const element = document.getElementsByClassName('black-opacity')[0];
-        element.className = element.className.replace('black-opacity', 'white-opacity')
+        if (element) {
+          element.className = element.className.replace('black-opacity', 'white-opacity')
+        }
+        
       }
 
       document.getElementById('htmlCore').style.display = 'block'
@@ -1910,7 +1919,6 @@ function chatBox() {
               style={{ width: 32, height: 32 }}
             >
               <FontAwesomeIcon
-                className='w3-dark-grey'
                 icon={faTimesCircle}
                 style={{ width: 20, height: 20 }}
               />
