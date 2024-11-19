@@ -1429,7 +1429,7 @@ function chatBox() {
           window.confirmationResult = confirmationResult; // Store to confirm the code
         })
         .catch((error) => {
-          console.error("Error during sign-in:", error);
+          document.getElementById('textErrorPN').innerText = "On n'a pas pu envoyer un code sur votre numero"
           document.getElementById('textErrorPN').style.display = 'block'
           setTimeout(() => {
             document.getElementById('textErrorPN').style.display = 'none'
@@ -1437,6 +1437,7 @@ function chatBox() {
           }, 3000);
         });
     } else {
+      document.getElementById('textErrorPN').innerText = "Veuillez vérifier votre numéro de téléphone."
       document.getElementById('textErrorPN').style.display = 'block'
       setTimeout(() => {
         document.getElementById('textErrorPN').style.display = 'none'
