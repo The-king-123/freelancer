@@ -780,7 +780,8 @@ export default function RootLayout({ children }) {
         }
       })
       .catch((e) => {
-        localStorage.removeItem('userPhoneNumber')
+        localStorage.removeItem('userPhoneNumber');
+        document.location = "/";
         // signOut(auth).then(() => {
         //   document.getElementById("logoutSpinner").style.display =
         //     "none";
