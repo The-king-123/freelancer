@@ -766,10 +766,11 @@ export default function RootLayout({ children }) {
           document.getElementById("logoutIcon").style.display =
             "inline-block";
           openDropdown("setting");
+          localStorage.removeItem('userPhoneNumber')
+          // signOut(auth).then(() => {
+          // }).catch((error) => {
+          // });
           document.location = "/";
-          signOut(auth).then(() => {
-          }).catch((error) => {
-          });
         } else {
           document.getElementById("logoutSpinner").style.display =
             "none";
@@ -779,6 +780,7 @@ export default function RootLayout({ children }) {
         }
       })
       .catch((e) => {
+        localStorage.removeItem('userPhoneNumber')
         signOut(auth).then(() => {
           document.getElementById("logoutSpinner").style.display =
             "none";

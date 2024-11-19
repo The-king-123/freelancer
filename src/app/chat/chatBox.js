@@ -1395,54 +1395,59 @@ function chatBox() {
   function signInWithPhone() {
     const containerId = 'recaptchaContainer'
     const phoneNumber = authPhoneNumber.phoneNumber;
-    if (formatPhoneNumber(phoneNumber) && !authPhoneNumber.holder) {
-      authPhoneNumber.holder = true;
-      const recaptchaVerifier = setupRecaptcha(containerId);
-      signInWithPhoneNumber(auth, formatPhoneNumber(phoneNumber), recaptchaVerifier)
-        .then((confirmationResult) => {
-          if (document.getElementById('smsCodeConfirmation')) {
-            document.getElementById('smsCodeConfirmation').innerText = "Un code a été envoyé au numéro ********" + phoneNumber.slice(-2) + ". Veuillez le saisir ci-dessous pour confirmer."
-            document.getElementById('modalCodeConfirmation').style.display = 'block'
-            document.getElementById('modalNotLogedIn').style.display = 'none';
 
-            if (authPhoneNumber.resend > 0) {
-              document.getElementById('textErrorCC').className = 'w3-text-yellow w3-small'
-              document.getElementById('textErrorCC').innerText = "Le code a été renvoyé."
-              document.getElementById('textErrorCC').style.display = 'block'
-              setTimeout(() => {
-                document.getElementById('textErrorCC').style.display = 'none'
-              }, 3000);
-            }
-            var wait = 60
-            const sendCodeInterval = setInterval(() => {
-              wait--;
-              document.getElementById('resendCodeCompter').innerText = wait + 's'
-            }, 1000);
-            setTimeout(() => {
-              authPhoneNumber.holder = false;
-              clearInterval(sendCodeInterval)
-              authPhoneNumber.resend++
-              document.getElementById('resendCodeCompter').innerText = '';
-            }, 60000);
-          }
-
-          window.confirmationResult = confirmationResult; // Store to confirm the code
-        })
-        .catch((error) => {
-          document.getElementById('textErrorPN').innerText = "On n'a pas pu envoyer un code sur votre numero"
-          document.getElementById('textErrorPN').style.display = 'block'
-          setTimeout(() => {
-            document.getElementById('textErrorPN').style.display = 'none'
-            authPhoneNumber.holder = false;
-          }, 3000);
-        });
-    } else {
-      document.getElementById('textErrorPN').innerText = "Veuillez vérifier votre numéro de téléphone."
-      document.getElementById('textErrorPN').style.display = 'block'
-      setTimeout(() => {
-        document.getElementById('textErrorPN').style.display = 'none'
-      }, 3000);
+    if (formatPhoneNumber(phoneNumber)) {
+      localStorage.setItem('userPhoneNumber', formatPhoneNumber(phoneNumber))
+      window.location.reload();
     }
+    // if (formatPhoneNumber(phoneNumber) && !authPhoneNumber.holder) {
+    //   authPhoneNumber.holder = true;
+    //   const recaptchaVerifier = setupRecaptcha(containerId);
+    //   signInWithPhoneNumber(auth, formatPhoneNumber(phoneNumber), recaptchaVerifier)
+    //     .then((confirmationResult) => {
+    //       if (document.getElementById('smsCodeConfirmation')) {
+    //         document.getElementById('smsCodeConfirmation').innerText = "Un code a été envoyé au numéro ********" + phoneNumber.slice(-2) + ". Veuillez le saisir ci-dessous pour confirmer."
+    //         document.getElementById('modalCodeConfirmation').style.display = 'block'
+    //         document.getElementById('modalNotLogedIn').style.display = 'none';
+
+    //         if (authPhoneNumber.resend > 0) {
+    //           document.getElementById('textErrorCC').className = 'w3-text-yellow w3-small'
+    //           document.getElementById('textErrorCC').innerText = "Le code a été renvoyé."
+    //           document.getElementById('textErrorCC').style.display = 'block'
+    //           setTimeout(() => {
+    //             document.getElementById('textErrorCC').style.display = 'none'
+    //           }, 3000);
+    //         }
+    //         var wait = 60
+    //         const sendCodeInterval = setInterval(() => {
+    //           wait--;
+    //           document.getElementById('resendCodeCompter').innerText = wait + 's'
+    //         }, 1000);
+    //         setTimeout(() => {
+    //           authPhoneNumber.holder = false;
+    //           clearInterval(sendCodeInterval)
+    //           authPhoneNumber.resend++
+    //           document.getElementById('resendCodeCompter').innerText = '';
+    //         }, 60000);
+    //       }
+
+    //       window.confirmationResult = confirmationResult; // Store to confirm the code
+    //     })
+    //     .catch((error) => {
+    //       document.getElementById('textErrorPN').innerText = "On n'a pas pu envoyer un code sur votre numero"
+    //       document.getElementById('textErrorPN').style.display = 'block'
+    //       setTimeout(() => {
+    //         document.getElementById('textErrorPN').style.display = 'none'
+    //         authPhoneNumber.holder = false;
+    //       }, 3000);
+    //     });
+    // } else {
+    //   document.getElementById('textErrorPN').innerText = "Veuillez vérifier votre numéro de téléphone."
+    //   document.getElementById('textErrorPN').style.display = 'block'
+    //   setTimeout(() => {
+    //     document.getElementById('textErrorPN').style.display = 'none'
+    //   }, 3000);
+    // }
 
   }
 
@@ -1593,21 +1598,35 @@ function chatBox() {
           });
 
         } else {
-          onAuthStateChanged(auth, (user) => {
-            if (user) {
-              userInfo.key = user.phoneNumber;
-              userInfo.fullname = user.phoneNumber;
-              fetchChatListe()
-            } else {
-              console.log("No user is signed in.");
-              document.getElementById('chatListeCore').style.display = 'none'
-              if (document.getElementById('modalNotLogedIn')) {
-                document.getElementById('modalNotLogedIn').style.display = 'block'
-              }
-              document.getElementById('chattingCore').innerHTML = '';
-              document.getElementById('chatListeCore').innerHTML = '';
+          // onAuthStateChanged(auth, (user) => {
+          //   if (user) {
+          //     userInfo.key = user.phoneNumber;
+          //     userInfo.fullname = user.phoneNumber;
+          //     fetchChatListe()
+          //   } else {
+          //     console.log("No user is signed in.");
+          //     document.getElementById('chatListeCore').style.display = 'none'
+          //     if (document.getElementById('modalNotLogedIn')) {
+          //       document.getElementById('modalNotLogedIn').style.display = 'block'
+          //     }
+          //     document.getElementById('chattingCore').innerHTML = '';
+          //     document.getElementById('chatListeCore').innerHTML = '';
+          //   }
+          // });
+
+          if (localStorage.getItem('userPhoneNumber')) {
+            userInfo.key = localStorage.getItem('userPhoneNumber');
+            userInfo.fullname = localStorage.getItem('userPhoneNumber');
+            fetchChatListe()
+          } else {
+            console.log("No user is signed in.");
+            document.getElementById('chatListeCore').style.display = 'none'
+            if (document.getElementById('modalNotLogedIn')) {
+              document.getElementById('modalNotLogedIn').style.display = 'block'
             }
-          });
+            document.getElementById('chattingCore').innerHTML = '';
+            document.getElementById('chatListeCore').innerHTML = '';
+          }
         }
       })
       .catch((e) => {
