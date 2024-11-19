@@ -11,10 +11,16 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import parse from "html-react-parser";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "./firebase";
+import { getAuth, signOut } from "firebase/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
   axios.defaults.withCredentials = true;
   const [freeLink, setfreeLink] = useState(<Link id="freeLink" style={{ display: 'none' }} href={"/forum"} >freeLink</Link>)
@@ -755,7 +761,15 @@ export default function RootLayout({ children }) {
           openDropdown("setting");
           localStorage.removeItem('x-code');
           localStorage.removeItem('x-user');
+          document.getElementById("logoutSpinner").style.display =
+            "none";
+          document.getElementById("logoutIcon").style.display =
+            "inline-block";
+          openDropdown("setting");
           document.location = "/";
+          signOut(auth).then(() => {
+          }).catch((error) => {
+          });
         } else {
           document.getElementById("logoutSpinner").style.display =
             "none";
@@ -765,7 +779,19 @@ export default function RootLayout({ children }) {
         }
       })
       .catch((e) => {
-        console.error("failure", e);
+        signOut(auth).then(() => {
+          document.getElementById("logoutSpinner").style.display =
+            "none";
+          document.getElementById("logoutIcon").style.display =
+            "inline-block";
+          openDropdown("setting");
+          document.location = "/";
+        }).catch((error) => {
+          document.getElementById("logoutSpinner").style.display =
+            "none";
+          document.getElementById("logoutIcon").style.display =
+            "inline-block";
+        });
       });
   };
 

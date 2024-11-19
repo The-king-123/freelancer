@@ -8,7 +8,8 @@ import parse from "html-react-parser";
 import axios from 'axios';
 import { console_source as source } from '../data';
 import Image from 'next/image';
-import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { getAuth, onAuthStateChanged, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { firebaseConfig } from '../firebase';
 
 function chatBox() {
 
@@ -25,16 +26,7 @@ function chatBox() {
   }
 
   // Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyBI0egg-gSu_99VAcprwtbgRguW9GxrGIs",
-    authDomain: "freelancer-chatbox.firebaseapp.com",
-    projectId: "freelancer-chatbox",
-    storageBucket: "freelancer-chatbox.appspot.com",
-    messagingSenderId: "955747602246",
-    appId: "1:955747602246:web:f9aac0f407c73196289f47",
-    measurementId: "G-VTQ7112MF2",
-    databaseURL: "https://freelancer-chatbox-default-rtdb.europe-west1.firebasedatabase.app/"
-  };
+
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
   const auth = getAuth(app);
@@ -66,6 +58,8 @@ function chatBox() {
   const [authPhoneNumber, setauthPhoneNumber] = useState({
     phoneNumber: '',
     code: null,
+    holder: false,
+    resend: 0,
   })
   const [usersData, setusersData] = useState([])
 
@@ -1388,10 +1382,6 @@ function chatBox() {
     }
   }
 
-  const resendCo = () => {
-
-  }
-
   function setupRecaptcha(containerId) {
     const recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
       size: "invisible", // Or 'normal' for visible reCAPTCHA
@@ -1405,20 +1395,46 @@ function chatBox() {
   function signInWithPhone() {
     const containerId = 'recaptchaContainer'
     const phoneNumber = authPhoneNumber.phoneNumber;
-    if (formatPhoneNumber(phoneNumber)) {
+    if (formatPhoneNumber(phoneNumber) && !authPhoneNumber.holder) {
+      authPhoneNumber.holder = true;
       const recaptchaVerifier = setupRecaptcha(containerId);
       signInWithPhoneNumber(auth, formatPhoneNumber(phoneNumber), recaptchaVerifier)
         .then((confirmationResult) => {
           if (document.getElementById('smsCodeConfirmation')) {
             document.getElementById('smsCodeConfirmation').innerText = "Un code a été envoyé au numéro ********" + phoneNumber.slice(-2) + ". Veuillez le saisir ci-dessous pour confirmer."
             document.getElementById('modalCodeConfirmation').style.display = 'block'
-            document.getElementById('modalNotLogedIn').style.display = 'none'
+            document.getElementById('modalNotLogedIn').style.display = 'none';
+
+            if (authPhoneNumber.resend > 0) {
+              document.getElementById('textErrorCC').className = 'w3-text-yellow w3-small'
+              document.getElementById('textErrorCC').innerText = "Le code a été renvoyé."
+              document.getElementById('textErrorCC').style.display = 'block'
+              setTimeout(() => {
+                document.getElementById('textErrorCC').style.display = 'none'
+              }, 3000);
+            }
+            var wait = 60
+            const sendCodeInterval = setInterval(() => {
+              wait--;
+              document.getElementById('resendCodeCompter').innerText = wait + 's'
+            }, 1000);
+            setTimeout(() => {
+              authPhoneNumber.holder = false;
+              clearInterval(sendCodeInterval)
+              authPhoneNumber.resend++
+              document.getElementById('resendCodeCompter').innerText = '';
+            }, 60000);
           }
 
           window.confirmationResult = confirmationResult; // Store to confirm the code
         })
         .catch((error) => {
           console.error("Error during sign-in:", error);
+          document.getElementById('textErrorPN').style.display = 'block'
+          setTimeout(() => {
+            document.getElementById('textErrorPN').style.display = 'none'
+            authPhoneNumber.holder = false;
+          }, 3000);
         });
     } else {
       document.getElementById('textErrorPN').style.display = 'block'
@@ -1446,9 +1462,17 @@ function chatBox() {
   const confirmCode = () => {
     if (authPhoneNumber.code.length > 5) {
       confirmationResult.confirm(authPhoneNumber.code).then((result) => {
+        console.log(result.user);
         const user = result.user;
+        window.location.reload();
       }).catch((error) => {
-
+        console.log(error);
+        document.getElementById('textErrorCC').className = 'w3-text-red w3-small'
+        document.getElementById('textErrorCC').innerText = "Le code que vous avez saisi est incorrect."
+        document.getElementById('textErrorCC').style.display = 'block'
+        setTimeout(() => {
+          document.getElementById('textErrorCC').style.display = 'none'
+        }, 3000);
       });
     }
 
@@ -1564,13 +1588,19 @@ function chatBox() {
           });
 
         } else {
-          document.getElementById('chatListeCore').style.display = 'none'
-          if (document.getElementById('modalNotLogedIn')) {
-            document.getElementById('modalNotLogedIn').style.display = 'block'
-          }
-          document.getElementById('chattingCore').innerHTML = '';
-          document.getElementById('chatListeCore').innerHTML = '';
-
+          onAuthStateChanged(auth, (user) => {
+            if (user) {
+              console.log("User is connected:", user);
+            } else {
+              console.log("No user is signed in.");
+              document.getElementById('chatListeCore').style.display = 'none'
+              if (document.getElementById('modalNotLogedIn')) {
+                document.getElementById('modalNotLogedIn').style.display = 'block'
+              }
+              document.getElementById('chattingCore').innerHTML = '';
+              document.getElementById('chatListeCore').innerHTML = '';
+            }
+          });
         }
       })
       .catch((e) => {
@@ -1942,8 +1972,8 @@ function chatBox() {
               <div style={{ paddingInline: 24, paddingBlock: 8 }} id='smsCodeConfirmation'>
                 Un code a été envoyé au numéro ********. Veuillez le saisir ci-dessous pour confirmer.
               </div>
-              <div id='textErrorPN' style={{ paddingInline: 24, paddingBlock: 8, display: 'none' }} className='w3-text-red w3-small'>
-                Veuillez vérifier votre numéro de téléphone.
+              <div id='textErrorCC' style={{ paddingInline: 24, paddingBlock: 8, display: 'none' }} className='w3-text-red w3-small'>
+                Le code que vous avez saisi est incorrect.
               </div>
               <div className="w3-center w3-dark-grey w3-flex w3-flex-center">
                 <div className="w3-margin w3-block" style={{ paddingInline: 8 }}>
@@ -1959,10 +1989,10 @@ function chatBox() {
 
                   <div style={{ paddingBlock: 16 }}>
                     <div
-                      onClick={resendCo}
+                      onClick={!authPhoneNumber.holder && signInWithPhone}
                       className="w3-small w3-center w3-pointer"
                     >
-                      Vous n'avez pas reçu de code ?<u>&nbsp;Réessayez.</u>
+                      Vous n'avez pas reçu de code ?<u>&nbsp;Réessayez. <span id='resendCodeCompter'></span></u>
                     </div>
                   </div>
                 </div>
