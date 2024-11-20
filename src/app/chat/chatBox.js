@@ -1581,8 +1581,8 @@ function chatBox() {
           userInfo.fullname = res.data.user.fullname;
 
           if (res.data.user.designation == 'Admin') {
-            document.getElementById('searchUserInput').style.display = 'block'
-            document.getElementById('listeChatSpacer').style.height = '96px'
+            document.getElementById('searchUserInputWrapper').style.display = 'block'
+            document.getElementById('listeChatSpacer').style.height = '72px'
           }
 
           document.getElementById('bullField').style.height = (window.innerHeight - 32 - (window.innerWidth < 992 ? 96 : 0)) + 'px';
@@ -1869,25 +1869,18 @@ function chatBox() {
       </div>
       <div id='chatListeCore'>
         <div id='chatHeadSearch' className='w3-dark-grey w3-top w3-block'>
-          <div style={{ marginTop: 16 }}>
-            <div className='w3-big w3-large' style={{ marginLeft: 16 }}>
-              ChatBox
-            </div>
-          </div>
-
-          <div style={{ paddingInline: 16, paddingBlock: 16 }}>
+          <div id='searchUserInputWrapper' style={{ paddingInline: 16, paddingBlock: 16,display: 'none' }}>
             <input
               id="searchUserInput"
               onChange={(e) => search.keyword = e.target.value}
               className="input w3-border-0 w3-input w3-border-0 w3-round-xxlarge w3-black "
               placeholder="Chercher un contact"
               type="text"
-              style={{ display: 'none' }}
             />
           </div>
         </div>
         <div id='chatListeScrollable' style={{ paddingInline: 12, marginBottom: 16 }}>
-          <div id='listeChatSpacer' style={{ height: 48 }}></div>
+          <div id='listeChatSpacer'></div>
           {
             chatListe
           }
