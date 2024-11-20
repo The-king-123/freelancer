@@ -61,6 +61,10 @@ export default function PostContent() {
   }
 
   useEffect(() => {
+    
+    if (document.getElementById('headerPageTitle')) {
+      document.getElementById('headerPageTitle').innerText = ('Membres').toUpperCase()
+    }
     axios
       .get(source + "/_auth/users")
       .then((res) => {

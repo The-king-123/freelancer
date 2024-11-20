@@ -285,6 +285,10 @@ export default function Forum(props) {
 
   useEffect(() => {
 
+    if (document.getElementById('headerPageTitle')) {
+      document.getElementById('headerPageTitle').innerText = ('Forums').toUpperCase()
+    }
+
     if (props.forums) {
       reloadForums(props.forums)
     } else {

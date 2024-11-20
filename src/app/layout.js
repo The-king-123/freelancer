@@ -1688,8 +1688,8 @@ export default function RootLayout({ children }) {
           style={{ paddingBlock: 8, paddingInline: 16, zIndex: 3 }}
         >
           <div className="w3-flex-1">
-            <div className="w3-pointer w3-flex-row" onClick={() => window.location = '/'}>
-              {/* Header text here */} FREELANCER
+            <div id="headerPageTitle" className="w3-pointer w3-flex-row" onClick={() => window.location = '/'}>
+              FREELANCER
             </div>
           </div>
 
@@ -1843,7 +1843,7 @@ export default function RootLayout({ children }) {
           >
             <div
               id="talentScreen"
-              className="menuItemBottom w3-flex w3-flex-center w3-overflow w3-black w3-round whiteBlackYellow"
+              className="menuItemBottom w3-flex-column w3-flex-center whiteBlackYellow"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
@@ -1851,6 +1851,7 @@ export default function RootLayout({ children }) {
                 width={20}
                 height={20}
               />
+              <div className="w3-tiny" style={{marginTop:2}}>Membres</div>
             </div>
           </Link>
 
@@ -1861,7 +1862,7 @@ export default function RootLayout({ children }) {
           >
             <div
               id="recrutementScreen"
-              className="menuItemBottom w3-flex w3-flex-center w3-overflow w3-black w3-round whiteBlackYellow"
+              className="menuItemBottom w3-flex-column w3-flex-center whiteBlackYellow"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
@@ -1869,6 +1870,7 @@ export default function RootLayout({ children }) {
                 width={20}
                 height={20}
               />
+              <div className="w3-tiny" style={{marginTop:2}}>Postuler</div>
             </div>
           </Link>
 
@@ -1945,7 +1947,7 @@ export default function RootLayout({ children }) {
           >
             <div
               id="storeScreen"
-              className="menuItemBottom w3-flex w3-flex-center w3-overflow w3-black w3-round whiteBlackYellow"
+              className="menuItemBottom w3-flex-column w3-flex-center whiteBlackYellow"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
@@ -1953,6 +1955,7 @@ export default function RootLayout({ children }) {
                 width={20}
                 height={20}
               />
+              <div className="w3-tiny" style={{marginTop:2}}>Boutique</div>
             </div>
           </Link>
 
@@ -1971,7 +1974,7 @@ export default function RootLayout({ children }) {
           >
             <div
               id="chatScreen"
-              className="menuItemBottom w3-flex w3-flex-center w3-overflow w3-black w3-round whiteBlackYellow"
+              className="menuItemBottom w3-flex-column w3-flex-center whiteBlackYellow"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
@@ -1979,6 +1982,7 @@ export default function RootLayout({ children }) {
                 width={20}
                 height={20}
               />
+              <div className="w3-tiny" style={{marginTop:2}}>Message</div>
             </div>
           </Link>
         </div>

@@ -61,6 +61,10 @@ function Tarifs({ tarif }) {
     }
     useEffect(() => {
 
+        if (document.getElementById('headerPageTitle')) {
+            document.getElementById('headerPageTitle').innerText = ('Tarifs').toUpperCase()
+          }
+
         if (!tarif) {
 
 

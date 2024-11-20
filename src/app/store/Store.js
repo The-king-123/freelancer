@@ -119,6 +119,9 @@ function Store() {
 
   useEffect(() => {
     //
+    if (document.getElementById('headerPageTitle')) {
+      document.getElementById('headerPageTitle').innerText = ('Boutique').toUpperCase()
+    }
     axios
       .get(source + "/_store")
       .then((res) => {

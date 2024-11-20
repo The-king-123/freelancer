@@ -158,6 +158,10 @@ function page() {
 
     useEffect(() => {
 
+        if (document.getElementById('headerPageTitle')) {
+            document.getElementById('headerPageTitle').innerText = ('Signup').toUpperCase()
+          }
+
         document.onkeyup = async (e) => {
             if (e.key == "Enter") {
                 signup();

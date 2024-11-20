@@ -123,6 +123,10 @@ export default function ProductContent({ content }) {
 
   useEffect(() => {
 
+    if (document.getElementById('headerPageTitle')) {
+      document.getElementById('headerPageTitle').innerText = ('Boutique').toUpperCase()
+    }
+
     document.getElementById('backButtonProduct').addEventListener('click', () => {
       if (window.history.length > 0) {
         window.history.back();

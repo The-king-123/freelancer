@@ -384,6 +384,11 @@ function postuleRecrutement(props) {
 
   useEffect(() => {
 
+    
+    if (document.getElementById('headerPageTitle')) {
+      document.getElementById('headerPageTitle').innerText = ('Recrutement').toUpperCase()
+    }
+
     if (localStorage.getItem('theme') != 'dark') {
 
       const elementGrey = document.getElementsByClassName('w3-black').length

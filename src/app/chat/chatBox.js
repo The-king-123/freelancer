@@ -1527,6 +1527,10 @@ function chatBox() {
 
   useEffect(() => {
 
+    if (document.getElementById('headerPageTitle')) {
+      document.getElementById('headerPageTitle').innerText = ('Discussions').toUpperCase()
+    }
+
     if (localStorage.getItem('theme') != 'dark') {
 
       const elementGrey = document.getElementsByClassName('w3-black').length

@@ -64,6 +64,10 @@ export default function PostContent({ content }) {
   }
 
   useEffect(() => {
+    
+    if (document.getElementById('headerPageTitle')) {
+      document.getElementById('headerPageTitle').innerText = ('Membres').toUpperCase()
+    }
     reloadMembers(content)
   }, [])
 

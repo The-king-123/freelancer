@@ -183,6 +183,17 @@ export default function PostContent({ posts }) {
         </div>
       </Link>
     ))
+    if (type == 'premium') {
+
+      if (document.getElementById('headerPageTitle')) {
+        document.getElementById('headerPageTitle').innerText = ('Premium').toUpperCase()
+      }
+    } else {
+
+      if (document.getElementById('headerPageTitle')) {
+        document.getElementById('headerPageTitle').innerText = ('Gratuit').toUpperCase()
+      }
+    }
     setdisplayPost(glitchPost)
     makeMarqueeText();
 
@@ -285,6 +296,10 @@ export default function PostContent({ posts }) {
   }
 
   useEffect(() => {
+
+    if (document.getElementById('headerPageTitle')) {
+      document.getElementById('headerPageTitle').innerText = ('FREELANCER').toUpperCase()
+    }
 
     if (document.getElementById("audioBox")) {
       audioBox.chaine = document.getElementById("audioBox");
