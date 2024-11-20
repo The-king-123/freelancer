@@ -84,7 +84,8 @@ function chatBox() {
     message: "",
     reaction: null,
     deleted: false,
-    state: 'sent'
+    state: 'sent',
+    responseText: '',
   })
 
   async function setCSRFToken() {
@@ -218,7 +219,6 @@ function chatBox() {
                 chatInfo.key = '';
                 chatInfo.des_key = '';
                 chatInfo.timestamp = '';
-                chatInfo.attachement = null;
                 chatInfo.reaction = null;
                 chatInfo.deleted = false;
 
@@ -229,7 +229,7 @@ function chatBox() {
                   state: 'sent',
                   lastmessage: {
                     key: userInfo.key,
-                    message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.message : chatInfo.message
+                    message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.responseText : (chatInfo.attachement ? 'A envoyé une ' + (attachementInfo.type == 'image' ? 'photo' : (attachementInfo.type == 'video' ? 'video' : 'pièce jointe')) : chatInfo.message)
                   }
                 }).then(() => {
                   set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
@@ -239,17 +239,18 @@ function chatBox() {
                     state: 'sent',
                     lastmessage: {
                       key: userInfo.key,
-                      message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.message : chatInfo.message
+                      message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.responseText : (chatInfo.attachement ? 'A envoyé une ' + (attachementInfo.type == 'image' ? 'photo' : (attachementInfo.type == 'video' ? 'video' : 'pièce jointe')) : chatInfo.message)
                     }
                   }).then(() => {
                     chatInfo.message = '';
                     chatInfo.responseTo = null;
+                    chatInfo.attachement = null;
+                    cancelMedia()
+                    cancelReply()
                   })
                 })
 
 
-
-                cancelReply()
               })
               .catch((error) => {
                 console.error('Error writing data:', error);
@@ -1161,10 +1162,11 @@ function chatBox() {
   }
 
   const reply = (idBull, bull) => {
-    chatInfo.responseTo = idBull
+    chatInfo.responseTo = idBull;
+    chatInfo.responseText = bull.attachement ? (bull.attachement.type == 'image' ? 'Une Photo' : (bull.attachement.type == 'video' ? 'Une Video' : 'Une Pièce jointe')) : bull.message.replace(/\n/g, " ")
     if (bull.attachement) {
       document.getElementById('replyPanelImage').style.backgroundImage = `url(${source}/images.php?w=320&h=320&zlonk=9733&zlink=${bull.attachement.link})`;
-      document.getElementById('replyPanelText').innerText = bull.message.replace(/\n/g, " ")
+      document.getElementById('replyPanelText').innerText = bull.attachement ? (bull.attachement.type == 'image' ? 'Une Photo' : (bull.attachement.type == 'video' ? 'Une Video' : 'Une Pièce jointe')) : bull.message.replace(/\n/g, " ")
       document.getElementById('replyPanelImage').style.display = 'inline-block'
       document.getElementById('replyPanel').style.display = 'flex'
     } else {
@@ -1541,21 +1543,21 @@ function chatBox() {
         if (element) {
           element.className = element.className.replace('w3-black', 'w3-light-grey')
         }
-        
+
       }
       for (let i = 0; i < elementWhite; i++) {
         const element = document.getElementsByClassName('w3-dark-grey')[0];
         if (element) {
           element.className = element.className.replace('w3-dark-grey', 'w3-white')
         }
-        
+
       }
       for (let i = 0; i < backTransparent; i++) {
         const element = document.getElementsByClassName('black-opacity')[0];
         if (element) {
           element.className = element.className.replace('black-opacity', 'white-opacity')
         }
-        
+
       }
 
       document.getElementById('htmlCore').style.display = 'block'
@@ -1869,7 +1871,7 @@ function chatBox() {
       </div>
       <div id='chatListeCore'>
         <div id='chatHeadSearch' className='w3-dark-grey w3-top w3-block'>
-          <div id='searchUserInputWrapper' style={{ paddingInline: 16, paddingBlock: 16,display: 'none' }}>
+          <div id='searchUserInputWrapper' style={{ paddingInline: 16, paddingBlock: 16, display: 'none' }}>
             <input
               id="searchUserInput"
               onChange={(e) => search.keyword = e.target.value}
