@@ -1988,23 +1988,16 @@ export default function RootLayout({ children }) {
           >
             <div
               id="chatScreen"
-<<<<<<< HEAD
               className="menuItemBottom w3-flex-column w3-flex-center whiteBlackYellow"
-=======
-              className="menuItemBottom w3-flex-row w3-flex-center w3-black w3-round whiteBlackYellow"
->>>>>>> 8137a714855b79048fd91ae4666a346a51f14720
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
+              <div id="chatSpanScreen" className="w3-red w3-round-xxlarge w3-flex w3-small w3-flex-center" style={{ paddingInline: 6, marginRight:-32,marginLeft:-4,marginTop:-12,marginBottom:-8, display:'none' }}></div>
               <FontAwesomeIcon
                 icon={faComments}
                 width={20}
                 height={20}
               />
-<<<<<<< HEAD
               <div className="w3-tiny" style={{marginTop:2}}>Message</div>
-=======
-              <div id="chatSpanScreen" className="w3-red w3-round-xxlarge w3-flex w3-small w3-flex-center" style={{ paddingInline: 6, marginRight:-14,marginLeft:-4,marginTop:-24, display:'none' }}></div>
->>>>>>> 8137a714855b79048fd91ae4666a346a51f14720
             </div>
           </Link>
         </div>
