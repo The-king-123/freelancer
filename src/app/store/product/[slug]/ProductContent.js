@@ -25,6 +25,12 @@ export default function ProductContent({ content }) {
     fielTester: null,
   });
 
+  const [userInfo, setuserInfo] = useState({
+    key: '',
+    authority: '',
+    designation: '',
+  })
+
   const singleStoreInfo = {
     id: content.data.id,
     category: content.data.category,
@@ -42,7 +48,7 @@ export default function ProductContent({ content }) {
 
   const download = async (id) => {
 
-    if (content.data.type == 'premium') {
+    if (content.data.type == 'premium' && !(authorityChecker(userInfo.authority) || userInfo.designation == 'Admin' ? true : (userInfo.key == '336302677822455' ? true : false))) {
       document.getElementById('modalCodePremiumDownload').style.display = 'block'
     } else {
       document.getElementById('freeDownloadSpinner').style.display = 'inline-block'
@@ -115,6 +121,23 @@ export default function ProductContent({ content }) {
     }
   }
 
+  const authorityChecker = (authority) => {
+    if (authority == "ghest") {
+      return false;
+    }
+
+    try {
+      const parsed = JSON.parse(authority);
+      if (parsed.store == "master") {
+        return true;
+      }
+    } catch (error) {
+      console.error("Invalid JSON string:", error);
+    }
+
+    return false;
+  }
+
   // Simple Base64 encoding to simulate encryption
   function encryptString(plainText) {
     // Convert plain text to Base64 encoded string
@@ -123,10 +146,25 @@ export default function ProductContent({ content }) {
 
   useEffect(() => {
 
+    const xcode = localStorage.getItem('x-code');
+    axios
+      .get(source + "/_auth?xcode=" + xcode)
+      .then((res) => {
+        if (res.data.logedin) {
+          userInfo.key = res.data.user.key;
+          userInfo.authority = res.data.user.authority;
+          userInfo.designation = res.data.user.designation;
+        }
+      })
+      .catch((e) => {
+        console.error("failure", e);
+        //
+      });
+
     document.getElementById('backButtonProduct').addEventListener('click', () => {
       if (window.history.length > 0) {
         window.history.back();
-      }else{
+      } else {
         window.location = '/'
       }
     })
@@ -194,7 +232,7 @@ export default function ProductContent({ content }) {
           <div>
             <div onClick={() => download(singleStoreInfo.id)} className={"w3-button w3-round-xxlarge w3-yellow w3-hover-yellow w3-text-black w3-flex-row w3-flex-center w3-margin-top " + (singleStoreInfo.type == "premium" ? 'w3-text-yellow' : '')}>
               <FontAwesomeIcon id="freeDownloadIcon" icon={faDownload} className="w3-margin-right" />
-              <FontAwesomeIcon id="freeDownloadSpinner" icon={faSpinner} className="w3-margin-right w3-spin" style={{display:'none'}} />
+              <FontAwesomeIcon id="freeDownloadSpinner" icon={faSpinner} className="w3-margin-right w3-spin" style={{ display: 'none' }} />
               Download
             </div>
           </div>
