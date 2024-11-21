@@ -1811,7 +1811,7 @@ function chatBox() {
                 <div
                   id='selectorWrapper'
                   className="w3-dropdown-content w3-bar-block w3-card w3-round"
-                  style={{ minWidth: 230, marginTop: 8, paddingBottom: 4, bottom: 42, paddingTop: 6, paddingInline: 6 }}
+                  style={{ minWidth: 230, marginTop: 8, paddingBottom: 4, bottom: 32, paddingTop: 6, paddingInline: 6 }}
                 >
                   <div
                     id='imageSelector'
@@ -1847,7 +1847,7 @@ function chatBox() {
                     Fichier
                   </div>
                   {/* / arrow marker / */}
-                  <div className='w3-red'>
+                  <div style={{marginBottom:-20}}>
                     <FontAwesomeIcon
                       icon={faPlay}
                       className="rotate90 w3-text-white"
