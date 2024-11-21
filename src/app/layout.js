@@ -947,6 +947,12 @@ export default function RootLayout({ children }) {
       e.preventDefault(); // Prevent pinch-to-zoom on mobile
     });
 
+    document.addEventListener('touchstart', function(e) {
+      if (e.touches.length > 1) {
+        e.preventDefault();  // Prevent multi-touch zoom gestures
+      }
+    }, { passive: false });
+
     const firstPath = location.pathname.split('/')[1]
     if (document.getElementById(firstPath + 'Page')) {
       document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') != 'dark' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow w3-hover-yellow')
