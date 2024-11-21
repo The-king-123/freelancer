@@ -1215,7 +1215,7 @@ export default function RootLayout({ children }) {
                 data-key="160471339156947"
                 id="Page"
                 onClick={() => localStorage.setItem("user", "160471339156947")}
-                className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"/"}
               >
@@ -1229,7 +1229,7 @@ export default function RootLayout({ children }) {
 
               <Link
                 id="storePage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"/store/all"}
               >
@@ -1243,7 +1243,7 @@ export default function RootLayout({ children }) {
 
               <div
                 id="forumPage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-pointer"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow w3-pointer"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 onClick={userForum}
               >
@@ -1257,7 +1257,7 @@ export default function RootLayout({ children }) {
 
               <Link
                 id="talentPage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"/talent"}
               >
@@ -1272,7 +1272,7 @@ export default function RootLayout({ children }) {
               <Link
                 data-key="336302677822455"
                 id="userPage"
-                className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"/user/336302677822455"}
               >
@@ -1286,7 +1286,7 @@ export default function RootLayout({ children }) {
 
               <Link
                 id="recrutementPage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"/recrutement/postule"}
               >
@@ -1300,7 +1300,7 @@ export default function RootLayout({ children }) {
 
               <div
                 id="tarifsPage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-pointer"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow w3-pointer"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 onClick={userTarifs}
               >
@@ -1313,7 +1313,7 @@ export default function RootLayout({ children }) {
               </div>
 
               <Link
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"https://pos.freelancer.mg"}
                 target="_blank"
@@ -1336,7 +1336,7 @@ export default function RootLayout({ children }) {
                     }
                   }
                 }}
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"/chat"}
               >

@@ -1324,6 +1324,13 @@ a {
   color: #000 !important;
   background-color: #ffeb3b !important;
 }
+
+.w3-yellow-pale,
+.w3-hover-yellow-pale:hover {
+  color: #000 !important;
+  background-color: #ffeb3b99 !important;
+}
+
 .w3-white,
 .w3-hover-white:hover {
   color: #000 !important;
