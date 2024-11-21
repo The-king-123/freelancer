@@ -2,6 +2,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./app.css";
+import "@/app/page.module.css"
 import { app_name, console_source as source } from "@/app/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faCalculator, faCheck, faChevronCircleUp, faCode, faComment, faComments, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faSun, faTimesCircle, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
@@ -935,23 +936,10 @@ export default function RootLayout({ children }) {
           }
         }
       }
+      
     }, 500);
 
-    document.addEventListener('wheel', function (e) {
-      if (e.ctrlKey) {
-        e.preventDefault(); // Prevent zooming with Ctrl+scroll
-      }
-    }, { passive: false });
 
-    document.addEventListener('gesturestart', function (e) {
-      e.preventDefault(); // Prevent pinch-to-zoom on mobile
-    });
-
-    document.addEventListener('touchstart', function (e) {
-      if (e.touches.length > 1) {
-        e.preventDefault();  // Prevent multi-touch zoom gestures
-      }
-    }, { passive: false });
 
     const firstPath = location.pathname.split('/')[1]
     if (document.getElementById(firstPath + 'Page')) {
@@ -1167,7 +1155,7 @@ export default function RootLayout({ children }) {
   }, []);
 
   return (
-    <html id="htmlCore" style={{ display: 'none' }} className="w3-dark-grey" lang="en">
+    <html id="htmlCore" style={{ display: 'none' }} className="w3-dark-grey html" lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </head>

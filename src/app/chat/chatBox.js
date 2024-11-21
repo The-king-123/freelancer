@@ -10,6 +10,7 @@ import { console_source as source } from '../data';
 import Image from 'next/image';
 import { getAuth, onAuthStateChanged, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { firebaseConfig } from '../firebase';
+import "../app.css";
 
 function chatBox() {
 
@@ -1556,7 +1557,7 @@ function chatBox() {
     if (document.getElementById('headerPageTitle')) {
       document.getElementById('headerPageTitle').innerText = ('Discussions').toUpperCase()
     }
-
+    
     if (localStorage.getItem('theme') != 'dark') {
 
       const elementGrey = document.getElementsByClassName('w3-black').length
