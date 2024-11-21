@@ -937,10 +937,6 @@ export default function RootLayout({ children }) {
       }
     }, 500);
 
-    setInterval(() => {
-      document.body.style.transform = "scale(1)";
-      document.body.style.transformOrigin = "0 0";
-    }, 1000);
     document.addEventListener('wheel', function (e) {
       if (e.ctrlKey) {
         e.preventDefault(); // Prevent zooming with Ctrl+scroll
