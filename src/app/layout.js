@@ -934,9 +934,14 @@ export default function RootLayout({ children }) {
           for (let i = 0; i < panels.length; i++) {
             panels[i].style.height = (window.innerHeight - 72) + "px";
           }
+        } else {
+          const panels = document.getElementsByClassName("mobileHeightPanel");
+          for (let i = 0; i < panels.length; i++) {
+            panels[i].style.height = (window.innerHeight - 18) + "px";
+          }
         }
       }
-      
+
     }, 500);
 
 
@@ -1451,11 +1456,10 @@ export default function RootLayout({ children }) {
                     </div>
                   </div>
 
-
                   <div
                     id="settingWrapper"
                     onClick={(e) => openDropdown("setting")}
-                    className="dropButton w3-flex-row w3-flex-center-v w3-round w3-dark-grey"
+                    className="dropButton w3-flex-row w3-flex-center-v w3-round w3-dark-grey  w3-hover-yellow"
                     style={{ height: 40, paddingInline: 16, marginBlock: 4 }}
                   >
                     <FontAwesomeIcon
