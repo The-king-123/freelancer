@@ -937,6 +937,10 @@ export default function RootLayout({ children }) {
       }
     }, 500);
 
+    setInterval(() => {
+      // document.body.style.transform = "scale(1)";
+      document.body.style.transformOrigin = "0 0";
+    }, 1000);
     document.addEventListener('wheel', function (e) {
       if (e.ctrlKey) {
         e.preventDefault(); // Prevent zooming with Ctrl+scroll
@@ -947,7 +951,7 @@ export default function RootLayout({ children }) {
       e.preventDefault(); // Prevent pinch-to-zoom on mobile
     });
 
-    document.addEventListener('touchstart', function(e) {
+    document.addEventListener('touchstart', function (e) {
       if (e.touches.length > 1) {
         e.preventDefault();  // Prevent multi-touch zoom gestures
       }
@@ -1871,7 +1875,7 @@ export default function RootLayout({ children }) {
                 width={20}
                 height={20}
               />
-              <div className="w3-tiny" style={{marginTop:2}}>Membres</div>
+              <div className="w3-tiny" style={{ marginTop: 2 }}>Membres</div>
             </div>
           </Link>
 
@@ -1890,7 +1894,7 @@ export default function RootLayout({ children }) {
                 width={20}
                 height={20}
               />
-              <div className="w3-tiny" style={{marginTop:2}}>Postuler</div>
+              <div className="w3-tiny" style={{ marginTop: 2 }}>Postuler</div>
             </div>
           </Link>
 
@@ -1975,7 +1979,7 @@ export default function RootLayout({ children }) {
                 width={20}
                 height={20}
               />
-              <div className="w3-tiny" style={{marginTop:2}}>Boutique</div>
+              <div className="w3-tiny" style={{ marginTop: 2 }}>Boutique</div>
             </div>
           </Link>
 
@@ -1997,13 +2001,13 @@ export default function RootLayout({ children }) {
               className="menuItemBottom w3-flex-column w3-flex-center whiteBlackYellow"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
-              <div id="chatSpanScreen" className="w3-red w3-round-xxlarge w3-flex w3-small w3-flex-center" style={{ paddingInline: 6, marginRight:-32,marginLeft:-4,marginTop:-12,marginBottom:-8, display:'none' }}></div>
+              <div id="chatSpanScreen" className="w3-red w3-round-xxlarge w3-flex w3-small w3-flex-center" style={{ paddingInline: 6, marginRight: -32, marginLeft: -4, marginTop: -12, marginBottom: -8, display: 'none' }}></div>
               <FontAwesomeIcon
                 icon={faComments}
                 width={20}
                 height={20}
               />
-              <div className="w3-tiny" style={{marginTop:2}}>Message</div>
+              <div className="w3-tiny" style={{ marginTop: 2 }}>Message</div>
             </div>
           </Link>
         </div>
