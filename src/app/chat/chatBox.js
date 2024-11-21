@@ -947,8 +947,8 @@ function chatBox() {
 
     console.log(chat.length);
     console.log(userInfo.messageCounter);
-    
-    
+
+
     if (chat.length > userInfo.messageCounter) {
       setTimeout(() => {
         if (document.getElementById("bullField").scrollHeight > window.innerHeight - 160
@@ -1283,7 +1283,24 @@ function chatBox() {
 
         history.pushState({}, "", newUrl);
       }
-    };
+    } else if (userInfo.key != '160471339156947' && userInfo.key != '336302677822455') {
+      if (data.length > 0) {
+        var searchFound = false;
+        data.forEach(user => {
+          if (user.key == '160471339156947') {
+            searchFound = true;
+            displayDiscution(user)
+          }
+        });
+        const baseUrl = window.location.origin;
+        const newUrl = `${baseUrl}/chat?to=160471339156947`;
+
+        document.getElementById('chatListeCore').style.display = 'block'
+        document.getElementById('chattingCore').style.display = 'none';
+
+        history.pushState({}, "", newUrl);
+      }
+    }
 
 
     setchatListe(glitchChat)
@@ -1776,9 +1793,11 @@ function chatBox() {
     <div id='chatMainCore'>
       <div id='chattingCore' style={{ display: 'none' }}>
         <div id='bullField' className='w3-noscrollbar w3-overflow-scroll w3-block' style={{ padding: 8, display: 'flex', flexDirection: 'column-reverse' }}>
+          <div className='w3-block'>
             <div className='w3-block' style={{ minHeight: 132 }}></div>
             {displayChat}
             <div className='w3-block' style={{ minHeight: 72 }}></div>
+          </div>
         </div>
         <div id='chatInputWrapper' style={{ maxWidth: 620, paddingInline: 6, paddingBottom: 6, marginBottom: 8 }} className='w3-dark-grey w3-block w3-bottom'>
           <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
@@ -1847,7 +1866,7 @@ function chatBox() {
                     Fichier
                   </div>
                   {/* / arrow marker / */}
-                  <div style={{marginBottom:-20}}>
+                  <div style={{ marginBottom: -20 }}>
                     <FontAwesomeIcon
                       icon={faPlay}
                       className="rotate90 w3-text-white"
