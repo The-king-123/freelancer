@@ -945,6 +945,10 @@ function chatBox() {
     }, 100);
     setdisplayChat(glitchChat);
 
+    console.log(chat.length);
+    console.log(userInfo.messageCounter);
+    
+    
     if (chat.length > userInfo.messageCounter) {
       setTimeout(() => {
         if (document.getElementById("bullField").scrollHeight > window.innerHeight - 160
@@ -1529,6 +1533,9 @@ function chatBox() {
 
   useEffect(() => {
 
+    document.getElementById('bullField').style.height = (window.innerHeight - 32 - (window.innerWidth < 992 ? 96 : 0)) + 'px';
+    document.getElementById('bullField').style.maxHeight = (window.innerHeight - 32 - (window.innerWidth < 992 ? 96 : 0)) + 'px';
+
     if (document.getElementById('headerPageTitle')) {
       document.getElementById('headerPageTitle').innerText = ('Discussions').toUpperCase()
     }
@@ -1586,8 +1593,6 @@ function chatBox() {
             document.getElementById('searchUserInputWrapper').style.display = 'block'
             document.getElementById('listeChatSpacer').style.height = '64px'
           }
-
-          document.getElementById('bullField').style.height = (window.innerHeight - 32 - (window.innerWidth < 992 ? 96 : 0)) + 'px';
 
           fetchChatListe()
 
@@ -1771,11 +1776,9 @@ function chatBox() {
     <div id='chatMainCore'>
       <div id='chattingCore' style={{ display: 'none' }}>
         <div id='bullField' className='w3-noscrollbar w3-overflow-scroll w3-block' style={{ padding: 8, display: 'flex', flexDirection: 'column-reverse' }}>
-          <div className='w3-block'>
-            <div style={{ height: 72 }}></div>
+            <div className='w3-block' style={{ minHeight: 132 }}></div>
             {displayChat}
-            <div style={{ height: 96 }}></div>
-          </div>
+            <div className='w3-block' style={{ minHeight: 72 }}></div>
         </div>
         <div id='chatInputWrapper' style={{ maxWidth: 620, paddingInline: 6, paddingBottom: 6, marginBottom: 8 }} className='w3-dark-grey w3-block w3-bottom'>
           <div style={{ padding: 16 }} className='w3-black w3-round w3-card' >
@@ -1844,7 +1847,7 @@ function chatBox() {
                     Fichier
                   </div>
                   {/* / arrow marker / */}
-                  <div style={{ height: 2 }}>
+                  <div className='w3-red'>
                     <FontAwesomeIcon
                       icon={faPlay}
                       className="rotate90 w3-text-white"
