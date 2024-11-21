@@ -60,7 +60,7 @@ export default function PostContent({ posts }) {
     const glitchPost = posts.map((post, key) => (
       (type == 'premium' ? post.category == type : post.category != 'premium') &&
       <Link className="postCard" href={'/post/' + post.slug} key={key} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
-        <div className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow w3-round w3-pointer"}>
+        <div className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-hover-shadow w3-overflow w3-round w3-pointer"}>
           <div
             className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-big w3-small w3-flex-row w3-flex-center-v"}
             title={parse(post.title)}
