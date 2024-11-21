@@ -931,7 +931,7 @@ export default function RootLayout({ children }) {
         if (window.innerWidth < 992) {
           const panels = document.getElementsByClassName("mobileHeightPanel");
           for (let i = 0; i < panels.length; i++) {
-            panels[i].style.height = window.innerHeight - 72 + "px !important";
+            panels[i].style.height = (window.innerHeight - 72) + "px";
           }
         }
       }
