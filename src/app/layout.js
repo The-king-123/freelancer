@@ -1187,7 +1187,7 @@ export default function RootLayout({ children }) {
               <div id="beastWrapper" className="w3-flex-column">
                 <div className="btn3_container w3-dark-grey w3-border-dark-grey" style={{ marginInline: 'auto' }}>
                   <span className="main w3-pointer">
-                    <div id="freeSwitch" className="btn w3-yellow w3-hover-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
+                    <div id="freeSwitch" className="btn w3-yellow w3-hover-yellow w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
                       <FontAwesomeIcon icon={faDollarSign} />
                     </div>
                     <div id="premiumSwitch" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36, display: 'none' }}>

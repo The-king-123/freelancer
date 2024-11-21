@@ -523,7 +523,7 @@ function postuleRecrutement(props) {
               recrutementInfos.jobTitle = e.target.value;
               document.getElementById('postulerPourLePoste').style.display = 'none';
             }}
-            className="w3-block  w3-black w3-round w3-block w3-text-black w3-medium  w3-border-0 w3-margin-bottom"
+            className="w3-block  w3-black w3-round w3-block blacktext w3-medium  w3-border-0 w3-margin-bottom"
             style={{ paddingBlock: 10, paddingInline: 5 }}
             defaultValue={'default'}
           >
@@ -574,7 +574,7 @@ function postuleRecrutement(props) {
           />
           <select
             onChange={(e) => recrutementInfos.niveauLangue.fr = e.target.value}
-            className="w3-block  w3-black w3-round w3-block w3-text-black w3-medium  w3-border-0 w3-margin-bottom"
+            className="w3-block  w3-black w3-round w3-block blacktext w3-medium  w3-border-0 w3-margin-bottom"
             style={{ paddingBlock: 10, paddingInline: 5 }}
             defaultValue={'default'}
           >
