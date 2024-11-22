@@ -4,7 +4,7 @@ import "./globals.css";
 import "./app.css";
 import { app_name, console_source as source } from "@/app/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faCalculator, faCheck, faChevronCircleUp, faCode, faComment, faComments, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faSun, faTimesCircle, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCalculator, faCheck, faChevronCircleUp, faCode, faComment, faComments, faCube, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faSun, faTimesCircle, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { faFacebookMessenger, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
@@ -1332,6 +1332,21 @@ export default function RootLayout({ children }) {
                 <div className="w3-margin-left w3-medium">POS</div>
               </Link>
 
+
+              <Link
+                id="notionPage"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                href={"/notion"}
+              >
+                <FontAwesomeIcon
+                  icon={faCube}
+                  width={20}
+                  height={20}
+                />
+                <div className="w3-margin-left w3-medium w3-flex-1">Notion</div>
+              </Link>
+
               <Link
                 id="chatPage"
                 onClick={() => {
@@ -1354,7 +1369,6 @@ export default function RootLayout({ children }) {
                 <div className="w3-margin-left w3-medium w3-flex-1">Message</div>
                 <div id="chatSpanPage" className="w3-red w3-round-xxlarge w3-flex w3-small w3-flex-center" style={{ paddingInline: 6, display: 'none' }}></div>
               </Link>
-
               <div style={{ height: 40 }}>
                 <div
                   id="settingDropContainer"
@@ -1707,6 +1721,21 @@ export default function RootLayout({ children }) {
             </div>
           </div>
 
+          <Link
+            href={'/notion'}
+            style={{ width: 36, height: 36, marginRight: 16 }}
+          >
+            <div
+              className="w3-flex w3-flex-center w3-overflow w3-dark-grey w3-card w3-round"
+              style={{ width: 36, height: 36 }}
+            >
+              <FontAwesomeIcon
+                icon={faCube}
+                width={20}
+                height={20}
+              />
+            </div>
+          </Link>
           <div
             onClick={toggleChat}
             style={{ width: 36, height: 36, marginRight: 16 }}
@@ -1865,7 +1894,7 @@ export default function RootLayout({ children }) {
                 width={20}
                 height={20}
               />
-              <div className="w3-tiny" style={{marginTop:2}}>Membres</div>
+              <div className="w3-tiny" style={{ marginTop: 2 }}>Membres</div>
             </div>
           </Link>
 
@@ -1884,7 +1913,7 @@ export default function RootLayout({ children }) {
                 width={20}
                 height={20}
               />
-              <div className="w3-tiny" style={{marginTop:2}}>Postuler</div>
+              <div className="w3-tiny" style={{ marginTop: 2 }}>Postuler</div>
             </div>
           </Link>
 
@@ -1969,7 +1998,7 @@ export default function RootLayout({ children }) {
                 width={20}
                 height={20}
               />
-              <div className="w3-tiny" style={{marginTop:2}}>Boutique</div>
+              <div className="w3-tiny" style={{ marginTop: 2 }}>Boutique</div>
             </div>
           </Link>
 
@@ -1991,13 +2020,13 @@ export default function RootLayout({ children }) {
               className="menuItemBottom w3-flex-column w3-flex-center whiteBlackYellow"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
-              <div id="chatSpanScreen" className="w3-red w3-round-xxlarge w3-flex w3-small w3-flex-center" style={{ paddingInline: 6, marginRight:-32,marginLeft:-4,marginTop:-12,marginBottom:-8, display:'none' }}></div>
+              <div id="chatSpanScreen" className="w3-red w3-round-xxlarge w3-flex w3-small w3-flex-center" style={{ paddingInline: 6, marginRight: -32, marginLeft: -4, marginTop: -12, marginBottom: -8, display: 'none' }}></div>
               <FontAwesomeIcon
                 icon={faComments}
                 width={20}
                 height={20}
               />
-              <div className="w3-tiny" style={{marginTop:2}}>Message</div>
+              <div className="w3-tiny" style={{ marginTop: 2 }}>Message</div>
             </div>
           </Link>
         </div>
