@@ -2,6 +2,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./app.css";
+import "@/app/page.module.css"
 import { app_name, console_source as source } from "@/app/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faCalculator, faCheck, faChevronCircleUp, faCode, faComment, faComments, faCube, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faSun, faTimesCircle, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
@@ -931,21 +932,19 @@ export default function RootLayout({ children }) {
         if (window.innerWidth < 992) {
           const panels = document.getElementsByClassName("mobileHeightPanel");
           for (let i = 0; i < panels.length; i++) {
-            panels[i].style.height = window.innerHeight - 72 + "px !important";
+            panels[i].style.height = (window.innerHeight - 72) + "px";
+          }
+        } else {
+          const panels = document.getElementsByClassName("mobileHeightPanel");
+          for (let i = 0; i < panels.length; i++) {
+            panels[i].style.height = (window.innerHeight - 18) + "px";
           }
         }
       }
+
     }, 500);
 
-    document.addEventListener('wheel', function (e) {
-      if (e.ctrlKey) {
-        e.preventDefault(); // Prevent zooming with Ctrl+scroll
-      }
-    }, { passive: false });
 
-    document.addEventListener('gesturestart', function (e) {
-      e.preventDefault(); // Prevent pinch-to-zoom on mobile
-    });
 
     const firstPath = location.pathname.split('/')[1]
     if (document.getElementById(firstPath + 'Page')) {
@@ -1161,7 +1160,7 @@ export default function RootLayout({ children }) {
   }, []);
 
   return (
-    <html id="htmlCore" style={{ display: 'none' }} className="w3-dark-grey" lang="en">
+    <html id="htmlCore" style={{ display: 'none' }} className="w3-dark-grey html" lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </head>
@@ -1193,7 +1192,7 @@ export default function RootLayout({ children }) {
               <div id="beastWrapper" className="w3-flex-column">
                 <div className="btn3_container w3-dark-grey w3-border-dark-grey" style={{ marginInline: 'auto' }}>
                   <span className="main w3-pointer">
-                    <div id="freeSwitch" className="btn w3-yellow w3-hover-yellow w3-text-black w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
+                    <div id="freeSwitch" className="btn w3-yellow w3-hover-yellow w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
                       <FontAwesomeIcon icon={faDollarSign} />
                     </div>
                     <div id="premiumSwitch" className="btn w3-green w3-text-white w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36, display: 'none' }}>
@@ -1221,7 +1220,7 @@ export default function RootLayout({ children }) {
                 data-key="160471339156947"
                 id="Page"
                 onClick={() => localStorage.setItem("user", "160471339156947")}
-                className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"/"}
               >
@@ -1235,7 +1234,7 @@ export default function RootLayout({ children }) {
 
               <Link
                 id="storePage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"/store/all"}
               >
@@ -1249,7 +1248,7 @@ export default function RootLayout({ children }) {
 
               <div
                 id="forumPage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-pointer"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow w3-pointer"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 onClick={userForum}
               >
@@ -1263,7 +1262,7 @@ export default function RootLayout({ children }) {
 
               <Link
                 id="talentPage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"/talent"}
               >
@@ -1278,7 +1277,7 @@ export default function RootLayout({ children }) {
               <Link
                 data-key="336302677822455"
                 id="userPage"
-                className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"/user/336302677822455"}
               >
@@ -1292,7 +1291,7 @@ export default function RootLayout({ children }) {
 
               <Link
                 id="recrutementPage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"/recrutement/postule"}
               >
@@ -1306,7 +1305,7 @@ export default function RootLayout({ children }) {
 
               <div
                 id="tarifsPage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-pointer"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow w3-pointer"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 onClick={userTarifs}
               >
@@ -1319,7 +1318,7 @@ export default function RootLayout({ children }) {
               </div>
 
               <Link
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"https://pos.freelancer.mg"}
                 target="_blank"
@@ -1357,7 +1356,7 @@ export default function RootLayout({ children }) {
                     }
                   }
                 }}
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                 href={"/chat"}
               >
@@ -1471,11 +1470,10 @@ export default function RootLayout({ children }) {
                     </div>
                   </div>
 
-
                   <div
                     id="settingWrapper"
                     onClick={(e) => openDropdown("setting")}
-                    className="dropButton w3-flex-row w3-flex-center-v w3-round w3-dark-grey"
+                    className="dropButton w3-flex-row w3-flex-center-v w3-round w3-dark-grey  w3-hover-yellow"
                     style={{ height: 40, paddingInline: 16, marginBlock: 4 }}
                   >
                     <FontAwesomeIcon

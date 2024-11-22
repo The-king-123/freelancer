@@ -1291,7 +1291,7 @@ function PostCreate(props) {
                             disabled
                             id="repeatRecord"
                             title="Supprimer l'enregistrement!"
-                            className="w3-text-black w3-margin-left w3-flex w3-border w3-border-black w3-circle w3-flex-center"
+                            className="blacktext w3-margin-left w3-flex w3-border w3-border-black w3-circle w3-flex-center"
                             style={{ width: 36, height: 36, display: 'none' }}
                         >
                             <FontAwesomeIcon icon={faTrashAlt} />
@@ -1300,7 +1300,7 @@ function PostCreate(props) {
                             disabled
                             id="stopRecord"
                             title="Arrêter l'enregistrement!"
-                            className="w3-text-black w3-margin-left w3-flex w3-border w3-border-black w3-circle w3-flex-center"
+                            className="blacktext w3-margin-left w3-flex w3-border w3-border-black w3-circle w3-flex-center"
                             style={{ width: 36, height: 36, display: 'none' }}
                         >
                             <FontAwesomeIcon icon={faStop} />
@@ -1308,7 +1308,7 @@ function PostCreate(props) {
                         <div
                             id="startRecord"
                             title="Commencer l'enregistrement!"
-                            className="w3-text-black w3-margin-left w3-flex w3-border w3-border-black w3-circle w3-flex-center"
+                            className="blacktext w3-margin-left w3-flex w3-border w3-border-black w3-circle w3-flex-center"
                             style={{ width: 36, height: 36 }}
                         >
                             <FontAwesomeIcon icon={faRecordVinyl} />

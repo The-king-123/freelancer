@@ -288,3 +288,16 @@ input, textarea {
 .chat-image {
   height: "auto";
 }
+
+html, body {
+  touch-action: none; /* Disables touch gestures such as pinch-to-zoom */
+  overflow: hidden;   /* Prevents scrolling (optional) */
+}
+
+/* Prevent zooming in on mobile devices */
+@media (pointer: coarse) {
+  /* Prevent the user from zooming */
+  meta[name="viewport"] {
+    content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+  }
+}

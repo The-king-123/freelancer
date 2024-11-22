@@ -51,7 +51,7 @@ export default function PostContent({ content }) {
       glitchMembers = (
         <div>
           <div
-            className="w3-text-black w3-border w3-flex-row w3-flex-center-v w3-round w3-block w3-medium w3-big"
+            className="blacktext w3-border w3-flex-row w3-flex-center-v w3-round w3-block w3-medium w3-big"
             style={{ marginBlock: 16, padding: 12 }}
           >
             You will find users here...
