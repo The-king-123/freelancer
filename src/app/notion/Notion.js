@@ -157,7 +157,7 @@ function Notion() {
                         <ol id={'elementNumber' + key} style={{ paddingInline: 24 }}>
                             {
                                 bloque.subElement.map((subBloque, k) => (
-                                    <li key={k} className='placeholder' data-placeholder={'Élément numéroté ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable='true' style={{ minHeight: 24 }}>
+                                    <li onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément numéroté ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable='true' style={{ minHeight: 24 }}>
                                         {subBloque.content}
                                     </li>
                                 ))
