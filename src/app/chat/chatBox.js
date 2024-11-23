@@ -543,7 +543,7 @@ function chatBox() {
                         : 0,
                     }}
                   >
-                    {/\n.+/.test(bull.message) ? parse(bull.message.replace(/\n/g, "<br/>")) : bull.message}
+                    {/\n.+/.test(bull.message) ? parse(convertLinks(bull.message.replace(/\n/g, "<br/>"))) : parse(convertLinks(bull.message))}
                   </div>
                 }
                 {/* Bull media */}
@@ -744,7 +744,7 @@ function chatBox() {
                           : -4,
                     }}
                   >
-                    {/\n.+/.test(bull.message) ? parse(bull.message.replace(/\n/g, "<br/>")) : bull.message}
+                    {/\n.+/.test(bull.message) ? parse(convertLinks(bull.message.replace(/\n/g, "<br/>"))) : parse(convertLinks(bull.message))}
 
                   </div>
                 }
@@ -1549,6 +1549,15 @@ function chatBox() {
     });
   }
 
+  const convertLinks = (text) => {
+
+    const urlRegex = /\b(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9-]+\.[a-z]{2,}(?:\.[a-z]{2,})?(?:\/[^\s]*)?/g;
+    return text.replace(urlRegex, (url) => {
+        let href = url.startsWith('http') ? url : `https://${url}`;
+        return `<a href="${href}" target="_blank"><u>${url}</u></a>`;
+    });
+
+}
   useEffect(() => {
 
     document.getElementById('bullField').style.height = (window.innerHeight - 32 - (window.innerWidth < 992 ? 96 : 0)) + 'px';
