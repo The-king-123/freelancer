@@ -3,6 +3,7 @@ import { faCubes, faMuseum, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import Link from 'next/link'
+import parse from "html-react-parser";
 import React, { useEffect, useState } from 'react'
 import { console_source as source } from '../data'
 
@@ -123,6 +124,13 @@ function Notion() {
 
     }
 
+    const blockValueTaker = (key) => {
+        pageData.bloque[key].content = document.getElementById('elementNumber' + key).innerText;
+    }
+    const suBlockValueTaker = (key,k) => {
+        pageData.bloque[key].subElement[k].content = document.getElementById('listeNumber' + key + 'Child' + k).innerText;
+    }
+
     const reloadElement = () => {
         const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
         const glitchBloque = pageData.bloque.map((bloque, key) => (
@@ -130,44 +138,44 @@ function Notion() {
                 key={key}
                 className="w3-dropdown-click w3-block"
             >
-                <div onContextMenu={(e) => {e.preventDefault(); openDropdown("bloqueNumber" + key);}} className='w3-margin-bottom'>
+                <div onContextMenu={(e) => { e.preventDefault(); openDropdown("bloqueNumber" + key); }} className='w3-margin-bottom'>
                     {/* elementEditable */}
                     {bloque.element == 'p' &&
-                        <p id={'elementNumber' + key} className='placeholder' data-placeholder='Écrivez votre texte ici...' contentEditable='true' style={{ minHeight: 24 }}>
-                            {convertLinks(bloque.content)}
+                        <p id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Écrivez votre texte ici...' contentEditable='true' style={{ minHeight: 24 }}>
+                            {bloque.content}
                         </p>
                     }
                     {bloque.element == 'div' &&
-                        <div id={'elementNumber' + key} className='placeholder' data-placeholder='Ajoutez du contenu ici...' contentEditable='true' style={{ minHeight: 24 }}>
-                            {convertLinks(bloque.content)}
+                        <div id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Ajoutez du contenu ici...' contentEditable='true' style={{ minHeight: 24 }}>
+                            {bloque.content}
                         </div>
                     }
                     {bloque.element == 'h1' &&
-                        <h1 id={'elementNumber' + key} className='placeholder' data-placeholder='Titre principal...' contentEditable='true' style={{ minHeight: 24 }}>
-                            {convertLinks(bloque.content)}
+                        <h1 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Titre principal...' contentEditable='true' style={{ minHeight: 24 }}>
+                            { bloque.content}
                         </h1>
                     }
                     {bloque.element == 'h2' &&
-                        <h2 id={'elementNumber' + key} className='placeholder' data-placeholder='Sous-titre...' contentEditable='true' style={{ minHeight: 24 }}>
-                            {convertLinks(bloque.content)}
+                        <h2 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Sous-titre...' contentEditable='true' style={{ minHeight: 24 }}>
+                            { bloque.content}
                         </h2>
                     }
                     {bloque.element == 'h3' &&
-                        <h3 id={'elementNumber' + key} className='placeholder' data-placeholder='Sous-titre secondaire...' contentEditable='true' style={{ minHeight: 24 }}>
-                            {convertLinks(bloque.content)}
+                        <h3 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Sous-titre secondaire...' contentEditable='true' style={{ minHeight: 24 }}>
+                            { bloque.content}
                         </h3>
                     }
                     {bloque.element == 'h4' &&
-                        <h4 id={'elementNumber' + key} className='placeholder' data-placeholder='Petit titre...' contentEditable='true' style={{ minHeight: 24 }}>
-                            {convertLinks(bloque.content)}
+                        <h4 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Petit titre...' contentEditable='true' style={{ minHeight: 24 }}>
+                            { bloque.content}
                         </h4>
                     }
                     {bloque.element == 'ul' &&
                         <ul id={'elementNumber' + key} style={{ paddingInline: 24 }}>
                             {
                                 bloque.subElement.map((subBloque, k) => (
-                                    <li onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément de liste ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable='true' style={{ minHeight: 24 }}>
-                                        {convertLinks(subBloque.content)}
+                                    <li onKeyUp={()=>suBlockValueTaker(key,k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément de liste ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable='true' style={{ minHeight: 24 }}>
+                                        {subBloque.content}
                                     </li>
                                 ))
                             }
@@ -178,8 +186,8 @@ function Notion() {
                         <ol id={'elementNumber' + key} style={{ paddingInline: 24 }}>
                             {
                                 bloque.subElement.map((subBloque, k) => (
-                                    <li onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément numéroté ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable='true' style={{ minHeight: 24 }}>
-                                        {convertLinks(subBloque.content)}
+                                    <li onKeyUp={()=>suBlockValueTaker(key,k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément numéroté ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable='true' style={{ minHeight: 24 }}>
+                                        {subBloque.content}
                                     </li>
                                 ))
                             }
@@ -191,7 +199,7 @@ function Notion() {
                 <div
                     id={"bloqueNumber" + key}
                     className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-round w3-overflow-scroll w3-noscrollbar w3-container"}
-                    style={{ minWidth: 360, padding: 8, marginTop:-16 }}
+                    style={{ minWidth: 360, padding: 8, marginTop: -16 }}
                 >
                     {/* liste des options */}
                     <div onClick={() => deleteBlock(key)} className="w3-button w3-round" style={{ padding: 8 }}>
@@ -244,7 +252,6 @@ function Notion() {
     const showOption = (id) => {
         console.log(id);
     }
-
 
     useEffect(() => {
         if (localStorage.getItem('theme') != 'dark') {
@@ -362,7 +369,7 @@ function Notion() {
             </div>
 
             {/* add notion element */}
-            <div style={{marginTop:64}}>
+            <div style={{ marginTop: 64 }}>
                 <div className='w3-black w3-round' style={{ padding: 6 }}>
                     <div
                         className="w3-dropdown-click"
