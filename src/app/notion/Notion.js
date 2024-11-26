@@ -40,6 +40,7 @@ function Notion() {
             pageHashing: '',
             intervalIDPageSaving: '',
             pageID: null,
+            lockAddNewPage: false,
         }
     )
 
