@@ -285,16 +285,28 @@ function Notion() {
         return result;
     }
 
-    const savePage = () => {
-        const chatRef = ref(database, 'notion/' + userInfo.key);
-        const chatPush = push(chatRef)
+    const addNewPage = async () => {
 
-        pageData.lastModification = Date.now();
-        set(chatPush, pageData)
+        if (keeper.pageID && keeper.pageHashing != hashArray(pageData)) {
+            await savePage();
+        }
+
+        const pageRef = ref(database, 'notion/' + userInfo.key);
+        const pagePush = push(pageRef)
+
+        const newPage = {
+            pageName: 'Nouvelle page',
+            lastModification: Date.now(),
+            bloque: [],
+            lock: false,
+        }
+
+        await set(pagePush, newPage)
             .then(() => {
-
+                pageData.bloque = [],
+                pageData.
+                keeper.pageID = pagePush.key
             })
-
             .catch((error) => {
                 console.error('Error writing data:', error);
             });
@@ -311,11 +323,17 @@ function Notion() {
         return hashHex;
     }
 
+    const savePage = async () => {
+        pageData.lastModification = Date.now();
+        await set(ref(database, 'notion/' + keeper.pageID), pageData).then(() => keeper.pageID = null);
+    }
 
     const openPage = (page) => {
 
-        onValue(ref(database, 'notion/' + page.pageID), (snapshot) => {
+        onValue(ref(database, 'notion/' + page.pageID), async (snapshot) => {
 
+            clearInterval(keeper.intervalIDPageSaving)
+            if (keeper.pageID) await savePage();
             if (snapshot.exists()) {
                 const notion = snapshot.val();
                 pageData.pageName = notion.pageName;
@@ -323,16 +341,19 @@ function Notion() {
                 pageData.lock = notion.lock ? notion.lock : false;
                 pageData.lastModification = notion.lastModification ? notion.lastModification : null,
 
-                keeper.pageID = page.pageID
+                    keeper.pageID = page.pageID
 
                 // hashing content
                 hashArray(pageData).then(hash => {
-                    keeper.pageHashing = hash
+                    keeper.pageHashing = hash;
+                    autoSave();
                 });
 
                 document.getElementById('myPageTitle').innerText = notion.pageName;
                 openDropdown("notionList")
                 reloadElement()
+            } else {
+
             }
         }, (error) => {
             console.error("Error reading data:", error);
@@ -394,10 +415,13 @@ function Notion() {
         });
     }
 
-    const autoSave = () => {
-        keeper.intervalIDPageSaving = setInterval(() => {
+    const autoSave = async () => {
+        keeper.intervalIDPageSaving = setInterval(async () => {
             if (keeper.pageHashing != hashArray(pageData)) {
-                
+                console.log('tsy mitovy');
+                await savePage();
+            } else {
+                console.log('mitovy');
             }
         }, 3000);
     }
