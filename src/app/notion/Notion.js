@@ -37,15 +37,17 @@ function Notion() {
                 subBlockKey: null,
                 state: false,
             },
-            pageHashing:'',
-            intervalIDPageSaving:'',
+            pageHashing: '',
+            intervalIDPageSaving: '',
+            pageID: null,
         }
     )
 
     const [pageData, setpageData] = useState({
         pageName: 'Nouvelle page',
-        lastModification: '',
+        lastModification: null,
         bloque: [],
+        lock: false,
     })
 
     const [userInfo, setuserInfo] = useState({
@@ -288,21 +290,53 @@ function Notion() {
 
         pageData.lastModification = Date.now();
         set(chatPush, pageData)
-          .then(() => {
-            
-          })
+            .then(() => {
 
-          .catch((error) => {
-            console.error('Error writing data:', error);
-          });
+            })
+
+            .catch((error) => {
+                console.error('Error writing data:', error);
+            });
     }
 
+    const hashArray = async (array) => {
+        const encoder = new TextEncoder();
+        const encoded = encoder.encode(JSON.stringify(array));
+
+        const hashBuffer = await crypto.subtle.digest('SHA-256', encoded);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+
+        return hashHex;
+    }
+
+
     const openPage = (page) => {
-        pageData.pageName = page.pageCore.pageName;
-        pageData.bloque = page.pageCore.bloque ? page.pageCore.bloque : [];
-        document.getElementById('myPageTitle').innerText = pageData.pageName;
-        openDropdown("notionList")
-        reloadElement()
+
+        onValue(ref(database, 'notion/' + page.pageID), (snapshot) => {
+
+            if (snapshot.exists()) {
+                const notion = snapshot.val();
+                pageData.pageName = notion.pageName;
+                pageData.bloque = notion.bloque ? notion.bloque : [];
+                pageData.lock = notion.lock ? notion.lock : false;
+                pageData.lastModification = notion.lastModification ? notion.lastModification : null,
+
+                keeper.pageID = page.pageID
+
+                // hashing content
+                hashArray(pageData).then(hash => {
+                    keeper.pageHashing = hash
+                });
+
+                document.getElementById('myPageTitle').innerText = notion.pageName;
+                openDropdown("notionList")
+                reloadElement()
+            }
+        }, (error) => {
+            console.error("Error reading data:", error);
+        });
+
     }
 
     const reloadNotionsList = (data) => {
@@ -335,20 +369,20 @@ function Notion() {
             if (snapshot.exists()) {
                 const pages = []
                 const notions = snapshot.val();
-                
+
                 notionData.splice(1, notionData.length);
                 const sortedNotions = Object.entries(notions).sort(([, a], [, b]) => b.lastModification - a.lastModification)
-                
-                sortedNotions.map(([index, notion]) => {                    
+
+                sortedNotions.map(([index, notion]) => {
                     pages.push({
-                        pageID:index,
+                        pageID: index,
                         pageCore: notion,
                     });
                     notionData.push({
-                        pageID:index,
+                        pageID: index,
                         pageCore: notion,
                     })
-                });                
+                });
                 reloadNotionsList(pages)
 
             } else {
@@ -357,6 +391,14 @@ function Notion() {
         }, (error) => {
             console.error("Error reading data:", error);
         });
+    }
+
+    const autoSave = () => {
+        keeper.intervalIDPageSaving = setInterval(() => {
+            if (keeper.pageHashing != hashArray(pageData)) {
+                
+            }
+        }, 3000);
     }
 
     useEffect(() => {
