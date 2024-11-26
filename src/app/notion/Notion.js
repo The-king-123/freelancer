@@ -207,7 +207,7 @@ function Notion() {
                 <div
                     id={"bloqueNumber" + key}
                     className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-dropdown-content w3-bar-block w3-round w3-overflow-scroll w3-noscrollbar w3-container"}
-                    style={{ minWidth: 360, padding: 8, marginTop: -16 }}
+                    style={{ minWidth: 360, padding: 4, marginTop: -16 }}
                 >
                     {/* liste des options */}
                     <div onClick={() => deleteBlock(key)} className="w3-button w3-round" style={{ padding: 8 }}>
@@ -341,7 +341,7 @@ function Notion() {
     const openPage = async (page) => {
 
         const newHash = await hashArray(pageData);
-        
+
         if (keeper.pageID && keeper.pageHashing != newHash) savePage();
 
         const pageRef = ref(database, 'notion/' + page.pageID);
@@ -439,8 +439,9 @@ function Notion() {
     }
 
     const autoSave = async () => {
-        keeper.intervalIDPageSaving = setInterval(async () => {
 
+        keeper.intervalIDPageSaving = setInterval(async () => {
+            pageData.pageName = document.getElementById('myPageTitle').innerText;
             if (!keeper.lockAutoSave) {
                 keeper.lockAutoSave = true;
                 const newHash = await hashArray(pageData);
