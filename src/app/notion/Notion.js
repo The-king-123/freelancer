@@ -1,5 +1,5 @@
 'use client'
-import { faCubes, faMuseum, faPlus, faStickyNote } from '@fortawesome/free-solid-svg-icons'
+import { faCubes, faLock, faLockOpen, faMuseum, faPlus, faStickyNote } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import Link from 'next/link'
@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react'
 import { console_source as source } from '../data'
 import { initializeApp } from 'firebase/app'
 import { firebaseConfig } from '../firebase'
-import { getDatabase, ref, set, push, onValue } from "firebase/database";
+import { getDatabase, ref, set, push, onValue, get } from "firebase/database";
 
 function Notion() {
 
@@ -18,17 +18,6 @@ function Notion() {
     // Firebase configuration
 
     const [notionData, setnotionData] = useState([])
-
-    const elementList = {
-        p: `<p id='elementNumber00' class='placeholder w3-margin-bottom' data-placeholder='Écrivez votre texte ici...' contentEditable='true' style='min-height:24px'></p>`,
-        div: `<div id='elementNumber00' class='placeholder w3-margin-bottom' data-placeholder='Ajoutez du contenu ici...' contentEditable='true' style='min-height:24px'></div>`,
-        ul: `<div id='elementNumber00' class='w3-margin-bottom' style='padding-inline:16px'><ul id='listeNumber00'><li class='placeholder' data-placeholder='Élément de liste 1...' id='listeNumber00Child0' contentEditable='true' style='min-height:24px'></li></ul></div>`,
-        ol: `<div id='elementNumber00' class='w3-margin-bottom' style='padding-inline:16px'><ol id='listeNumber00'><li class='placeholder' data-placeholder='Élément numéroté 1...' id='listeNumber00Child0' contentEditable='true' style='min-height:24px'></li></ol></div>`,
-        h1: `<h1 id='elementNumber00' class='placeholder w3-margin-bottom' data-placeholder='Titre principal...' contentEditable='true' style='min-height:24px'></h1>`,
-        h2: `<h2 id='elementNumber00' class='placeholder w3-margin-bottom' data-placeholder='Sous-titre...' contentEditable='true' style='min-height:24px'></h2>`,
-        h3: `<h3 id='elementNumber00' class='placeholder w3-margin-bottom' data-placeholder='Sous-titre secondaire...' contentEditable='true' style='min-height:24px'></h3>`,
-        h4: `<h4 id='elementNumber00' class='placeholder w3-margin-bottom' data-placeholder='Petit titre...' contentEditable='true' style='min-height:24px'></h4>`,
-    }
 
     const [keeper, setkeeper] = useState(
         {
@@ -41,6 +30,7 @@ function Notion() {
             intervalIDPageSaving: '',
             pageID: null,
             lockAddNewPage: false,
+            lockAutoSave: false,
         }
     )
 
@@ -147,6 +137,9 @@ function Notion() {
     }
 
     const reloadElement = () => {
+
+        document.getElementById('myPageTitle').innerText = pageData.pageName;
+
         const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
         const glitchBloque = pageData.bloque.map((bloque, key) => (
             <div
@@ -156,32 +149,32 @@ function Notion() {
                 <div onContextMenu={(e) => { e.preventDefault(); openDropdown("bloqueNumber" + key); }} className='w3-margin-bottom'>
                     {/* elementEditable */}
                     {bloque.element == 'p' &&
-                        <p id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Écrivez votre texte ici...' contentEditable='true' style={{ minHeight: 24 }}>
+                        <p id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Écrivez votre texte ici...' contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
                             {bloque.content}
                         </p>
                     }
                     {bloque.element == 'div' &&
-                        <div id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Ajoutez du contenu ici...' contentEditable='true' style={{ minHeight: 24 }}>
+                        <div id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Ajoutez du contenu ici...' contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
                             {bloque.content}
                         </div>
                     }
                     {bloque.element == 'h1' &&
-                        <h1 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Titre principal...' contentEditable='true' style={{ minHeight: 24 }}>
+                        <h1 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Titre principal...' contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
                             {bloque.content}
                         </h1>
                     }
                     {bloque.element == 'h2' &&
-                        <h2 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Sous-titre...' contentEditable='true' style={{ minHeight: 24 }}>
+                        <h2 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Sous-titre...' contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
                             {bloque.content}
                         </h2>
                     }
                     {bloque.element == 'h3' &&
-                        <h3 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Sous-titre secondaire...' contentEditable='true' style={{ minHeight: 24 }}>
+                        <h3 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Sous-titre secondaire...' contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
                             {bloque.content}
                         </h3>
                     }
                     {bloque.element == 'h4' &&
-                        <h4 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Petit titre...' contentEditable='true' style={{ minHeight: 24 }}>
+                        <h4 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Petit titre...' contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
                             {bloque.content}
                         </h4>
                     }
@@ -189,7 +182,7 @@ function Notion() {
                         <ul id={'elementNumber' + key} style={{ paddingInline: 24 }}>
                             {
                                 bloque.subElement.map((subBloque, k) => (
-                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément de liste ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable='true' style={{ minHeight: 24 }}>
+                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément de liste ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
                                         {subBloque.content}
                                     </li>
                                 ))
@@ -201,7 +194,7 @@ function Notion() {
                         <ol id={'elementNumber' + key} style={{ paddingInline: 24 }}>
                             {
                                 bloque.subElement.map((subBloque, k) => (
-                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément numéroté ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable='true' style={{ minHeight: 24 }}>
+                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément numéroté ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
                                         {subBloque.content}
                                     </li>
                                 ))
@@ -287,6 +280,10 @@ function Notion() {
 
     const addNewPage = async () => {
 
+        if (keeper.lockAddNewPage) return;
+
+        keeper.lockAddNewPage = true;
+
         if (keeper.pageID && keeper.pageHashing != hashArray(pageData)) {
             await savePage();
         }
@@ -303,12 +300,19 @@ function Notion() {
 
         await set(pagePush, newPage)
             .then(() => {
-                pageData.bloque = [],
-                pageData.
-                keeper.pageID = pagePush.key
+                pageData.bloque = newPage.bloque;
+                pageData.pageName = newPage.pageName;
+                pageData.lock = newPage.lock;
+                pageData.lastModification = newPage.lastModification;
+
+                keeper.pageID = pagePush.key;
+                keeper.lockAddNewPage = false;
+
+                reloadElement()
             })
             .catch((error) => {
                 console.error('Error writing data:', error);
+                keeper.lockAddNewPage = false;
             });
     }
 
@@ -325,31 +329,50 @@ function Notion() {
 
     const savePage = async () => {
         pageData.lastModification = Date.now();
-        await set(ref(database, 'notion/' + keeper.pageID), pageData).then(() => keeper.pageID = null);
+        await set(ref(database, 'notion/' + keeper.pageID), pageData).then(async () => {
+            console.log('Saved');
+
+            const newHash = await hashArray(pageData);
+            keeper.pageHashing = newHash;
+            keeper.lockAutoSave = false;
+        });
     }
 
-    const openPage = (page) => {
+    const openPage = async (page) => {
 
-        onValue(ref(database, 'notion/' + page.pageID), async (snapshot) => {
+        const newHash = await hashArray(pageData);
+        
+        if (keeper.pageID && keeper.pageHashing != newHash) savePage();
 
-            clearInterval(keeper.intervalIDPageSaving)
-            if (keeper.pageID) await savePage();
+        const pageRef = ref(database, 'notion/' + page.pageID);
+        get(pageRef).then((snapshot) => {
+
+            if (keeper.intervalIDPageSaving) clearInterval(keeper.intervalIDPageSaving);
+
             if (snapshot.exists()) {
+
                 const notion = snapshot.val();
+
                 pageData.pageName = notion.pageName;
                 pageData.bloque = notion.bloque ? notion.bloque : [];
                 pageData.lock = notion.lock ? notion.lock : false;
-                pageData.lastModification = notion.lastModification ? notion.lastModification : null,
+                pageData.lastModification = notion.lastModification ? notion.lastModification : null;
 
-                    keeper.pageID = page.pageID
+                if (pageData.lock) {
+                    document.getElementById('iconLockPage').style.display = 'inline-block'
+                    document.getElementById('iconOpenPage').style.display = 'none'
+                } else {
+                    document.getElementById('iconLockPage').style.display = 'none'
+                    document.getElementById('iconOpenPage').style.display = 'inline-block'
+                }
+
+                keeper.pageID = page.pageID
 
                 // hashing content
                 hashArray(pageData).then(hash => {
                     keeper.pageHashing = hash;
                     autoSave();
                 });
-
-                document.getElementById('myPageTitle').innerText = notion.pageName;
                 openDropdown("notionList")
                 reloadElement()
             } else {
@@ -417,13 +440,32 @@ function Notion() {
 
     const autoSave = async () => {
         keeper.intervalIDPageSaving = setInterval(async () => {
-            if (keeper.pageHashing != hashArray(pageData)) {
-                console.log('tsy mitovy');
-                await savePage();
-            } else {
-                console.log('mitovy');
+
+            if (!keeper.lockAutoSave) {
+                keeper.lockAutoSave = true;
+                const newHash = await hashArray(pageData);
+                if (keeper.pageHashing != newHash) {
+                    savePage();
+                } else {
+                    keeper.lockAutoSave = false;
+                }
             }
-        }, 3000);
+
+        }, 1500);
+    }
+
+    const toggleLockPage = () => {
+        if (document.getElementById('iconLockPage').style.display == 'none') {
+            document.getElementById('iconLockPage').style.display = 'inline-block'
+            document.getElementById('iconOpenPage').style.display = 'none'
+            pageData.lock = true;
+            reloadElement();
+        } else {
+            document.getElementById('iconLockPage').style.display = 'none'
+            document.getElementById('iconOpenPage').style.display = 'inline-block'
+            pageData.lock = false;
+            reloadElement();
+        }
     }
 
     useEffect(() => {
@@ -523,7 +565,7 @@ function Notion() {
                         style={{ left: 0, minWidth: 224, marginTop: 8, padding: 4, height: 'calc(100vh - 96px)' }}
                     >
                         {/* liste des pages */}
-                        <div className="w3-button w3-hover-grey w3-round w3-block w3-yellow w3-margin-bottom">
+                        <div onClick={addNewPage} className="w3-button w3-hover-grey w3-round w3-block w3-yellow w3-margin-bottom">
                             <FontAwesomeIcon
                                 className="w3-margin-right"
                                 icon={faStickyNote}
@@ -534,6 +576,10 @@ function Notion() {
                     </div>
                 </div>
                 <div id='myPageTitle' data-placeholder='Nouvelle page' className='w3-big w3-margin-left w3-flex-1 placeholder' contentEditable='true' style={{ minHeight: 24 }}>
+                </div>
+                <div onClick={() => toggleLockPage()} style={{ width: 32, height: 32 }} className='w3-pointer w3-border w3-round w3-flex w3-flex-center'>
+                    <FontAwesomeIcon id='iconLockPage' className='w3-opacity' style={{ display: 'none' }} icon={faLock} />
+                    <FontAwesomeIcon id='iconOpenPage' className='w3-text-yellow' icon={faLockOpen} />
                 </div>
             </div>
 
