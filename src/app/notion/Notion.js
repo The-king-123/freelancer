@@ -1,13 +1,23 @@
 'use client'
-import { faCubes, faMuseum, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faCubes, faMuseum, faPlus, faStickyNote } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import Link from 'next/link'
 import parse from "html-react-parser";
 import React, { useEffect, useState } from 'react'
 import { console_source as source } from '../data'
+import { initializeApp } from 'firebase/app'
+import { firebaseConfig } from '../firebase'
+import { getDatabase, ref, set, push, onValue } from "firebase/database";
 
 function Notion() {
+
+    // Firebase configuration
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    // Firebase configuration
+
+    const [notionData, setnotionData] = useState([])
 
     const elementList = {
         p: `<p id='elementNumber00' class='placeholder w3-margin-bottom' data-placeholder='Écrivez votre texte ici...' contentEditable='true' style='min-height:24px'></p>`,
@@ -26,13 +36,14 @@ function Notion() {
                 blockKey: null,
                 subBlockKey: null,
                 state: false,
-            }
+            },
+            pageHashing:'',
+            intervalIDPageSaving:'',
         }
     )
 
     const [pageData, setpageData] = useState({
-        pageName: 'Nouveau Page',
-        pageID: null,
+        pageName: 'Nouvelle page',
         lastModification: '',
         bloque: [],
     })
@@ -46,6 +57,7 @@ function Notion() {
         notionToLoad: null,
     });
 
+    const [displayNotion, setdisplayNotion] = useState('')
     const [displayBloques, setdisplayBloques] = useState('')
 
     const openDropdown = (ID, IDW) => {
@@ -127,7 +139,7 @@ function Notion() {
     const blockValueTaker = (key) => {
         pageData.bloque[key].content = document.getElementById('elementNumber' + key).innerText;
     }
-    const suBlockValueTaker = (key,k) => {
+    const suBlockValueTaker = (key, k) => {
         pageData.bloque[key].subElement[k].content = document.getElementById('listeNumber' + key + 'Child' + k).innerText;
     }
 
@@ -152,29 +164,29 @@ function Notion() {
                     }
                     {bloque.element == 'h1' &&
                         <h1 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Titre principal...' contentEditable='true' style={{ minHeight: 24 }}>
-                            { bloque.content}
+                            {bloque.content}
                         </h1>
                     }
                     {bloque.element == 'h2' &&
                         <h2 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Sous-titre...' contentEditable='true' style={{ minHeight: 24 }}>
-                            { bloque.content}
+                            {bloque.content}
                         </h2>
                     }
                     {bloque.element == 'h3' &&
                         <h3 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Sous-titre secondaire...' contentEditable='true' style={{ minHeight: 24 }}>
-                            { bloque.content}
+                            {bloque.content}
                         </h3>
                     }
                     {bloque.element == 'h4' &&
                         <h4 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Petit titre...' contentEditable='true' style={{ minHeight: 24 }}>
-                            { bloque.content}
+                            {bloque.content}
                         </h4>
                     }
                     {bloque.element == 'ul' &&
                         <ul id={'elementNumber' + key} style={{ paddingInline: 24 }}>
                             {
                                 bloque.subElement.map((subBloque, k) => (
-                                    <li onKeyUp={()=>suBlockValueTaker(key,k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément de liste ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable='true' style={{ minHeight: 24 }}>
+                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément de liste ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable='true' style={{ minHeight: 24 }}>
                                         {subBloque.content}
                                     </li>
                                 ))
@@ -186,7 +198,7 @@ function Notion() {
                         <ol id={'elementNumber' + key} style={{ paddingInline: 24 }}>
                             {
                                 bloque.subElement.map((subBloque, k) => (
-                                    <li onKeyUp={()=>suBlockValueTaker(key,k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément numéroté ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable='true' style={{ minHeight: 24 }}>
+                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément numéroté ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable='true' style={{ minHeight: 24 }}>
                                         {subBloque.content}
                                     </li>
                                 ))
@@ -253,7 +265,102 @@ function Notion() {
         console.log(id);
     }
 
+    const generateRandomKey = (length, existingKeys) => {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        let result = '';
+        let isUnique = false;
+
+        while (!isUnique) {
+            result = '';
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            isUnique = !existingKeys.some(item => item.pageKey === result);
+        }
+
+        return result;
+    }
+
+    const savePage = () => {
+        const chatRef = ref(database, 'notion/' + userInfo.key);
+        const chatPush = push(chatRef)
+
+        pageData.lastModification = Date.now();
+        set(chatPush, pageData)
+          .then(() => {
+            
+          })
+
+          .catch((error) => {
+            console.error('Error writing data:', error);
+          });
+    }
+
+    const openPage = (page) => {
+        pageData.pageName = page.pageCore.pageName;
+        pageData.bloque = page.pageCore.bloque ? page.pageCore.bloque : [];
+        document.getElementById('myPageTitle').innerText = pageData.pageName;
+        openDropdown("notionList")
+        reloadElement()
+    }
+
+    const reloadNotionsList = (data) => {
+        var glitchNotion
+        if (data.length > 0) {
+            glitchNotion = data.map((notion, key) => (
+                <div key={key} onClick={() => openPage(notion)} className="w3-button w3-round w3-block w3-left-align w3-overflow w3-nowrap">
+                    {notion.pageCore.pageName}
+                </div>
+            ))
+        } else {
+            glitchNotion = (
+                <div style={{ padding: 8 }}>
+                    <div className="w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
+                        <div style={{ paddingInline: 16 }}>
+                            Vous n'avez créé aucune page.
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+        setdisplayNotion(glitchNotion)
+
+    }
+
+    const fetchNotionListe = () => {
+
+        onValue(ref(database, 'notion/'), (snapshot) => {
+
+            if (snapshot.exists()) {
+                const pages = []
+                const notions = snapshot.val();
+                
+                notionData.splice(1, notionData.length);
+                const sortedNotions = Object.entries(notions).sort(([, a], [, b]) => b.lastModification - a.lastModification)
+                
+                sortedNotions.map(([index, notion]) => {                    
+                    pages.push({
+                        pageID:index,
+                        pageCore: notion,
+                    });
+                    notionData.push({
+                        pageID:index,
+                        pageCore: notion,
+                    })
+                });                
+                reloadNotionsList(pages)
+
+            } else {
+                reloadNotionsList([])
+            }
+        }, (error) => {
+            console.error("Error reading data:", error);
+        });
+    }
+
     useEffect(() => {
+
         if (localStorage.getItem('theme') != 'dark') {
 
             const elementGrey = document.getElementsByClassName('w3-black').length
@@ -316,11 +423,12 @@ function Notion() {
                         userInfo.notionToLoad = "160471339156947"
                         userInfo.acceptEditable = false;
                     }
-
+                    fetchNotionListe()
                     document.getElementById('notionCore').style.display = 'block';
                 } else {
                     userInfo.notionToLoad = "160471339156947"
                     userInfo.acceptEditable = false;
+                    fetchNotionListe();
                 }
             })
             .catch((e) => {
@@ -339,27 +447,26 @@ function Notion() {
                 <div
                     className="w3-dropdown-click"
                 >
-                    <div onClick={() => openDropdown("notionList")} style={{ width: 32, height: 32 }} className='w3-yellow w3-round w3-flex w3-flex-center'>
+                    <div onClick={() => openDropdown("notionList")} style={{ width: 32, height: 32 }} className='w3-yellow w3-round w3-hover-grey w3-flex w3-flex-center'>
                         <FontAwesomeIcon icon={faCubes} />
                     </div>
                     <div
                         id="notionList"
                         className="w3-dropdown-content w3-bar-block w3-card w3-round w3-overflow-scroll w3-noscrollbar"
-                        style={{ left: 0, minWidth: 224, marginTop: 8, paddingBottom: 4, padding: 4, height: 'calc(100vh - 96px)' }}
+                        style={{ left: 0, minWidth: 224, marginTop: 8, padding: 4, height: 'calc(100vh - 96px)' }}
                     >
                         {/* liste des pages */}
-                        <div className="w3-button w3-round ">
+                        <div className="w3-button w3-hover-grey w3-round w3-block w3-yellow w3-margin-bottom">
                             <FontAwesomeIcon
                                 className="w3-margin-right"
-                                icon={faMuseum}
+                                icon={faStickyNote}
                             />
-                            Liste des pages
+                            Créer une page
                         </div>
-
+                        {displayNotion}
                     </div>
                 </div>
-                <div className='w3-big w3-margin-left w3-flex-1' contentEditable='true' style={{ minHeight: 24 }}>
-                    Nouveau page
+                <div id='myPageTitle' data-placeholder='Nouvelle page' className='w3-big w3-margin-left w3-flex-1 placeholder' contentEditable='true' style={{ minHeight: 24 }}>
                 </div>
             </div>
 

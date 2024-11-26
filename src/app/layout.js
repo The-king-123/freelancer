@@ -1720,6 +1720,21 @@ export default function RootLayout({ children }) {
           </div>
 
           <Link
+            href={'/recrutement/postule'}
+            style={{ width: 36, height: 36, marginRight: 16 }}
+          >
+            <div
+              className="w3-flex w3-flex-center w3-overflow w3-dark-grey w3-card w3-round"
+              style={{ width: 36, height: 36 }}
+            >
+              <FontAwesomeIcon
+                icon={faUserPlus}
+                width={20}
+                height={20}
+              />
+            </div>
+          </Link>
+          <Link
             href={'/notion'}
             style={{ width: 36, height: 36, marginRight: 16 }}
           >
@@ -1734,21 +1749,6 @@ export default function RootLayout({ children }) {
               />
             </div>
           </Link>
-          <div
-            onClick={toggleChat}
-            style={{ width: 36, height: 36, marginRight: 16 }}
-          >
-            <div
-              className="w3-flex w3-flex-center w3-overflow w3-dark-grey w3-card w3-round"
-              style={{ width: 36, height: 36 }}
-            >
-              <FontAwesomeIcon
-                icon={faRobot}
-                width={20}
-                height={20}
-              />
-            </div>
-          </div>
           <div style={{ width: 36, height: 36 }}>
             <div
               id="settingMobileWrapper"
@@ -1897,21 +1897,21 @@ export default function RootLayout({ children }) {
           </Link>
 
           <Link
-            href={'/recrutement/postule'}
+            href={'/store/all'}
             className="w3-flex-1"
             style={{ width: 36, height: 36 }}
           >
             <div
-              id="recrutementScreen"
+              id="storeScreen"
               className="menuItemBottom w3-flex-column w3-flex-center whiteBlackYellow"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
-                icon={faUserPlus}
+                icon={faStore}
                 width={20}
                 height={20}
               />
-              <div className="w3-tiny" style={{ marginTop: 2 }}>Postuler</div>
+              <div className="w3-tiny" style={{ marginTop: 2 }}>Boutique</div>
             </div>
           </Link>
 
@@ -1924,7 +1924,7 @@ export default function RootLayout({ children }) {
               <div
                 id="switchPannel"
                 onClick={() => removePannelFirstPassed()}
-                className="w3-dropdown-content w3-bar-block w3-card w3-round"
+                className="w3-dropdown-content w3-bar-block w3-card w3-round w3-hide"
                 style={{ right: -16, minWidth: 230, marginTop: 8, paddingBottom: 4, bottom: 42 }}
               ><div className="dropButton"></div>
 
@@ -1981,24 +1981,24 @@ export default function RootLayout({ children }) {
           </div>
           {/* // End Switch free premium with inital panel */}
 
-          <Link
-            href={'/store/all'}
+          <div
+            onClick={toggleChat}
             className="w3-flex-1"
             style={{ width: 36, height: 36 }}
           >
             <div
-              id="storeScreen"
+              // id="storeScreen"
               className="menuItemBottom w3-flex-column w3-flex-center whiteBlackYellow"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
-                icon={faStore}
+                icon={faRobot}
                 width={20}
                 height={20}
               />
-              <div className="w3-tiny" style={{ marginTop: 2 }}>Boutique</div>
+              <div className="w3-tiny" style={{ marginTop: 2 }}>Chatbot</div>
             </div>
-          </Link>
+          </div>
 
           <Link
             onClick={() => {

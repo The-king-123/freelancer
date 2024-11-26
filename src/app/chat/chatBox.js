@@ -27,7 +27,6 @@ function chatBox() {
   }
 
   // Firebase configuration
-
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
   const auth = getAuth(app);
@@ -1553,11 +1552,12 @@ function chatBox() {
 
     const urlRegex = /\b(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9-]+\.[a-z]{2,}(?:\.[a-z]{2,})?(?:\/[^\s]*)?/g;
     return text.replace(urlRegex, (url) => {
-        let href = url.startsWith('http') ? url : `https://${url}`;
-        return `<a href="${href}" target="_blank"><u>${url}</u></a>`;
+      let href = url.startsWith('http') ? url : `https://${url}`;
+      return `<a href="${href}" target="_blank"><u>${url}</u></a>`;
     });
 
-}
+  }
+
   useEffect(() => {
 
     document.getElementById('bullField').style.height = (window.innerHeight - 32 - (window.innerWidth < 992 ? 96 : 0)) + 'px';
@@ -1566,7 +1566,7 @@ function chatBox() {
     if (document.getElementById('headerPageTitle')) {
       document.getElementById('headerPageTitle').innerText = ('Discussions').toUpperCase()
     }
-    
+
     if (localStorage.getItem('theme') != 'dark') {
 
       const elementGrey = document.getElementsByClassName('w3-black').length
@@ -1958,7 +1958,7 @@ function chatBox() {
           <div className="w3-block w3-flex-column w3-flex-center" style={{ paddingInline: 8 }}>
             <div className="w3-block">
               <div style={{ paddingInline: 24, paddingBlock: 8 }} id='cardNotPremiumText'>
-                Vous devez vous connecter pour voir les messages, ou bien utiliser votre numéro mobile.
+                Veuillez entrer votre numéro de téléphone.
               </div>
               <div id='textErrorPN' style={{ paddingInline: 24, paddingBlock: 8, display: 'none' }} className='w3-text-red w3-small'>
                 Veuillez vérifier votre numéro de téléphone.
