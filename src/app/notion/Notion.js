@@ -441,7 +441,7 @@ function Notion() {
 
     const deleteHandler = async (params) => {
         openOption(params.key);
-        notionData.splice(key, 1)
+        notionData.splice(params.key, 1)
         await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + params.notionID), null).then(async () => {
             if (params.notionID == keeper.pageID && params.key - 1 >= 0) openPage(notionData[params.key - 1]);
             cancelHandler()
