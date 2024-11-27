@@ -151,10 +151,10 @@ function Notion() {
     }
 
     const blockValueTaker = (key) => {
-        pageData.bloque[key].content = document.getElementById('elementNumber' + key).innerText;
+        pageData.bloque[key].content = document.getElementById('elementNumber' + key).innerHTML;
     }
     const suBlockValueTaker = (key, k) => {
-        pageData.bloque[key].subElement[k].content = document.getElementById('listeNumber' + key + 'Child' + k).innerText;
+        pageData.bloque[key].subElement[k].content = document.getElementById('listeNumber' + key + 'Child' + k).innerHTML;
     }
 
     const reloadElement = () => {
@@ -172,32 +172,32 @@ function Notion() {
                     {/* elementEditable */}
                     {bloque.element == 'p' &&
                         <p id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Écrivez votre texte ici...' contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
-                            {bloque.content}
+                            {parse(convertLinks(bloque.content))}
                         </p>
                     }
                     {bloque.element == 'div' &&
                         <div id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Ajoutez du contenu ici...' contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
-                            {bloque.content}
+                            {parse(convertLinks(bloque.content))}
                         </div>
                     }
                     {bloque.element == 'h1' &&
                         <h1 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Titre principal...' contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
-                            {bloque.content}
+                            {parse(convertLinks(bloque.content))}
                         </h1>
                     }
                     {bloque.element == 'h2' &&
                         <h2 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Sous-titre...' contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
-                            {bloque.content}
+                            {parse(convertLinks(bloque.content))}
                         </h2>
                     }
                     {bloque.element == 'h3' &&
                         <h3 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Sous-titre secondaire...' contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
-                            {bloque.content}
+                            {parse(convertLinks(bloque.content))}
                         </h3>
                     }
                     {bloque.element == 'h4' &&
                         <h4 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Petit titre...' contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
-                            {bloque.content}
+                            {parse(convertLinks(bloque.content))}
                         </h4>
                     }
                     {bloque.element == 'ul' &&
@@ -205,7 +205,7 @@ function Notion() {
                             {
                                 bloque.subElement.map((subBloque, k) => (
                                     <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addRemoveNewListe(e, key, k)} key={k} className='placeholder' data-placeholder={'Élément de liste ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
-                                        {subBloque.content}
+                                        {parse(convertLinks(subBloque.content))}
                                     </li>
                                 ))
                             }
@@ -217,11 +217,10 @@ function Notion() {
                             {
                                 bloque.subElement.map((subBloque, k) => (
                                     <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addRemoveNewListe(e, key, k)} key={k} className='placeholder' data-placeholder={'Élément numéroté ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
-                                        {subBloque.content}
+                                        {parse(convertLinks(subBloque.content))}
                                     </li>
                                 ))
                             }
-
                         </ol>
                     }
 
