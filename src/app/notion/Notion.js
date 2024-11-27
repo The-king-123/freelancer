@@ -355,13 +355,19 @@ function Notion() {
                 pageData.lock = notion.lock ? notion.lock : false;
                 pageData.lastModification = notion.lastModification ? notion.lastModification : null;
 
-                if (pageData.lock && !userInfo.acceptEditable) {
+                if (userInfo.acceptEditable) {
+                    if (pageData.lock) {
+                        document.getElementById('iconLockPage').style.display = 'inline-block'
+                        document.getElementById('iconOpenPage').style.display = 'none'
+                    } else {
+                        document.getElementById('iconLockPage').style.display = 'none'
+                        document.getElementById('iconOpenPage').style.display = 'inline-block'
+                    }
+                } else {
                     document.getElementById('iconLockPage').style.display = 'inline-block'
                     document.getElementById('iconOpenPage').style.display = 'none'
-                } else {
-                    document.getElementById('iconLockPage').style.display = 'none'
-                    document.getElementById('iconOpenPage').style.display = 'inline-block'
                 }
+
 
                 if (keeper.pageID) openDropdown("notionList");
                 keeper.pageID = page.pageID
