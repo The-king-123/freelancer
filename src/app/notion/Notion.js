@@ -348,7 +348,7 @@ function Notion() {
 
                 const notion = snapshot.val();
 
-                pageData.pageName = notion.pageName;
+                pageData.pageName = notion.pageName.length > 0 ? notion.pageName : 'Nouvelle page';
                 pageData.bloque = notion.bloque ? notion.bloque : [];
                 pageData.lock = notion.lock ? notion.lock : false;
                 pageData.lastModification = notion.lastModification ? notion.lastModification : null;
