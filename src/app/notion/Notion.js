@@ -230,7 +230,7 @@ function Notion() {
 
             if (element) {
                 const tempTextArea = document.createElement("textarea");
-                tempTextArea.value = element.innerHTML;
+                tempTextArea.value = element.innerText;
 
                 document.body.appendChild(tempTextArea);
                 tempTextArea.select();
@@ -238,7 +238,8 @@ function Notion() {
                 document.body.removeChild(tempTextArea);
                 console.log("Content copied to clipboard!");
             }
-        }, 200);
+        }, 500);
+
         setdisplayBloques(glitchBloque)
     }
 
@@ -359,6 +360,7 @@ function Notion() {
                     } else {
                         document.getElementById('iconLockPage').style.display = 'none'
                         document.getElementById('iconOpenPage').style.display = 'inline-block'
+                        document.getElementById('addNotionElement').style.display = 'block'
                     }
                 } else {
                     document.getElementById('iconLockPage').style.display = 'inline-block'
