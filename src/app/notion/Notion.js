@@ -225,6 +225,20 @@ function Notion() {
             </div>
         ))
 
+        setTimeout(() => {
+            const element = document.getElementById('editableNotionCore');
+
+            if (element) {
+                const tempTextArea = document.createElement("textarea");
+                tempTextArea.value = element.innerHTML;
+
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempTextArea);
+                console.log("Content copied to clipboard!");
+            }
+        }, 200);
         setdisplayBloques(glitchBloque)
     }
 
