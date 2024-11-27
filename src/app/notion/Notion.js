@@ -81,8 +81,8 @@ function Notion() {
 
     };
 
-    const addNewListe = (key, blockKey, subBlockKey) => {
-        if (key == 'Enter') {
+    const addRemoveNewListe = (e, blockKey, subBlockKey) => {
+        if (e.key == 'Enter') {
             if (keeper.nextListe.blockKey == blockKey) {
                 if (keeper.nextListe.state) {
                     pageData.bloque[blockKey].subElement.push(
@@ -102,6 +102,24 @@ function Notion() {
                             document.getElementById('listeNumber' + blockKey + 'Child' + (subBlockKey + 1)).focus()
                         }
                     }, 100);
+                } else {
+                    keeper.nextListe.blockKey = blockKey
+                    keeper.nextListe.subBlockKey = subBlockKey
+                    keeper.nextListe.state = true
+                }
+            } else {
+                keeper.nextListe.blockKey = blockKey
+                keeper.nextListe.subBlockKey = subBlockKey
+                keeper.nextListe.state = true
+            }
+        } else if (e.key == 'Delete' && e.target.innerText.trim() == "") {
+            if (keeper.nextListe.blockKey == blockKey) {
+                if (keeper.nextListe.state) {
+                    pageData.bloque[blockKey].subElement.splice(keeper.nextListe.subBlockKey,1)
+                    keeper.nextListe.blockKey = null;
+                    keeper.nextListe.subBlockKey = null;
+                    keeper.nextListe.state = false;
+                    reloadElement()
                 } else {
                     keeper.nextListe.blockKey = blockKey
                     keeper.nextListe.subBlockKey = subBlockKey
@@ -183,7 +201,7 @@ function Notion() {
                         <ul id={'elementNumber' + key} style={{ paddingInline: 24 }}>
                             {
                                 bloque.subElement.map((subBloque, k) => (
-                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément de liste ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
+                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addRemoveNewListe(e, key, k)} key={k} className='placeholder' data-placeholder={'Élément de liste ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
                                         {subBloque.content}
                                     </li>
                                 ))
@@ -195,7 +213,7 @@ function Notion() {
                         <ol id={'elementNumber' + key} style={{ paddingInline: 24 }}>
                             {
                                 bloque.subElement.map((subBloque, k) => (
-                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément numéroté ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
+                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addRemoveNewListe(e, key, k)} key={k} className='placeholder' data-placeholder={'Élément numéroté ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
                                         {subBloque.content}
                                     </li>
                                 ))
