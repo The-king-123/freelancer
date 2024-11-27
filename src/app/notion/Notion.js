@@ -270,23 +270,6 @@ function Notion() {
         console.log(id);
     }
 
-    const generateRandomKey = (length, existingKeys) => {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        const charactersLength = characters.length;
-        let result = '';
-        let isUnique = false;
-
-        while (!isUnique) {
-            result = '';
-            for (let i = 0; i < length; i++) {
-                result += characters.charAt(Math.floor(Math.random() * charactersLength));
-            }
-            isUnique = !existingKeys.some(item => item.pageKey === result);
-        }
-
-        return result;
-    }
-
     const addNewPage = async () => {
 
         if (keeper.lockAddNewPage) return;
