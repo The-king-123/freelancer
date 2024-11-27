@@ -357,6 +357,7 @@ function Notion() {
                     if (pageData.lock) {
                         document.getElementById('iconLockPage').style.display = 'inline-block'
                         document.getElementById('iconOpenPage').style.display = 'none'
+                        document.getElementById('addNotionElement').style.display = 'none'
                     } else {
                         document.getElementById('iconLockPage').style.display = 'none'
                         document.getElementById('iconOpenPage').style.display = 'inline-block'
@@ -365,6 +366,7 @@ function Notion() {
                 } else {
                     document.getElementById('iconLockPage').style.display = 'inline-block'
                     document.getElementById('iconOpenPage').style.display = 'none'
+                    document.getElementById('addNotionElement').style.display = 'none'
                 }
 
 
@@ -691,7 +693,7 @@ function Notion() {
                 </div>
 
                 {/* add notion element */}
-                <div id='addNotionElement' style={{ marginTop: 64 }}>
+                <div id='addNotionElement' style={{ marginTop: 64, display: 'none' }}>
                     <div className='w3-black w3-round' style={{ padding: 6 }}>
                         <div
                             className="w3-dropdown-click"
