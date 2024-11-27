@@ -1,5 +1,5 @@
 'use client'
-import { faCubes, faLock, faLockOpen, faMuseum, faPlus, faStickyNote } from '@fortawesome/free-solid-svg-icons'
+import { faCubes, faLock, faLockOpen, faMuseum, faPlus, faStickyNote, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import Link from 'next/link'
@@ -139,6 +139,7 @@ function Notion() {
     const reloadElement = () => {
 
         document.getElementById('myPageTitle').innerText = pageData.pageName;
+        document.getElementById('myPageTitle').contentEditable = !pageData.lock && userInfo.acceptEditable
 
         const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
         const glitchBloque = pageData.bloque.map((bloque, key) => (
@@ -149,32 +150,32 @@ function Notion() {
                 <div onContextMenu={(e) => { e.preventDefault(); openDropdown("bloqueNumber" + key); }} className='w3-margin-bottom'>
                     {/* elementEditable */}
                     {bloque.element == 'p' &&
-                        <p id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Écrivez votre texte ici...' contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
+                        <p id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Écrivez votre texte ici...' contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
                             {bloque.content}
                         </p>
                     }
                     {bloque.element == 'div' &&
-                        <div id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Ajoutez du contenu ici...' contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
+                        <div id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Ajoutez du contenu ici...' contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
                             {bloque.content}
                         </div>
                     }
                     {bloque.element == 'h1' &&
-                        <h1 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Titre principal...' contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
+                        <h1 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Titre principal...' contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
                             {bloque.content}
                         </h1>
                     }
                     {bloque.element == 'h2' &&
-                        <h2 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Sous-titre...' contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
+                        <h2 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Sous-titre...' contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
                             {bloque.content}
                         </h2>
                     }
                     {bloque.element == 'h3' &&
-                        <h3 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Sous-titre secondaire...' contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
+                        <h3 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Sous-titre secondaire...' contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
                             {bloque.content}
                         </h3>
                     }
                     {bloque.element == 'h4' &&
-                        <h4 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Petit titre...' contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
+                        <h4 id={'elementNumber' + key} onKeyUp={() => blockValueTaker(key)} className='placeholder' data-placeholder='Petit titre...' contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
                             {bloque.content}
                         </h4>
                     }
@@ -182,7 +183,7 @@ function Notion() {
                         <ul id={'elementNumber' + key} style={{ paddingInline: 24 }}>
                             {
                                 bloque.subElement.map((subBloque, k) => (
-                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément de liste ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
+                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément de liste ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
                                         {subBloque.content}
                                     </li>
                                 ))
@@ -194,7 +195,7 @@ function Notion() {
                         <ol id={'elementNumber' + key} style={{ paddingInline: 24 }}>
                             {
                                 bloque.subElement.map((subBloque, k) => (
-                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément numéroté ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable={!pageData.lock} style={{ minHeight: 24 }}>
+                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addNewListe(e.key, key, k)} key={k} className='placeholder' data-placeholder={'Élément numéroté ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
                                         {subBloque.content}
                                     </li>
                                 ))
@@ -241,12 +242,6 @@ function Notion() {
         reloadElement()
     }
 
-    const removeLinks = (text) => {
-        let step1 = text.replace(/<a[^>]*><u>/g, '').replace(/<a[^>]*>/g, '');
-        let step2 = step1.replace(/<\/u><\/a>/g, '').replace(/<\/a>/g, '');
-        return step2;
-    };
-
     const convertLinks = (text) => {
 
         const urlRegex = /\b(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9-]+\.[a-z]{2,}(?:\.[a-z]{2,})?(?:\/[^\s]*)?/g;
@@ -288,7 +283,7 @@ function Notion() {
             await savePage();
         }
 
-        const pageRef = ref(database, 'notion/' + userInfo.key);
+        const pageRef = ref(database, 'notion/' + userInfo.notionToLoad + '/' + userInfo.key);
         const pagePush = push(pageRef)
 
         const newPage = {
@@ -329,9 +324,7 @@ function Notion() {
 
     const savePage = async () => {
         pageData.lastModification = Date.now();
-        await set(ref(database, 'notion/' + keeper.pageID), pageData).then(async () => {
-            console.log('Saved');
-
+        await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + keeper.pageID), pageData).then(async () => {
             const newHash = await hashArray(pageData);
             keeper.pageHashing = newHash;
             keeper.lockAutoSave = false;
@@ -344,12 +337,16 @@ function Notion() {
 
         if (keeper.pageID && keeper.pageHashing != newHash) savePage();
 
-        const pageRef = ref(database, 'notion/' + page.pageID);
+        const pageRef = ref(database, 'notion/' + userInfo.notionToLoad + '/' + page.pageID);
+
+        if (keeper.intervalIDPageSaving) {
+            clearInterval(keeper.intervalIDPageSaving);
+            keeper.intervalIDPageSaving = null;
+        }
+
         get(pageRef).then((snapshot) => {
 
-            if (keeper.intervalIDPageSaving) clearInterval(keeper.intervalIDPageSaving);
-
-            if (snapshot.exists()) {
+            if (snapshot.exists() && !keeper.intervalIDPageSaving) {
 
                 const notion = snapshot.val();
 
@@ -358,7 +355,7 @@ function Notion() {
                 pageData.lock = notion.lock ? notion.lock : false;
                 pageData.lastModification = notion.lastModification ? notion.lastModification : null;
 
-                if (pageData.lock) {
+                if (pageData.lock && userInfo.acceptEditable) {
                     document.getElementById('iconLockPage').style.display = 'inline-block'
                     document.getElementById('iconOpenPage').style.display = 'none'
                 } else {
@@ -366,17 +363,15 @@ function Notion() {
                     document.getElementById('iconOpenPage').style.display = 'inline-block'
                 }
 
+                if (keeper.pageID) openDropdown("notionList");
                 keeper.pageID = page.pageID
 
                 // hashing content
                 hashArray(pageData).then(hash => {
                     keeper.pageHashing = hash;
-                    autoSave();
+                    if (!keeper.intervalIDPageSaving && userInfo.acceptEditable) autoSave();
                 });
-                openDropdown("notionList")
-                reloadElement()
-            } else {
-
+                reloadElement();
             }
         }, (error) => {
             console.error("Error reading data:", error);
@@ -384,12 +379,62 @@ function Notion() {
 
     }
 
+    const openOption = (key) => {
+        const allNotionOption = document.getElementsByClassName('optionAllNotion');
+        for (let i = 0; i < allNotionOption.length; i++) {
+            const element = allNotionOption[i];
+
+            if (element.id != 'notion#' + key + 'Option') {
+                element.style.display = 'none';
+            }
+        }
+
+        if (document.getElementById('notion#' + key + 'Option').style.display == 'none') {
+            document.getElementById('notion#' + key + 'Option').style.display = 'flex';
+        } else {
+            document.getElementById('notion#' + key + 'Option').style.display = 'none';
+        }
+    }
+
+    const deleteNotion = (key, notionID) => {
+        document.getElementById("modalWarning").style.display = "block";
+        document.getElementById("textWarning").innerText = "Voulez vous vraiment supprimer cette page ...";
+
+        document
+            .getElementById("confirmWarning")
+            .addEventListener("click", deleteHandler.bind(null, { key: key, notionID: notionID }));
+        document
+            .getElementById("cancelWarning")
+            .addEventListener("click", cancelHandler);
+    }
+
+    const deleteHandler = async (params) => {
+        openOption(params.key);
+        await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + params.notionID), null).then(async () => {
+            cancelHandler()
+        });
+    };
+
+    const cancelHandler = async () => {
+        document.getElementById("modalWarning").style.display = "none";
+
+        document
+            .getElementById("confirmWarning")
+            .removeEventListener("click", deleteHandler);
+        document
+            .getElementById("cancelWarning")
+            .removeEventListener("click", cancelHandler);
+    };
+
     const reloadNotionsList = (data) => {
         var glitchNotion
         if (data.length > 0) {
             glitchNotion = data.map((notion, key) => (
-                <div key={key} onClick={() => openPage(notion)} className="w3-button w3-round w3-block w3-left-align w3-overflow w3-nowrap">
-                    {notion.pageCore.pageName}
+                <div className='w3-flex-row w3-flex-center-v' style={{ maxWidth: 216 }}>
+                    <div id={'notion#' + key} key={key} onContextMenu={(e) => { e.preventDefault(); openOption(key); }} onClick={() => openPage(notion)} className="w3-button w3-round w3-block w3-left-align w3-overflow w3-nowrap">
+                        <di>{notion.pageCore.pageName}</di>
+                    </div>
+                    <div id={'notion#' + key + 'Option'} onClick={() => deleteNotion(key, notion.pageID)} style={{ width: 32, height: 32, minWidth: 32, display: 'none' }} className='optionAllNotion w3-opacity-min w3-pointer w3-overflow w3-red w3-flex w3-flex-center w3-circle'><FontAwesomeIcon icon={faTrash} /></div>
                 </div>
             ))
         } else {
@@ -409,13 +454,13 @@ function Notion() {
 
     const fetchNotionListe = () => {
 
-        onValue(ref(database, 'notion/'), (snapshot) => {
+        onValue(ref(database, 'notion/' + userInfo.notionToLoad), (snapshot) => {
 
             if (snapshot.exists()) {
                 const pages = []
                 const notions = snapshot.val();
 
-                notionData.splice(1, notionData.length);
+                notionData.splice(0, notionData.length);
                 const sortedNotions = Object.entries(notions).sort(([, a], [, b]) => b.lastModification - a.lastModification)
 
                 sortedNotions.map(([index, notion]) => {
@@ -429,9 +474,22 @@ function Notion() {
                     })
                 });
                 reloadNotionsList(pages)
+                if (!keeper.pageID) openPage(pages[0]);
+                document.getElementById('addFirstNotion').style.display = 'none'
+                document.getElementById('noPagesFound').style.display = 'none'
+                document.getElementById('displayNotionWrapper').style.display = 'block'
 
             } else {
-                reloadNotionsList([])
+                if (userInfo.acceptEditable) {
+                    document.getElementById('addFirstNotion').style.display = 'block'
+                    document.getElementById('displayNotionWrapper').style.display = 'none'
+                    document.getElementById('noPagesFound').style.display = 'none'
+                } else {
+
+                    document.getElementById('addFirstNotion').style.display = 'none'
+                    document.getElementById('displayNotionWrapper').style.display = 'none'
+                    document.getElementById('noPagesFound').style.display = 'block'
+                }
             }
         }, (error) => {
             console.error("Error reading data:", error);
@@ -459,12 +517,12 @@ function Notion() {
         if (document.getElementById('iconLockPage').style.display == 'none') {
             document.getElementById('iconLockPage').style.display = 'inline-block'
             document.getElementById('iconOpenPage').style.display = 'none'
-            pageData.lock = true;
+            pageData.lock = true && userInfo.acceptEditable;
             reloadElement();
         } else {
             document.getElementById('iconLockPage').style.display = 'none'
             document.getElementById('iconOpenPage').style.display = 'inline-block'
-            pageData.lock = false;
+            ppageData.lock = false && userInfo.acceptEditable;
             reloadElement();
         }
     }
@@ -509,9 +567,10 @@ function Notion() {
         });
 
         document.addEventListener('keyup', (e) => {
-            console.log(e.key);
-            if (e.key == 'Alt') {
-                openDropdown("notionList")
+            if (e.key == 'a') {
+                if (e.altKey) {
+                    openDropdown("notionList")
+                }
             }
         })
 
@@ -532,12 +591,15 @@ function Notion() {
                     } else {
                         userInfo.notionToLoad = "160471339156947"
                         userInfo.acceptEditable = false;
+                        document.getElementById('addNotionElement').innerHTML = ''
                     }
                     fetchNotionListe()
                     document.getElementById('notionCore').style.display = 'block';
+                    document.getElementById('newPageButton').style.display = 'block';
                 } else {
                     userInfo.notionToLoad = "160471339156947"
                     userInfo.acceptEditable = false;
+                    document.getElementById('addNotionElement').innerHTML = ''
                     fetchNotionListe();
                 }
             })
@@ -545,7 +607,16 @@ function Notion() {
                 console.error("failure", e);
                 userInfo.notionToLoad = "160471339156947"
                 userInfo.acceptEditable = false;
+                document.getElementById('addNotionElement').innerHTML = ''
             });
+
+        const notionListeWrapper = document.getElementById('notionListeWrapper');
+        const notionListe = document.getElementById('notionList');
+        document.addEventListener('click', (event) => {
+            if (!notionListeWrapper.contains(event.target)) {
+                notionListe.className = notionListe.className.replace('w3-show', '');
+            }
+        })
 
     }, [])
 
@@ -553,127 +624,146 @@ function Notion() {
     return (
         <div id='notionCore' style={{ position: 'relative', padding: 8 }}>
             {/* Button list des pages */}
-            <div className='w3-flex-row w3-flex-center-v'>
-                <div
-                    className="w3-dropdown-click"
-                >
-                    <div onClick={() => openDropdown("notionList")} style={{ width: 32, height: 32 }} className='w3-yellow w3-round w3-hover-grey w3-flex w3-flex-center'>
-                        <FontAwesomeIcon icon={faCubes} />
-                    </div>
-                    <div
-                        id="notionList"
-                        className="w3-dropdown-content w3-bar-block w3-card w3-round w3-overflow-scroll w3-noscrollbar"
-                        style={{ left: 0, minWidth: 224, marginTop: 8, padding: 4, height: 'calc(100vh - 96px)' }}
-                    >
-                        {/* liste des pages */}
-                        <div onClick={addNewPage} className="w3-button w3-hover-grey w3-round w3-block w3-yellow w3-margin-bottom">
-                            <FontAwesomeIcon
-                                className="w3-margin-right"
-                                icon={faStickyNote}
-                            />
-                            Créer une page
-                        </div>
-                        {displayNotion}
-                    </div>
-                </div>
-                <div id='myPageTitle' data-placeholder='Nouvelle page' className='w3-big w3-margin-left w3-flex-1 placeholder' contentEditable='true' style={{ minHeight: 24 }}>
-                </div>
-                <div onClick={() => toggleLockPage()} style={{ width: 32, height: 32 }} className='w3-pointer w3-border w3-round w3-flex w3-flex-center'>
-                    <FontAwesomeIcon id='iconLockPage' className='w3-opacity' style={{ display: 'none' }} icon={faLock} />
-                    <FontAwesomeIcon id='iconOpenPage' className='w3-text-yellow' icon={faLockOpen} />
+            <div id='noPagesFound' style={{ display: 'none' }}>
+                <div style={{ padding: 12 }} className="w3-round w3-block w3-black w3-margin-bottom">
+                    Aucune page trouvée, veuillez revenir plus tard pour en consulter.
                 </div>
             </div>
 
-            {/* Editable notion core */}
-            <div className='w3-margin-top' id='editableNotionCore'>
-                {displayBloques}
+            <div id='addFirstNotion' style={{ display: 'none' }}>
+                <div onClick={addNewPage} className="w3-button w3-hover-grey w3-round w3-block w3-yellow w3-margin-bottom">
+                    <FontAwesomeIcon
+                        className="w3-margin-right"
+                        icon={faStickyNote}
+                    />
+                    Créer votre première page
+                </div>
             </div>
 
-            {/* add notion element */}
-            <div style={{ marginTop: 64 }}>
-                <div className='w3-black w3-round' style={{ padding: 6 }}>
+            <div id='displayNotionWrapper' style={{ display: 'none' }}>
+                <div className='w3-flex-row w3-flex-center-v'>
                     <div
+                        id='notionListeWrapper'
                         className="w3-dropdown-click"
                     >
-                        <div onClick={() => openDropdown("elementList")} style={{ width: 28, height: 28 }} className='w3-dark-grey w3-round w3-flex w3-flex-center'>
-                            <FontAwesomeIcon icon={faPlus} />
+                        <div onClick={() => openDropdown("notionList")} style={{ width: 32, height: 32 }} className='w3-yellow w3-round w3-hover-grey w3-flex w3-flex-center'>
+                            <FontAwesomeIcon icon={faCubes} />
                         </div>
                         <div
-                            id="elementList"
-                            className="w3-dropdown-content w3-bar-block w3-black w3-round w3-overflow-scroll w3-noscrollbar w3-container"
-                            style={{ left: -6, minWidth: 360, marginTop: 12, padding: 8 }}
+                            id="notionList"
+                            className="w3-dropdown-content w3-bar-block w3-card w3-round w3-overflow-scroll w3-noscrollbar"
+                            style={{ left: 0, minWidth: 224, marginTop: 8, padding: 4, height: 'calc(100vh - 96px)' }}
                         >
-                            {/* liste des elements */}
-                            <div onClick={() => addThisElement('p')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                <div className='w3-flex-row w3-flex-center-v'>
-                                    <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                        P
-                                    </div>
-                                    <div>Paragraphe</div>
-                                </div>
+                            {/* liste des pages */}
+                            <div id='newPageButton' style={{display:'none'}} onClick={addNewPage} className="w3-button w3-hover-grey w3-round w3-block w3-yellow w3-margin-bottom">
+                                <FontAwesomeIcon
+                                    className="w3-margin-right"
+                                    icon={faStickyNote}
+                                />
+                                Créer une page
                             </div>
-                            <div onClick={() => addThisElement('div')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                <div className='w3-flex-row w3-flex-center-v'>
-                                    <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                        div
-                                    </div>
-                                    <div>Conteneur</div>
-                                </div>
-                            </div>
-                            <div onClick={() => addThisElement('ul')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                <div className='w3-flex-row w3-flex-center-v'>
-                                    <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                        UL
-                                    </div>
-                                    <div>Liste a puce</div>
-                                </div>
-                            </div>
-                            <div onClick={() => addThisElement('ol')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                <div className='w3-flex-row w3-flex-center-v'>
-                                    <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                        OL
-                                    </div>
-                                    <div>Liste numerote</div>
-                                </div>
-                            </div>
-                            <div onClick={() => addThisElement('h1')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                <div className='w3-flex-row w3-flex-center-v'>
-                                    <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                        H1
-                                    </div>
-                                    <div>Titre niveau 1</div>
-                                </div>
-                            </div>
-                            <div onClick={() => addThisElement('h2')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                <div className='w3-flex-row w3-flex-center-v'>
-                                    <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                        H2
-                                    </div>
-                                    <div>Titre niveau 2</div>
-                                </div>
-                            </div>
-                            <div onClick={() => addThisElement('h3')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                <div className='w3-flex-row w3-flex-center-v'>
-                                    <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                        H3
-                                    </div>
-                                    <div>Titre niveau 3</div>
-                                </div>
-                            </div>
-                            <div onClick={() => addThisElement('h4')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                <div className='w3-flex-row w3-flex-center-v'>
-                                    <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                        H4
-                                    </div>
-                                    <div>Titre niveau 4</div>
-                                </div>
-                            </div>
-
+                            {displayNotion}
                         </div>
                     </div>
+                    <div id='myPageTitle' data-placeholder='Nouvelle page' className='w3-big w3-margin-left w3-flex-1 placeholder' contentEditable='true' style={{ minHeight: 24 }}>
+                    </div>
+                    <div onClick={() => toggleLockPage()} style={{ width: 32, height: 32 }} className='w3-pointer w3-border w3-round w3-flex w3-flex-center'>
+                        <FontAwesomeIcon id='iconLockPage' className='w3-opacity' style={{ display: 'none' }} icon={faLock} />
+                        <FontAwesomeIcon id='iconOpenPage' className='w3-text-yellow' icon={faLockOpen} />
+                    </div>
                 </div>
-                <div style={{ height: 200 }}>
 
+                {/* Editable notion core */}
+                <div className='w3-margin-top' id='editableNotionCore'>
+                    {displayBloques}
+                </div>
+
+                {/* add notion element */}
+                <div id='addNotionElement' style={{ marginTop: 64 }}>
+                    <div className='w3-black w3-round' style={{ padding: 6 }}>
+                        <div
+                            className="w3-dropdown-click"
+                        >
+                            <div onClick={() => openDropdown("elementList")} style={{ width: 28, height: 28 }} className='w3-dark-grey w3-round w3-flex w3-flex-center'>
+                                <FontAwesomeIcon icon={faPlus} />
+                            </div>
+                            <div
+                                id="elementList"
+                                className="w3-dropdown-content w3-bar-block w3-black w3-round w3-overflow-scroll w3-noscrollbar w3-container"
+                                style={{ left: -6, minWidth: 360, marginTop: 12, padding: 8 }}
+                            >
+                                {/* liste des elements */}
+                                <div onClick={() => addThisElement('p')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
+                                    <div className='w3-flex-row w3-flex-center-v'>
+                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
+                                            P
+                                        </div>
+                                        <div>Paragraphe</div>
+                                    </div>
+                                </div>
+                                <div onClick={() => addThisElement('div')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
+                                    <div className='w3-flex-row w3-flex-center-v'>
+                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
+                                            div
+                                        </div>
+                                        <div>Conteneur</div>
+                                    </div>
+                                </div>
+                                <div onClick={() => addThisElement('ul')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
+                                    <div className='w3-flex-row w3-flex-center-v'>
+                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
+                                            UL
+                                        </div>
+                                        <div>Liste a puce</div>
+                                    </div>
+                                </div>
+                                <div onClick={() => addThisElement('ol')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
+                                    <div className='w3-flex-row w3-flex-center-v'>
+                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
+                                            OL
+                                        </div>
+                                        <div>Liste numerote</div>
+                                    </div>
+                                </div>
+                                <div onClick={() => addThisElement('h1')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
+                                    <div className='w3-flex-row w3-flex-center-v'>
+                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
+                                            H1
+                                        </div>
+                                        <div>Titre niveau 1</div>
+                                    </div>
+                                </div>
+                                <div onClick={() => addThisElement('h2')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
+                                    <div className='w3-flex-row w3-flex-center-v'>
+                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
+                                            H2
+                                        </div>
+                                        <div>Titre niveau 2</div>
+                                    </div>
+                                </div>
+                                <div onClick={() => addThisElement('h3')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
+                                    <div className='w3-flex-row w3-flex-center-v'>
+                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
+                                            H3
+                                        </div>
+                                        <div>Titre niveau 3</div>
+                                    </div>
+                                </div>
+                                <div onClick={() => addThisElement('h4')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
+                                    <div className='w3-flex-row w3-flex-center-v'>
+                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
+                                            H4
+                                        </div>
+                                        <div>Titre niveau 4</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div style={{ height: 200 }}>
+
+                    </div>
                 </div>
             </div>
         </div>
