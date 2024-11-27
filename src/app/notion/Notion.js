@@ -115,9 +115,9 @@ function Notion() {
         } else if ((e.key == 'Delete' || e.key == 'Backspace') && e.target.innerText.trim() == "") {
             if (keeper.nextListe.blockKey == blockKey) {
                 if (keeper.nextListe.state) {
-                    pageData.bloque[blockKey].subElement.splice(keeper.nextListe.subBlockKey,1)
-                    if (pageData.bloque[blockKey].subElement.length<=0) {
-                        pageData.bloque.splice(blockKey,1)
+                    pageData.bloque[blockKey].subElement.splice(keeper.nextListe.subBlockKey, 1)
+                    if (pageData.bloque[blockKey].subElement.length <= 0) {
+                        pageData.bloque.splice(blockKey, 1)
                     }
                     keeper.nextListe.blockKey = null;
                     keeper.nextListe.subBlockKey = null;
@@ -159,6 +159,7 @@ function Notion() {
 
     const reloadElement = () => {
 
+        setdisplayBloques('')
         document.getElementById('myPageTitle').innerText = pageData.pageName;
         document.getElementById('myPageTitle').contentEditable = !pageData.lock && userInfo.acceptEditable
 
@@ -259,8 +260,11 @@ function Notion() {
                 console.log("Content copied to clipboard!");
             }
         }, 500);
+        setTimeout(() => {
+            setdisplayBloques(glitchBloque)
+        }, 1);
+        
 
-        setdisplayBloques(glitchBloque)
     }
 
     const addThisElement = (element) => {
