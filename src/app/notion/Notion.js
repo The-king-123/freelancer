@@ -283,7 +283,7 @@ function Notion() {
             await savePage();
         }
 
-        const pageRef = ref(database, 'notion/' + userInfo.notionToLoad + '/' + userInfo.key);
+        const pageRef = ref(database, 'notion/' + userInfo.notionToLoad);
         const pagePush = push(pageRef)
 
         const newPage = {
@@ -355,7 +355,7 @@ function Notion() {
                 pageData.lock = notion.lock ? notion.lock : false;
                 pageData.lastModification = notion.lastModification ? notion.lastModification : null;
 
-                if (pageData.lock && userInfo.acceptEditable) {
+                if (pageData.lock && !userInfo.acceptEditable) {
                     document.getElementById('iconLockPage').style.display = 'inline-block'
                     document.getElementById('iconOpenPage').style.display = 'none'
                 } else {
@@ -410,7 +410,9 @@ function Notion() {
 
     const deleteHandler = async (params) => {
         openOption(params.key);
+        notionData.splice(key, 1)
         await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + params.notionID), null).then(async () => {
+            if (params.notionID == keeper.pageID && params.key - 1 >= 0) openPage(notionData[params.key - 1]);
             cancelHandler()
         });
     };
@@ -514,17 +516,22 @@ function Notion() {
     }
 
     const toggleLockPage = () => {
-        if (document.getElementById('iconLockPage').style.display == 'none') {
-            document.getElementById('iconLockPage').style.display = 'inline-block'
-            document.getElementById('iconOpenPage').style.display = 'none'
-            pageData.lock = true && userInfo.acceptEditable;
-            reloadElement();
-        } else {
-            document.getElementById('iconLockPage').style.display = 'none'
-            document.getElementById('iconOpenPage').style.display = 'inline-block'
-            ppageData.lock = false && userInfo.acceptEditable;
-            reloadElement();
+        if (userInfo.acceptEditable) {
+            if (document.getElementById('iconLockPage').style.display == 'none') {
+                document.getElementById('iconLockPage').style.display = 'inline-block'
+                document.getElementById('iconOpenPage').style.display = 'none'
+                document.getElementById('addNotionElement').style.display = 'none'
+                pageData.lock = true;
+                reloadElement();
+            } else {
+                document.getElementById('iconLockPage').style.display = 'none'
+                document.getElementById('iconOpenPage').style.display = 'inline-block'
+                document.getElementById('addNotionElement').style.display = 'block'
+                pageData.lock = false;
+                reloadElement();
+            }
         }
+
     }
 
     useEffect(() => {
@@ -655,7 +662,7 @@ function Notion() {
                             style={{ left: 0, minWidth: 224, marginTop: 8, padding: 4, height: 'calc(100vh - 96px)' }}
                         >
                             {/* liste des pages */}
-                            <div id='newPageButton' style={{display:'none'}} onClick={addNewPage} className="w3-button w3-hover-grey w3-round w3-block w3-yellow w3-margin-bottom">
+                            <div id='newPageButton' style={{ display: 'none' }} onClick={addNewPage} className="w3-button w3-hover-grey w3-round w3-block w3-yellow w3-margin-bottom">
                                 <FontAwesomeIcon
                                     className="w3-margin-right"
                                     icon={faStickyNote}
