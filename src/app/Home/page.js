@@ -44,6 +44,43 @@ export default function Home(props) {
       });
   };
 
+  function showMoreOF(id, iconId, textId) {
+    const showmoreCore = document.getElementById(id);
+    if (showmoreCore) {
+      const allCollapse = document.getElementsByClassName('allCollapse');
+      for (let i = 0; i < allCollapse.length; i++) {
+        const element = allCollapse[i];
+        if (element.id != id) {
+          element.className = element.className.replace(" w3-show", "");
+        }
+      }
+      const collapseIcon = document.getElementsByClassName('collapseIcon');
+      for (let i = 0; i < collapseIcon.length; i++) {
+        const element = collapseIcon[i];
+        if (element.id != iconId) {
+          element.style.transform = 'rotate(0deg)';
+        }
+      }
+      if (showmoreCore.className.indexOf("w3-show") == -1) {
+        showmoreCore.className += " w3-show";
+        if (iconId && document.getElementById(iconId)) {
+          document.getElementById(iconId).style.transform = 'rotate(-180deg)';
+        }
+        if (textId && document.getElementById(textId)) {
+          document.getElementById(textId).innerText = document.getElementById(textId).innerText.replace('Plus', 'Moins').replace('plus', 'moins');
+        }
+      } else {
+        showmoreCore.className = showmoreCore.className.replace(" w3-show", "");
+        if (iconId && document.getElementById(iconId)) {
+          document.getElementById(iconId).style.transform = 'rotate(0deg)';
+        }
+        if (textId && document.getElementById(textId)) {
+          document.getElementById(textId).innerText = document.getElementById(textId).innerText.replace('Moins', 'Plus').replace('moins', 'plus');
+        }
+      }
+    }
+  }
+
   useEffect(() => {
 
     localStorage.setItem('freePremiumListened', 'not')
@@ -62,6 +99,15 @@ export default function Home(props) {
     const firstPath = location.pathname.split('/')[1]
     if (document.getElementById(firstPath + 'Page')) {
       document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') != 'dark' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow w3-hover-yellow')
+      if (firstPath == 'notion') {
+        document.getElementById('showmoreOptionButton').style.display = 'flex'
+        document.getElementById('notionMenuIcon').style.display = 'inline-block'
+        showMoreOF('optionMenu', 'optionMenuIcon', 'optionMenuText')
+        showMoreOF('notionMenu', 'notionMenuIcon', null)
+      } else {
+        document.getElementById('notionMenuIcon').style.display = 'none'
+        document.getElementById('showmoreOptionButton').style.display = 'none'
+      }
     }
     if (document.getElementById(firstPath + 'Screen')) {
       document.getElementById(firstPath + 'Screen').className = document.getElementById(firstPath + 'Screen').className.replace('whiteBlackYellow', 'w3-text-yellow')
