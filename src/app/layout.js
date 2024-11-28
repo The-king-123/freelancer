@@ -1071,8 +1071,6 @@ export default function RootLayout({ children }) {
     if (document.getElementById(firstPath + 'Page')) {
       document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') != 'dark' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow w3-hover-yellow')
       if (firstPath == 'notion') {
-        console.log('impiry');
-
         document.getElementById('showmoreOptionButton').style.display = 'flex'
         document.getElementById('notionMenuIcon').style.display = 'inline-block'
         showMoreOF('optionMenu', 'optionMenuIcon', 'optionMenuText')

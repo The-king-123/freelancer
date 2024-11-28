@@ -590,9 +590,9 @@ function Notion() {
     }
 
     const autoSave = async () => {
-        console.log('ato e');
 
         keeper.intervalIDPageSaving = setInterval(async () => {
+            console.log('ato e');
             if (document.getElementById('myPageTitle')) {
                 pageData.pageName = document.getElementById('myPageTitle').innerText;
             }
