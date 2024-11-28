@@ -1344,7 +1344,7 @@ export default function RootLayout({ children }) {
                 <FontAwesomeIcon
                   style={{ transition: '0.5s' }}
                   id="optionMenuIcon"
-                  icon={faChevronCircleDown}
+                  icon={faChevronDown}
                   width={20}
                   height={20}
                 />
