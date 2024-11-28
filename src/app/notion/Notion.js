@@ -689,7 +689,7 @@ function Notion() {
 
         if (window.innerWidth < 992) {
             //ato ary eee
-            document.getElementById('displayNotionWrapper').style.display = 'block';
+            document.getElementById('displayNotionListeWrapper').style.display = 'block';
         }
 
         const xcode = localStorage.getItem('x-code');
@@ -780,7 +780,7 @@ function Notion() {
                                 />
                                 Créer une page
                             </div>
-                            <div id='displayNotionWrapper' className='w3-margin-bottom' style={{ display: 'none' }}>
+                            <div id='displayNotionListeWrapper' className='w3-margin-bottom' style={{ display: 'none' }}>
                                 {displayNotion}
                             </div>
                         </div>
