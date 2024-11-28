@@ -78,7 +78,13 @@ export default function RootLayout({ children }) {
       </span>
     </div>
   );
-  const [displayNotion, setdisplayNotion] = useState('')
+  const [displayNotion, setdisplayNotion] = useState(
+    <div className="w3-flex w3-flex-center" style={{ padding: 16 }}>
+      <span className="w3-spin">
+        <FontAwesomeIcon icon={faSpinner} />
+      </span>
+    </div>
+  )
   const [displayChoice, setdisplayChoice] = useState("");
   const [chatData, setchatData] = useState([]);
 
