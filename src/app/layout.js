@@ -1058,7 +1058,7 @@ export default function RootLayout({ children }) {
       document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') != 'dark' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow w3-hover-yellow')
       if (firstPath == 'notion') {
         console.log('impiry');
-        
+
         document.getElementById('showmoreOptionButton').style.display = 'flex'
         document.getElementById('notionMenuIcon').style.display = 'inline-block'
         showMoreOF('optionMenu', 'optionMenuIcon', 'optionMenuText')
@@ -1327,7 +1327,7 @@ export default function RootLayout({ children }) {
           </div>
           <div
             className="w3-large w3-text-grey w3-overflow-scroll w3-noscrollbar"
-            style={{ paddingInline: 16, height:'calc(100vh - 82px)' }}
+            style={{ paddingInline: 16, height: 'calc(100vh - 82px)' }}
           >
             {/* menu desktop */}
             <div
@@ -1468,16 +1468,38 @@ export default function RootLayout({ children }) {
                   />
                   <div className="w3-margin-left w3-medium">POS</div>
                 </Link>
+
+                <Link
+                  id="chatPage"
+                  onClick={() => {
+                    if (location.pathname.split('/')[1] == 'chat') {
+                      if (document.getElementById('chatListeCore')) {
+                        document.getElementById('chatListeCore').style.display = 'block';
+                        document.getElementById('chattingCore').style.display = 'none'
+                      }
+                    }
+                  }}
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                  href={"/chat"}
+                >
+                  <FontAwesomeIcon
+                    icon={faComments}
+                    width={20}
+                    height={20}
+                  />
+                  <div className="w3-margin-left w3-medium w3-flex-1">Message</div>
+                  <div id="chatSpanPage" className="w3-red w3-round-xxlarge w3-flex w3-small w3-flex-center" style={{ paddingInline: 6, display: 'none' }}></div>
+                </Link>
               </div>
 
               <Link
                 id="notionPage"
-                onClick={() => 
-                  {
-                    if (document.getElementById('notionCore')) {
-                      showMoreOF('notionMenu', 'notionMenuIcon', null)
-                    }
+                onClick={() => {
+                  if (document.getElementById('notionCore')) {
+                    showMoreOF('notionMenu', 'notionMenuIcon', null)
                   }
+                }
                 }
                 className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                 style={{ height: 40, paddingLeft: 16, paddingRight: 8, marginBlock: 2 }}
@@ -1501,28 +1523,6 @@ export default function RootLayout({ children }) {
                 {displayNotion}
               </div>
 
-              <Link
-                id="chatPage"
-                onClick={() => {
-                  if (location.pathname.split('/')[1] == 'chat') {
-                    if (document.getElementById('chatListeCore')) {
-                      document.getElementById('chatListeCore').style.display = 'block';
-                      document.getElementById('chattingCore').style.display = 'none'
-                    }
-                  }
-                }}
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                href={"/chat"}
-              >
-                <FontAwesomeIcon
-                  icon={faComments}
-                  width={20}
-                  height={20}
-                />
-                <div className="w3-margin-left w3-medium w3-flex-1">Message</div>
-                <div id="chatSpanPage" className="w3-red w3-round-xxlarge w3-flex w3-small w3-flex-center" style={{ paddingInline: 6, display: 'none' }}></div>
-              </Link>
               <div style={{ height: 40 }}>
                 <div
                   id="settingDropContainer"
