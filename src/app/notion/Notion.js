@@ -592,17 +592,21 @@ function Notion() {
     const autoSave = async () => {
 
         keeper.intervalIDPageSaving = setInterval(async () => {
-            if (document.getElementById('myPageTitle')) {
-                pageData.pageName = document.getElementById('myPageTitle').innerText;
-            }
-            if (!keeper.lockAutoSave) {
-                keeper.lockAutoSave = true;
-                const newHash = await hashArray(pageData);
-                if (keeper.pageHashing != newHash) {
-                    savePage();
-                } else {
-                    keeper.lockAutoSave = false;
+            if (document.getElementById('editableNotionCore')) {
+                if (document.getElementById('myPageTitle')) {
+                    pageData.pageName = document.getElementById('myPageTitle').innerText;
                 }
+                if (!keeper.lockAutoSave) {
+                    keeper.lockAutoSave = true;
+                    const newHash = await hashArray(pageData);
+                    if (keeper.pageHashing != newHash) {
+                        savePage();
+                    } else {
+                        keeper.lockAutoSave = false;
+                    }
+                }
+            } else {
+                clearInterval(keeper.intervalIDPageSaving);
             }
 
         }, 2000);
