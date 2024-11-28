@@ -683,6 +683,7 @@ function Notion() {
 
         if (window.innerWidth < 992) {
             //ato ary eee
+            document.getElementById('displayNotionWrapper').style.display = 'block';
         }
 
         const xcode = localStorage.getItem('x-code');
@@ -763,17 +764,19 @@ function Notion() {
                         <div
                             id="notionList"
                             className="w3-dropdown-content w3-bar-block w3-card w3-round w3-overflow-scroll w3-noscrollbar"
-                            style={{ left: 0, minWidth: 224, marginTop: 8, padding: 4, height: 'calc(100vh - 96px)' }}
+                            style={{ left: 0, minWidth: 224, marginTop: 8, padding: 4 }}
                         >
                             {/* liste des pages */}
-                            <div id='newPageButton' style={{ display: 'none' }} onClick={addNewPage} className="w3-button w3-hover-grey w3-round w3-block w3-yellow w3-margin-bottom">
+                            <div id='newPageButton' style={{ display: 'none' }} onClick={addNewPage} className="w3-button w3-hover-grey w3-round w3-block w3-yellow">
                                 <FontAwesomeIcon
                                     className="w3-margin-right"
                                     icon={faStickyNote}
                                 />
                                 Créer une page
                             </div>
-                            {displayNotion}
+                            <div id='displayNotionWrapper' className='w3-margin-bottom' style={{display:'none'}}>
+                                {displayNotion}
+                            </div>
                         </div>
                     </div>
                     <div id='myPageTitle' data-placeholder='Nouvelle page' className='w3-big w3-margin-left w3-flex-1 placeholder' contentEditable='true' style={{ minHeight: 24 }}>
