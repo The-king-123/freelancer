@@ -1497,7 +1497,7 @@ export default function RootLayout({ children }) {
                   height={20}
                 />
               </Link>
-              <div id="notionMenu" className="w3-hide w3-block">
+              <div id="notionMenu" className="w3-hide w3-block w3-dark-grey w3-round">
                 {displayNotion}
               </div>
 
