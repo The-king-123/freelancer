@@ -1352,7 +1352,7 @@ export default function RootLayout({ children }) {
                 className="w3-flex-row w3-flex-center-v w3-overflow w3-dark-grey w3-round-xxlarge w3-margin-top"
                 style={{ height: 32, paddingLeft: 16, paddingRight: 8, marginBlock: 2, display: 'none' }}
               >
-                <div className="w3-flex-1 w3-medium" id="optionMenuText">Plus d'option</div>
+                <div className="w3-flex-1 w3-medium" id="optionMenuText">Menu principal</div>
                 <FontAwesomeIcon
                   style={{ transition: '0.5s' }}
                   className="collapseIcon"
