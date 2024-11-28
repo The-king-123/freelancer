@@ -5,7 +5,7 @@ import "./app.css";
 import "@/app/page.module.css"
 import { app_name, console_source as source } from "@/app/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faCalculator, faCheck, faChevronCircleUp, faCode, faComment, faComments, faCube, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faSun, faTimesCircle, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faArrowCircleDown, faBars, faCalculator, faCheck, faChevronCircleDown, faChevronCircleUp, faChevronDown, faCode, faComment, faComments, faCube, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faSun, faTimesCircle, faTrash, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { faFacebookMessenger, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
@@ -78,6 +78,7 @@ export default function RootLayout({ children }) {
       </span>
     </div>
   );
+  const [displayNotion, setdisplayNotion] = useState('')
   const [displayChoice, setdisplayChoice] = useState("");
   const [chatData, setchatData] = useState([]);
 
@@ -107,6 +108,7 @@ export default function RootLayout({ children }) {
     password: "",
     designation: "",
     key: "",
+    notionToLoad: null,
   });
 
   const ActiveLightMode = () => {
@@ -849,6 +851,94 @@ export default function RootLayout({ children }) {
     });
   }
 
+  function showMoreOF(id, iconId, textId) {
+    var showmoreCore = document.getElementById(id);
+    if (showmoreCore) {
+      if (showmoreCore.className.indexOf("w3-show") == -1) {
+        showmoreCore.className += " w3-show";
+        if (iconId && document.getElementById(iconId)) {
+          document.getElementById(iconId).style.transform = 'rotate(-180deg)';
+        }
+        if (textId && document.getElementById(textId)) {
+          document.getElementById(textId).innerText = document.getElementById(textId).innerText.replace('Plus', 'Moins').replace('plus', 'moins');
+        }
+      } else {
+        showmoreCore.className = showmoreCore.className.replace(" w3-show", "");
+        if (iconId && document.getElementById(iconId)) {
+          document.getElementById(iconId).style.transform = 'rotate(0deg)';
+        }
+        if (textId && document.getElementById(textId)) {
+          document.getElementById(textId).innerText = document.getElementById(textId).innerText.replace('Moins', 'Plus').replace('moins', 'plus');
+        }
+      }
+    }
+  }
+  const openOption = (key) => {
+    const allNotionOption = document.getElementsByClassName('optionAllNotion');
+    for (let i = 0; i < allNotionOption.length; i++) {
+      const element = allNotionOption[i];
+
+      if (element.id != 'notion#' + key + 'Option') {
+        element.style.display = 'none';
+      }
+    }
+
+    if (document.getElementById('notion#' + key + 'Option').style.display == 'none') {
+      document.getElementById('notion#' + key + 'Option').style.display = 'flex';
+    } else {
+      document.getElementById('notion#' + key + 'Option').style.display = 'none';
+    }
+  }
+  const reloadNotionsList = (data) => {
+    const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
+    var glitchNotion
+    if (data.length > 0) {
+      glitchNotion = data.map((notion, key) => (
+        <div key={key} className='w3-flex-row w3-flex-center-v w3-block' style={{ fontSize: 14 }}>
+          <div id={'notion#' + key} key={key} onContextMenu={(e) => { e.preventDefault(); openOption(key); }} className={(themeLight ? 'w3-text-black' : 'w3-text-white') + " w3-button w3-round w3-block w3-left-align w3-overflow w3-nowrap"}>
+            <di>{notion.pageCore.pageName}</di>
+          </div>
+          <div id={'notion#' + key + 'Option'} style={{ width: 32, height: 32, minWidth: 32, display: 'none' }} className='optionAllNotion w3-opacity-min w3-pointer w3-overflow w3-red w3-flex w3-flex-center w3-circle'><FontAwesomeIcon icon={faTrash} /></div>
+        </div>
+      ))
+    } else {
+      glitchNotion = (
+        <div style={{ padding: 8 }}>
+          <div className="w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
+            <div style={{ paddingInline: 16 }}>
+              Vous n'avez créé aucune page.
+            </div>
+          </div>
+        </div>
+      )
+    }
+    setdisplayNotion(glitchNotion)
+
+  }
+
+  const fetchNotionListe = () => {
+
+    onValue(ref(database, 'notion/' + userInfo.notionToLoad), (snapshot) => {
+
+      if (snapshot.exists()) {
+        const pages = []
+        const notions = snapshot.val();
+        const sortedNotions = Object.entries(notions).sort(([, a], [, b]) => b.lastModification - a.lastModification)
+        sortedNotions.map(([index, notion]) => {
+          pages.push({
+            pageID: index,
+            pageCore: notion,
+          });
+        });
+        reloadNotionsList(pages)
+      } else {
+        reloadNotionsList([])
+      }
+    }, (error) => {
+      console.error("Error reading data:", error);
+    });
+  }
+
   useEffect(() => {
 
     if (localStorage.getItem('theme') != 'dark') {
@@ -896,6 +986,14 @@ export default function RootLayout({ children }) {
         if (res.data.logedin) {
           userInfo.key = res.data.user.key;
           userInfo.fullname = res.data.user.fullname;
+
+          if (res.data.user.key == "160471339156947" || res.data.user.key == "336302677822455") {
+            userInfo.notionToLoad = res.data.user.key == "160471339156947" ? "160471339156947" : "336302677822455"
+          } else {
+            userInfo.notionToLoad = "160471339156947"
+          }
+
+          fetchNotionListe()
           fetchChatListe()
         } else {
           // onAuthStateChanged(auth, (user) => {
@@ -913,7 +1011,8 @@ export default function RootLayout({ children }) {
           //     document.getElementById('chatListeCore').innerHTML = '';
           //   }
           // });
-
+          userInfo.notionToLoad = "160471339156947"
+          fetchNotionListe()
           if (localStorage.getItem('userPhoneNumber')) {
             userInfo.key = localStorage.getItem('userPhoneNumber');
             userInfo.fullname = localStorage.getItem('userPhoneNumber');
@@ -922,6 +1021,8 @@ export default function RootLayout({ children }) {
         }
       })
       .catch((e) => {
+        userInfo.notionToLoad = "160471339156947"
+        fetchNotionListe()
         console.error("failure", e);
         //
       });
@@ -949,6 +1050,17 @@ export default function RootLayout({ children }) {
     const firstPath = location.pathname.split('/')[1]
     if (document.getElementById(firstPath + 'Page')) {
       document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') != 'dark' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow w3-hover-yellow')
+      if (firstPath == 'notion') {
+        console.log('impiry');
+        
+        document.getElementById('showmoreOptionButton').style.display = 'flex'
+        document.getElementById('notionMenuIcon').style.display = 'inline-block'
+        showMoreOF('optionMenu', 'optionMenuIcon', 'optionMenuText')
+        showMoreOF('notionMenu', 'notionMenuIcon', null)
+      } else {
+        document.getElementById('notionMenuIcon').style.display = 'none'
+        document.getElementById('showmoreOptionButton').style.display = 'none'
+      }
     }
     if (document.getElementById(firstPath + 'Screen')) {
       document.getElementById(firstPath + 'Screen').className = document.getElementById(firstPath + 'Screen').className.replace('whiteBlackYellow', 'w3-text-yellow')
@@ -1214,128 +1326,155 @@ export default function RootLayout({ children }) {
             {/* menu desktop */}
             <div
               className="w3-block w3-flex w3-flex-column"
-              style={{ paddingBlock: 8, zIndex: 9999 }}
+              style={{ zIndex: 9999 }}
             >
-              <Link
-                data-key="160471339156947"
-                id="Page"
-                onClick={() => localStorage.setItem("user", "160471339156947")}
-                className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                href={"/"}
-              >
-                <FontAwesomeIcon
-                  icon={faHome}
-                  width={20}
-                  height={20}
-                />
-                <div className="w3-margin-left w3-medium">Travail en ligne</div>
-              </Link>
-
-              <Link
-                id="storePage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                href={"/store/all"}
-              >
-                <FontAwesomeIcon
-                  icon={faStore}
-                  width={20}
-                  height={20}
-                />
-                <div className="w3-margin-left w3-medium">Boutique</div>
-              </Link>
-
               <div
-                id="forumPage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow w3-pointer"
-                style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                onClick={userForum}
+                id="showmoreOptionButton"
+                onClick={() => showMoreOF('optionMenu', 'optionMenuIcon', 'optionMenuText')}
+                className="w3-flex-row w3-flex-center-v w3-overflow w3-dark-grey w3-round-xxlarge w3-margin-top"
+                style={{ height: 32, paddingLeft: 16, paddingRight: 8, marginBlock: 2, display: 'none' }}
               >
+                <div className="w3-flex-1 w3-medium"><u id="optionMenuText">Plus d'option</u></div>
                 <FontAwesomeIcon
-                  icon={faNewspaper}
+                  style={{ transition: '0.5s' }}
+                  id="optionMenuIcon"
+                  icon={faChevronCircleDown}
                   width={20}
                   height={20}
                 />
-                <div className="w3-margin-left w3-medium">Forums</div>
               </div>
-
-              <Link
-                id="talentPage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                href={"/talent"}
-              >
-                <FontAwesomeIcon
-                  icon={faUsers}
-                  width={20}
-                  height={20}
-                />
-                <div className="w3-margin-left w3-medium">Catégorie</div>
-              </Link>
-
-              <Link
-                data-key="336302677822455"
-                id="userPage"
-                className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                href={"/user/336302677822455"}
-              >
-                <FontAwesomeIcon
-                  icon={faCode}
-                  width={20}
-                  height={20}
-                />
-                <div className="w3-margin-left w3-medium">Dev web</div>
-              </Link>
-
-              <Link
-                id="recrutementPage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                href={"/recrutement/postule"}
-              >
-                <FontAwesomeIcon
-                  icon={faUserPlus}
-                  width={20}
-                  height={20}
-                />
-                <div className="w3-margin-left w3-medium">Recrutement</div>
-              </Link>
-
               <div
-                id="tarifsPage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow w3-pointer"
-                style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                onClick={userTarifs}
+                id="optionMenu"
+                className="w3-block w3-flex w3-flex-column w3-hide w3-show"
+                style={{ paddingBlock: 8 }}
               >
-                <FontAwesomeIcon
-                  icon={faMoneyBill1}
-                  width={20}
-                  height={20}
-                />
-                <div className="w3-margin-left w3-medium">Tarifs</div>
+                <Link
+                  data-key="160471339156947"
+                  id="Page"
+                  onClick={() => localStorage.setItem("user", "160471339156947")}
+                  className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                  href={"/"}
+                >
+                  <FontAwesomeIcon
+                    icon={faHome}
+                    width={20}
+                    height={20}
+                  />
+                  <div className="w3-margin-left w3-medium">Travail en ligne</div>
+                </Link>
+
+                <Link
+                  id="storePage"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                  href={"/store/all"}
+                >
+                  <FontAwesomeIcon
+                    icon={faStore}
+                    width={20}
+                    height={20}
+                  />
+                  <div className="w3-margin-left w3-medium">Boutique</div>
+                </Link>
+
+                <div
+                  id="forumPage"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow w3-pointer"
+                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                  onClick={userForum}
+                >
+                  <FontAwesomeIcon
+                    icon={faNewspaper}
+                    width={20}
+                    height={20}
+                  />
+                  <div className="w3-margin-left w3-medium">Forums</div>
+                </div>
+
+                <Link
+                  id="talentPage"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                  href={"/talent"}
+                >
+                  <FontAwesomeIcon
+                    icon={faUsers}
+                    width={20}
+                    height={20}
+                  />
+                  <div className="w3-margin-left w3-medium">Catégorie</div>
+                </Link>
+
+                <Link
+                  data-key="336302677822455"
+                  id="userPage"
+                  className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                  href={"/user/336302677822455"}
+                >
+                  <FontAwesomeIcon
+                    icon={faCode}
+                    width={20}
+                    height={20}
+                  />
+                  <div className="w3-margin-left w3-medium">Dev web</div>
+                </Link>
+
+                <Link
+                  id="recrutementPage"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                  href={"/recrutement/postule"}
+                >
+                  <FontAwesomeIcon
+                    icon={faUserPlus}
+                    width={20}
+                    height={20}
+                  />
+                  <div className="w3-margin-left w3-medium">Recrutement</div>
+                </Link>
+
+                <div
+                  id="tarifsPage"
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow w3-pointer"
+                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                  onClick={userTarifs}
+                >
+                  <FontAwesomeIcon
+                    icon={faMoneyBill1}
+                    width={20}
+                    height={20}
+                  />
+                  <div className="w3-margin-left w3-medium">Tarifs</div>
+                </div>
+
+                <Link
+                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                  href={"https://pos.freelancer.mg"}
+                  target="_blank"
+                >
+                  <FontAwesomeIcon
+                    icon={faCalculator}
+                    width={20}
+                    height={20}
+                  />
+                  <div className="w3-margin-left w3-medium">POS</div>
+                </Link>
               </div>
-
-              <Link
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                href={"https://pos.freelancer.mg"}
-                target="_blank"
-              >
-                <FontAwesomeIcon
-                  icon={faCalculator}
-                  width={20}
-                  height={20}
-                />
-                <div className="w3-margin-left w3-medium">POS</div>
-              </Link>
-
 
               <Link
                 id="notionPage"
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round"
-                style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                onClick={() => 
+                  {
+                    if (document.getElementById('notionCore')) {
+                      showMoreOF('notionMenu', 'notionMenuIcon', null)
+                    }
+                  }
+                }
+                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                style={{ height: 40, paddingLeft: 16, paddingRight: 8, marginBlock: 2 }}
                 href={"/notion"}
               >
                 <FontAwesomeIcon
@@ -1343,8 +1482,18 @@ export default function RootLayout({ children }) {
                   width={20}
                   height={20}
                 />
-                <div className="w3-margin-left w3-medium w3-flex-1">Notion</div>
+                <div className="w3-flex-1 w3-margin-left w3-medium w3-flex-1">Notion</div>
+                <FontAwesomeIcon
+                  style={{ transition: '0.5s', display: 'none' }}
+                  id="notionMenuIcon"
+                  icon={faChevronDown}
+                  width={20}
+                  height={20}
+                />
               </Link>
+              <div id="notionMenu" className="w3-hide w3-block">
+                {displayNotion}
+              </div>
 
               <Link
                 id="chatPage"

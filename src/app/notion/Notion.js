@@ -17,6 +17,54 @@ function Notion() {
     const database = getDatabase(app);
     // Firebase configuration
 
+    const elementList = [
+        {
+            id: 'p',
+            name: 'P',
+            Title: 'Paragraphe',
+        },
+        {
+            id: 'div',
+            name: 'div',
+            Title: 'Conteneur',
+        },
+        {
+            id: 'ul',
+            name: 'UL',
+            Title: 'Liste à puce',
+        },
+        {
+            id: 'il',
+            name: 'LS',
+            Title: 'Liste sans puce',
+        },
+        {
+            id: 'ol',
+            name: 'OL',
+            Title: 'Liste numeroté',
+        },
+        {
+            id: 'h1',
+            name: 'H1',
+            Title: 'Titre niveau 1',
+        },
+        {
+            id: 'h2',
+            name: 'H2',
+            Title: 'Titre niveau 2',
+        },
+        {
+            id: 'h3',
+            name: 'H3',
+            Title: 'Titre niveau 3',
+        },
+        {
+            id: 'h4',
+            name: 'H4',
+            Title: 'Titre niveau 4',
+        }
+    ]
+
     const [notionData, setnotionData] = useState([])
 
     const [keeper, setkeeper] = useState(
@@ -213,6 +261,18 @@ function Notion() {
 
                         </ul>
                     }
+                    {bloque.element == 'il' &&
+                        <ul id={'elementNumber' + key} style={{ paddingInline: 24, listStyleType: 'none' }}>
+                            {
+                                bloque.subElement.map((subBloque, k) => (
+                                    <li onKeyUp={() => suBlockValueTaker(key, k)} onKeyDown={(e) => addRemoveNewListe(e, key, k)} key={k} className='placeholder' data-placeholder={'Élément de liste ' + k + '...'} id={'listeNumber' + key + 'Child' + k} contentEditable={!pageData.lock && userInfo.acceptEditable} style={{ minHeight: 24 }}>
+                                        {parse(convertLinks(subBloque.content))}
+                                    </li>
+                                ))
+                            }
+
+                        </ul>
+                    }
                     {bloque.element == 'ol' &&
                         <ol id={'elementNumber' + key} style={{ paddingInline: 24 }}>
                             {
@@ -263,7 +323,7 @@ function Notion() {
         setTimeout(() => {
             setdisplayBloques(glitchBloque)
         }, 1);
-        
+
 
     }
 
@@ -273,7 +333,7 @@ function Notion() {
             {
                 element: element,
                 content: '',
-                subElement: (element == 'ol' || element == 'ul') ? [{
+                subElement: (element == 'ol' || element == 'ul' || element == 'il') ? [{
                     content: '',
                 }] : null,
             }
@@ -357,7 +417,7 @@ function Notion() {
 
         const newHash = await hashArray(pageData);
 
-        if (keeper.pageID && keeper.pageHashing != newHash) savePage();
+        if (keeper.pageID && keeper.pageHashing != newHash) await savePage();
 
         const pageRef = ref(database, 'notion/' + userInfo.notionToLoad + '/' + page.pageID);
 
@@ -366,7 +426,7 @@ function Notion() {
             keeper.intervalIDPageSaving = null;
         }
 
-        get(pageRef).then((snapshot) => {
+        get(pageRef).then(async (snapshot) => {
 
             if (snapshot.exists() && !keeper.intervalIDPageSaving) {
 
@@ -398,9 +458,9 @@ function Notion() {
                 keeper.pageID = page.pageID
 
                 // hashing content
-                hashArray(pageData).then(hash => {
+                await hashArray(pageData).then(async hash => {
                     keeper.pageHashing = hash;
-                    if (!keeper.intervalIDPageSaving && userInfo.acceptEditable) autoSave();
+                    if (!keeper.intervalIDPageSaving && userInfo.acceptEditable) await autoSave();
                 });
                 reloadElement();
             }
@@ -532,7 +592,9 @@ function Notion() {
     const autoSave = async () => {
 
         keeper.intervalIDPageSaving = setInterval(async () => {
-            pageData.pageName = document.getElementById('myPageTitle').innerText;
+            if (document.getElementById('myPageTitle')) {
+                pageData.pageName = document.getElementById('myPageTitle').innerText;
+            }
             if (!keeper.lockAutoSave) {
                 keeper.lockAutoSave = true;
                 const newHash = await hashArray(pageData);
@@ -611,6 +673,11 @@ function Notion() {
                 }
             }
         })
+
+
+        if (window.innerWidth<992) {
+            //ato ary eee
+        }
 
         const xcode = localStorage.getItem('x-code');
         axios
@@ -712,7 +779,7 @@ function Notion() {
                 </div>
 
                 {/* Editable notion core */}
-                <div className='w3-margin-top' id='editableNotionCore'>
+                <div className='w3-margin-top w3-overflow-scroll w3-noscrollbar' id='editableNotionCore'>
                     {displayBloques}
                 </div>
 
@@ -731,70 +798,18 @@ function Notion() {
                                 style={{ left: -6, minWidth: 360, marginTop: 12, padding: 8 }}
                             >
                                 {/* liste des elements */}
-                                <div onClick={() => addThisElement('p')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                    <div className='w3-flex-row w3-flex-center-v'>
-                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                            P
+                                {
+                                    elementList.map((element, key) => (
+                                        <div key={key} onClick={() => addThisElement(element.id)} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
+                                            <div className='w3-flex-row w3-flex-center-v'>
+                                                <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
+                                                    {element.name}
+                                                </div>
+                                                <div>{element.Title}</div>
+                                            </div>
                                         </div>
-                                        <div>Paragraphe</div>
-                                    </div>
-                                </div>
-                                <div onClick={() => addThisElement('div')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                    <div className='w3-flex-row w3-flex-center-v'>
-                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                            div
-                                        </div>
-                                        <div>Conteneur</div>
-                                    </div>
-                                </div>
-                                <div onClick={() => addThisElement('ul')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                    <div className='w3-flex-row w3-flex-center-v'>
-                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                            UL
-                                        </div>
-                                        <div>Liste a puce</div>
-                                    </div>
-                                </div>
-                                <div onClick={() => addThisElement('ol')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                    <div className='w3-flex-row w3-flex-center-v'>
-                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                            OL
-                                        </div>
-                                        <div>Liste numerote</div>
-                                    </div>
-                                </div>
-                                <div onClick={() => addThisElement('h1')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                    <div className='w3-flex-row w3-flex-center-v'>
-                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                            H1
-                                        </div>
-                                        <div>Titre niveau 1</div>
-                                    </div>
-                                </div>
-                                <div onClick={() => addThisElement('h2')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                    <div className='w3-flex-row w3-flex-center-v'>
-                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                            H2
-                                        </div>
-                                        <div>Titre niveau 2</div>
-                                    </div>
-                                </div>
-                                <div onClick={() => addThisElement('h3')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                    <div className='w3-flex-row w3-flex-center-v'>
-                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                            H3
-                                        </div>
-                                        <div>Titre niveau 3</div>
-                                    </div>
-                                </div>
-                                <div onClick={() => addThisElement('h4')} className="w3-button w3-round w3-half" style={{ padding: 8 }}>
-                                    <div className='w3-flex-row w3-flex-center-v'>
-                                        <div style={{ width: 28, height: 28, marginRight: 8 }} className='w3-border w3-flex w3-small w3-flex-center w3-round'>
-                                            H4
-                                        </div>
-                                        <div>Titre niveau 4</div>
-                                    </div>
-                                </div>
+                                    ))
+                                }
 
                             </div>
                         </div>
