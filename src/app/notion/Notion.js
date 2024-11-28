@@ -460,7 +460,7 @@ function Notion() {
                 // hashing content
                 await hashArray(pageData).then(async hash => {
                     keeper.pageHashing = hash;
-                    if (!keeper.intervalIDPageSaving && userInfo.acceptEditable) await autoSave();
+                    if (!keeper.intervalIDPageSaving && userInfo.acceptEditable && !pageData.lock) await autoSave();
                 });
                 reloadElement();
             }
@@ -590,6 +590,7 @@ function Notion() {
     }
 
     const autoSave = async () => {
+        console.log('ato e');
 
         keeper.intervalIDPageSaving = setInterval(async () => {
             if (document.getElementById('myPageTitle')) {
@@ -605,7 +606,7 @@ function Notion() {
                 }
             }
 
-        }, 1500);
+        }, 2000);
     }
 
     const toggleLockPage = () => {
@@ -615,12 +616,14 @@ function Notion() {
                 document.getElementById('iconOpenPage').style.display = 'none'
                 document.getElementById('addNotionElement').style.display = 'none'
                 pageData.lock = true;
+                clearInterval(keeper.intervalIDPageSaving);
                 reloadElement();
             } else {
                 document.getElementById('iconLockPage').style.display = 'none'
                 document.getElementById('iconOpenPage').style.display = 'inline-block'
                 document.getElementById('addNotionElement').style.display = 'block'
                 pageData.lock = false;
+                autoSave();
                 reloadElement();
             }
         }
@@ -675,7 +678,7 @@ function Notion() {
         })
 
 
-        if (window.innerWidth<992) {
+        if (window.innerWidth < 992) {
             //ato ary eee
         }
 

@@ -858,8 +858,22 @@ export default function RootLayout({ children }) {
   }
 
   function showMoreOF(id, iconId, textId) {
-    var showmoreCore = document.getElementById(id);
+    const showmoreCore = document.getElementById(id);
     if (showmoreCore) {
+      const allCollapse = document.getElementsByClassName('allCollapse');
+      for (let i = 0; i < allCollapse.length; i++) {
+        const element = allCollapse[i];
+        if (element.id != id) {
+          element.className = element.className.replace(" w3-show", "");
+        }
+      }
+      const collapseIcon = document.getElementsByClassName('collapseIcon');
+      for (let i = 0; i < collapseIcon.length; i++) {
+        const element = collapseIcon[i];
+        if (element.id != iconId) {
+          element.style.transform = 'rotate(0deg)';
+        }
+      }
       if (showmoreCore.className.indexOf("w3-show") == -1) {
         showmoreCore.className += " w3-show";
         if (iconId && document.getElementById(iconId)) {
@@ -1343,6 +1357,7 @@ export default function RootLayout({ children }) {
                 <div className="w3-flex-1 w3-medium" id="optionMenuText">Plus d'option</div>
                 <FontAwesomeIcon
                   style={{ transition: '0.5s' }}
+                  className="collapseIcon"
                   id="optionMenuIcon"
                   icon={faChevronDown}
                   width={20}
@@ -1351,7 +1366,7 @@ export default function RootLayout({ children }) {
               </div>
               <div
                 id="optionMenu"
-                className="w3-block w3-flex w3-flex-column w3-hide w3-show"
+                className="w3-block w3-flex w3-flex-column w3-hide w3-show allCollapse"
                 style={{ paddingTop: 8 }}
               >
                 <Link
@@ -1512,6 +1527,7 @@ export default function RootLayout({ children }) {
                 />
                 <div className="w3-flex-1 w3-margin-left w3-medium w3-flex-1">Notion</div>
                 <FontAwesomeIcon
+                  className="collapseIcon"
                   style={{ transition: '0.5s', display: 'none' }}
                   id="notionMenuIcon"
                   icon={faChevronDown}
@@ -1519,7 +1535,7 @@ export default function RootLayout({ children }) {
                   height={20}
                 />
               </Link>
-              <div id="notionMenu" className="w3-hide w3-block w3-dark-grey w3-round" style={{marginTop:2}}>
+              <div id="notionMenu" className="w3-hide w3-block w3-dark-grey w3-round allCollapse w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 2, height:'calc(100vh - 236px)' }}>
                 {displayNotion}
               </div>
 
