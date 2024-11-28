@@ -351,10 +351,6 @@ function Notion() {
 
     };
 
-    const showOption = (id) => {
-        console.log(id);
-    }
-
     const addNewPage = async () => {
 
         if (keeper.lockAddNewPage) return;
@@ -454,7 +450,7 @@ function Notion() {
                 }
 
 
-                if (keeper.pageID) openDropdown("notionList");
+                if (keeper.pageID && window.innerWidth<992) openDropdown("notionList");
                 keeper.pageID = page.pageID
 
                 // hashing content
@@ -520,28 +516,38 @@ function Notion() {
     };
 
     const reloadNotionsList = (data) => {
-        var glitchNotion
-        if (data.length > 0) {
-            glitchNotion = data.map((notion, key) => (
-                <div className='w3-flex-row w3-flex-center-v' style={{ maxWidth: 216 }}>
-                    <div id={'notion#' + key} key={key} onContextMenu={(e) => { e.preventDefault(); openOption(key); }} onClick={() => openPage(notion)} className="w3-button w3-round w3-block w3-left-align w3-overflow w3-nowrap">
-                        <di>{notion.pageCore.pageName}</di>
-                    </div>
-                    <div id={'notion#' + key + 'Option'} onClick={() => deleteNotion(key, notion.pageID)} style={{ width: 32, height: 32, minWidth: 32, display: 'none' }} className='optionAllNotion w3-opacity-min w3-pointer w3-overflow w3-red w3-flex w3-flex-center w3-circle'><FontAwesomeIcon icon={faTrash} /></div>
-                </div>
-            ))
+        if (window.innerWidth > 992) {
+            data.map((notion, key) => {
+                if (document.getElementById('notion#' + key)) {
+                    document.getElementById('notion#' + key).addEventListener('click', () => openPage(notion))
+                    document.getElementById('notion#' + key + 'Option').addEventListener('click', () => deleteNotion(key, notion.pageID))
+                }
+            })
         } else {
-            glitchNotion = (
-                <div style={{ padding: 8 }}>
-                    <div className="w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
-                        <div style={{ paddingInline: 16 }}>
-                            Vous n'avez créé aucune page.
+            var glitchNotion
+            if (data.length > 0) {
+                glitchNotion = data.map((notion, key) => (
+                    <div className='w3-flex-row w3-flex-center-v' style={{ maxWidth: 216 }}>
+                        <div id={'notion#' + key} key={key} onContextMenu={(e) => { e.preventDefault(); openOption(key); }} onClick={() => openPage(notion)} className="w3-button w3-round w3-block w3-left-align w3-overflow w3-nowrap">
+                            <di>{notion.pageCore.pageName}</di>
+                        </div>
+                        <div id={'notion#' + key + 'Option'} onClick={() => deleteNotion(key, notion.pageID)} style={{ width: 32, height: 32, minWidth: 32, display: 'none' }} className='optionAllNotion w3-opacity-min w3-pointer w3-overflow w3-red w3-flex w3-flex-center w3-circle'><FontAwesomeIcon icon={faTrash} /></div>
+                    </div>
+                ))
+            } else {
+                glitchNotion = (
+                    <div style={{ padding: 8 }}>
+                        <div className="w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
+                            <div style={{ paddingInline: 16 }}>
+                                Vous n'avez créé aucune page.
+                            </div>
                         </div>
                     </div>
-                </div>
-            )
+                )
+            }
+            setdisplayNotion(glitchNotion)
         }
-        setdisplayNotion(glitchNotion)
+
 
     }
 
@@ -774,7 +780,7 @@ function Notion() {
                                 />
                                 Créer une page
                             </div>
-                            <div id='displayNotionWrapper' className='w3-margin-bottom' style={{display:'none'}}>
+                            <div id='displayNotionWrapper' className='w3-margin-bottom' style={{ display: 'none' }}>
                                 {displayNotion}
                             </div>
                         </div>
