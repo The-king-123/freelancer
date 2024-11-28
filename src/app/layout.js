@@ -1326,8 +1326,8 @@ export default function RootLayout({ children }) {
             </div>
           </div>
           <div
-            className="w3-large w3-text-grey"
-            style={{ paddingInline: 16 }}
+            className="w3-large w3-text-grey w3-overflow-scroll w3-noscrollbar"
+            style={{ paddingInline: 16, height:'calc(100vh - 82px)' }}
           >
             {/* menu desktop */}
             <div
@@ -1340,7 +1340,7 @@ export default function RootLayout({ children }) {
                 className="w3-flex-row w3-flex-center-v w3-overflow w3-dark-grey w3-round-xxlarge w3-margin-top"
                 style={{ height: 32, paddingLeft: 16, paddingRight: 8, marginBlock: 2, display: 'none' }}
               >
-                <div className="w3-flex-1 w3-medium"><u id="optionMenuText">Plus d'option</u></div>
+                <div className="w3-flex-1 w3-medium" id="optionMenuText">Plus d'option</div>
                 <FontAwesomeIcon
                   style={{ transition: '0.5s' }}
                   id="optionMenuIcon"
