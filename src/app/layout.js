@@ -1326,7 +1326,7 @@ export default function RootLayout({ children }) {
             </div>
           </div>
           <div
-            className="w3-large w3-text-grey w3-overflow-scroll w3-noscrollbar"
+            className="w3-large w3-text-grey"
             style={{ paddingInline: 16, height: 'calc(100vh - 82px)' }}
           >
             {/* menu desktop */}
@@ -1352,7 +1352,7 @@ export default function RootLayout({ children }) {
               <div
                 id="optionMenu"
                 className="w3-block w3-flex w3-flex-column w3-hide w3-show"
-                style={{ paddingBlock: 8 }}
+                style={{ paddingTop: 8 }}
               >
                 <Link
                   data-key="160471339156947"
@@ -1519,7 +1519,7 @@ export default function RootLayout({ children }) {
                   height={20}
                 />
               </Link>
-              <div id="notionMenu" className="w3-hide w3-block w3-dark-grey w3-round">
+              <div id="notionMenu" className="w3-hide w3-block w3-dark-grey w3-round" style={{marginTop:2}}>
                 {displayNotion}
               </div>
 
