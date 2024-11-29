@@ -79,6 +79,7 @@ function Notion() {
             pageID: null,
             lockAddNewPage: false,
             lockAutoSave: false,
+            lockDelete: false,
         }
     )
 
@@ -422,7 +423,7 @@ function Notion() {
             keeper.intervalIDPageSaving = null;
         }
 
-        get(pageRef).then(async (snapshot) => {
+        await get(pageRef).then(async (snapshot) => {
 
             if (snapshot.exists() && !keeper.intervalIDPageSaving) {
 
@@ -450,7 +451,7 @@ function Notion() {
                 }
 
 
-                if (keeper.pageID && window.innerWidth<992) openDropdown("notionList");
+                if (keeper.pageID && window.innerWidth < 992) openDropdown("notionList");
                 keeper.pageID = page.pageID
 
                 // hashing content
@@ -471,41 +472,47 @@ function Notion() {
         for (let i = 0; i < allNotionOption.length; i++) {
             const element = allNotionOption[i];
 
-            if (element.id != 'notion#' + key + 'Option') {
+            if (element.id != ('notion#' + key + 'Option')) {
                 element.style.display = 'none';
             }
         }
-
-        if (document.getElementById('notion#' + key + 'Option').style.display == 'none') {
-            document.getElementById('notion#' + key + 'Option').style.display = 'flex';
-        } else {
-            document.getElementById('notion#' + key + 'Option').style.display = 'none';
+        if (document.getElementById('notion#' + key + 'Option')) {
+            if (document.getElementById('notion#' + key + 'Option').style.display == 'none') {
+                document.getElementById('notion#' + key + 'Option').style.display = 'flex';
+            } else {
+                document.getElementById('notion#' + key + 'Option').style.display = 'none';
+            }
         }
+
     }
 
-    const deleteNotion = (key, notionID) => {
+    const deleteNotion = (notion) => {
         document.getElementById("modalWarning").style.display = "block";
         document.getElementById("textWarning").innerText = "Voulez vous vraiment supprimer cette page ...";
 
         document
             .getElementById("confirmWarning")
-            .addEventListener("click", deleteHandler.bind(null, { key: key, notionID: notionID }));
+            .addEventListener("click", deleteHandler.bind(null, { key: notion.key, notionID: notion.notionID }));
         document
             .getElementById("cancelWarning")
             .addEventListener("click", cancelHandler);
     }
 
     const deleteHandler = async (params) => {
-        openOption(params.key);
-        notionData.splice(params.key, 1)
-        await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + params.notionID), null).then(async () => {
-            if (params.notionID == keeper.pageID && params.key - 1 >= 0) openPage(notionData[params.key - 1]);
+        if (!keeper.lockDelete) {
+            keeper.lockDelete = true
             if (params.notionID == keeper.pageID) keeper.pageID = null;
-            cancelHandler();
-        });
+            openOption(null);
+            await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + params.notionID), null).then(async () => {
+                cancelHandler();
+                keeper.lockDelete = false;
+            });
+        }
     };
 
     const cancelHandler = async () => {
+
+
         document.getElementById("modalWarning").style.display = "none";
 
         document
@@ -514,14 +521,17 @@ function Notion() {
         document
             .getElementById("cancelWarning")
             .removeEventListener("click", cancelHandler);
+
     };
 
     const reloadNotionsList = (data) => {
         if (window.innerWidth > 992) {
             data.map((notion, key) => {
                 if (document.getElementById('notion#' + key)) {
-                    document.getElementById('notion#' + key).addEventListener('click', () => openPage(notion))
-                    document.getElementById('notion#' + key + 'Option').addEventListener('click', () => deleteNotion(key, notion.pageID))
+                    document.getElementById('notion#' + key).removeEventListener('click', openPage.bind(null,notion))
+                    document.getElementById('notion#' + key + 'Option').removeEventListener('click', deleteNotion.bind(null,{key:key, notionID:notion.pageID}))
+                    document.getElementById('notion#' + key).addEventListener('click', openPage.bind(null,notion))
+                    document.getElementById('notion#' + key + 'Option').addEventListener('click', deleteNotion.bind(null,{key:key, notionID:notion.pageID}))
                 }
             })
         } else {
