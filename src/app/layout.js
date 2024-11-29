@@ -1153,7 +1153,7 @@ export default function RootLayout({ children }) {
                 <Link
                   key={key}
                   href={adm.link}
-                  className="w3-bar-item w3-button"
+                  className="w3-bar-item w3-button w3-round"
                 >
                   {adm.icon}{adm.title}
                 </Link>
@@ -1346,197 +1346,198 @@ export default function RootLayout({ children }) {
               className="w3-block w3-flex w3-flex-column"
               style={{ zIndex: 9999 }}
             >
-              <div
-                id="showmoreOptionButton"
-                onClick={() => showMoreOF('optionMenu', 'optionMenuIcon', 'optionMenuText')}
-                className="w3-flex-row w3-flex-center-v w3-overflow w3-dark-grey w3-round-xxlarge w3-margin-top"
-                style={{ height: 32, paddingLeft: 16, paddingRight: 8, marginBlock: 2, display: 'none' }}
-              >
-                <div className="w3-flex-1 w3-medium" id="optionMenuText">Menu principal</div>
-                <FontAwesomeIcon
-                  style={{ transition: '0.5s' }}
-                  className="collapseIcon"
-                  id="optionMenuIcon"
-                  icon={faChevronDown}
-                  width={20}
-                  height={20}
-                />
-              </div>
-              <div
-                id="optionMenu"
-                className="w3-block w3-flex w3-flex-column w3-hide w3-show allCollapse"
-                style={{ paddingTop: 8 }}
-              >
-                <Link
-                  data-key="160471339156947"
-                  id="Page"
-                  onClick={() => localStorage.setItem("user", "160471339156947")}
-                  className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                  href={"/"}
-                >
-                  <FontAwesomeIcon
-                    icon={faHome}
-                    width={20}
-                    height={20}
-                  />
-                  <div className="w3-margin-left w3-medium">Travail en ligne</div>
-                </Link>
-
-                <Link
-                  id="storePage"
-                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                  href={"/store/all"}
-                >
-                  <FontAwesomeIcon
-                    icon={faStore}
-                    width={20}
-                    height={20}
-                  />
-                  <div className="w3-margin-left w3-medium">Boutique</div>
-                </Link>
-
+              <div className="w3-overflow-scroll w3-noscrollbar" style={{ height: 'calc(100vh - 140px)' }}>
                 <div
-                  id="forumPage"
-                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow w3-pointer"
-                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                  onClick={userForum}
+                  id="showmoreOptionButton"
+                  onClick={() => showMoreOF('optionMenu', 'optionMenuIcon', 'optionMenuText')}
+                  className="w3-flex-row w3-flex-center-v w3-overflow w3-dark-grey w3-round-xxlarge w3-margin-top"
+                  style={{ height: 32, paddingLeft: 16, paddingRight: 8, marginBlock: 2, display: 'none', marginBottom:4 }}
                 >
+                  <div className="w3-flex-1 w3-medium" id="optionMenuText">Menu principal</div>
                   <FontAwesomeIcon
-                    icon={faNewspaper}
+                    style={{ transition: '0.5s' }}
+                    className="collapseIcon"
+                    id="optionMenuIcon"
+                    icon={faChevronDown}
                     width={20}
                     height={20}
                   />
-                  <div className="w3-margin-left w3-medium">Forums</div>
                 </div>
-
-                <Link
-                  id="talentPage"
-                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                  href={"/talent"}
-                >
-                  <FontAwesomeIcon
-                    icon={faUsers}
-                    width={20}
-                    height={20}
-                  />
-                  <div className="w3-margin-left w3-medium">Catégorie</div>
-                </Link>
-
-                <Link
-                  data-key="336302677822455"
-                  id="userPage"
-                  className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                  href={"/user/336302677822455"}
-                >
-                  <FontAwesomeIcon
-                    icon={faCode}
-                    width={20}
-                    height={20}
-                  />
-                  <div className="w3-margin-left w3-medium">Dev web</div>
-                </Link>
-
-                <Link
-                  id="recrutementPage"
-                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                  href={"/recrutement/postule"}
-                >
-                  <FontAwesomeIcon
-                    icon={faUserPlus}
-                    width={20}
-                    height={20}
-                  />
-                  <div className="w3-margin-left w3-medium">Recrutement</div>
-                </Link>
-
                 <div
-                  id="tarifsPage"
-                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow w3-pointer"
-                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                  onClick={userTarifs}
+                  id="optionMenu"
+                  className="w3-block w3-flex w3-flex-column w3-hide w3-show allCollapse"
+                  style={{ paddingTop: 8 }}
                 >
-                  <FontAwesomeIcon
-                    icon={faMoneyBill1}
-                    width={20}
-                    height={20}
-                  />
-                  <div className="w3-margin-left w3-medium">Tarifs</div>
-                </div>
+                  <Link
+                    data-key="160471339156947"
+                    id="Page"
+                    onClick={() => localStorage.setItem("user", "160471339156947")}
+                    className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                    style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                    href={"/"}
+                  >
+                    <FontAwesomeIcon
+                      icon={faHome}
+                      width={20}
+                      height={20}
+                    />
+                    <div className="w3-margin-left w3-medium">Travail en ligne</div>
+                  </Link>
 
-                <Link
-                  className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                  href={"https://pos.freelancer.mg"}
-                  target="_blank"
-                >
-                  <FontAwesomeIcon
-                    icon={faCalculator}
-                    width={20}
-                    height={20}
-                  />
-                  <div className="w3-margin-left w3-medium">POS</div>
-                </Link>
+                  <Link
+                    id="storePage"
+                    className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                    style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                    href={"/store/all"}
+                  >
+                    <FontAwesomeIcon
+                      icon={faStore}
+                      width={20}
+                      height={20}
+                    />
+                    <div className="w3-margin-left w3-medium">Boutique</div>
+                  </Link>
 
-                <Link
-                  id="chatPage"
-                  onClick={() => {
-                    if (location.pathname.split('/')[1] == 'chat') {
-                      if (document.getElementById('chatListeCore')) {
-                        document.getElementById('chatListeCore').style.display = 'block';
-                        document.getElementById('chattingCore').style.display = 'none'
+                  <div
+                    id="forumPage"
+                    className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow w3-pointer"
+                    style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                    onClick={userForum}
+                  >
+                    <FontAwesomeIcon
+                      icon={faNewspaper}
+                      width={20}
+                      height={20}
+                    />
+                    <div className="w3-margin-left w3-medium">Forums</div>
+                  </div>
+
+                  <Link
+                    id="talentPage"
+                    className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                    style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                    href={"/talent"}
+                  >
+                    <FontAwesomeIcon
+                      icon={faUsers}
+                      width={20}
+                      height={20}
+                    />
+                    <div className="w3-margin-left w3-medium">Catégorie</div>
+                  </Link>
+
+                  <Link
+                    data-key="336302677822455"
+                    id="userPage"
+                    className="userKey menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                    style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                    href={"/user/336302677822455"}
+                  >
+                    <FontAwesomeIcon
+                      icon={faCode}
+                      width={20}
+                      height={20}
+                    />
+                    <div className="w3-margin-left w3-medium">Dev web</div>
+                  </Link>
+
+                  <Link
+                    id="recrutementPage"
+                    className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                    style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                    href={"/recrutement/postule"}
+                  >
+                    <FontAwesomeIcon
+                      icon={faUserPlus}
+                      width={20}
+                      height={20}
+                    />
+                    <div className="w3-margin-left w3-medium">Recrutement</div>
+                  </Link>
+
+                  <div
+                    id="tarifsPage"
+                    className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow w3-pointer"
+                    style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                    onClick={userTarifs}
+                  >
+                    <FontAwesomeIcon
+                      icon={faMoneyBill1}
+                      width={20}
+                      height={20}
+                    />
+                    <div className="w3-margin-left w3-medium">Tarifs</div>
+                  </div>
+
+                  <Link
+                    className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                    style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                    href={"https://pos.freelancer.mg"}
+                    target="_blank"
+                  >
+                    <FontAwesomeIcon
+                      icon={faCalculator}
+                      width={20}
+                      height={20}
+                    />
+                    <div className="w3-margin-left w3-medium">POS</div>
+                  </Link>
+
+                  <Link
+                    id="chatPage"
+                    onClick={() => {
+                      if (location.pathname.split('/')[1] == 'chat') {
+                        if (document.getElementById('chatListeCore')) {
+                          document.getElementById('chatListeCore').style.display = 'block';
+                          document.getElementById('chattingCore').style.display = 'none'
+                        }
                       }
+                    }}
+                    className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                    style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                    href={"/chat"}
+                  >
+                    <FontAwesomeIcon
+                      icon={faComments}
+                      width={20}
+                      height={20}
+                    />
+                    <div className="w3-margin-left w3-medium w3-flex-1">Message</div>
+                    <div id="chatSpanPage" className="w3-red w3-round-xxlarge w3-flex w3-small w3-flex-center" style={{ paddingInline: 6, display: 'none' }}></div>
+                  </Link>
+                </div>
+
+                <Link
+                  id="notionPage"
+                  onClick={() => {
+                    if (document.getElementById('notionCore')) {
+                      showMoreOF('notionMenu', 'notionMenuIcon', null)
                     }
-                  }}
+                  }
+                  }
                   className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                  style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                  href={"/chat"}
+                  style={{ height: 40, paddingLeft: 16, paddingRight: 8, marginBlock: 2 }}
+                  href={"/notion"}
                 >
                   <FontAwesomeIcon
-                    icon={faComments}
+                    icon={faCube}
                     width={20}
                     height={20}
                   />
-                  <div className="w3-margin-left w3-medium w3-flex-1">Message</div>
-                  <div id="chatSpanPage" className="w3-red w3-round-xxlarge w3-flex w3-small w3-flex-center" style={{ paddingInline: 6, display: 'none' }}></div>
+                  <div className="w3-flex-1 w3-margin-left w3-medium w3-flex-1">Notion</div>
+                  <FontAwesomeIcon
+                    className="collapseIcon"
+                    style={{ transition: '0.5s', display: 'none' }}
+                    id="notionMenuIcon"
+                    icon={faChevronDown}
+                    width={20}
+                    height={20}
+                  />
                 </Link>
+                <div id="notionMenu" className="w3-hide w3-block w3-dark-grey w3-round allCollapse w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 236px)' }}>
+                  {displayNotion}
+                </div>
               </div>
-
-              <Link
-                id="notionPage"
-                onClick={() => {
-                  if (document.getElementById('notionCore')) {
-                    showMoreOF('notionMenu', 'notionMenuIcon', null)
-                  }
-                }
-                }
-                className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
-                style={{ height: 40, paddingLeft: 16, paddingRight: 8, marginBlock: 2 }}
-                href={"/notion"}
-              >
-                <FontAwesomeIcon
-                  icon={faCube}
-                  width={20}
-                  height={20}
-                />
-                <div className="w3-flex-1 w3-margin-left w3-medium w3-flex-1">Notion</div>
-                <FontAwesomeIcon
-                  className="collapseIcon"
-                  style={{ transition: '0.5s', display: 'none' }}
-                  id="notionMenuIcon"
-                  icon={faChevronDown}
-                  width={20}
-                  height={20}
-                />
-              </Link>
-              <div id="notionMenu" className="w3-hide w3-block w3-dark-grey w3-round allCollapse w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 2, height:'calc(100vh - 236px)' }}>
-                {displayNotion}
-              </div>
-
               <div style={{ height: 40 }}>
                 <div
                   id="settingDropContainer"
@@ -1546,7 +1547,7 @@ export default function RootLayout({ children }) {
                   <div
                     id="setting"
                     className="w3-dropdown-content w3-bar-block w3-card w3-round w3-medium"
-                    style={{ left: 234, bottom: 4, minWidth: 260 }}
+                    style={{ left: 234, bottom: 4, minWidth: 260, padding:4 }}
                   >
                     <div className="w3-flex-row">
                       {/* / arrow marker / */}
@@ -1554,13 +1555,13 @@ export default function RootLayout({ children }) {
                         <FontAwesomeIcon
                           icon={faPlay}
                           className="rotate180 w3-text-white w3-right w3-display-bottomleft"
-                          style={{ marginLeft: -8, marginBottom: 12 }}
+                          style={{ marginLeft: -12, marginBottom: 8 }}
                         />
                       </div>
                       {/* / arrow marker / */}
                       <div className="w3-flex-1 w3-overflow w3-round" style={{ zIndex: 2 }}>
 
-                        <div onClick={() => ActiveLightMode()} className="w3-bar-item w3-button">
+                        <div onClick={() => ActiveLightMode()} className="w3-bar-item w3-button w3-round">
                           <div className="w3-flex-row w3-flex-center-v">
                             <div className="w3-flex-1">
                               <FontAwesomeIcon
@@ -1573,14 +1574,14 @@ export default function RootLayout({ children }) {
                           </div>
                         </div>
 
-                        <Link className="w3-bar-item w3-button" href={'/profile'}>
+                        <Link className="w3-bar-item w3-button w3-round" href={'/profile'}>
                           <FontAwesomeIcon
                             className="w3-margin-right"
                             icon={faUser}
                           />
                           Votre profil
                         </Link>
-                        <Link className="w3-bar-item w3-button" href={'/chatbotmaker'}>
+                        <Link className="w3-bar-item w3-button w3-round" href={'/chatbotmaker'}>
                           <FontAwesomeIcon
                             className="w3-margin-right"
                             icon={faRobot}
@@ -1589,7 +1590,7 @@ export default function RootLayout({ children }) {
                         </Link>
                         <Link
                           href={'/security'}
-                          className="w3-bar-item w3-button"
+                          className="w3-bar-item w3-button w3-round"
                         >
                           <FontAwesomeIcon
                             className="w3-margin-right"
@@ -1599,7 +1600,7 @@ export default function RootLayout({ children }) {
                         </Link>
                         <Link
                           href={'/tarifs/gestion'}
-                          className="w3-bar-item w3-button"
+                          className="w3-bar-item w3-button w3-round"
                         >
                           <FontAwesomeIcon
                             className="w3-margin-right"
@@ -1610,7 +1611,7 @@ export default function RootLayout({ children }) {
                         {adminCore}
                         <Link
                           href={'/versioncontrole'}
-                          className="w3-bar-item w3-button"
+                          className="w3-bar-item w3-button w3-round"
                         >
                           <FontAwesomeIcon
                             className="w3-margin-right"
@@ -1620,7 +1621,7 @@ export default function RootLayout({ children }) {
                         </Link>
                         <div
                           onClick={logout}
-                          className="w3-bar-item w3-button"
+                          className="w3-bar-item w3-button w3-round"
                         >
                           <FontAwesomeIcon
                             id="logoutIcon"
@@ -1937,18 +1938,18 @@ export default function RootLayout({ children }) {
               <div
                 id="settingMobile"
                 className="w3-dropdown-content w3-bar-block w3-card w3-round"
-                style={{ right: 0, minWidth: 260, marginTop: 8, paddingBottom: 4 }}
+                style={{ right: 0, minWidth: 260, marginTop: 8, padding: 4 }}
               >
                 {/* / arrow marker / */}
-                <div style={{ height: 2 }}>
+                <div style={{ height: 2, marginBottom:-6 }}>
                   <FontAwesomeIcon
                     icon={faPlay}
                     className="rotate-90 w3-text-white w3-right"
-                    style={{ marginTop: -9, marginRight: 13 }}
+                    style={{ marginTop: -14, marginRight: 8 }}
                   />
                 </div>
                 {/* / arrow marker / */}
-                <div onClick={() => ActiveLightMode()} className="w3-bar-item w3-button">
+                <div onClick={() => ActiveLightMode()} className="w3-bar-item w3-button w3-round">
                   <div className="w3-flex-row w3-flex-center-v">
                     <div className="w3-flex-1">
                       <FontAwesomeIcon
@@ -1961,14 +1962,14 @@ export default function RootLayout({ children }) {
                   </div>
                 </div>
 
-                <Link className="w3-bar-item w3-button" href={'/profile'}>
+                <Link className="w3-bar-item w3-button w3-round" href={'/profile'}>
                   <FontAwesomeIcon
                     className="w3-margin-right"
                     icon={faUser}
                   />
                   Votre profil
                 </Link>
-                <Link className="w3-bar-item w3-button" href={'/chatbotmaker'}>
+                <Link className="w3-bar-item w3-button w3-round" href={'/chatbotmaker'}>
                   <FontAwesomeIcon
                     className="w3-margin-right"
                     icon={faRobot}
@@ -1976,21 +1977,21 @@ export default function RootLayout({ children }) {
                   Gérez votre chatbot
                 </Link>
 
-                <Link className="w3-bar-item w3-button" href={'/post/create'}>
+                <Link className="w3-bar-item w3-button w3-round" href={'/post/create'}>
                   <FontAwesomeIcon
                     className="w3-margin-right"
                     icon={faImages}
                   />
                   Gérez votre post
                 </Link>
-                <Link className="w3-bar-item w3-button" href={'/forum/create'}>
+                <Link className="w3-bar-item w3-button w3-round" href={'/forum/create'}>
                   <FontAwesomeIcon
                     className="w3-margin-right"
                     icon={faPager}
                   />
                   Gérez votre forum
                 </Link>
-                {/* <Link className="w3-bar-item w3-button" href={'/settings'}>
+                {/* <Link className="w3-bar-item w3-button w3-round" href={'/settings'}>
                 <FontAwesomeIcon
                   className="w3-margin-right"
                   icon={faClock}
@@ -1999,7 +2000,7 @@ export default function RootLayout({ children }) {
               </Link> */}
                 <Link
                   href={'/security'}
-                  className="w3-bar-item w3-button"
+                  className="w3-bar-item w3-button w3-round"
                 >
                   <FontAwesomeIcon
                     className="w3-margin-right"
@@ -2009,7 +2010,7 @@ export default function RootLayout({ children }) {
                 </Link>
                 <Link
                   href={'/tarif'}
-                  className="w3-bar-item w3-button"
+                  className="w3-bar-item w3-button w3-round"
                 >
                   <FontAwesomeIcon
                     className="w3-margin-right"
@@ -2020,7 +2021,7 @@ export default function RootLayout({ children }) {
                 {adminCore}
                 <div
                   onClick={logout}
-                  className="w3-bar-item w3-button"
+                  className="w3-bar-item w3-button w3-round"
                 >
                   <FontAwesomeIcon
                     id="logoutIcon"
@@ -2098,7 +2099,7 @@ export default function RootLayout({ children }) {
               ><div className="dropButton"></div>
 
                 <div
-                  className="w3-bar-item w3-button"
+                  className="w3-bar-item w3-button w3-round"
                   style={{ marginTop: 4, fontSize: 12.5 }}
                 >
                   <div className="w3-container" style={{ padding: 0 }}>

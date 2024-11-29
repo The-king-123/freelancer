@@ -1295,7 +1295,7 @@ function chatBox() {
         const baseUrl = window.location.origin;
         const newUrl = `${baseUrl}/chat?to=160471339156947`;
 
-        document.getElementById('chatListeCore').style.display = 'block'
+        // document.getElementById('chatListeCore').style.display = 'block'
         document.getElementById('chattingCore').style.display = 'none';
 
         history.pushState({}, "", newUrl);
