@@ -528,10 +528,10 @@ function Notion() {
         if (window.innerWidth > 992) {
             data.map((notion, key) => {
                 if (document.getElementById('notion#' + key)) {
-                    document.getElementById('notion#' + key).removeEventListener('click', openPage.bind(null,notion))
-                    document.getElementById('notion#' + key + 'Option').removeEventListener('click', deleteNotion.bind(null,{key:key, notionID:notion.pageID}))
-                    document.getElementById('notion#' + key).addEventListener('click', openPage.bind(null,notion))
-                    document.getElementById('notion#' + key + 'Option').addEventListener('click', deleteNotion.bind(null,{key:key, notionID:notion.pageID}))
+                    document.getElementById('notion#' + key).removeEventListener('click', openPage.bind(null, notion))
+                    document.getElementById('notion#' + key + 'Option').removeEventListener('click', deleteNotion.bind(null, { key: key, notionID: notion.pageID }))
+                    document.getElementById('notion#' + key).addEventListener('click', openPage.bind(null, notion))
+                    document.getElementById('notion#' + key + 'Option').addEventListener('click', deleteNotion.bind(null, { key: key, notionID: notion.pageID }))
                 }
             })
         } else {
@@ -651,6 +651,10 @@ function Notion() {
     }
 
     useEffect(() => {
+
+        if (document.getElementById('headerPageTitle')) {
+            document.getElementById('headerPageTitle').innerText = ('Notion').toUpperCase()
+        }
 
         if (localStorage.getItem('theme') != 'dark') {
 
