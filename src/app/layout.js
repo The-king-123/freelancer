@@ -1497,7 +1497,7 @@ export default function RootLayout({ children }) {
                     height={20}
                   />
                 </Link>
-                <div id="notionMenu" className="w3-hide w3-block w3-black w3-round w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 236px)' }}>
+                <div id="notionMenu" className="w3-hide w3-block w3-black w3-round w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 194px)' }}>
                   {displayNotion}
                 </div>
               </div>
