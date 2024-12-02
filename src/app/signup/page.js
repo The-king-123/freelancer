@@ -33,8 +33,7 @@ function page() {
     const fullnameRegister = (element) => {
         signupAuthElement.fullname = element.target.value;
         if (signupAuthElement.fullname.length > 3) {
-            document.getElementById("fullnameAlert").className =
-                "w3-text-white";
+            document.getElementById("fullnameAlert").className = "";
         } else {
             document.getElementById("fullnameAlert").className = "w3-text-red";
         }
@@ -42,7 +41,7 @@ function page() {
     const emailRegister = (element) => {
         signupAuthElement.email = element.target.value;
         if (signupAuthElement.email.includes("@")) {
-            document.getElementById("emailAlert").className = "w3-text-white";
+            document.getElementById("emailAlert").className = "";
         } else {
             document.getElementById("emailAlert").className = "w3-text-red";
         }
@@ -50,7 +49,7 @@ function page() {
     const contactRegister = (element) => {
         signupAuthElement.contact = element.target.value;
         if (signupAuthElement.contact.length > 8) {
-            document.getElementById("numberAlert").className = "w3-text-white";
+            document.getElementById("numberAlert").className = "";
         } else {
             document.getElementById("numberAlert").className = "w3-text-red";
         }
@@ -58,8 +57,7 @@ function page() {
     const passwordRegister = (element) => {
         signupAuthElement.password = element.target.value;
         if (signupAuthElement.password.length > 8) {
-            document.getElementById("passwordAlert").className =
-                "w3-text-white";
+            document.getElementById("passwordAlert").className = "";
         } else {
             document.getElementById("passwordAlert").className = "w3-text-red";
         }
@@ -74,7 +72,7 @@ function page() {
             signupAuthElement.confirmed = false;
         }
         if (signupAuthElement.confirmed) {
-            document.getElementById("confirmAlert").className = "w3-text-white";
+            document.getElementById("confirmAlert").className = "";
         } else {
             document.getElementById("confirmAlert").className = "w3-text-red";
         }
@@ -180,7 +178,7 @@ function page() {
 
     });
     return (
-        <div className="w3-100vh w3-block w3-black" style={{ paddingTop: 42 }}>
+        <div className="w3-100vh w3-block" style={{ paddingTop: 42 }}>
 
             <Link href={'/profile'} style={{ display: 'none' }} id="freeLinkProfile" ></Link>
             <div className="w3-card w3-round w3-overflow w3-dark-grey" style={{ maxWidth: 420, marginInline: 'auto' }}>

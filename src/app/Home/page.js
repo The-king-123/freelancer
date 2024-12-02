@@ -100,13 +100,9 @@ export default function Home(props) {
     if (document.getElementById(firstPath + 'Page')) {
       document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') != 'dark' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow w3-hover-yellow')
       if (firstPath == 'notion') {
-        document.getElementById('showmoreOptionButton').style.display = 'flex'
         document.getElementById('notionMenuIcon').style.display = 'inline-block'
-        showMoreOF('optionMenu', 'optionMenuIcon', 'optionMenuText')
-        showMoreOF('notionMenu', 'notionMenuIcon', null)
       } else {
         document.getElementById('notionMenuIcon').style.display = 'none'
-        document.getElementById('showmoreOptionButton').style.display = 'none'
       }
     }
     if (document.getElementById(firstPath + 'Screen')) {

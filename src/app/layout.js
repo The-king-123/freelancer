@@ -5,7 +5,7 @@ import "./app.css";
 import "@/app/page.module.css"
 import { app_name, console_source as source } from "@/app/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowCircleDown, faBars, faCalculator, faCheck, faChevronCircleDown, faChevronCircleUp, faChevronDown, faCode, faComment, faComments, faCube, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faSun, faTimesCircle, faTrash, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faArrowCircleDown, faBars, faCalculator, faCheck, faChevronCircleDown, faChevronCircleUp, faChevronDown, faCode, faComment, faComments, faCube, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faSun, faTimes, faTimesCircle, faTrash, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { faFacebookMessenger, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
@@ -857,38 +857,22 @@ export default function RootLayout({ children }) {
     });
   }
 
-  function showMoreOF(id, iconId, textId) {
+  function toggleNotionListe(id, iconId, action) {
     const showmoreCore = document.getElementById(id);
     if (showmoreCore) {
-      const allCollapse = document.getElementsByClassName('allCollapse');
-      for (let i = 0; i < allCollapse.length; i++) {
-        const element = allCollapse[i];
-        if (element.id != id) {
-          element.className = element.className.replace(" w3-show", "");
-        }
-      }
-      const collapseIcon = document.getElementsByClassName('collapseIcon');
-      for (let i = 0; i < collapseIcon.length; i++) {
-        const element = collapseIcon[i];
-        if (element.id != iconId) {
-          element.style.transform = 'rotate(0deg)';
-        }
-      }
-      if (showmoreCore.className.indexOf("w3-show") == -1) {
+      if (action == 'open') {
         showmoreCore.className += " w3-show";
         if (iconId && document.getElementById(iconId)) {
+          document.getElementById(iconId).style.display = 'inline-block'
           document.getElementById(iconId).style.transform = 'rotate(-180deg)';
-        }
-        if (textId && document.getElementById(textId)) {
-          document.getElementById(textId).innerText = document.getElementById(textId).innerText.replace('Plus', 'Moins').replace('plus', 'moins');
         }
       } else {
         showmoreCore.className = showmoreCore.className.replace(" w3-show", "");
         if (iconId && document.getElementById(iconId)) {
           document.getElementById(iconId).style.transform = 'rotate(0deg)';
-        }
-        if (textId && document.getElementById(textId)) {
-          document.getElementById(textId).innerText = document.getElementById(textId).innerText.replace('Moins', 'Plus').replace('moins', 'plus');
+          setTimeout(() => {
+            document.getElementById(iconId).style.display = 'none'
+          }, 500);
         }
       }
     }
@@ -1071,13 +1055,11 @@ export default function RootLayout({ children }) {
     if (document.getElementById(firstPath + 'Page')) {
       document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') != 'dark' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow w3-hover-yellow')
       if (firstPath == 'notion') {
-        document.getElementById('showmoreOptionButton').style.display = 'flex'
         document.getElementById('notionMenuIcon').style.display = 'inline-block'
-        showMoreOF('optionMenu', 'optionMenuIcon', 'optionMenuText')
-        showMoreOF('notionMenu', 'notionMenuIcon', null)
+        toggleNotionListe('optionMenu', 'optionMenuIcon', 'optionMenuText')
+        toggleNotionListe('notionMenu', 'notionMenuIcon', null)
       } else {
         document.getElementById('notionMenuIcon').style.display = 'none'
-        document.getElementById('showmoreOptionButton').style.display = 'none'
       }
     }
     if (document.getElementById(firstPath + 'Screen')) {
@@ -1348,22 +1330,6 @@ export default function RootLayout({ children }) {
             >
               <div className="w3-overflow-scroll w3-noscrollbar" style={{ height: 'calc(100vh - 140px)' }}>
                 <div
-                  id="showmoreOptionButton"
-                  onClick={() => showMoreOF('optionMenu', 'optionMenuIcon', 'optionMenuText')}
-                  className="w3-flex-row w3-flex-center-v w3-overflow w3-dark-grey w3-round-xxlarge w3-margin-top"
-                  style={{ height: 32, paddingLeft: 16, paddingRight: 8, marginBlock: 2, display: 'none', marginBottom:4 }}
-                >
-                  <div className="w3-flex-1 w3-medium" id="optionMenuText">Menu principal</div>
-                  <FontAwesomeIcon
-                    style={{ transition: '0.5s' }}
-                    className="collapseIcon"
-                    id="optionMenuIcon"
-                    icon={faChevronDown}
-                    width={20}
-                    height={20}
-                  />
-                </div>
-                <div
                   id="optionMenu"
                   className="w3-block w3-flex w3-flex-column w3-hide w3-show allCollapse"
                   style={{ paddingTop: 8 }}
@@ -1511,10 +1477,9 @@ export default function RootLayout({ children }) {
                   id="notionPage"
                   onClick={() => {
                     if (document.getElementById('notionCore')) {
-                      showMoreOF('notionMenu', 'notionMenuIcon', null)
+                      toggleNotionListe('notionMenu', 'notionMenuIcon', 'open')
                     }
-                  }
-                  }
+                  }}
                   className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                   style={{ height: 40, paddingLeft: 16, paddingRight: 8, marginBlock: 2 }}
                   href={"/notion"}
@@ -1526,15 +1491,19 @@ export default function RootLayout({ children }) {
                   />
                   <div className="w3-flex-1 w3-margin-left w3-medium w3-flex-1">Notion</div>
                   <FontAwesomeIcon
-                    className="collapseIcon"
+                    onClick={() => {
+                      if (document.getElementById('notionCore')) {
+                        toggleNotionListe('notionMenu', 'notionMenuIcon', 'close')
+                      }
+                    }}
                     style={{ transition: '0.5s', display: 'none' }}
                     id="notionMenuIcon"
-                    icon={faChevronDown}
+                    icon={faTimes}
                     width={20}
                     height={20}
                   />
                 </Link>
-                <div id="notionMenu" className="w3-hide w3-block w3-dark-grey w3-round allCollapse w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 236px)' }}>
+                <div id="notionMenu" className="w3-hide w3-block w3-dark-grey w3-round w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 236px)' }}>
                   {displayNotion}
                 </div>
               </div>
@@ -1547,7 +1516,7 @@ export default function RootLayout({ children }) {
                   <div
                     id="setting"
                     className="w3-dropdown-content w3-bar-block w3-card w3-round w3-medium"
-                    style={{ left: 234, bottom: 4, minWidth: 260, padding:4 }}
+                    style={{ left: 234, bottom: 4, minWidth: 260, padding: 4 }}
                   >
                     <div className="w3-flex-row">
                       {/* / arrow marker / */}
@@ -1941,7 +1910,7 @@ export default function RootLayout({ children }) {
                 style={{ right: 0, minWidth: 260, marginTop: 8, padding: 4 }}
               >
                 {/* / arrow marker / */}
-                <div style={{ height: 2, marginBottom:-6 }}>
+                <div style={{ height: 2, marginBottom: -6 }}>
                   <FontAwesomeIcon
                     icon={faPlay}
                     className="rotate-90 w3-text-white w3-right"
@@ -2335,6 +2304,6 @@ export default function RootLayout({ children }) {
           </div>
         </div>
       </body>
-    </html>
+    </html >
   );
 }

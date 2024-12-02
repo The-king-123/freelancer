@@ -277,12 +277,12 @@ function chatBox() {
 
     // Si c'est aujourd'hui
     if (diffInDays === 0) {
-        return date.toLocaleTimeString([], options);  // juste l'heure
+      return date.toLocaleTimeString([], options);  // juste l'heure
     }
 
     // Si c'était hier
     else if (diffInDays === 1) {
-        return `Hier à ${date.toLocaleTimeString([], options)}`;
+      return `Hier à ${date.toLocaleTimeString([], options)}`;
     }
 
     // Sinon, afficher la date complète
@@ -295,7 +295,7 @@ function chatBox() {
     const formattedDate = `${dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1)} ${dayOfMonth} ${month} ${year} à ${date.toLocaleTimeString([], options)}`;
 
     return formattedDate;
-};
+  };
 
 
   const replyChecker = (idBull, chatArray) => {
@@ -1250,10 +1250,11 @@ function chatBox() {
     if (window.location.search.length > 0) {
       let urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get("to")) {
+        
         if (data.length > 0) {
           var searchFound = false;
-          data.forEach(user => {
-            if (user.key == urlParams.get("to")) {
+          data.forEach(user => {        
+            if (user.key.replace(/\+/g, '').replace(/ /g, '') == urlParams.get("to").replace(/ /g, '')) {
               searchFound = true;
               displayDiscution(user)
             }
@@ -1288,9 +1289,6 @@ function chatBox() {
         });
         const baseUrl = window.location.origin;
         const newUrl = `${baseUrl}/chat?to=160471339156947`;
-
-        // document.getElementById('chatListeCore').style.display = 'block'
-        document.getElementById('chattingCore').style.display = 'none';
 
         history.pushState({}, "", newUrl);
       }
