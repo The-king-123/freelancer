@@ -1453,7 +1453,8 @@ export default function RootLayout({ children }) {
                       if (location.pathname.split('/')[1] == 'chat') {
                         if (document.getElementById('chatListeCore')) {
                           document.getElementById('chatListeCore').style.display = 'block';
-                          document.getElementById('chattingCore').style.display = 'none'
+                          document.getElementById('chattingCore').style.display = 'none';
+                          document.getElementById('headerPageTitle').innerText = 'DISCUSSIONS';
                         }
                       }
                     }}
@@ -1845,8 +1846,8 @@ export default function RootLayout({ children }) {
           className="w3-top w3-block w3-card w3-dark-grey w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
           style={{ paddingBlock: 8, paddingInline: 16, zIndex: 3 }}
         >
-          <div className="w3-flex-1">
-            <div id="headerPageTitle" className="w3-pointer w3-flex-row" onClick={() => window.location = '/'}>
+          <div className="w3-flex-1 w3-nowrap w3-overflow" style={{paddingRight:8}}>
+            <div id="headerPageTitle" className="w3-pointer w3-flex-row w3-nowrap w3-overflow" onClick={() => window.location = '/'}>
               FREELANCER
             </div>
           </div>
@@ -2137,7 +2138,8 @@ export default function RootLayout({ children }) {
               if (location.pathname.split('/')[1] == 'chat') {
                 if (document.getElementById('chatListeCore')) {
                   document.getElementById('chatListeCore').style.display = 'block';
-                  document.getElementById('chattingCore').style.display = 'none'
+                  document.getElementById('chattingCore').style.display = 'none';
+                  document.getElementById('headerPageTitle').innerText = 'DISCUSSIONS';
                 }
               }
             }}

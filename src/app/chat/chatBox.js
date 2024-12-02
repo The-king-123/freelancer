@@ -1313,6 +1313,10 @@ function chatBox() {
     userInfo.des_fullname = user.fullname
     userInfo.des_key = user.key
 
+    if (document.getElementById('headerPageTitle')) {
+      document.getElementById('headerPageTitle').innerText = user.fullname;
+    }
+
     //change the url to the chat url
     const baseUrl = window.location.origin;
     const newUrl = `${baseUrl}/chat?to=${user.key}`;
