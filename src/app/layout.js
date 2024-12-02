@@ -859,19 +859,22 @@ export default function RootLayout({ children }) {
 
   function toggleNotionListe(id, iconId, action) {
     const showmoreCore = document.getElementById(id);
+    const optionMenu = document.getElementById('optionMenu');
     if (showmoreCore) {
       if (action == 'open') {
         showmoreCore.className += " w3-show";
         if (iconId && document.getElementById(iconId)) {
           document.getElementById(iconId).style.display = 'inline-block'
           document.getElementById(iconId).style.transform = 'rotate(-180deg)';
+          optionMenu.className = optionMenu.className.replace(/ w3-show/g, "");
         }
       } else {
-        showmoreCore.className = showmoreCore.className.replace(" w3-show", "");
+        showmoreCore.className = showmoreCore.className.replace(/ w3-show/g, "");
         if (iconId && document.getElementById(iconId)) {
           document.getElementById(iconId).style.transform = 'rotate(0deg)';
           setTimeout(() => {
             document.getElementById(iconId).style.display = 'none'
+            optionMenu.className += " w3-show";
           }, 500);
         }
       }
@@ -1055,11 +1058,9 @@ export default function RootLayout({ children }) {
     if (document.getElementById(firstPath + 'Page')) {
       document.getElementById(firstPath + 'Page').className = document.getElementById(firstPath + 'Page').className.replace((localStorage.getItem('theme') != 'dark' ? 'w3-light-grey' : 'w3-black'), 'w3-yellow w3-hover-yellow')
       if (firstPath == 'notion') {
-        document.getElementById('notionMenuIcon').style.display = 'inline-block'
-        toggleNotionListe('optionMenu', 'optionMenuIcon', 'optionMenuText')
-        toggleNotionListe('notionMenu', 'notionMenuIcon', null)
+        toggleNotionListe('notionMenu', 'notionMenuIcon', 'open')
       } else {
-        document.getElementById('notionMenuIcon').style.display = 'none'
+        toggleNotionListe('notionMenu', 'notionMenuIcon', 'close')
       }
     }
     if (document.getElementById(firstPath + 'Screen')) {
@@ -1328,11 +1329,10 @@ export default function RootLayout({ children }) {
               className="w3-block w3-flex w3-flex-column"
               style={{ zIndex: 9999 }}
             >
-              <div className="w3-overflow-scroll w3-noscrollbar" style={{ height: 'calc(100vh - 140px)' }}>
+              <div className="w3-overflow-scroll w3-noscrollbar" style={{ height: 'calc(100vh - 140px)', paddingTop: 8 }}>
                 <div
                   id="optionMenu"
                   className="w3-block w3-flex w3-flex-column w3-hide w3-show allCollapse"
-                  style={{ paddingTop: 8 }}
                 >
                   <Link
                     data-key="160471339156947"
@@ -1503,7 +1503,7 @@ export default function RootLayout({ children }) {
                     height={20}
                   />
                 </Link>
-                <div id="notionMenu" className="w3-hide w3-block w3-dark-grey w3-round w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 236px)' }}>
+                <div id="notionMenu" className="w3-hide w3-block w3-black w3-round w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 236px)' }}>
                   {displayNotion}
                 </div>
               </div>

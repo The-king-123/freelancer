@@ -177,6 +177,7 @@ function page() {
             });
 
     });
+    
     return (
         <div className="w3-100vh w3-block" style={{ paddingTop: 42 }}>
 
