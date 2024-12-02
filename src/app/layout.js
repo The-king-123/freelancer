@@ -2054,7 +2054,7 @@ export default function RootLayout({ children }) {
               className="w3-dropdown-click"
             >
 
-              <div
+              {/* <div
                 id="switchPannel"
                 onClick={() => removePannelFirstPassed()}
                 className="w3-dropdown-content w3-bar-block w3-card w3-round w3-hide"
@@ -2072,7 +2072,6 @@ export default function RootLayout({ children }) {
                     Cliquer sur le bouton ci-dessous pour intervertir les contenus gratuit et premium.
                   </div>
                 </div>
-                {/* / arrow marker / */}
                 <div style={{ height: 2 }}>
                   <FontAwesomeIcon
                     icon={faPlay}
@@ -2080,8 +2079,7 @@ export default function RootLayout({ children }) {
                     style={{ marginBottom: -12, marginRight: 54 }}
                   />
                 </div>
-                {/* / arrow marker / */}
-              </div>
+              </div> */}
 
               <div
                 id="settingMobileWrapper"
