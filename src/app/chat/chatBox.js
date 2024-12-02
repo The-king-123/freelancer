@@ -272,37 +272,31 @@ function chatBox() {
     const diffInHours = Math.floor(diffInMinutes / 60);
     const diffInDays = Math.floor(diffInHours / 24);
 
+    // Format de l'heure
     const options = { hour: '2-digit', minute: '2-digit' };
 
-    // On the same day
+    // Si c'est aujourd'hui
     if (diffInDays === 0) {
-      return date.toLocaleTimeString([], options);
+        return date.toLocaleTimeString([], options);  // juste l'heure
     }
-    // Yesterday
+
+    // Si c'était hier
     else if (diffInDays === 1) {
-      return `Yesterday at ${date.toLocaleTimeString([], options)}`;
+        return `Hier à ${date.toLocaleTimeString([], options)}`;
     }
-    // Two days ago
-    else if (diffInDays === 2) {
-      return `Two days ago at ${date.toLocaleTimeString([], options)}`;
-    }
-    // Within a week
-    else if (diffInDays < 7) {
-      return `${diffInDays} days ago at ${date.toLocaleTimeString([], options)}`;
-    }
-    // Within the same year
-    else if (diffInDays < 365) {
-      const diffInMonths = Math.floor(diffInDays / 30);
-      if (diffInMonths < 12) {
-        return diffInMonths === 1
-          ? `a month ago`
-          : `${diffInMonths} months ago`;
-      }
-    }
-    // More than a year ago
-    const diffInYears = Math.floor(diffInDays / 365);
-    return diffInYears === 1 ? `a year ago` : `${diffInYears} years ago`;
-  }
+
+    // Sinon, afficher la date complète
+    const dayOfWeek = date.toLocaleString('fr-FR', { weekday: 'long' }); // Jour de la semaine (ex. : "jeudi")
+    const dayOfMonth = date.getDate();
+    const month = date.toLocaleString('fr-FR', { month: 'short' }); // Mois (ex. : "dec")
+    const year = date.getFullYear();
+
+    // Format de la date complète
+    const formattedDate = `${dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1)} ${dayOfMonth} ${month} ${year} à ${date.toLocaleTimeString([], options)}`;
+
+    return formattedDate;
+};
+
 
   const replyChecker = (idBull, chatArray) => {
     var replayed = false
