@@ -1800,9 +1800,9 @@ function chatBox() {
       <div id='chattingCore' style={{ display: 'none' }}>
         <div id='bullField' className='w3-noscrollbar w3-overflow-scroll w3-block' style={{ padding: 8, display: 'flex', flexDirection: 'column-reverse' }}>
           <div className='w3-block'>
-            <div className='w3-block' style={{ minHeight: 132 }}></div>
-            {displayChat}
             <div className='w3-block' style={{ minHeight: 72 }}></div>
+            {displayChat}
+            <div className='w3-block' style={{ minHeight: 124 }}></div>
           </div>
         </div>
         <div id='chatInputWrapper' style={{ maxWidth: 620, paddingInline: 6, paddingBottom: 6, marginBottom: 8 }} className='w3-dark-grey w3-block w3-bottom'>
