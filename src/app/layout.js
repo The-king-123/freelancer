@@ -858,6 +858,8 @@ export default function RootLayout({ children }) {
   }
 
   function toggleNotionListe(id, iconId, action) {
+    console.log(killer.toggleNotion);
+    
     const showmoreCore = document.getElementById(id);
     const optionMenu = document.getElementById('optionMenu');
     if (showmoreCore) {
@@ -866,13 +868,13 @@ export default function RootLayout({ children }) {
         document.getElementById(iconId).style.display = 'inline-block'
         document.getElementById(iconId).style.transform = 'rotate(-180deg)';
         optionMenu.className = optionMenu.className.replace(/ w3-show/g, "");
-        killer.toggleNotion = true;
+        killer.toggleNotion = false;
       } else {
         showmoreCore.className = showmoreCore.className.replace(/ w3-show/g, "");
         document.getElementById(iconId).style.transform = 'rotate(0deg)';
         document.getElementById(iconId).style.display = 'none'
         optionMenu.className += " w3-show";
-        killer.toggleNotion = false;
+        killer.toggleNotion = true;
       }
     }
   }
