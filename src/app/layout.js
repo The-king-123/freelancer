@@ -89,7 +89,7 @@ export default function RootLayout({ children }) {
   const [chatData, setchatData] = useState([]);
 
   const [dataUsers, setdataUsers] = useState([]);
-  const [killer, setkiller] = useState({ starter: null, beastUser: false });
+  const [killer, setkiller] = useState({ starter: null, beastUser: false, toggleNotion: false });
   const [topicData, settopicData] = useState([]);
   const [stepper, setstepper] = useState({
     key: 0,
@@ -863,20 +863,16 @@ export default function RootLayout({ children }) {
     if (showmoreCore) {
       if (action == 'open') {
         showmoreCore.className += " w3-show";
-        if (iconId && document.getElementById(iconId)) {
-          document.getElementById(iconId).style.display = 'inline-block'
-          document.getElementById(iconId).style.transform = 'rotate(-180deg)';
-          optionMenu.className = optionMenu.className.replace(/ w3-show/g, "");
-        }
+        document.getElementById(iconId).style.display = 'inline-block'
+        document.getElementById(iconId).style.transform = 'rotate(-180deg)';
+        optionMenu.className = optionMenu.className.replace(/ w3-show/g, "");
+        killer.toggleNotion = true;
       } else {
         showmoreCore.className = showmoreCore.className.replace(/ w3-show/g, "");
-        if (iconId && document.getElementById(iconId)) {
-          document.getElementById(iconId).style.transform = 'rotate(0deg)';
-          setTimeout(() => {
-            document.getElementById(iconId).style.display = 'none'
-            optionMenu.className += " w3-show";
-          }, 500);
-        }
+        document.getElementById(iconId).style.transform = 'rotate(0deg)';
+        document.getElementById(iconId).style.display = 'none'
+        optionMenu.className += " w3-show";
+        killer.toggleNotion = false;
       }
     }
   }
@@ -1477,7 +1473,7 @@ export default function RootLayout({ children }) {
                   id="notionPage"
                   onClick={() => {
                     if (document.getElementById('notionCore')) {
-                      toggleNotionListe('notionMenu', 'notionMenuIcon', 'open')
+                      toggleNotionListe('notionMenu', 'notionMenuIcon', killer.toggleNotion ? 'open' : 'close')
                     }
                   }}
                   className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
@@ -1491,11 +1487,6 @@ export default function RootLayout({ children }) {
                   />
                   <div className="w3-flex-1 w3-margin-left w3-medium w3-flex-1">Notion</div>
                   <FontAwesomeIcon
-                    onClick={() => {
-                      if (document.getElementById('notionCore')) {
-                        toggleNotionListe('notionMenu', 'notionMenuIcon', 'close')
-                      }
-                    }}
                     style={{ transition: '0.5s', display: 'none' }}
                     id="notionMenuIcon"
                     icon={faTimes}
