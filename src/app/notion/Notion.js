@@ -80,7 +80,6 @@ function Notion() {
             lockAddNewPage: false,
             lockAutoSave: false,
             lockDelete: false,
-            lockReloadListeAddEvent: false,
         }
     )
 
@@ -469,8 +468,7 @@ function Notion() {
     }
 
     const openOption = (key) => {
-        if (!userInfo.acceptEditable && window.innerWidth>992) return;
-        if (!userInfo.acceptEditable && window.innerWidth<992) document.getElementById('newPageButton').style.display = 'none';
+        if (!userInfo.acceptEditable) return;
         const allNotionOption = document.getElementsByClassName('optionAllNotion');
         for (let i = 0; i < allNotionOption.length; i++) {
             const element = allNotionOption[i];
@@ -525,17 +523,14 @@ function Notion() {
 
     const reloadNotionsList = (data) => {
         if (window.innerWidth > 992) {
-            if (!keeper.lockReloadListeAddEvent) {
+            setTimeout(() => {
                 data.map((notion, key) => {
                     if (document.getElementById('notion#' + notion.pageID)) {
-                        console.log(document.getElementById('notion#' + notion.pageID).hasAttribute('listened-notion'));
-                        if (!document.getElementById('notion#' + notion.pageID).hasAttribute('listened-notion')) {
-                            document.getElementById('notion#' + notion.pageID).addEventListener('click', openPage.bind(null, notion))
-                            document.getElementById('notion#' + notion.pageID).setAttribute('listened-notion', true);
-                        }
+                        document.getElementById('notion#' + notion.pageID).removeEventListener('click', openPage)
+                        document.getElementById('notion#' + notion.pageID).addEventListener('click', openPage.bind(null, notion))
                     }
                 })
-            }
+            }, 500);
         } else {
             var glitchNotion
             if (data.length > 0) {
@@ -565,7 +560,6 @@ function Notion() {
     const fetchNotionListe = () => {
 
         onValue(ref(database, 'notion/' + userInfo.notionToLoad), (snapshot) => {
-
             if (snapshot.exists()) {
                 const pages = []
                 const notions = snapshot.val();
@@ -759,6 +753,7 @@ function Notion() {
     return (
         <div id='notionCore' style={{ position: 'relative', padding: 8 }}>
             {/* Button list des pages */}
+            <div onClick={() => reloadNotionsList(notionData)} id='simulatorNotionReloader'></div>
             <div id='noPagesFound' style={{ display: 'none' }}>
                 <div style={{ padding: 12 }} className="w3-round w3-block w3-black w3-margin-bottom">
                     Aucune page trouvée, veuillez revenir plus tard pour en consulter.
@@ -782,7 +777,8 @@ function Notion() {
                         className="w3-dropdown-click"
                     >
                         <div onClick={() => {
-                            if (!userInfo.acceptEditable) return;
+                            if (!userInfo.acceptEditable && window.innerWidth > 992) return;
+                            if (!userInfo.acceptEditable && window.innerWidth < 992) document.getElementById('newPageButton').style.display = 'none';
                             openDropdown("notionList")
                         }}
                             style={{ width: 32, height: 32 }} className='w3-yellow w3-round w3-hover-grey w3-flex w3-flex-center'>

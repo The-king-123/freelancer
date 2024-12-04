@@ -880,7 +880,7 @@ export default function RootLayout({ children }) {
 
   const openOption = (key) => {
     if (!userInfo.acceptEditable) return;
-    
+
     const allNotionOption = document.getElementsByClassName('optionAllNotion');
     for (let i = 0; i < allNotionOption.length; i++) {
       const element = allNotionOption[i];
