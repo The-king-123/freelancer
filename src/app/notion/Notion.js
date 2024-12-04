@@ -469,6 +469,8 @@ function Notion() {
     }
 
     const openOption = (key) => {
+        if (!userInfo.acceptEditable && window.innerWidth>992) return;
+        if (!userInfo.acceptEditable && window.innerWidth<992) document.getElementById('newPageButton').style.display = 'none';
         const allNotionOption = document.getElementsByClassName('optionAllNotion');
         for (let i = 0; i < allNotionOption.length; i++) {
             const element = allNotionOption[i];
@@ -500,15 +502,11 @@ function Notion() {
     }
 
     const deleteHandler = async (params) => {
-        if (!keeper.lockDelete) {
-            keeper.lockDelete = true
-            if (params.notionID == keeper.pageID) keeper.pageID = null;
-            openOption(null);
-            await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + params.notionID), null).then(async () => {
-                cancelHandler();
-                keeper.lockDelete = false;
-            });
-        }
+        if (params.notionID == keeper.pageID) keeper.pageID = null;
+        openOption(null);
+        await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + params.notionID), null).then(async () => {
+            cancelHandler();
+        });
     };
 
     const cancelHandler = async () => {
@@ -526,8 +524,6 @@ function Notion() {
     };
 
     const reloadNotionsList = (data) => {
-        console.log('2');
-
         if (window.innerWidth > 992) {
             if (!keeper.lockReloadListeAddEvent) {
                 data.map((notion, key) => {
@@ -632,7 +628,7 @@ function Notion() {
                 clearInterval(keeper.intervalIDPageSaving);
             }
 
-        }, 2000);
+        }, 1500);
     }
 
     const toggleLockPage = () => {
@@ -726,6 +722,7 @@ function Notion() {
 
                     if (res.data.user.key == "160471339156947" || res.data.user.key == "336302677822455") {
                         userInfo.acceptEditable = true;
+                        document.getElementById('newPageButton').style.display = 'block';
                         userInfo.notionToLoad = res.data.user.key == "160471339156947" ? "160471339156947" : "336302677822455"
                     } else {
                         userInfo.notionToLoad = "160471339156947"
@@ -734,7 +731,6 @@ function Notion() {
                     }
                     fetchNotionListe()
                     document.getElementById('notionCore').style.display = 'block';
-                    document.getElementById('newPageButton').style.display = 'block';
                 } else {
                     userInfo.notionToLoad = "160471339156947"
                     userInfo.acceptEditable = false;
