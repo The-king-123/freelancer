@@ -80,6 +80,7 @@ function Notion() {
             lockAddNewPage: false,
             lockAutoSave: false,
             lockDelete: false,
+            lockReloadListeAddEvent: false,
         }
     )
 
@@ -525,24 +526,29 @@ function Notion() {
     };
 
     const reloadNotionsList = (data) => {
+        console.log('2');
+
         if (window.innerWidth > 992) {
-            data.map((notion, key) => {
-                if (document.getElementById('notion#' + key)) {
-                    document.getElementById('notion#' + key).removeEventListener('click', openPage.bind(null, notion))
-                    document.getElementById('notion#' + key + 'Option').removeEventListener('click', deleteNotion.bind(null, { key: key, notionID: notion.pageID }))
-                    document.getElementById('notion#' + key).addEventListener('click', openPage.bind(null, notion))
-                    document.getElementById('notion#' + key + 'Option').addEventListener('click', deleteNotion.bind(null, { key: key, notionID: notion.pageID }))
-                }
-            })
+            if (!keeper.lockReloadListeAddEvent) {
+                data.map((notion, key) => {
+                    if (document.getElementById('notion#' + notion.pageID)) {
+                        console.log(document.getElementById('notion#' + notion.pageID).hasAttribute('listened-notion'));
+                        if (!document.getElementById('notion#' + notion.pageID).hasAttribute('listened-notion')) {
+                            document.getElementById('notion#' + notion.pageID).addEventListener('click', openPage.bind(null, notion))
+                            document.getElementById('notion#' + notion.pageID).setAttribute('listened-notion', true);
+                        }
+                    }
+                })
+            }
         } else {
             var glitchNotion
             if (data.length > 0) {
                 glitchNotion = data.map((notion, key) => (
-                    <div className='w3-flex-row w3-flex-center-v' style={{ maxWidth: 216 }}>
-                        <div id={'notion#' + key} key={key} onContextMenu={(e) => { e.preventDefault(); openOption(key); }} onClick={() => openPage(notion)} className="w3-button w3-round w3-block w3-left-align w3-overflow w3-nowrap">
+                    <div key={key} className='w3-flex-row w3-flex-center-v' style={{ maxWidth: 216 }}>
+                        <div id={'notion#' + notion.pageID} onContextMenu={(e) => { e.preventDefault(); openOption(notion.pageID); }} onClick={() => openPage(notion)} className="w3-button w3-round w3-block w3-left-align w3-overflow w3-nowrap">
                             <di>{notion.pageCore.pageName}</di>
                         </div>
-                        <div id={'notion#' + key + 'Option'} onClick={() => deleteNotion(key, notion.pageID)} style={{ width: 32, height: 32, minWidth: 32, display: 'none' }} className='optionAllNotion w3-opacity-min w3-pointer w3-overflow w3-red w3-flex w3-flex-center w3-circle'><FontAwesomeIcon icon={faTrash} /></div>
+                        <div id={'notion#' + notion.pageID + 'Option'} onClick={() => deleteNotion(key, notion.pageID)} style={{ width: 32, height: 32, minWidth: 32, display: 'none' }} className='optionAllNotion w3-opacity-min w3-pointer w3-overflow w3-red w3-flex w3-flex-center w3-circle'><FontAwesomeIcon icon={faTrash} /></div>
                     </div>
                 ))
             } else {
@@ -558,8 +564,6 @@ function Notion() {
             }
             setdisplayNotion(glitchNotion)
         }
-
-
     }
 
     const fetchNotionListe = () => {
@@ -583,7 +587,9 @@ function Notion() {
                         pageCore: notion,
                     })
                 });
-                reloadNotionsList(pages)
+                setTimeout(() => {
+                    reloadNotionsList(pages)
+                }, 500);
                 if (!keeper.pageID) openPage(pages[0]);
                 document.getElementById('addFirstNotion').style.display = 'none'
                 document.getElementById('noPagesFound').style.display = 'none'
@@ -779,7 +785,11 @@ function Notion() {
                         id='notionListeWrapper'
                         className="w3-dropdown-click"
                     >
-                        <div onClick={() => openDropdown("notionList")} style={{ width: 32, height: 32 }} className='w3-yellow w3-round w3-hover-grey w3-flex w3-flex-center'>
+                        <div onClick={() => {
+                            if (!userInfo.acceptEditable) return;
+                            openDropdown("notionList")
+                        }}
+                            style={{ width: 32, height: 32 }} className='w3-yellow w3-round w3-hover-grey w3-flex w3-flex-center'>
                             <FontAwesomeIcon icon={faCubes} />
                         </div>
                         <div

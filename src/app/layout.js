@@ -89,7 +89,7 @@ export default function RootLayout({ children }) {
   const [chatData, setchatData] = useState([]);
 
   const [dataUsers, setdataUsers] = useState([]);
-  const [killer, setkiller] = useState({ starter: null, beastUser: false, toggleNotion: false });
+  const [killer, setkiller] = useState({ starter: null, beastUser: false, toggleNotion: false, lockDelete: false });
   const [topicData, settopicData] = useState([]);
   const [stepper, setstepper] = useState({
     key: 0,
@@ -115,6 +115,7 @@ export default function RootLayout({ children }) {
     designation: "",
     key: "",
     notionToLoad: null,
+    acceptEditable: false,
   });
 
   const ActiveLightMode = () => {
@@ -858,8 +859,6 @@ export default function RootLayout({ children }) {
   }
 
   function toggleNotionListe(id, iconId, action) {
-    console.log(killer.toggleNotion);
-    
     const showmoreCore = document.getElementById(id);
     const optionMenu = document.getElementById('optionMenu');
     if (showmoreCore) {
@@ -878,32 +877,37 @@ export default function RootLayout({ children }) {
       }
     }
   }
+
   const openOption = (key) => {
+    if (!userInfo.acceptEditable) return;
+    
     const allNotionOption = document.getElementsByClassName('optionAllNotion');
     for (let i = 0; i < allNotionOption.length; i++) {
       const element = allNotionOption[i];
 
-      if (element.id != 'notion#' + key + 'Option') {
+      if (element.id != ('notion#' + key + 'Option')) {
         element.style.display = 'none';
       }
     }
-
-    if (document.getElementById('notion#' + key + 'Option').style.display == 'none') {
-      document.getElementById('notion#' + key + 'Option').style.display = 'flex';
-    } else {
-      document.getElementById('notion#' + key + 'Option').style.display = 'none';
+    if (document.getElementById('notion#' + key + 'Option')) {
+      if (document.getElementById('notion#' + key + 'Option').style.display == 'none') {
+        document.getElementById('notion#' + key + 'Option').style.display = 'flex';
+      } else {
+        document.getElementById('notion#' + key + 'Option').style.display = 'none';
+      }
     }
+
   }
+
   const reloadNotionsList = (data) => {
-    const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
     var glitchNotion
     if (data.length > 0) {
       glitchNotion = data.map((notion, key) => (
-        <div key={key} className='w3-flex-row w3-flex-center-v w3-block' style={{ fontSize: 14 }}>
-          <div id={'notion#' + key} key={key} onContextMenu={(e) => { e.preventDefault(); openOption(key); }} className={(themeLight ? 'w3-text-black' : 'w3-text-white') + " w3-button w3-round w3-block w3-left-align w3-overflow w3-nowrap"}>
+        <div key={key} className='w3-flex-row w3-flex-center-v' style={{ maxWidth: 216 }}>
+          <div id={'notion#' + notion.pageID} onContextMenu={(e) => { e.preventDefault(); openOption(notion.pageID); }} className="w3-button w3-round w3-block w3-left-align w3-overflow w3-nowrap">
             <di>{notion.pageCore.pageName}</di>
           </div>
-          <div id={'notion#' + key + 'Option'} style={{ width: 32, height: 32, minWidth: 32, display: 'none' }} className='optionAllNotion w3-opacity-min w3-pointer w3-overflow w3-red w3-flex w3-flex-center w3-circle'><FontAwesomeIcon icon={faTrash} /></div>
+          <div id={'notion#' + notion.pageID + 'Option'} onClick={() => deleteNotion(notion.pageID)} style={{ width: 32, height: 32, minWidth: 32, display: 'none' }} className='optionAllNotion w3-opacity-min w3-pointer w3-overflow w3-red w3-flex w3-flex-center w3-circle'><FontAwesomeIcon icon={faTrash} /></div>
         </div>
       ))
     } else {
@@ -911,38 +915,72 @@ export default function RootLayout({ children }) {
         <div style={{ padding: 8 }}>
           <div className="w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
             <div style={{ paddingInline: 16 }}>
-              Vous n'avez créé aucune page.
+              Aucune page n'a été trouvée.
             </div>
           </div>
         </div>
       )
     }
     setdisplayNotion(glitchNotion)
-
   }
 
   const fetchNotionListe = () => {
+    if (window.innerWidth > 992) {
+      onValue(ref(database, 'notion/' + userInfo.notionToLoad), (snapshot) => {
 
-    onValue(ref(database, 'notion/' + userInfo.notionToLoad), (snapshot) => {
-
-      if (snapshot.exists()) {
-        const pages = []
-        const notions = snapshot.val();
-        const sortedNotions = Object.entries(notions).sort(([, a], [, b]) => b.lastModification - a.lastModification)
-        sortedNotions.map(([index, notion]) => {
-          pages.push({
-            pageID: index,
-            pageCore: notion,
+        if (snapshot.exists()) {
+          const pages = []
+          const notions = snapshot.val();
+          const sortedNotions = Object.entries(notions).sort(([, a], [, b]) => b.lastModification - a.lastModification)
+          sortedNotions.map(([index, notion]) => {
+            pages.push({
+              pageID: index,
+              pageCore: notion,
+            });
           });
-        });
-        reloadNotionsList(pages)
-      } else {
-        reloadNotionsList([])
-      }
-    }, (error) => {
-      console.error("Error reading data:", error);
-    });
+          reloadNotionsList(pages)
+        } else {
+          reloadNotionsList([])
+        }
+      }, (error) => {
+        console.error("Error reading data:", error);
+      });
+    }
   }
+
+  const deleteNotion = (notionID) => {
+    document.getElementById("modalWarning").style.display = "block";
+    document.getElementById("textWarning").innerText = "Voulez vous vraiment supprimer cette page ...";
+
+    document
+      .getElementById("confirmWarning")
+      .addEventListener("click", deleteHandler.bind(null, notionID));
+    document
+      .getElementById("cancelWarning")
+      .addEventListener("click", cancelHandler);
+  }
+
+  const deleteHandler = async (notionID) => {
+    if (notionID == killer.pageID) killer.pageID = null;
+    openOption(null);
+    await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + notionID), null).then(async () => {
+      cancelHandler();
+    });
+  };
+
+  const cancelHandler = async () => {
+
+
+    document.getElementById("modalWarning").style.display = "none";
+
+    document
+      .getElementById("confirmWarning")
+      .removeEventListener("click", deleteHandler);
+    document
+      .getElementById("cancelWarning")
+      .removeEventListener("click", cancelHandler);
+
+  };
 
   useEffect(() => {
 
@@ -993,8 +1031,10 @@ export default function RootLayout({ children }) {
           userInfo.fullname = res.data.user.fullname;
 
           if (res.data.user.key == "160471339156947" || res.data.user.key == "336302677822455") {
+            userInfo.acceptEditable = true;
             userInfo.notionToLoad = res.data.user.key == "160471339156947" ? "160471339156947" : "336302677822455"
           } else {
+            userInfo.acceptEditable = false;
             userInfo.notionToLoad = "160471339156947"
           }
 
@@ -1846,7 +1886,7 @@ export default function RootLayout({ children }) {
           className="w3-top w3-block w3-card w3-dark-grey w3-flex w3-flex-row w3-flex-center-v w3-hide-large"
           style={{ paddingBlock: 8, paddingInline: 16, zIndex: 3 }}
         >
-          <div className="w3-flex-1 w3-nowrap w3-overflow" style={{paddingRight:8}}>
+          <div className="w3-flex-1 w3-nowrap w3-overflow" style={{ paddingRight: 8 }}>
             <div id="headerPageTitle" className="w3-pointer w3-flex-row w3-nowrap w3-overflow" onClick={() => window.location = '/'}>
               FREELANCER
             </div>
