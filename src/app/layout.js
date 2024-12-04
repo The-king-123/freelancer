@@ -1529,6 +1529,8 @@ export default function RootLayout({ children }) {
                     height={20}
                   />
                   <div className="w3-flex-1 w3-margin-left w3-medium w3-flex-1">Notion</div>
+                  {/* // Liste de category Notion */}
+                  
                   <FontAwesomeIcon
                     style={{ transition: '0.5s', display: 'none' }}
                     id="notionMenuIcon"
