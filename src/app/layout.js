@@ -5,7 +5,7 @@ import "./app.css";
 import "@/app/page.module.css"
 import { app_name, console_source as source } from "@/app/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowCircleDown, faBars, faCalculator, faCheck, faChevronCircleDown, faChevronCircleUp, faChevronDown, faCode, faComment, faComments, faCube, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faSun, faTimes, faTimesCircle, faTrash, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faArrowCircleDown, faBars, faCalculator, faCheck, faChevronCircleDown, faChevronCircleUp, faChevronDown, faCode, faComment, faComments, faCube, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faSun, faTimes, faTimesCircle, faTimesSquare, faTrash, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { faFacebookMessenger, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
@@ -864,14 +864,16 @@ export default function RootLayout({ children }) {
     if (showmoreCore) {
       if (action == 'open') {
         showmoreCore.className += " w3-show";
-        document.getElementById(iconId).style.display = 'inline-block'
+        document.getElementById(iconId).style.display = 'flex';
         document.getElementById(iconId).style.transform = 'rotate(-180deg)';
+        document.getElementById('beastWrapper').style.display = 'none';
         optionMenu.className = optionMenu.className.replace(/ w3-show/g, "");
         killer.toggleNotion = false;
       } else {
         showmoreCore.className = showmoreCore.className.replace(/ w3-show/g, "");
         document.getElementById(iconId).style.transform = 'rotate(0deg)';
-        document.getElementById(iconId).style.display = 'none'
+        document.getElementById(iconId).style.display = 'none';
+        document.getElementById('beastWrapper').style.display = 'block';
         optionMenu.className += " w3-show";
         killer.toggleNotion = true;
       }
@@ -905,7 +907,7 @@ export default function RootLayout({ children }) {
       glitchNotion = data.map((notion, key) => (
         <div key={key} className='w3-flex-row w3-flex-center-v' style={{ maxWidth: 216 }}>
           <div id={'notion#' + notion.pageID} onContextMenu={(e) => { e.preventDefault(); openOption(notion.pageID); }} className="w3-button w3-round w3-block w3-left-align w3-overflow w3-nowrap">
-            <di>{notion.pageCore.pageName}</di>
+            <di>{notion.pageCore.pageName.charAt(0).toUpperCase() + notion.pageCore.pageName.slice(1).toLowerCase()}</di>
           </div>
           <div id={'notion#' + notion.pageID + 'Option'} onClick={() => deleteNotion(notion.pageID)} style={{ width: 32, height: 32, minWidth: 32, display: 'none' }} className='optionAllNotion w3-opacity-min w3-pointer w3-overflow w3-red w3-flex w3-flex-center w3-circle'><FontAwesomeIcon icon={faTrash} /></div>
         </div>
@@ -1530,17 +1532,28 @@ export default function RootLayout({ children }) {
                   />
                   <div className="w3-flex-1 w3-margin-left w3-medium w3-flex-1">Notion</div>
                   {/* // Liste de category Notion */}
-                  
-                  <FontAwesomeIcon
-                    style={{ transition: '0.5s', display: 'none' }}
-                    id="notionMenuIcon"
-                    icon={faTimes}
-                    width={20}
-                    height={20}
-                  />
+                  <div id="notionMenuIcon" style={{ height: 24, width: 24, display: 'none' }} className="w3-red w3-round w3-flex w3-flex-center">
+                    <FontAwesomeIcon
+                      style={{ transition: '0.5s' }}
+                      icon={faTimes}
+                      width={20}
+                      height={20}
+                    />
+                  </div>
                 </Link>
-                <div id="notionMenu" className="w3-hide w3-block w3-black w3-round w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 194px)' }}>
-                  {displayNotion}
+                <div id="notionMenu" className="w3-hide w3-dark-grey">
+                  <select
+                    id="notionCategory"
+                    className="input w3-block  w3-yellow w3-round w3-block w3-medium  w3-border-0"
+                    style={{ paddingBlock: 8 }}
+                  >
+                    <option value="Acheteur">Come UP</option>
+                    <option value="Acheteur">SAV</option>
+                   
+                  </select>
+                  <div className="w3-medium w3-block w3-dark-grey w3-round w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 194px)' }}>
+                    {displayNotion}
+                  </div>
                 </div>
               </div>
               <div style={{ height: 40 }}>
@@ -1548,7 +1561,6 @@ export default function RootLayout({ children }) {
                   id="settingDropContainer"
                   className="w3-dropdown-click"
                 >
-
                   <div
                     id="setting"
                     className="w3-dropdown-content w3-bar-block w3-card w3-round w3-medium"
