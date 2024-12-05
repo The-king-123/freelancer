@@ -1334,7 +1334,7 @@ export default function RootLayout({ children }) {
             zIndex: 5,
             width: 250,
             top: 8,
-            paddingBlock:8,
+            paddingBlock: 8,
             borderRadius: "0px 8px 8px 0px",
             overflow: 'visible'
           }}
@@ -1345,7 +1345,7 @@ export default function RootLayout({ children }) {
               className="w3-pointer w3-center w3-flex-row w3-flex-center w3-large"
             >
               {/* ///-------------------- */}
-              <div id="beastWrapper" className="w3-flex-column" style={{marginTop:-8}}>
+              <div id="beastWrapper" className="w3-flex-column" style={{ marginTop: -8 }}>
                 <div className="btn3_container w3-dark-grey w3-border-dark-grey" style={{ marginInline: 'auto' }}>
                   <span className="main w3-pointer">
                     <div id="freeSwitch" className="btn w3-yellow w3-hover-yellow w3-circle w3-flex w3-flex-center" style={{ height: 36, width: 36 }}>
@@ -1552,13 +1552,13 @@ export default function RootLayout({ children }) {
                   <select
                     id="notionCategory"
                     className="w3-block  w3-yellow w3-round w3-block w3-medium w3-border-0"
-                    style={{ paddingBlock: 8, paddingInline:12, marginTop:4 }}
+                    style={{ paddingBlock: 8, paddingInline: 12, marginTop: 4 }}
                   >
                     <option value="Acheteur">Come UP</option>
                     <option value="Acheteur">SAV</option>
                     <option value="Acheteur">SAV</option>
                   </select>
-                  <div className="w3-medium w3-block w3-dark-grey w3-round w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 180px)',paddingInline:4 }}>
+                  <div className="w3-medium w3-block w3-dark-grey w3-round w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 180px)', paddingInline: 4, paddingBottom: 4 }}>
                     {displayNotion}
                   </div>
                 </div>
