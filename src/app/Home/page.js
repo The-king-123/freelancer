@@ -50,20 +50,18 @@ export default function Home(props) {
     if (showmoreCore) {
       if (action == 'open') {
         showmoreCore.className += " w3-show";
-        if (iconId && document.getElementById(iconId)) {
-          document.getElementById(iconId).style.display = 'inline-block'
-          document.getElementById(iconId).style.transform = 'rotate(-180deg)';
-          optionMenu.className = optionMenu.className.replace(/ w3-show/g, "");
-        }
+        document.getElementById(iconId).style.display = 'flex';
+        document.getElementById(iconId).style.transform = 'rotate(-180deg)';
+        document.getElementById('beastWrapper').style.display = 'none';
+        document.getElementById('optionMenuWrapper').style.height = 'calc(100vh - 86px)';
+        optionMenu.className = optionMenu.className.replace(/ w3-show/g, "");
       } else {
         showmoreCore.className = showmoreCore.className.replace(/ w3-show/g, "");
-        if (iconId && document.getElementById(iconId)) {
-          document.getElementById(iconId).style.transform = 'rotate(0deg)';
-          setTimeout(() => {
-            document.getElementById(iconId).style.display = 'none'
-            optionMenu.className += " w3-show";
-          }, 500);
-        }
+        document.getElementById(iconId).style.transform = 'rotate(0deg)';
+        document.getElementById(iconId).style.display = 'none';
+        document.getElementById('beastWrapper').style.display = 'flex';
+        document.getElementById('optionMenuWrapper').style.height = 'calc(100vh - 140px)';
+        optionMenu.className += " w3-show";
       }
     }
   }

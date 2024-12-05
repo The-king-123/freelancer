@@ -874,7 +874,7 @@ export default function RootLayout({ children }) {
         showmoreCore.className = showmoreCore.className.replace(/ w3-show/g, "");
         document.getElementById(iconId).style.transform = 'rotate(0deg)';
         document.getElementById(iconId).style.display = 'none';
-        document.getElementById('beastWrapper').style.display = 'block';
+        document.getElementById('beastWrapper').style.display = 'flex';
         document.getElementById('optionMenuWrapper').style.height = 'calc(100vh - 140px)';
         optionMenu.className += " w3-show";
         killer.toggleNotion = true;
@@ -1551,14 +1551,14 @@ export default function RootLayout({ children }) {
                 <div id="notionMenu" className="w3-hide w3-dark-grey w3-round">
                   <select
                     id="notionCategory"
-                    className="w3-block  w3-yellow w3-round w3-block w3-medium  w3-border-0"
+                    className="w3-block  w3-yellow w3-round w3-block w3-medium w3-border-0"
                     style={{ paddingBlock: 8, paddingInline:12, marginTop:4 }}
                   >
                     <option value="Acheteur">Come UP</option>
                     <option value="Acheteur">SAV</option>
-
+                    <option value="Acheteur">SAV</option>
                   </select>
-                  <div className="w3-medium w3-block w3-dark-grey w3-round w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 180px)' }}>
+                  <div className="w3-medium w3-block w3-dark-grey w3-round w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 180px)',paddingInline:4 }}>
                     {displayNotion}
                   </div>
                 </div>
