@@ -1,5 +1,5 @@
 'use client'
-import { faCubes, faLock, faLockOpen, faMuseum, faPlus, faStickyNote, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faCubes, faLock, faLockOpen, faMuseum, faPlus, faSpinner, faStickyNote, faTags, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import Link from 'next/link'
@@ -11,6 +11,8 @@ import { firebaseConfig } from '../firebase'
 import { getDatabase, ref, set, push, onValue, get } from "firebase/database";
 
 function Notion() {
+
+    axios.defaults.withCredentials = true;
 
     // Firebase configuration
     const app = initializeApp(firebaseConfig);
@@ -65,6 +67,15 @@ function Notion() {
         }
     ]
 
+    const [singleCategoryInfo, setsingleCategoryInfo] = useState({
+        id: null,
+        name: null,
+        type: "notion",
+        state: "publique",
+        info: {
+            description: "_",
+        },
+    });
     const [notionData, setnotionData] = useState([])
 
     const [keeper, setkeeper] = useState(
@@ -83,6 +94,12 @@ function Notion() {
         }
     )
 
+    const [categoryListe, setcategoryListe] = useState(
+        <div style={{ padding: 24 }} className='w3-center'>
+            <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
+        </div>
+    )
+
     const [pageData, setpageData] = useState({
         pageName: 'Nouvelle page',
         lastModification: null,
@@ -98,6 +115,15 @@ function Notion() {
         acceptEditable: false,
         notionToLoad: null,
     });
+
+    const categoryInfo = {
+        name: null,
+        type: "actuality",
+        state: "publique",
+        info: {
+            description: "_",
+        },
+    };
 
     const [displayNotion, setdisplayNotion] = useState('')
     const [displayBloques, setdisplayBloques] = useState('')
@@ -646,6 +672,122 @@ function Notion() {
 
     }
 
+    const closeModalCategory = () => {
+        singleCategoryInfo.name = ''
+        document.getElementById("categoryTitleNotion").value = "";
+        document.getElementById("modalCategoryNotion").style.display = "none";
+    };
+
+    const openModalCategory = () => {
+        singleCategoryInfo.name = ''
+        document.getElementById("categoryTitleNotion").value = "";
+        document.getElementById("modalCategoryNotion").style.display = "block";
+    };
+
+    const reloadCategory = (data) => {
+        setselectCategoryList(data)
+        const glitchCategory = data.map((element, key) => (
+            <div key={key} className="w3-flex-row w3-black w3-round w3-overflow w3-flex-center-v" style={{ marginBlock: 4 }}>
+                <div
+                    className="w3-nowrap w3-hover-grey w3-flex-1 w3-overflow"
+                    style={{ paddingInline: 8 }}
+                >
+                    {element.name}
+                </div>
+                <div
+                    onClick={() => deleteCategory(element.id)}
+                    className="w3-red w3-button w3-flex-center topicdelete"
+                >
+                    <FontAwesomeIcon className="w3-medium" icon={faTrash} />
+                </div>
+            </div>
+        ));
+        document.getElementById("categoryTitlePost").value = "";
+        setcategoryListe(glitchCategory);
+    };
+
+    async function setCSRFToken() {
+        try {
+            // Fetch CSRF token from the server
+            const response = await axios.get(source + '/csrf-token');
+            // Set CSRF token as a default header for all future requests
+            axios.defaults.headers.common['X-CSRF-TOKEN'] = response.data.csrfToken;
+        } catch (error) {
+            console.error('CSRF token fetch failed:', error);
+        }
+    }
+
+    const saveCategory = async () => {
+        const xcode = localStorage.getItem('x-code')
+        const request = {
+            name: categoryInfo.name,
+            type: categoryInfo.type,
+            state: categoryInfo.state,
+            info: JSON.stringify({
+                description: categoryInfo.info.description.replace(
+                    /\n/g,
+                    "<br/>"
+                ),
+            }),
+        };
+        await setCSRFToken();
+        await axios
+            .post(source + "/_category?xcode=" + xcode, request)
+            .then((res) => {
+                reloadCategory(res.data.data.reverse());
+            })
+            .catch((e) => {
+                console.error("failure", e);
+            });
+    };
+
+    const deleteCategory = async (id) => {
+        document.getElementById("modalWarning").style.display = "block";
+        document.getElementById("textWarning").innerText = "Voulez vous vraiment supprimer cette categorie avec ses elements ...";
+
+        const xcode = localStorage.getItem('x-code');
+        const deleteHandler = async () => {
+            document.getElementById("confirmSpinner").style.display = "inline-block";
+            await axios
+                .delete(source + "/_category/" + id + "?xcode=" + xcode)
+                .then((res) => {
+                    document.getElementById("confirmSpinner").style.display =
+                        "none";
+                    document.getElementById("modalWarning").style.display =
+                        "none";
+
+                    document
+                        .getElementById("confirmWarning")
+                        .removeEventListener("click", deleteHandler);
+                    document
+                        .getElementById("cancelWarning")
+                        .removeEventListener("click", cancelHandler);
+
+                    reloadCategory(res.data.data.reverse());
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                });
+        };
+        const cancelHandler = () => {
+            document.getElementById("modalWarning").style.display = "none";
+
+            document
+                .getElementById("confirmWarning")
+                .removeEventListener("click", deleteHandler);
+            document
+                .getElementById("cancelWarning")
+                .removeEventListener("click", cancelHandler);
+        };
+
+        document
+            .getElementById("confirmWarning")
+            .addEventListener("click", deleteHandler);
+        document
+            .getElementById("cancelWarning")
+            .addEventListener("click", cancelHandler);
+    };
+
     useEffect(() => {
 
         if (document.getElementById('headerPageTitle')) {
@@ -716,7 +858,7 @@ function Notion() {
 
                     if (res.data.user.key == "160471339156947" || res.data.user.key == "336302677822455") {
                         userInfo.acceptEditable = true;
-                        document.getElementById('newPageButton').style.display = 'block';
+                        document.getElementById('createManageButton').style.display = 'block';
                         userInfo.notionToLoad = res.data.user.key == "160471339156947" ? "160471339156947" : "336302677822455"
                     } else {
                         userInfo.notionToLoad = "160471339156947"
@@ -778,7 +920,7 @@ function Notion() {
                     >
                         <div onClick={() => {
                             if (!userInfo.acceptEditable && window.innerWidth > 992) return;
-                            if (!userInfo.acceptEditable && window.innerWidth < 992) document.getElementById('newPageButton').style.display = 'none';
+                            if (!userInfo.acceptEditable && window.innerWidth < 992) document.getElementById('createManageButton').style.display = 'none';
                             openDropdown("notionList")
                         }}
                             style={{ width: 32, height: 32 }} className='w3-yellow w3-round w3-hover-grey w3-flex w3-flex-center'>
@@ -789,14 +931,24 @@ function Notion() {
                             className="w3-dropdown-content w3-bar-block w3-card w3-round w3-overflow-scroll w3-noscrollbar"
                             style={{ left: 0, minWidth: 224, marginTop: 8, padding: 4 }}
                         >
-                            {/* liste des pages */}
-                            <div id='newPageButton' style={{ display: 'none' }} onClick={addNewPage} className="w3-button w3-hover-grey w3-round w3-block w3-yellow">
-                                <FontAwesomeIcon
-                                    className="w3-margin-right"
-                                    icon={faStickyNote}
-                                />
-                                Créer une page
+                            <div id='createManageButton' style={{ display: 'none' }}>
+                                <div onClick={openModalCategory} style={{ marginBottom: 4 }} className="w3-left-align w3-button w3-hover-grey w3-round w3-block w3-yellow">
+                                    <FontAwesomeIcon
+                                        className="w3-margin-right"
+                                        icon={faTags}
+                                    />
+                                    Gérer les catégories
+                                </div>
+
+                                <div onClick={addNewPage} className="w3-left-align w3-button w3-hover-grey w3-round w3-block w3-yellow">
+                                    <FontAwesomeIcon
+                                        className="w3-margin-right"
+                                        icon={faStickyNote}
+                                    />
+                                    Créer une page
+                                </div>
                             </div>
+                            {/* liste des pages */}
                             <div id='displayNotionListeWrapper' className='w3-margin-bottom' style={{ display: 'none' }}>
                                 {displayNotion}
                             </div>
@@ -851,6 +1003,40 @@ function Notion() {
                     </div>
                 </div>
             </div>
+            {/* modal add new category */}
+            <div id="modalCategoryNotion" className="w3-modal w3-round white-opacity" style={{ position: 'absolute', height: 'calc(100vh - 16px)' }}>
+                <div
+                    className="w3-modal-content w3-card w3-round w3-overflow"
+                    style={{ maxWidth: 420, top: 48 }}
+                >
+
+                    <div onClick={closeModalCategory} className="w3-circle w3-black w3-hover-black w3-flex w3-flex-center" style={{ width: 32, height: 32, marginInline: 16, marginTop: 16 }}>
+                        <FontAwesomeIcon icon={faTimes} />
+                    </div>
+
+                    <div className="w3-flex-row w3-flex-center-v" style={{ paddingInline: 16, paddingBlock: 24 }}>
+                        <input
+                            id="categoryTitleNotion"
+                            onChange={(e) => categoryInfo.name = e.target.value}
+                            className="w3-border-0 w3-input w3-border w3-round"
+                            placeholder="Nom de la catégorie"
+                            type="text"
+                        />
+                        <button
+                            onClick={saveCategory}
+                            className="w3-button w3-margin-left w3-round w3-dark-grey w3-light-grey w3-flex w3-flex-center"
+                            style={{ height: 40 }}
+                        >
+                            <FontAwesomeIcon icon={faPlus} />
+                        </button>
+                    </div>
+
+                    <div className="w3-padding w3-overflow-scroll w3-noscrollbar" style={{ height: '50vh' }}>
+                        {categoryListe}
+                    </div>
+                </div>
+            </div>
+            {/* end modal add new category */}
         </div>
     )
 }
