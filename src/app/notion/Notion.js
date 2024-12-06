@@ -685,7 +685,6 @@ function Notion() {
     };
 
     const reloadCategory = (data) => {
-        setselectCategoryList(data)
         const glitchCategory = data.map((element, key) => (
             <div key={key} className="w3-flex-row w3-black w3-round w3-overflow w3-flex-center-v" style={{ marginBlock: 4 }}>
                 <div
@@ -702,7 +701,7 @@ function Notion() {
                 </div>
             </div>
         ));
-        document.getElementById("categoryTitlePost").value = "";
+        document.getElementById("categoryTitleNotion").value = "";
         setcategoryListe(glitchCategory);
     };
 
