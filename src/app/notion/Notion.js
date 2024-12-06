@@ -730,7 +730,7 @@ function Notion() {
                 ),
             }),
         };
-        if (categoryInfo.name.length > 3) {
+        if (categoryInfo.name.length >= 3) {
             await setCSRFToken();
             await axios
                 .post(source + "/_category?xcode=" + xcode, request)
