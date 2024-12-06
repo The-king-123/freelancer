@@ -118,7 +118,7 @@ function Notion() {
 
     const categoryInfo = {
         name: null,
-        type: "actuality",
+        type: "notion",
         state: "publique",
         info: {
             description: "_",
@@ -730,15 +730,18 @@ function Notion() {
                 ),
             }),
         };
-        await setCSRFToken();
-        await axios
-            .post(source + "/_category?xcode=" + xcode, request)
-            .then((res) => {
-                reloadCategory(res.data.data.reverse());
-            })
-            .catch((e) => {
-                console.error("failure", e);
-            });
+        if (categoryInfo.name.length > 3) {
+            await setCSRFToken();
+            await axios
+                .post(source + "/_category?xcode=" + xcode, request)
+                .then((res) => {
+                    reloadCategory(res.data.data.reverse());
+                })
+                .catch((e) => {
+                    console.error("failure", e);
+                });
+        }
+
     };
 
     const deleteCategory = async (id) => {
