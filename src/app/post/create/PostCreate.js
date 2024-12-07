@@ -496,10 +496,11 @@ function PostCreate(props) {
 
     const reloadCategory = (data) => {
         setselectCategoryList(data)
+        const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
         const glitchCategory = data.map((element, key) => (
-            <div key={key} className="w3-flex-row w3-black w3-round w3-overflow w3-flex-center-v" style={{ marginBlock: 4 }}>
+            <div key={key} className={(themeLight ? 'w3-light-grey' : 'w3-dark') + " w3-flex-row w3-round w3-overflow w3-flex-center-v"} style={{ marginBlock: 4 }}>
                 <div
-                    className="w3-nowrap w3-hover-grey w3-flex-1 w3-overflow"
+                    className="w3-nowrap w3-flex-1 w3-overflow"
                     style={{ paddingInline: 8 }}
                 >
                     {element.name}
@@ -512,7 +513,7 @@ function PostCreate(props) {
                 </div>
             </div>
         ));
-        document.getElementById("categoryTitlePost").value = "";
+        document.getElementById("categoryTitleNotion").value = "";
         setcategoryListe(glitchCategory);
     };
 

@@ -114,6 +114,7 @@ function Notion() {
         key: "",
         acceptEditable: false,
         notionToLoad: null,
+        selectedCategory: 'default',
     });
 
     const categoryInfo = {
@@ -228,6 +229,7 @@ function Notion() {
     const blockValueTaker = (key) => {
         pageData.bloque[key].content = document.getElementById('elementNumber' + key).innerHTML;
     }
+
     const suBlockValueTaker = (key, k) => {
         pageData.bloque[key].subElement[k].content = document.getElementById('listeNumber' + key + 'Child' + k).innerHTML;
     }
@@ -352,7 +354,7 @@ function Notion() {
         }, 1);
 
 
-    }
+    };
 
     const addThisElement = (element) => {
 
@@ -366,7 +368,7 @@ function Notion() {
             }
         )
         reloadElement()
-    }
+    };
 
     const convertLinks = (text) => {
 
@@ -414,7 +416,7 @@ function Notion() {
                 console.error('Error writing data:', error);
                 keeper.lockAddNewPage = false;
             });
-    }
+    };
 
     const hashArray = async (array) => {
         const encoder = new TextEncoder();
@@ -425,16 +427,16 @@ function Notion() {
         const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
 
         return hashHex;
-    }
+    };
 
     const savePage = async () => {
         pageData.lastModification = Date.now();
-        await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + keeper.pageID), pageData).then(async () => {
+        await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + userInfo.selectedCategory + '/' + keeper.pageID), pageData).then(async () => {
             const newHash = await hashArray(pageData);
             keeper.pageHashing = newHash;
             keeper.lockAutoSave = false;
         });
-    }
+    };
 
     const openPage = async (page) => {
 
@@ -442,7 +444,7 @@ function Notion() {
 
         if (keeper.pageID && keeper.pageHashing != newHash) await savePage();
 
-        const pageRef = ref(database, 'notion/' + userInfo.notionToLoad + '/' + page.pageID);
+        const pageRef = ref(database, 'notion/' + userInfo.notionToLoad + '/' + userInfo.selectedCategory + '/' + page.pageID);
 
         if (keeper.intervalIDPageSaving) {
             clearInterval(keeper.intervalIDPageSaving);
@@ -491,7 +493,7 @@ function Notion() {
             console.error("Error reading data:", error);
         });
 
-    }
+    };
 
     const openOption = (key) => {
         if (!userInfo.acceptEditable) return;
@@ -511,7 +513,7 @@ function Notion() {
             }
         }
 
-    }
+    };
 
     const deleteNotion = (notion) => {
         document.getElementById("modalWarning").style.display = "block";
@@ -523,7 +525,7 @@ function Notion() {
         document
             .getElementById("cancelWarning")
             .addEventListener("click", cancelHandler);
-    }
+    };
 
     const deleteHandler = async (params) => {
         if (params.notionID == keeper.pageID) keeper.pageID = null;
@@ -581,11 +583,12 @@ function Notion() {
             }
             setdisplayNotion(glitchNotion)
         }
-    }
+    };
 
     const fetchNotionListe = () => {
 
-        onValue(ref(database, 'notion/' + userInfo.notionToLoad), (snapshot) => {
+        userInfo.selectedCategory = localStorage.getItem('notionCategory') ? localStorage.getItem('notionCategory') : 'default';
+        onValue(ref(database, 'notion/' + userInfo.notionToLoad + '/' + userInfo.selectedCategory), (snapshot) => {
             if (snapshot.exists()) {
                 const pages = []
                 const notions = snapshot.val();
@@ -603,9 +606,9 @@ function Notion() {
                         pageCore: notion,
                     })
                 });
-                setTimeout(() => {
+                setTimeout(() => {                    
                     reloadNotionsList(pages)
-                }, 500);
+                }, 500);                
                 if (!keeper.pageID) openPage(pages[0]);
                 document.getElementById('addFirstNotion').style.display = 'none'
                 document.getElementById('noPagesFound').style.display = 'none'
@@ -626,7 +629,7 @@ function Notion() {
         }, (error) => {
             console.error("Error reading data:", error);
         });
-    }
+    };
 
     const autoSave = async () => {
 
@@ -649,7 +652,7 @@ function Notion() {
             }
 
         }, 1500);
-    }
+    };
 
     const toggleLockPage = () => {
         if (userInfo.acceptEditable) {
@@ -670,7 +673,7 @@ function Notion() {
             }
         }
 
-    }
+    };
 
     const closeModalCategory = () => {
         singleCategoryInfo.name = ''
@@ -685,10 +688,11 @@ function Notion() {
     };
 
     const reloadCategory = (data) => {
+        const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
         const glitchCategory = data.map((element, key) => (
-            <div key={key} className="w3-flex-row w3-black w3-round w3-overflow w3-flex-center-v" style={{ marginBlock: 4 }}>
+            <div key={key} className={(themeLight ? 'w3-light-grey' : 'w3-dark') + " w3-flex-row w3-round w3-overflow w3-flex-center-v"} style={{ marginBlock: 4 }}>
                 <div
-                    className="w3-nowrap w3-hover-grey w3-flex-1 w3-overflow"
+                    className="w3-nowrap w3-flex-1 w3-overflow"
                     style={{ paddingInline: 8 }}
                 >
                     {element.name}
@@ -714,13 +718,13 @@ function Notion() {
         } catch (error) {
             console.error('CSRF token fetch failed:', error);
         }
-    }
+    };
 
     const saveCategory = async () => {
         const xcode = localStorage.getItem('x-code')
         const request = {
             name: categoryInfo.name,
-            type: categoryInfo.type,
+            type: categoryInfo.type + userInfo.notionToLoad,
             state: categoryInfo.state,
             info: JSON.stringify({
                 description: categoryInfo.info.description.replace(
@@ -752,7 +756,7 @@ function Notion() {
             document.getElementById("confirmSpinner").style.display = "inline-block";
             await axios
                 .delete(source + "/_category/" + id + "?xcode=" + xcode)
-                .then((res) => {
+                .then(async (res) => {
                     document.getElementById("confirmSpinner").style.display =
                         "none";
                     document.getElementById("modalWarning").style.display =
@@ -765,12 +769,15 @@ function Notion() {
                         .getElementById("cancelWarning")
                         .removeEventListener("click", cancelHandler);
 
+
+                    await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + userInfo.selectedCategory), null)
                     reloadCategory(res.data.data.reverse());
                 })
                 .catch((e) => {
                     console.error("failure", e);
                 });
         };
+
         const cancelHandler = () => {
             document.getElementById("modalWarning").style.display = "none";
 
@@ -847,6 +854,13 @@ function Notion() {
             document.getElementById('displayNotionListeWrapper').style.display = 'block';
         }
 
+        document.getElementById('notionCategory').addEventListener('change', () => {
+            setTimeout(() => {
+                keeper.pageID = null;
+                fetchNotionListe()
+            }, 500);
+        })
+
         const xcode = localStorage.getItem('x-code');
         axios
             .get(source + "/_auth?xcode=" + xcode)
@@ -867,8 +881,20 @@ function Notion() {
                         userInfo.acceptEditable = false;
                         document.getElementById('addNotionElement').innerHTML = ''
                     }
-                    fetchNotionListe()
-                    document.getElementById('notionCore').style.display = 'block';
+
+                    axios
+                        .get(`${source}/_category/notion${userInfo.notionToLoad}?xcode=${xcode}`)
+                        .then((res) => {
+                            if (res.data.logedin) {
+                                fetchNotionListe()
+                                document.getElementById('notionCore').style.display = 'block';
+                                reloadCategory(res.data.data.reverse())
+                            }
+                        })
+                        .catch((e) => {
+                            console.error("failure", e);
+                        });
+
                 } else {
                     userInfo.notionToLoad = "160471339156947"
                     userInfo.acceptEditable = false;

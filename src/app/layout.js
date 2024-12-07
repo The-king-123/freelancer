@@ -87,6 +87,7 @@ export default function RootLayout({ children }) {
   )
   const [displayChoice, setdisplayChoice] = useState("");
   const [chatData, setchatData] = useState([]);
+  const [categoryNotion, setcategoryNotion] = useState([])
 
   const [dataUsers, setdataUsers] = useState([]);
   const [killer, setkiller] = useState({ starter: null, beastUser: false, toggleNotion: false, lockDelete: false });
@@ -116,6 +117,7 @@ export default function RootLayout({ children }) {
     key: "",
     notionToLoad: null,
     acceptEditable: false,
+    selectedCategory: 'default',
   });
 
   const ActiveLightMode = () => {
@@ -126,6 +128,12 @@ export default function RootLayout({ children }) {
       localStorage.setItem('theme', 'light');
       window.location.reload()
     }
+  }
+
+  const selectedCategory = (e) => {
+    userInfo.selectedCategory = e.target.value;
+    localStorage.setItem('notionCategory', e.target.value);
+    fetchNotionListe()
   }
 
   const reloadChat = (data) => {
@@ -929,8 +937,10 @@ export default function RootLayout({ children }) {
   }
 
   const fetchNotionListe = () => {
+
+    userInfo.selectedCategory = localStorage.getItem('notionCategory') ? localStorage.getItem('notionCategory') : 'default';
     if (window.innerWidth > 992) {
-      onValue(ref(database, 'notion/' + userInfo.notionToLoad), (snapshot) => {
+      onValue(ref(database, 'notion/' + userInfo.notionToLoad + '/' + userInfo.selectedCategory), (snapshot) => {
 
         if (snapshot.exists()) {
           const pages = []
@@ -967,7 +977,7 @@ export default function RootLayout({ children }) {
   const deleteHandler = async (notionID) => {
     if (notionID == killer.pageID) killer.pageID = null;
     openOption(null);
-    await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + notionID), null).then(async () => {
+    await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + userInfo.selectedCategory + '/' + notionID), null).then(async () => {
       cancelHandler();
     });
   };
@@ -1041,8 +1051,17 @@ export default function RootLayout({ children }) {
             userInfo.acceptEditable = false;
             userInfo.notionToLoad = "160471339156947"
           }
-
-          fetchNotionListe()
+          axios
+            .get(`${source}/_category/notion${userInfo.notionToLoad}?xcode=${xcode}`)
+            .then((res) => {
+              if (res.data.logedin) {
+                fetchNotionListe();
+                setcategoryNotion(res.data.data.reverse())
+              }
+            })
+            .catch((e) => {
+              console.error("failure", e);
+            });
           fetchChatListe()
         } else {
           // onAuthStateChanged(auth, (user) => {
@@ -1550,13 +1569,17 @@ export default function RootLayout({ children }) {
                 </Link>
                 <div id="notionMenu" className="w3-hide w3-dark-grey w3-round">
                   <select
+                    onChange={e => selectedCategory(e)}
                     id="notionCategory"
                     className="w3-block  w3-yellow w3-round w3-block w3-medium w3-border-0"
                     style={{ paddingBlock: 8, paddingInline: 12, marginTop: 4 }}
                   >
-                    <option value="Acheteur">Come UP</option>
-                    <option value="Acheteur">SAV</option>
-                    <option value="Acheteur">SAV</option>
+                    <option value="default">Par defaut</option>
+                    {
+                      categoryNotion.map((cat, key) => (
+                        <option value={cat.name}>{cat.name}</option>
+                      ))
+                    }
                   </select>
                   <div className="w3-medium w3-block w3-dark-grey w3-round w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 180px)', paddingInline: 4, paddingBottom: 4 }}>
                     {displayNotion}
