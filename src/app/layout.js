@@ -939,6 +939,7 @@ export default function RootLayout({ children }) {
   const fetchNotionListe = () => {
 
     userInfo.selectedCategory = localStorage.getItem('notionCategory') ? localStorage.getItem('notionCategory') : 'default';
+    document.getElementById('notionCategory').value = userInfo.selectedCategory;
     if (window.innerWidth > 992) {
       onValue(ref(database, 'notion/' + userInfo.notionToLoad + '/' + userInfo.selectedCategory), (snapshot) => {
 
@@ -1571,6 +1572,7 @@ export default function RootLayout({ children }) {
                   <select
                     onChange={e => selectedCategory(e)}
                     id="notionCategory"
+                    defaultValue={'default'}
                     className="w3-block  w3-yellow w3-round w3-block w3-medium w3-border-0"
                     style={{ paddingBlock: 8, paddingInline: 12, marginTop: 4 }}
                   >

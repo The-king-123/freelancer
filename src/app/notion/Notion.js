@@ -530,7 +530,7 @@ function Notion() {
     const deleteHandler = async (params) => {
         if (params.notionID == keeper.pageID) keeper.pageID = null;
         openOption(null);
-        await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + params.notionID), null).then(async () => {
+        await set(ref(database, 'notion/' + userInfo.notionToLoad + '/' + userInfo.selectedCategory + '/' + params.notionID), null).then(async () => {
             cancelHandler();
         });
     };
