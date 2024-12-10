@@ -1467,7 +1467,7 @@ export default function RootLayout({ children }) {
                   </Link>
 
                   <div
-                    id="forumPage"
+                    id="actualitePage"
                     className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow w3-pointer"
                     style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
                     onClick={userForum}
@@ -2299,12 +2299,12 @@ export default function RootLayout({ children }) {
           {/* // End Switch free premium with inital panel */}
 
           <Link
-            href={'/chat'}
+            href={'/actualite'}
             className="w3-flex-1"
             style={{ width: 36, height: 36 }}
           >
             <div
-              // id="storeScreen"
+              id="actualiteScreen"
               className="menuItemBottom w3-flex-column w3-flex-center whiteBlackYellow"
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >

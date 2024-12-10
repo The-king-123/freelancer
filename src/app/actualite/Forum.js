@@ -307,6 +307,8 @@ export default function Forum(props) {
       const forumCore = document.getElementsByClassName("forumCore");
       for (let i = 0; i < forumCore.length; i++) {
         forumCore[i].addEventListener("click", () => {
+          console.log("forum" + i);
+          
           if (document.getElementById("forum" + i).className == "_expand_") {
             document.getElementById("forum" + i).className =
               "w3-overflow w3-nowrap-multiline";
