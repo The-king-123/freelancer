@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import axios from "axios";
 import Home from "@/app/Home/page";
 import {app_name, console_source as source} from "@/app/data";
-import Forum from "../actualite";
+import Forum from "../Forum";
 
 export default async function page({ params }) {
 
