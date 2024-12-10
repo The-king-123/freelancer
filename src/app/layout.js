@@ -3,9 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import "./app.css";
 import "@/app/page.module.css"
-import { app_name, console_source as source } from "@/app/data";
+import { console_source as source } from "@/app/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowCircleDown, faBars, faCalculator, faCheck, faChevronCircleDown, faChevronCircleUp, faChevronDown, faCode, faComment, faComments, faCube, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPaperPlane, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faSun, faTimes, faTimesCircle, faTimesSquare, faTrash, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCalculator, faCheck, faChevronCircleUp, faCode, faComments, faCube, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faTimes, faTimesCircle, faTrash, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { faFacebookMessenger, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
@@ -22,7 +22,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({ children }) {
 
   axios.defaults.withCredentials = true;
-  const [freeLink, setfreeLink] = useState(<Link id="freeLink" style={{ display: 'none' }} href={"/forum"} >freeLink</Link>)
+  const [freeLink, setfreeLink] = useState(<Link id="freeLink" style={{ display: 'none' }} href={"/actualite"} >freeLink</Link>)
 
   const admCr = [
     {
@@ -119,6 +119,17 @@ export default function RootLayout({ children }) {
     acceptEditable: false,
     selectedCategory: 'default',
   });
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(function () {
+        console.log("Text copied to clipboard");
+      })
+      .catch(function (err) {
+        console.error("Could not copy text: ", err);
+      });
+  };
 
   const ActiveLightMode = () => {
     if (localStorage.getItem('theme') != 'dark') {
@@ -535,8 +546,10 @@ export default function RootLayout({ children }) {
       document.getElementById("chatChoice").style.transition = "0.4s";
       document.getElementById("chatChoice").style.height = "60px";
 
-      document.getElementById("expandIcon").style.transition = "0.4s";
-      document.getElementById("expandIcon").style.transform = "rotate(0deg)";
+      document.getElementById("expandIconScreen").style.transition = "0.4s";
+      document.getElementById("expandIconScreen").style.transform = "rotate(0deg)";
+      document.getElementById("expandIconPage").style.transition = "0.4s";
+      document.getElementById("expandIconPage").style.transform = "rotate(0deg)";
     }
 
     setdisplayChat("");
@@ -633,15 +646,21 @@ export default function RootLayout({ children }) {
       document.getElementById("chatChoice").style.height =
         window.innerHeight + "px";
 
-      document.getElementById("expandIcon").style.transition = "1s";
-      document.getElementById("expandIcon").style.transform = "rotate(180deg)";
+      document.getElementById("expandIconScreen").style.transition = "1s";
+      document.getElementById("expandIconScreen").style.transform = "rotate(180deg)";
+
+      document.getElementById("expandIconPage").style.transition = "1s";
+      document.getElementById("expandIconPage").style.transform = "rotate(180deg)";
     } else {
       document.getElementById("chatChoice").style.overflow = "hidden";
       document.getElementById("chatChoice").style.transition = "0.4s";
       document.getElementById("chatChoice").style.height = "60px";
 
-      document.getElementById("expandIcon").style.transition = "0.4s";
-      document.getElementById("expandIcon").style.transform = "rotate(0deg)";
+      document.getElementById("expandIconScreen").style.transition = "0.4s";
+      document.getElementById("expandIconScreen").style.transform = "rotate(0deg)";
+      
+      document.getElementById("expandIconPage").style.transition = "0.4s";
+      document.getElementById("expandIconPage").style.transform = "rotate(0deg)";
     }
   };
 
@@ -649,18 +668,18 @@ export default function RootLayout({ children }) {
     var user = localStorage.getItem("user");
     if (user) {
       if (user == "160471339156947" || user == "undefined") {
-        setfreeLink(<Link id="freeLink" style={{ display: 'none' }} href={"/forum"} >freeLink</Link>)
+        setfreeLink(<Link id="freeLink" style={{ display: 'none' }} href={"/actualite"} >freeLink</Link>)
         setTimeout(() => {
           document.getElementById('freeLink').click()
         }, 100);
       } else {
-        setfreeLink(<Link id="freeLink" style={{ display: 'none' }} href={"/forum/" + user} >freeLink</Link>)
+        setfreeLink(<Link id="freeLink" style={{ display: 'none' }} href={"/actualite/" + user} >freeLink</Link>)
         setTimeout(() => {
           document.getElementById('freeLink').click()
         }, 100);
       }
     } else {
-      setfreeLink(<Link id="freeLink" style={{ display: 'none' }} href={"/forum"} >freeLink</Link>)
+      setfreeLink(<Link id="freeLink" style={{ display: 'none' }} href={"/actualite"} >freeLink</Link>)
       setTimeout(() => {
         document.getElementById('freeLink').click()
       }, 100);
@@ -859,7 +878,12 @@ export default function RootLayout({ children }) {
             document.getElementById('chatSpanScreen').style.display = 'flex';
           }
         }
-
+        if (document.getElementById('chatSpanScreenHumain')) {
+          if (uicounter > 0) {
+            document.getElementById('chatSpanScreenHumain').innerText = uicounter;
+            document.getElementById('chatSpanScreenHumain').style.display = 'flex';
+          }
+        }
       }
     }, (error) => {
       console.error("Error reading data:", error);
@@ -875,6 +899,7 @@ export default function RootLayout({ children }) {
         document.getElementById(iconId).style.display = 'flex';
         document.getElementById(iconId).style.transform = 'rotate(-180deg)';
         document.getElementById('beastWrapper').style.display = 'none';
+        document.getElementById('infolineWrapper').style.display = 'none';
         document.getElementById('optionMenuWrapper').style.height = 'calc(100vh - 86px)';
         optionMenu.className = optionMenu.className.replace(/ w3-show/g, "");
         killer.toggleNotion = false;
@@ -883,6 +908,7 @@ export default function RootLayout({ children }) {
         document.getElementById(iconId).style.transform = 'rotate(0deg)';
         document.getElementById(iconId).style.display = 'none';
         document.getElementById('beastWrapper').style.display = 'flex';
+        document.getElementById('infolineWrapper').style.display = 'block';
         document.getElementById('optionMenuWrapper').style.height = 'calc(100vh - 140px)';
         optionMenu.className += " w3-show";
         killer.toggleNotion = true;
@@ -1311,6 +1337,15 @@ export default function RootLayout({ children }) {
         if (document.getElementById("mainCore")) {
           if (window.innerWidth <= 992) {
             document.getElementById("mainCore").style.height = (window.innerHeight - 52) + "px";
+            if (document.getElementById('screenExpendable')) {
+              document.getElementById('screenExpendable').style.display = 'flex'
+              document.getElementById('pageExpendable').style.display = 'none'
+            }
+          }else{
+            if (document.getElementById('screenExpendable')) {
+              document.getElementById('pageExpendable').style.display = 'flex'
+              document.getElementById('screenExpendable').style.display = 'none'
+            }
           }
         }
 
@@ -1585,6 +1620,32 @@ export default function RootLayout({ children }) {
                   </select>
                   <div className="w3-medium w3-block w3-dark-grey w3-round w3-overflow-scroll w3-noscrollbar" style={{ marginTop: 4, height: 'calc(100vh - 180px)', paddingInline: 4, paddingBottom: 4 }}>
                     {displayNotion}
+                  </div>
+                </div>
+                <div id="infolineWrapper" className="w3-border-top" style={{ marginTop: 16, paddingTop: 16 }}>
+                  <div
+                    className="menuItem w3-medium w3-black w3-round"
+                    style={{ marginBlock: 2 }}
+                    title="Copier"
+                    onClick={() => copyToClipboard('0385839612')}
+                  >
+                    <u>M-Vola</u>: 0385839612
+                  </div>
+                  <div
+                    className="menuItem w3-medium w3-black w3-round"
+                    style={{ marginBlock: 2 }}
+                    title="Copier"
+                    onClick={() => copyToClipboard('0325251811')}
+                  >
+                    <u>Orange Money</u>: 0325251811
+                  </div>
+                  <div
+                    className="menuItem w3-medium w3-black w3-round"
+                    style={{ marginBlock: 2 }}
+                    title="Copier"
+                    onClick={() => copyToClipboard('0348830311')}
+                  >
+                    <u>Infoline</u>: 0348830311
                   </div>
                 </div>
               </div>
@@ -1913,14 +1974,53 @@ export default function RootLayout({ children }) {
               className="w3-black"
               style={{ paddingInline: 16, paddingBottom: 10 }}
             >
-              <div className="w3-flex-row w3-flex-center-v">
-                <div
-                  onClick={() => expand()}
-                  className="w3-button w3-hover-grey w3-yellow w3-hover-yellow w3-flex-1 w3-round-xxlarge w3-flex-row w3-flex-center-v"
-                  style={{ marginTop: 12 }}
-                >
-                  <span className="w3-center w3-flex-1">Des questions !?</span>{" "}
-                  <FontAwesomeIcon id="expandIcon" icon={faChevronCircleUp} />
+              <div>
+                <div className="w3-flex-row w3-flex-center-v" id="screenExpendable" style={{display:'none'}}>
+                  <Link
+                    href={'/chat'}
+                    onClick={() => {
+                      if (location.pathname.split('/')[1] == 'chat') {
+                        if (document.getElementById('chatListeCore')) {
+                          if (document.getElementById('chatListeCore').style.display == 'block') {
+                            toggleChat();
+                          } else {
+                            document.getElementById('chatListeCore').style.display = 'block';
+                            document.getElementById('chattingCore').style.display = 'none';
+                            document.getElementById('headerPageTitle').innerText = 'DISCUSSIONS';
+                            toggleChat();
+                          }
+
+                        }
+                      } else {
+                        toggleChat();
+                      }
+                    }}
+                    className="w3-button w3-hover-grey w3-yellow w3-hover-yellow w3-flex-1 w3-round-xxlarge w3-flex-row w3-flex-center"
+                    style={{ marginTop: 12, marginRight: 8, paddingInline: 8 }}
+                  >
+                    <FontAwesomeIcon icon={faUser} />
+                    <div className="w3-center" style={{ marginInline: 8 }}>Humain</div>
+                    <div id="chatSpanScreenHumain" className="w3-red w3-round-xxlarge w3-flex w3-small w3-flex-center" style={{ paddingInline: 6, display: 'none' }}></div>
+                  </Link>
+                  <div
+                    onClick={() => expand()}
+                    className="w3-button w3-hover-grey w3-yellow w3-hover-yellow w3-flex-1 w3-round-xxlarge w3-flex-row w3-flex-center"
+                    style={{ marginTop: 12, marginLeft: 8, paddingInline: 8 }}
+                  >
+                    <FontAwesomeIcon icon={faRobot} />
+                    <div className="w3-center" style={{ marginInline: 8 }}>Robot</div>
+                    <FontAwesomeIcon id="expandIconScreen" icon={faChevronCircleUp} />
+                  </div>
+                </div>
+                <div className="w3-flex-row w3-flex-center-v" id="pageExpendable">
+                  <div
+                    onClick={() => expand()}
+                    className="w3-button w3-hover-grey w3-yellow w3-hover-yellow w3-flex-1 w3-round-xxlarge w3-flex-row w3-flex-center-v"
+                    style={{ marginTop: 12, marginRight: 8, paddingInline: 8 }}
+                  >
+                    <span className="w3-center w3-flex-1">Des questions !?</span>{" "}
+                    <FontAwesomeIcon id="expandIconPage" icon={faChevronCircleUp} />
+                  </div>
                 </div>
               </div>
             </div>
@@ -2033,7 +2133,7 @@ export default function RootLayout({ children }) {
                   />
                   Gérez votre post
                 </Link>
-                <Link className="w3-bar-item w3-button w3-round" href={'/forum/create'}>
+                <Link className="w3-bar-item w3-button w3-round" href={'/actualite/create'}>
                   <FontAwesomeIcon
                     className="w3-margin-right"
                     icon={faPager}
@@ -2198,8 +2298,8 @@ export default function RootLayout({ children }) {
           </div>
           {/* // End Switch free premium with inital panel */}
 
-          <div
-            onClick={toggleChat}
+          <Link
+            href={'/chat'}
             className="w3-flex-1"
             style={{ width: 36, height: 36 }}
           >
@@ -2209,25 +2309,31 @@ export default function RootLayout({ children }) {
               style={{ width: 36, height: 36, marginInline: "auto" }}
             >
               <FontAwesomeIcon
-                icon={faRobot}
+                icon={faNewspaper}
                 width={20}
                 height={20}
               />
-              <div className="w3-tiny" style={{ marginTop: 2 }}>Chatbot</div>
+              <div className="w3-tiny" style={{ marginTop: 2 }}>Actualité</div>
             </div>
-          </div>
+          </Link>
 
-          <Link
+          <div
             onClick={() => {
               if (location.pathname.split('/')[1] == 'chat') {
                 if (document.getElementById('chatListeCore')) {
-                  document.getElementById('chatListeCore').style.display = 'block';
-                  document.getElementById('chattingCore').style.display = 'none';
-                  document.getElementById('headerPageTitle').innerText = 'DISCUSSIONS';
+                  if (document.getElementById('chatListeCore').style.display == 'block') {
+                    toggleChat();
+                  } else {
+                    document.getElementById('chatListeCore').style.display = 'block';
+                    document.getElementById('chattingCore').style.display = 'none';
+                    document.getElementById('headerPageTitle').innerText = 'DISCUSSIONS';
+                  }
+
                 }
+              } else {
+                toggleChat();
               }
             }}
-            href={'/chat'}
             className="w3-flex-1"
             style={{ width: 36, height: 36 }}
           >
@@ -2244,7 +2350,7 @@ export default function RootLayout({ children }) {
               />
               <div className="w3-tiny" style={{ marginTop: 2 }}>Message</div>
             </div>
-          </Link>
+          </div>
         </div>
 
         {/* modal logedin */}

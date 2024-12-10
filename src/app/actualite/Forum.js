@@ -166,8 +166,8 @@ export default function Forum(props) {
           </div>
           <div className={"w3-flex-column w3-overflow w3-card w3-round "+ (themeLight ? 'w3-white' : 'w3-dark-grey')}>
             <Link
-              href={'/forum/preview/' + forum.slug}
-              data={"https://freelancer.mg/forum/" + forum.slug}
+              href={'/actualite/preview/' + forum.slug}
+              data={"https://freelancer.mg/actualite/" + forum.slug}
               className={"forumTitle w3-nowrap w3-overflow w3-big w3-pointer " + (themeLight ? 'w3-light-grey' : 'w3-black')}
               style={{ paddingBlock: 8, paddingInline: 16 }}
               title="Ouvrir le forum"
@@ -187,7 +187,7 @@ export default function Forum(props) {
             </div>
             {forum.type == "image" && (
               <Link
-                href={'/forum/preview/' + forum.slug}
+                href={'/actualite/preview/' + forum.slug}
                 className="forumMedia w3-display-container w3-black forum-image w3-pointer"
                 data={JSON.stringify(forum)}
                 style={{ zIndex: 2 }}
@@ -238,7 +238,7 @@ export default function Forum(props) {
               </div>
               {
                 forum.response.length > 3 &&
-                <Link href={'/forum/preview/' + forum.slug} className="w3-small w3-text-grey" style={{ marginTop: 8 }}>
+                <Link href={'/actualite/preview/' + forum.slug} className="w3-small w3-text-grey" style={{ marginTop: 8 }}>
                   <u>Voir tous les commentaires</u>
                 </Link>
               }
@@ -279,7 +279,7 @@ export default function Forum(props) {
       document.getElementById('createForumOnDesktop').style.display = 'block';
       document.getElementById('openForumListeButton').style.display = 'none';
     } else {
-      window.location = '/post/forum'
+      window.location = '/post/actualite'
     }
   }
 

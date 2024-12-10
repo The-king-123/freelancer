@@ -451,47 +451,50 @@ function Notion() {
             keeper.intervalIDPageSaving = null;
         }
 
-        await get(pageRef).then(async (snapshot) => {
+        setTimeout(() => {
+            get(pageRef).then(async (snapshot) => {
 
-            if (snapshot.exists() && !keeper.intervalIDPageSaving) {
+                if (snapshot.exists() && !keeper.intervalIDPageSaving) {
 
-                const notion = snapshot.val();
+                    const notion = snapshot.val();
 
-                pageData.pageName = notion.pageName.length > 0 ? notion.pageName : 'Nouvelle page';
-                pageData.bloque = notion.bloque ? notion.bloque : [];
-                pageData.lock = notion.lock ? notion.lock : false;
-                pageData.lastModification = notion.lastModification ? notion.lastModification : null;
+                    pageData.pageName = notion.pageName.length > 0 ? notion.pageName : 'Nouvelle page';
+                    pageData.bloque = notion.bloque ? notion.bloque : [];
+                    pageData.lock = notion.lock ? notion.lock : false;
+                    pageData.lastModification = notion.lastModification ? notion.lastModification : null;
 
-                if (userInfo.acceptEditable) {
-                    if (pageData.lock) {
+                    if (userInfo.acceptEditable) {
+                        if (pageData.lock) {
+                            document.getElementById('iconLockPage').style.display = 'inline-block'
+                            document.getElementById('iconOpenPage').style.display = 'none'
+                            document.getElementById('addNotionElement').style.display = 'none'
+                        } else {
+                            document.getElementById('iconLockPage').style.display = 'none'
+                            document.getElementById('iconOpenPage').style.display = 'inline-block'
+                            document.getElementById('addNotionElement').style.display = 'block'
+                        }
+                    } else {
                         document.getElementById('iconLockPage').style.display = 'inline-block'
                         document.getElementById('iconOpenPage').style.display = 'none'
                         document.getElementById('addNotionElement').style.display = 'none'
-                    } else {
-                        document.getElementById('iconLockPage').style.display = 'none'
-                        document.getElementById('iconOpenPage').style.display = 'inline-block'
-                        document.getElementById('addNotionElement').style.display = 'block'
                     }
-                } else {
-                    document.getElementById('iconLockPage').style.display = 'inline-block'
-                    document.getElementById('iconOpenPage').style.display = 'none'
-                    document.getElementById('addNotionElement').style.display = 'none'
+
+
+                    if (keeper.pageID && window.innerWidth < 992) openDropdown("notionList");
+                    keeper.pageID = page.pageID
+
+                    // hashing content
+                    await hashArray(pageData).then(async hash => {
+                        keeper.pageHashing = hash;
+                        if (!keeper.intervalIDPageSaving && userInfo.acceptEditable && !pageData.lock) await autoSave();
+                    });
+                    reloadElement();
                 }
+            }, (error) => {
+                console.error("Error reading data:", error);
+            });
+        }, 500);
 
-
-                if (keeper.pageID && window.innerWidth < 992) openDropdown("notionList");
-                keeper.pageID = page.pageID
-
-                // hashing content
-                await hashArray(pageData).then(async hash => {
-                    keeper.pageHashing = hash;
-                    if (!keeper.intervalIDPageSaving && userInfo.acceptEditable && !pageData.lock) await autoSave();
-                });
-                reloadElement();
-            }
-        }, (error) => {
-            console.error("Error reading data:", error);
-        });
 
     };
 
@@ -606,9 +609,9 @@ function Notion() {
                         pageCore: notion,
                     })
                 });
-                setTimeout(() => {                    
+                setTimeout(() => {
                     reloadNotionsList(pages)
-                }, 500);                
+                }, 500);
                 if (!keeper.pageID) openPage(pages[0]);
                 document.getElementById('addFirstNotion').style.display = 'none'
                 document.getElementById('noPagesFound').style.display = 'none'
@@ -651,7 +654,7 @@ function Notion() {
                 clearInterval(keeper.intervalIDPageSaving);
             }
 
-        }, 1500);
+        }, 500);
     };
 
     const toggleLockPage = () => {

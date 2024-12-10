@@ -13,7 +13,7 @@ import Link from "next/link";
 import { console_source as source } from "@/app/data";
 import HomePost from "@/app/HomePost";
 import CreatePost from '../post/create/PostCreate'
-import CreateForum from '../forum/create/createForum'
+import CreateForum from '../actualite/create/createForum'
 
 export default function Home(props) {
   axios.defaults.withCredentials = true;
@@ -53,6 +53,7 @@ export default function Home(props) {
         document.getElementById(iconId).style.display = 'flex';
         document.getElementById(iconId).style.transform = 'rotate(-180deg)';
         document.getElementById('beastWrapper').style.display = 'none';
+        document.getElementById('infolineWrapper').style.display = 'none';
         document.getElementById('optionMenuWrapper').style.height = 'calc(100vh - 86px)';
         optionMenu.className = optionMenu.className.replace(/ w3-show/g, "");
       } else {
@@ -60,6 +61,7 @@ export default function Home(props) {
         document.getElementById(iconId).style.transform = 'rotate(0deg)';
         document.getElementById(iconId).style.display = 'none';
         document.getElementById('beastWrapper').style.display = 'flex';
+        document.getElementById('infolineWrapper').style.display = 'block';
         document.getElementById('optionMenuWrapper').style.height = 'calc(100vh - 140px)';
         optionMenu.className += " w3-show";
       }
@@ -365,7 +367,7 @@ export default function Home(props) {
               </div>
               <div>
                 <Link
-                  href={'/forum/create'}
+                  href={'/actualite/create'}
                   className="w3-light-grey w3-circle w3-flex w3-flex-center"
                   style={{ width: 32, height: 32 }}
                 >

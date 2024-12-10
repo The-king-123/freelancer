@@ -81,7 +81,7 @@ function createForum(props) {
       document.getElementById('modalOptionForum').style.display = 'block'
       withcmInfo.id = data.id
       withcmInfo.slug = data.slug
-      // window.location = '/forum/preview/' + data.slug
+      // window.location = '/actualite/preview/' + data.slug
     }
 
   }
@@ -343,7 +343,7 @@ function createForum(props) {
   }
 
   const afficher = () => {
-    window.location = '/forum/preview/' + withcmInfo.slug
+    window.location = '/actualite/preview/' + withcmInfo.slug
   }
 
   useEffect(() => {
