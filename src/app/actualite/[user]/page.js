@@ -10,7 +10,7 @@ export default async function page({ params }) {
     const forums = await axios
       .get(source + "/_forum/" + params.user)
       .then((res) => {
-        return res.data.data;
+        return res.data.data.reverse();
       })
       .catch((e) => {
         console.error("failure", e);

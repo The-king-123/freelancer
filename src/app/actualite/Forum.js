@@ -155,7 +155,7 @@ export default function Forum(props) {
     const themeLight = localStorage.getItem('theme') != 'dark' ? true : false
     var glitchForum = ''
     if (forums.length > 0) {
-      glitchForum = forums.map((forum, key) => (
+      glitchForum = forums.reverse().map((forum, key) => (
         <div key={key} style={{ padding: 8, zIndex: 1 }}>
           <div
             className="w3-small w3-text-grey"

@@ -1477,7 +1477,7 @@ export default function RootLayout({ children }) {
                       width={20}
                       height={20}
                     />
-                    <div className="w3-margin-left w3-medium">Forums</div>
+                    <div className="w3-margin-left w3-medium">Actualité</div>
                   </div>
 
                   <Link
