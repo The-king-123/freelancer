@@ -9,7 +9,7 @@ export default async function page({ params }) {
   try {
     // var products = ''
     const products = await axios
-      .get(source + "/_store/" + params.category)
+      .get(source + "/_store/" + params.category + '?where=store')
       .then((res) => {
         return res.data.data;
       })
