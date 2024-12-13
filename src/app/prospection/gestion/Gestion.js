@@ -803,7 +803,7 @@ function Gestion() {
                     <div style={{ marginTop: 24 }}>
                         <button
                             onClick={() => save("public")}
-                            className="w3-button w3-light-grey w3-round-xxlarge w3-block w3-flex w3-flex-center"
+                            className="w3-button w3-yellow w3-round-xxlarge w3-block w3-flex w3-flex-center"
                         >
                             Mise en vente{" "}
                             <FontAwesomeIcon
