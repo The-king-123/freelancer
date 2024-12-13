@@ -5,7 +5,7 @@ import "./app.css";
 import "@/app/page.module.css"
 import { console_source as source } from "@/app/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faCalculator, faCheck, faChevronCircleUp, faCode, faComments, faCube, faDollarSign, faDoorOpen, faExclamationCircle, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faTimes, faTimesCircle, faTrash, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCalculator, faCheck, faChevronCircleUp, faCode, faComments, faCube, faDollarSign, faDoorOpen, faExclamationCircle, faFileExcel, faGear, faGift, faHome, faICursor, faImages, faKey, faMoneyBill1, faMoon, faNewspaper, faPager, faPhone, faPlay, faRobot, faShieldAlt, faSpinner, faStore, faTimes, faTimesCircle, faTrash, faUser, faUserCircle, faUserPlus, faUsers, faWarning } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { faFacebookMessenger, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
@@ -39,6 +39,11 @@ export default function RootLayout({ children }) {
       title: 'Gestion des produits',
       link: '/store/gestion',
       icon: <FontAwesomeIcon className="w3-margin-right" icon={faStore} />
+    },
+    {
+      title: 'Gestion des fichiers prospection',
+      link: '/prospection/gestion',
+      icon: <FontAwesomeIcon className="w3-margin-right" icon={faFileExcel} />
     },
     {
       title: 'Gestion des membres',
@@ -1456,7 +1461,7 @@ export default function RootLayout({ children }) {
                     id="storePage"
                     className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
                     style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
-                    href={"/store/all"}
+                    href={"/store"}
                   >
                     <FontAwesomeIcon
                       icon={faStore}
@@ -1464,6 +1469,20 @@ export default function RootLayout({ children }) {
                       height={20}
                     />
                     <div className="w3-margin-left w3-medium">Boutique</div>
+                  </Link>
+
+                  <Link
+                    id="prospectionPage"
+                    className="menuItem w3-flex-row w3-flex-center-v w3-overflow w3-black w3-round w3-hover-yellow"
+                    style={{ height: 40, paddingInline: 16, marginBlock: 2 }}
+                    href={"/prospection"}
+                  >
+                    <FontAwesomeIcon
+                      icon={faFileExcel}
+                      width={20}
+                      height={20}
+                    />
+                    <div className="w3-margin-left w3-medium">Prospection</div>
                   </Link>
 
                   <div
@@ -1657,7 +1676,7 @@ export default function RootLayout({ children }) {
                   <div
                     id="setting"
                     className="w3-dropdown-content w3-bar-block w3-card w3-round w3-medium"
-                    style={{ left: 234, bottom: 4, minWidth: 260, padding: 4 }}
+                    style={{ left: 234, bottom: 4, minWidth: 280, padding: 4 }}
                   >
                     <div className="w3-flex-row">
                       {/* / arrow marker / */}
