@@ -9,7 +9,7 @@ import parse from "html-react-parser";
 import Image from "next/image";
 
 
-function Store() {
+function Prospection() {
   const [displayStore, setdisplayStore] = useState(
     <div style={{ padding: 24 }} className='w3-center'>
       <FontAwesomeIcon className='w3-spin' icon={faSpinner} />
@@ -94,13 +94,15 @@ function Store() {
         </Link>
       ))
     } else {
-      glitchStore = (<div style={{ padding: 8 }}>
-        <div className="w3-black w3-round w3-flex w3-flex-center-v" style={{ height: 48 }}>
-          <div style={{ paddingInline: 16 }}>
-            Nous n'avons trouvé aucun produit pour le moment...
+      glitchStore = (
+        <div style={{ padding: 8 }}>
+          <div className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-round w3-flex w3-flex-center-v"} style={{ height: 48 }}>
+            <div style={{ paddingInline: 16 }}>
+              Nous n'avons trouvé aucun produit pour le moment...
+            </div>
           </div>
         </div>
-      </div>)
+      )
     }
 
     setdisplayStore(glitchStore)
@@ -118,12 +120,42 @@ function Store() {
   }
 
   useEffect(() => {
+
+    if (localStorage.getItem('theme') != 'dark') {
+
+      const elementGrey = document.getElementsByClassName('w3-black').length
+      const elementWhite = document.getElementsByClassName('w3-dark-grey').length
+      const backTransparent = document.getElementsByClassName('black-opacity').length
+      for (let i = 0; i < elementGrey; i++) {
+        const element = document.getElementsByClassName('w3-black')[0];
+        if (element) {
+          element.className = element.className.replace('w3-black', 'w3-light-grey')
+        }
+
+      }
+      for (let i = 0; i < elementWhite; i++) {
+        const element = document.getElementsByClassName('w3-dark-grey')[0];
+        if (element) {
+          element.className = element.className.replace('w3-dark-grey', 'w3-white')
+        }
+
+      }
+      for (let i = 0; i < backTransparent; i++) {
+        const element = document.getElementsByClassName('black-opacity')[0];
+        if (element) {
+          element.className = element.className.replace('black-opacity', 'white-opacity')
+        }
+
+      }
+
+      document.getElementById('htmlCore').style.display = 'block'
+    }
     //
     if (document.getElementById('headerPageTitle')) {
       document.getElementById('headerPageTitle').innerText = ('Boutique').toUpperCase()
     }
     axios
-      .get(source + "/_store?where=store")
+      .get(source + "/_store?where=prospection")
       .then((res) => {
         reloadStore(res.data.data);
       })
@@ -141,4 +173,4 @@ function Store() {
   )
 }
 
-export default Store
+export default Prospection
