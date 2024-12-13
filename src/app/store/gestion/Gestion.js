@@ -558,7 +558,7 @@ function Gestion() {
                     "inline-block";
                 await setCSRFToken();
                 await axios
-                    .delete(source + "/_store/" + productInfos.id + '?xcode=' + xcode)
+                    .delete(source + "/_store/" + productInfos.id + '?xcode=' + xcode + '&where=store')
                     .then((res) => {
                         if (res.data.logedin) {
                             if (res.data.authorized) {
@@ -667,7 +667,7 @@ function Gestion() {
         if (xcode && xcode != 'null') {
 
             axios
-                .get(`${source}/_store?xcode=${xcode}`)
+                .get(`${source}/_store?xcode=${xcode}&where=store`)
                 .then((res) => {
                     document.getElementById('productCore').style.display = 'block';
                     reloadProducts(res.data.data.reverse())

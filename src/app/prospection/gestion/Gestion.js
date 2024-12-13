@@ -335,7 +335,7 @@ function Gestion() {
                 await setCSRFToken();
                 if (!productInfos.image && productInfos.id) {
                     await axios
-                        .patch(source + "/_store/" + productInfos.id + "?xcode=" + xcode + 'where=prospection', data)
+                        .patch(source + "/_store/" + productInfos.id + "?xcode=" + xcode + '&where=prospection', data)
                         .then((res) => {
                             if (res.data.logedin) {
                                 if (res.data.updated) {
@@ -378,7 +378,7 @@ function Gestion() {
                         });
                 } else {
                     await axios
-                        .post(source + "/_store?xcode=" + xcode + 'where=prospection', data)
+                        .post(source + "/_store?xcode=" + xcode + '&where=prospection', data)
                         .then((res) => {
                             if (res.data.saved) {
                                 document.getElementById("productPublicSpinner").style.display = "none";
@@ -437,7 +437,7 @@ function Gestion() {
                     "inline-block";
                 await setCSRFToken();
                 await axios
-                    .delete(source + "/_store/" + productInfos.id + '?xcode=' + xcode + 'where=prospection')
+                    .delete(source + "/_store/" + productInfos.id + '?xcode=' + xcode + '&where=prospection')
                     .then((res) => {
                         if (res.data.logedin) {
                             if (res.data.authorized) {
