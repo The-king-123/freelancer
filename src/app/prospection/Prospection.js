@@ -50,6 +50,12 @@ function Prospection() {
                 </div>
               </div>
             </div>
+            <div
+            style={{paddingInline:8, paddingBottom:8}}
+              className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-big w3-small w3-flex-row w3-flex-center-v w3-nowrao w3-overflow"}
+            >
+              {parse(product.description)}
+            </div>
 
             <div
               className={(themeLight ? "w3-light-grey" : "w3-black") + " postMedia w3-display-container product-image"}
@@ -60,7 +66,7 @@ function Prospection() {
                 unoptimized
                 loading="lazy"
                 onContextMenu={(e) => e.preventDefault()}
-                height={100}
+                height={80}
                 width={80}
                 src={
                   source +
@@ -72,7 +78,7 @@ function Prospection() {
                   objectFit: "cover",
                   zIndex: 1,
                   height: '65vw',
-                  maxHeight: 180
+                  maxHeight: 154,
                 }}
                 className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow product-image w3-block"}
               />
