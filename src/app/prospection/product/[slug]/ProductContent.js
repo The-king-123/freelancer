@@ -128,7 +128,7 @@ export default function ProductContent({ content }) {
 
     try {
       const parsed = JSON.parse(authority);
-      if (parsed.store == "master") {
+      if (parsed.prospection == "master") {
         return true;
       }
     } catch (error) {
