@@ -21,7 +21,7 @@ function Prospection() {
     var glitchStore
     if (data.length > 0) {
       glitchStore = data.map((product, key) => (
-        <Link key={key} href={'/store/product/' + product.slug} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
+        <Link key={key} href={'/prospection/product/' + product.slug} style={{ padding: 8, zIndex: 1, width: '33.33%', display: 'inline-block' }}>
           <div className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-overflow w3-round w3-pointer"}>
             <div
               className={(themeLight ? "w3-light-grey" : "w3-black") + " w3-big w3-small w3-flex-row w3-flex-center-v"}

@@ -149,6 +149,35 @@ export default function ProductContent({ content }) {
     if (document.getElementById('headerPageTitle')) {
       document.getElementById('headerPageTitle').innerText = ('Boutique').toUpperCase()
     }
+    if (localStorage.getItem('theme') != 'dark') {
+
+      const elementGrey = document.getElementsByClassName('w3-black').length
+      const elementWhite = document.getElementsByClassName('w3-dark-grey').length
+      const backTransparent = document.getElementsByClassName('black-opacity').length
+      for (let i = 0; i < elementGrey; i++) {
+        const element = document.getElementsByClassName('w3-black')[0];
+        if (element) {
+          element.className = element.className.replace('w3-black', 'w3-light-grey')
+        }
+
+      }
+      for (let i = 0; i < elementWhite; i++) {
+        const element = document.getElementsByClassName('w3-dark-grey')[0];
+        if (element) {
+          element.className = element.className.replace('w3-dark-grey', 'w3-white')
+        }
+
+      }
+      for (let i = 0; i < backTransparent; i++) {
+        const element = document.getElementsByClassName('black-opacity')[0];
+        if (element) {
+          element.className = element.className.replace('black-opacity', 'white-opacity')
+        }
+
+      }
+
+      document.getElementById('htmlCore').style.display = 'block'
+    }
     const xcode = localStorage.getItem('x-code');
     axios
       .get(source + "/_auth?xcode=" + xcode)
@@ -233,7 +262,7 @@ export default function ProductContent({ content }) {
           </div>
           <div>{parse(singleStoreInfo.description)}</div>
           <div>
-            <div onClick={() => download(singleStoreInfo.id)} className={"w3-button w3-round-xxlarge w3-yellow w3-hover-yellow blacktext w3-flex-row w3-flex-center w3-margin-top " + (singleStoreInfo.type == "premium" ? 'w3-text-yellow' : '')}>
+            <div onClick={() => download(singleStoreInfo.id)} className={"w3-button w3-round-xxlarge w3-hover-yellow w3-flex-row w3-flex-center w3-margin-top " + (singleStoreInfo.type == "premium" ? 'w3-yellow' : 'w3-black')}>
               <FontAwesomeIcon id="freeDownloadIcon" icon={faDownload} className="w3-margin-right" />
               <FontAwesomeIcon id="freeDownloadSpinner" icon={faSpinner} className="w3-margin-right w3-spin" style={{ display: 'none' }} />
               Download
@@ -246,7 +275,7 @@ export default function ProductContent({ content }) {
             {
               content.features.map((feature, key) => (
                 <div key={key} style={{ paddingBlock: 8 }}>
-                  <Link href={'/store/product/' + feature.slug} className="w3-pointer w3-black w3-round w3-flex-row w3-flex-center-v " style={{ padding: 8 }}>
+                  <Link href={'/prospection/product/' + feature.slug} className="w3-pointer w3-black w3-round w3-flex-row w3-flex-center-v " style={{ padding: 8 }}>
                     <Image
                       alt={feature.name}
                       unoptimized
@@ -321,7 +350,7 @@ export default function ProductContent({ content }) {
                   <div className="w3-margin w3-block" style={{ paddingInline: 16 }}>
                     <div
                       onClick={downloadPremiumFile}
-                      className="transition w3-medium w3-text-yellow w3-button w3-block w3-round-xxlarge w3-light-grey"
+                      className="transition w3-medium w3-button w3-block w3-round-xxlarge w3-yellow"
                     >
                       <span id='buttonContactText'>Confirmer</span>
                       <FontAwesomeIcon id="premiumDownloadIcon" className='w3-margin-left' icon={faArrowRight} />
