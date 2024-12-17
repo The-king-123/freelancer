@@ -96,21 +96,34 @@ export default function ProductContent({ content }) {
         .then((res) => {
           if (res.data.exist) {
 
-            const url = `${source}/download.php?zlonk=1733&zlink=${atob(res.data.file)}`;
-            const link = document.createElement('a');
+            if (res.data.file != 'expired') {
+              const url = `${source}/download.php?zlonk=1733&zlink=${atob(res.data.file)}`;
+              const link = document.createElement('a');
 
-            link.href = url;
-            link.download = singleStoreInfo.name;
+              link.href = url;
+              link.download = singleStoreInfo.name;
 
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
 
-            document.getElementById('premiumDownloadSpinner').style.display = 'none'
-            document.getElementById('premiumDownloadIcon').style.display = 'inline-block'
+              document.getElementById('premiumDownloadSpinner').style.display = 'none'
+              document.getElementById('premiumDownloadIcon').style.display = 'inline-block'
+            } else {
+
+              document.getElementById('codeError').style.display = 'block';
+              document.getElementById('codeError').innerText = "Désolé, le code que vous avez entré est expiré.";
+              setTimeout(() => {
+                document.getElementById('codeError').style.display = 'none';
+              }, 3000);
+            }
 
           } else {
-
+            document.getElementById('codeError').style.display = 'block';
+            document.getElementById('codeError').innerText = "Le code que vous avez saisi est incorrect.";
+            setTimeout(() => {
+              document.getElementById('codeError').style.display = 'none';
+            }, 3000);
           }
         })
         .catch((e) => {
@@ -343,6 +356,7 @@ export default function ProductContent({ content }) {
                 <div style={{ padding: 24 }} id='cardNotPremiumText'>
                   Ce contenu est payant. Pour y accéder, il est nécessaire d'entrer un code de téléchargement.
                 </div>
+                <div className="w3-small w3-text-red" id="codeError" style={{ paddingInline: 24, marginTop: -8 }}></div>
                 <div style={{ paddingInline: 24, paddingBlock: 8 }}>
                   <input style={{ paddingInline: 16 }} onChange={(e) => code.code = e.target.value} className="w3-input w3-border-0 w3-black w3-block w3-round-xxlarge" type="text" placeholder="Code de téléchargement" />
                 </div>
