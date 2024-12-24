@@ -170,7 +170,7 @@ export default function Forum(props) {
               data={"https://freelancer.mg/actualite/" + forum.slug}
               className={"forumTitle w3-nowrap w3-overflow w3-big w3-pointer " + (themeLight ? 'w3-light-grey' : 'w3-black')}
               style={{ paddingBlock: 8, paddingInline: 16 }}
-              title="Ouvrir le forum"
+              title="Ouvrir l'actualité"
             >
               {parse(forum.title)}
             </Link>

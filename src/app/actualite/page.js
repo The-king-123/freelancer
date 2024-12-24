@@ -21,7 +21,7 @@ export default async function page() {
 
 export function metadata() {
   const meta = {
-    title: app_name + " - Forum",
+    title: app_name + " - Actualité",
     description: "Le forum pour les partages, les histoires fascinantes et pour s'entraider.",
   };
   return meta;
