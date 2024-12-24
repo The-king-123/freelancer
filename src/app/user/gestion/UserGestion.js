@@ -115,12 +115,13 @@ function UserGestion() {
         } else {
             accessList.access.store = JSON.parse(user.authority).store
             accessList.access.post = JSON.parse(user.authority).post
+            accessList.access.prospecteo = JSON.parse(user.authority).prospecteo ? JSON.parse(user.authority).prospecteo : 'ghest'
 
             accessList.access.post == 'ghest' && document.getElementById('certainPost').click()
             accessList.access.post == 'master' && document.getElementById('toutPost').click()
             accessList.access.store == 'ghest' && document.getElementById('certainStore').click()
             accessList.access.store == 'master' && document.getElementById('toutStore').click()
-            document.getElementById('prospecteoGhest').click()
+            accessList.access.prospecteo == 'ghest' && document.getElementById('prospecteoGhest').click()
             accessList.access.prospecteo == 'starter' && document.getElementById('prospecteoStarter').click()
             accessList.access.prospecteo == 'liberty' && document.getElementById('prospecteoLiberty').click()
             accessList.access.prospecteo == 'legend' && document.getElementById('prospecteoLegend').click()
