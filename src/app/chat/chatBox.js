@@ -210,7 +210,29 @@ function chatBox() {
           });
       } else {
 
-        set(chatPush, chatInfo)
+        await set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo'), {
+          fullname: userInfo.des_fullname,
+          key: userInfo.des_key,
+          timestamp: Date.now(),
+          state: 'sent',
+          lastmessage: {
+            key: userInfo.key,
+            message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.responseText : (chatInfo.attachement ? 'A envoyé une ' + (attachementInfo.type == 'image' ? 'photo' : (attachementInfo.type == 'video' ? 'video' : 'pièce jointe')) : chatInfo.message)
+          }
+        })
+
+        await set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
+          fullname: userInfo.fullname,
+          key: userInfo.key,
+          timestamp: Date.now(),
+          state: 'sent',
+          lastmessage: {
+            key: userInfo.key,
+            message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.responseText : (chatInfo.attachement ? 'A envoyé une ' + (attachementInfo.type == 'image' ? 'photo' : (attachementInfo.type == 'video' ? 'video' : 'pièce jointe')) : chatInfo.message)
+          }
+        })
+
+        await set(chatPush, chatInfo)
           .then(() => {
             set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/' + chatPush.key), chatInfo)
               .then(() => {
@@ -222,34 +244,11 @@ function chatBox() {
                 chatInfo.reaction = null;
                 chatInfo.deleted = false;
 
-                set(ref(database, 'chatcase/' + userInfo.key + '/' + userInfo.des_key + '/userInfo'), {
-                  fullname: userInfo.des_fullname,
-                  key: userInfo.des_key,
-                  timestamp: Date.now(),
-                  state: 'sent',
-                  lastmessage: {
-                    key: userInfo.key,
-                    message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.responseText : (chatInfo.attachement ? 'A envoyé une ' + (attachementInfo.type == 'image' ? 'photo' : (attachementInfo.type == 'video' ? 'video' : 'pièce jointe')) : chatInfo.message)
-                  }
-                }).then(() => {
-                  set(ref(database, 'chatcase/' + userInfo.des_key + '/' + userInfo.key + '/userInfo'), {
-                    fullname: userInfo.fullname,
-                    key: userInfo.key,
-                    timestamp: Date.now(),
-                    state: 'sent',
-                    lastmessage: {
-                      key: userInfo.key,
-                      message: chatInfo.responseTo ? 'A répondu à: ' + chatInfo.responseText : (chatInfo.attachement ? 'A envoyé une ' + (attachementInfo.type == 'image' ? 'photo' : (attachementInfo.type == 'video' ? 'video' : 'pièce jointe')) : chatInfo.message)
-                    }
-                  }).then(() => {
-                    chatInfo.message = '';
-                    chatInfo.responseTo = null;
-                    chatInfo.attachement = null;
-                    cancelMedia()
-                    cancelReply()
-                  })
-                })
-
+                chatInfo.message = '';
+                chatInfo.responseTo = null;
+                chatInfo.attachement = null;
+                cancelMedia()
+                cancelReply()
 
               })
               .catch((error) => {
@@ -1250,10 +1249,10 @@ function chatBox() {
     if (window.location.search.length > 0) {
       let urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get("to")) {
-        
+
         if (data.length > 0) {
           var searchFound = false;
-          data.forEach(user => {        
+          data.forEach(user => {
             if (user.key.replace(/\+/g, '').replace(/ /g, '') == urlParams.get("to").replace(/ /g, '')) {
               searchFound = true;
               displayDiscution(user)
@@ -1519,6 +1518,9 @@ function chatBox() {
         discutionsData.splice(1, discutionsData.length);
         const sortedChats = Object.entries(chats).sort(([, a], [, b]) => b.userInfo.timestamp - a.userInfo.timestamp)
         sortedChats.map(([index, chat]) => {
+          if (!chat.userInfo) {
+            console.log(chat);
+          }
           if (chat.userInfo) {
             if (chat.userInfo.key == '160471339156947') {
               discutions[0] = chat.userInfo

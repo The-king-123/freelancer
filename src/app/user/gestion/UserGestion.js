@@ -15,7 +15,8 @@ function UserGestion() {
         id: null,
         access: {
             store: 'ghest',
-            post: 'ghest'
+            post: 'ghest',
+            prospecteo: 'ghest',
         }
 
     })
@@ -28,13 +29,14 @@ function UserGestion() {
     const reloadList = (data) => {
         var glitchUsers;
         if (data.length > 0) {
+            const lightTheme = localStorage.getItem('theme') != 'dark' ? true : false;
             glitchUsers = data.map((user, key) => (
                 <div key={key} style={{ padding: 8, display: 'inline-block', width: '33.33%' }}>
-                    <div onClick={() => showThisUser(user)} className='w3-round w3-pointer w3-black w3-overflow' style={{ padding: 8 }}>
+                    <div onClick={() => showThisUser(user)} className={(lightTheme ? 'w3-light-grey' : 'w3-black') + ' w3-round w3-pointer  w3-overflow'} style={{ padding: 8 }}>
                         <Image
                             loading='lazy'
                             src={source + '/images.php?w=420&h=420&zlonk=3733&zlink=' + user.key}
-                            className="w3-dark-grey w3-round w3-block"
+                            className={(lightTheme ? 'w3-white' : 'w3-dark-grey') + " w3-round w3-block"}
                             height={100}
                             width={100}
                             style={{
@@ -53,7 +55,7 @@ function UserGestion() {
                         <div>
                             {
                                 user.authority == 'ghest' &&
-                                <div className='w3-dark-grey w3-circle' style={{ width: 16, height: 16, marginInline: 4 }}></div>
+                                <div className={(lightTheme ? 'w3-white' : 'w3-dark-grey') + ' w3-circle'} style={{ width: 16, height: 16, marginInline: 4 }}></div>
                             }
                             {
                                 user.authority != 'ghest' ?
@@ -99,14 +101,18 @@ function UserGestion() {
 
     const showThisUser = (user) => {
 
+        console.log(user);
+        
         accessList.id = user.id
 
         if (user.authority == 'ghest') {
             accessList.access.store = 'ghest'
             accessList.access.post = 'ghest'
+            accessList.access.prospecteo = 'ghest'
 
             document.getElementById('certainPost').click()
             document.getElementById('certainStore').click()
+            document.getElementById('prospecteoGhest').click()
 
         } else {
             accessList.access.store = JSON.parse(user.authority).store
@@ -116,6 +122,10 @@ function UserGestion() {
             accessList.access.post == 'master' && document.getElementById('toutPost').click()
             accessList.access.store == 'ghest' && document.getElementById('certainStore').click()
             accessList.access.store == 'master' && document.getElementById('toutStore').click()
+            accessList.access.store == 'starter' && document.getElementById('prospecteoStarter').click()
+            accessList.access.store == 'liberty' && document.getElementById('prospecteoLiberty').click()
+            accessList.access.store == 'legend' && document.getElementById('prospecteoLegend').click()
+            accessList.access.store == 'ghest' && document.getElementById('prospecteoGhest').click()
 
         }
 
@@ -146,8 +156,9 @@ function UserGestion() {
 
         core == 'formation' ? accessList.access.post = access : false
         core == 'store' ? accessList.access.store = access : false
+        core == 'prospecteo' ? accessList.access.prospecteo = access : false
 
-        if (accessList.access.post == 'ghest' && accessList.access.store == 'ghest') {
+        if (accessList.access.post == 'ghest' && accessList.access.store == 'ghest' && accessList.access.prospecteo == 'ghest') {
             accessRequest = {
                 id: accessList.id,
                 access: 'ghest'
@@ -159,12 +170,12 @@ function UserGestion() {
             }
         }
 
-        document.getElementById('choiceAccess').style.cursor = 'wait'
+        document.body.style.cursor = 'wait'
         const xcode = localStorage.getItem('x-code');
         await axios
             .patch(source + "/_auth/access?xcode=" + xcode, accessRequest)
             .then((res) => {
-                document.getElementById('choiceAccess').style.cursor = 'default'
+                document.body.style.cursor = 'default'
             })
             .catch((e) => {
                 console.error("failure", e);
@@ -172,7 +183,26 @@ function UserGestion() {
     }
 
     useEffect(() => {
+        if (localStorage.getItem('theme') != 'dark') {
 
+            const elementGrey = document.getElementsByClassName('w3-black').length
+            const elementWhite = document.getElementsByClassName('w3-dark-grey').length
+            const backTransparent = document.getElementsByClassName('black-opacity').length
+            for (let i = 0; i < elementGrey; i++) {
+                const element = document.getElementsByClassName('w3-black')[0];
+                element.className = element.className.replace('w3-black', 'w3-light-grey')
+            }
+            for (let i = 0; i < elementWhite; i++) {
+                const element = document.getElementsByClassName('w3-dark-grey')[0];
+                element.className = element.className.replace('w3-dark-grey', 'w3-white')
+            }
+            for (let i = 0; i < backTransparent; i++) {
+                const element = document.getElementsByClassName('black-opacity')[0];
+                element.className = element.className.replace('black-opacity', 'white-opacity')
+            }
+
+            document.getElementById('htmlCore').style.display = 'block'
+        }
         document.getElementById('backButtonUsergestion').addEventListener('click', () => {
             if (window.history.length > 0) {
                 window.history.back();
@@ -291,6 +321,58 @@ function UserGestion() {
                                         <div className='w3-half'>
                                             <input defaultChecked onClick={() => giveAccess('store', 'ghest')} style={{ marginRight: 8 }} type="radio" id="certainStore" name="store" />
                                             <label for="certainStore">Certain</label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className='w3-big' style={{ marginTop: 72 }}>
+                    <FontAwesomeIcon
+                        icon={faKey}
+                        className='w3-margin-right'
+                    />
+                    Accès à la base de donnée Prospecteo
+                </div>
+
+                <div style={{ marginTop: 16 }}>
+                    <table id="choiceAccessProspecteo" class="w3-table-all">
+
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div className='w3-container' style={{ padding: 0 }}>
+                                        <div>
+                                            <input onClick={() => giveAccess('prospecteo', 'starter')} style={{ marginRight: 8 }} type="radio" id="prospecteoStarter" name="prospecteo" />
+                                            <label for="prospecteoStarter">🎖️Pack Starter</label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div className='w3-container' style={{ padding: 0 }}>
+                                        <div>
+                                            <input onClick={() => giveAccess('prospecteo', 'liberty')} style={{ marginRight: 8 }} type="radio" id="prospecteoLiberty" name="prospecteo" />
+                                            <label for="prospecteoLiberty">🏅Pack Liberty</label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div className='w3-container' style={{ padding: 0 }}>
+                                        <div>
+                                            <input onClick={() => giveAccess('prospecteo', 'legend')} style={{ marginRight: 8 }} type="radio" id="prospecteoLegend" name="prospecteo" />
+                                            <label for="prospecteoLegend">🥇Pack Legend</label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className='w3-dark-grey'>
+                                    <div className='w3-container' style={{ padding: 0 }}>
+                                        <div>
+                                            <input onClick={() => giveAccess('prospecteo', 'ghest')} style={{ marginRight: 8 }} type="radio" id="prospecteoGhest" name="prospecteo" />
+                                            <label for="prospecteoGhest">Aucun abonnement</label>
                                         </div>
                                     </div>
                                 </td>
