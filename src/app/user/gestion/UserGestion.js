@@ -122,10 +122,10 @@ function UserGestion() {
             accessList.access.post == 'master' && document.getElementById('toutPost').click()
             accessList.access.store == 'ghest' && document.getElementById('certainStore').click()
             accessList.access.store == 'master' && document.getElementById('toutStore').click()
-            accessList.access.store == 'starter' && document.getElementById('prospecteoStarter').click()
-            accessList.access.store == 'liberty' && document.getElementById('prospecteoLiberty').click()
-            accessList.access.store == 'legend' && document.getElementById('prospecteoLegend').click()
-            accessList.access.store == 'ghest' && document.getElementById('prospecteoGhest').click()
+            document.getElementById('prospecteoGhest').click()
+            accessList.access.prospecteo == 'starter' && document.getElementById('prospecteoStarter').click()
+            accessList.access.prospecteo == 'liberty' && document.getElementById('prospecteoLiberty').click()
+            accessList.access.prospecteo == 'legend' && document.getElementById('prospecteoLegend').click()
 
         }
 
