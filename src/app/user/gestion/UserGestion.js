@@ -100,8 +100,6 @@ function UserGestion() {
     }
 
     const showThisUser = (user) => {
-
-        console.log(user);
         
         accessList.id = user.id
 
